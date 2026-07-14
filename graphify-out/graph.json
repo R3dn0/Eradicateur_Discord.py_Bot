@@ -170,7 +170,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "bot_i18n",
-      "community": 1,
+      "community": 2,
       "norm_label": "i18n.py"
     },
     {
@@ -180,7 +180,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "bot_i18n_jsontranslator",
-      "community": 1,
+      "community": 2,
       "norm_label": "jsontranslator"
     },
     {
@@ -190,7 +190,7 @@
       "source_location": "L12",
       "_origin": "ast",
       "id": "bot_i18n_jsontranslator_init",
-      "community": 1,
+      "community": 2,
       "norm_label": ".__init__()"
     },
     {
@@ -200,7 +200,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "bot_i18n_jsontranslator_load",
-      "community": 1,
+      "community": 2,
       "norm_label": ".load()"
     },
     {
@@ -280,7 +280,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "bot_main_eradicateurbot_setup_hook",
-      "community": 1,
+      "community": 2,
       "norm_label": ".setup_hook()"
     },
     {
@@ -320,7 +320,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "repositories_member_repository",
-      "community": 4,
+      "community": 6,
       "norm_label": "member_repository.py"
     },
     {
@@ -330,7 +330,7 @@
       "source_location": "L7",
       "_origin": "ast",
       "id": "repositories_member_repository_guildmember",
-      "community": 4,
+      "community": 6,
       "norm_label": "guildmember"
     },
     {
@@ -444,6 +444,86 @@
       "norm_label": "__init__.py"
     },
     {
+      "label": "conftest.py",
+      "file_type": "code",
+      "source_file": "tests/conftest.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_conftest",
+      "community": 4,
+      "norm_label": "conftest.py"
+    },
+    {
+      "label": "repo()",
+      "file_type": "code",
+      "source_file": "tests/conftest.py",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "tests_conftest_repo",
+      "community": 4,
+      "norm_label": "repo()"
+    },
+    {
+      "label": "test_member_repository.py",
+      "file_type": "code",
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "repositories_test_member_repository",
+      "community": 6,
+      "norm_label": "test_member_repository.py"
+    },
+    {
+      "label": "TestMemberRepository",
+      "file_type": "code",
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "repositories_test_member_repository_testmemberrepository",
+      "community": 6,
+      "norm_label": "testmemberrepository"
+    },
+    {
+      "label": ".test_add_and_get()",
+      "file_type": "code",
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "repositories_test_member_repository_testmemberrepository_test_add_and_get",
+      "community": 6,
+      "norm_label": ".test_add_and_get()"
+    },
+    {
+      "label": ".test_get_unknown_returns_none()",
+      "file_type": "code",
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "repositories_test_member_repository_testmemberrepository_test_get_unknown_returns_none",
+      "community": 6,
+      "norm_label": ".test_get_unknown_returns_none()"
+    },
+    {
+      "label": ".test_list_all_empty_and_count()",
+      "file_type": "code",
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L18",
+      "_origin": "ast",
+      "id": "repositories_test_member_repository_testmemberrepository_test_list_all_empty_and_count",
+      "community": 6,
+      "norm_label": ".test_list_all_empty_and_count()"
+    },
+    {
+      "label": ".test_add_overwrites_existing()",
+      "file_type": "code",
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L25",
+      "_origin": "ast",
+      "id": "repositories_test_member_repository_testmemberrepository_test_add_overwrites_existing",
+      "community": 6,
+      "norm_label": ".test_add_overwrites_existing()"
+    },
+    {
       "label": "README.fr.md",
       "file_type": "document",
       "source_file": "README.fr.md",
@@ -531,9 +611,9 @@
       "source_file": ".opencode/plugins/graphify.js",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "plugins_graphify",
-      "target": "plugins_graphify_graphifyplugin",
-      "confidence_score": 1.0
+      "target": "plugins_graphify_graphifyplugin"
     },
     {
       "relation": "imports_from",
@@ -553,9 +633,9 @@
       "source_file": "bot/cogs/guild_commands.py",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "cogs_guild_commands",
-      "target": "bot_main_eradicateurbot",
-      "confidence_score": 1.0
+      "target": "bot_main_eradicateurbot"
     },
     {
       "relation": "contains",
@@ -605,9 +685,9 @@
       "source_file": "bot/cogs/guild_commands.py",
       "source_location": "L5",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "cogs_guild_commands_guildcommands",
-      "target": "bot_main_eradicateurbot",
-      "confidence_score": 0.5
+      "target": "bot_main_eradicateurbot"
     },
     {
       "relation": "method",
@@ -753,9 +833,9 @@
       "source_file": "bot/cogs/guild_commands.py",
       "source_location": "L54",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "cogs_guild_commands_setup",
-      "target": "bot_main_eradicateurbot",
-      "confidence_score": 1.0
+      "target": "bot_main_eradicateurbot"
     },
     {
       "relation": "contains",
@@ -805,9 +885,9 @@
       "source_file": "bot/main.py",
       "source_location": "L7",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "bot_main_eradicateurbot",
-      "target": "bot_config_config",
-      "confidence_score": 0.5
+      "target": "bot_config_config"
     },
     {
       "relation": "references",
@@ -816,9 +896,9 @@
       "source_file": "bot/main.py",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_main_eradicateurbot_init",
-      "target": "bot_config_config",
-      "confidence_score": 1.0
+      "target": "bot_config_config"
     },
     {
       "relation": "calls",
@@ -837,9 +917,9 @@
       "source_file": "bot/i18n.py",
       "source_location": "L11",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_i18n",
-      "target": "bot_i18n_jsontranslator",
-      "confidence_score": 1.0
+      "target": "bot_i18n_jsontranslator"
     },
     {
       "relation": "imports_from",
@@ -848,9 +928,9 @@
       "source_file": "bot/main.py",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_main",
-      "target": "bot_i18n",
-      "confidence_score": 1.0
+      "target": "bot_i18n"
     },
     {
       "relation": "method",
@@ -858,9 +938,9 @@
       "source_file": "bot/i18n.py",
       "source_location": "L12",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_i18n_jsontranslator",
-      "target": "bot_i18n_jsontranslator_init",
-      "confidence_score": 1.0
+      "target": "bot_i18n_jsontranslator_init"
     },
     {
       "relation": "method",
@@ -868,9 +948,9 @@
       "source_file": "bot/i18n.py",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_i18n_jsontranslator",
-      "target": "bot_i18n_jsontranslator_load",
-      "confidence_score": 1.0
+      "target": "bot_i18n_jsontranslator_load"
     },
     {
       "relation": "method",
@@ -878,9 +958,9 @@
       "source_file": "bot/i18n.py",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_i18n_jsontranslator",
-      "target": "bot_i18n_jsontranslator_translate",
-      "confidence_score": 1.0
+      "target": "bot_i18n_jsontranslator_translate"
     },
     {
       "relation": "imports",
@@ -889,9 +969,9 @@
       "source_file": "bot/main.py",
       "source_location": "L8",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_main",
-      "target": "bot_i18n_jsontranslator",
-      "confidence_score": 1.0
+      "target": "bot_i18n_jsontranslator"
     },
     {
       "relation": "uses",
@@ -899,9 +979,9 @@
       "source_file": "bot/main.py",
       "source_location": "L8",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "bot_main_eradicateurbot",
-      "target": "bot_i18n_jsontranslator",
-      "confidence_score": 0.5
+      "target": "bot_i18n_jsontranslator"
     },
     {
       "relation": "calls",
@@ -921,9 +1001,9 @@
       "source_file": "bot/i18n.py",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_i18n_jsontranslator_translate",
-      "target": "locale",
-      "confidence_score": 1.0
+      "target": "locale"
     },
     {
       "relation": "references",
@@ -932,9 +1012,9 @@
       "source_file": "bot/i18n.py",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_i18n_jsontranslator_translate",
-      "target": "locale_str",
-      "confidence_score": 1.0
+      "target": "locale_str"
     },
     {
       "relation": "references",
@@ -943,9 +1023,9 @@
       "source_file": "bot/i18n.py",
       "source_location": "L23",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_i18n_jsontranslator_translate",
-      "target": "translationcontexttypes",
-      "confidence_score": 1.0
+      "target": "translationcontexttypes"
     },
     {
       "relation": "contains",
@@ -953,9 +1033,9 @@
       "source_file": "bot/main.py",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_main",
-      "target": "bot_main_eradicateurbot",
-      "confidence_score": 1.0
+      "target": "bot_main_eradicateurbot"
     },
     {
       "relation": "contains",
@@ -984,9 +1064,9 @@
       "source_file": "bot/main.py",
       "source_location": "L16",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_main_eradicateurbot",
-      "target": "bot_main_eradicateurbot_init",
-      "confidence_score": 1.0
+      "target": "bot_main_eradicateurbot_init"
     },
     {
       "relation": "method",
@@ -994,9 +1074,9 @@
       "source_file": "bot/main.py",
       "source_location": "L42",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_main_eradicateurbot",
-      "target": "bot_main_eradicateurbot_on_ready",
-      "confidence_score": 1.0
+      "target": "bot_main_eradicateurbot_on_ready"
     },
     {
       "relation": "method",
@@ -1004,9 +1084,9 @@
       "source_file": "bot/main.py",
       "source_location": "L22",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_main_eradicateurbot",
-      "target": "bot_main_eradicateurbot_setup_hook",
-      "confidence_score": 1.0
+      "target": "bot_main_eradicateurbot_setup_hook"
     },
     {
       "relation": "uses",
@@ -1014,9 +1094,9 @@
       "source_file": "bot/main.py",
       "source_location": "L9",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "bot_main_eradicateurbot",
-      "target": "repositories_member_repository_memberrepository",
-      "confidence_score": 0.5
+      "target": "repositories_member_repository_memberrepository"
     },
     {
       "relation": "calls",
@@ -1025,9 +1105,9 @@
       "source_file": "bot/main.py",
       "source_location": "L49",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "bot_main_main",
-      "target": "bot_main_eradicateurbot",
-      "confidence_score": 1.0
+      "target": "bot_main_eradicateurbot"
     },
     {
       "relation": "calls",
@@ -1091,6 +1171,60 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "repositories_member_repository_memberrepository_list_all",
+      "target": "repositories_member_repository_guildmember"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "repositories_test_member_repository",
+      "target": "repositories_member_repository_guildmember",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L1",
+      "weight": 0.8,
+      "source": "repositories_test_member_repository_testmemberrepository",
+      "target": "repositories_member_repository_guildmember",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "repositories_test_member_repository_testmemberrepository_test_add_and_get",
+      "target": "repositories_member_repository_guildmember"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "repositories_test_member_repository_testmemberrepository_test_add_overwrites_existing",
+      "target": "repositories_member_repository_guildmember"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "repositories_test_member_repository_testmemberrepository_test_list_all_empty_and_count",
       "target": "repositories_member_repository_guildmember"
     },
     {
@@ -1164,6 +1298,28 @@
       "target": "repositories_member_repository_memberrepository"
     },
     {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/conftest.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "tests_conftest",
+      "target": "repositories_member_repository_memberrepository",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/conftest.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "tests_conftest_repo",
+      "target": "repositories_member_repository_memberrepository"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -1230,14 +1386,74 @@
       "target": "repositories_member_repository_memberrepository_connect"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/conftest.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "tests_conftest",
+      "target": "tests_conftest_repo",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "repositories_test_member_repository",
+      "target": "repositories_test_member_repository_testmemberrepository",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "repositories_test_member_repository_testmemberrepository",
+      "target": "repositories_test_member_repository_testmemberrepository_test_add_and_get",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "repositories_test_member_repository_testmemberrepository",
+      "target": "repositories_test_member_repository_testmemberrepository_test_add_overwrites_existing",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "repositories_test_member_repository_testmemberrepository",
+      "target": "repositories_test_member_repository_testmemberrepository_test_get_unknown_returns_none",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_member_repository.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "source": "repositories_test_member_repository_testmemberrepository",
+      "target": "repositories_test_member_repository_testmemberrepository_test_list_all_empty_and_count",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "README.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme",
-      "target": "readme_fr",
-      "confidence_score": 1.0
+      "target": "readme_fr"
     },
     {
       "relation": "contains",
@@ -1245,9 +1461,9 @@
       "source_file": "README.fr.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_fr",
-      "target": "readme_fr_bot_discord_eradicateurs_guilde_albion_online",
-      "confidence_score": 1.0
+      "target": "readme_fr_bot_discord_eradicateurs_guilde_albion_online"
     },
     {
       "relation": "contains",
@@ -1255,9 +1471,9 @@
       "source_file": "README.fr.md",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_fr_bot_discord_eradicateurs_guilde_albion_online",
-      "target": "readme_fr_commandes_disponibles",
-      "confidence_score": 1.0
+      "target": "readme_fr_commandes_disponibles"
     },
     {
       "relation": "contains",
@@ -1265,9 +1481,9 @@
       "source_file": "README.fr.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_fr_bot_discord_eradicateurs_guilde_albion_online",
-      "target": "readme_fr_setup",
-      "confidence_score": 1.0
+      "target": "readme_fr_setup"
     },
     {
       "relation": "contains",
@@ -1275,9 +1491,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme",
-      "target": "readme_discord_bot_eradicateurs_albion_online_guild",
-      "confidence_score": 1.0
+      "target": "readme_discord_bot_eradicateurs_albion_online_guild"
     },
     {
       "relation": "contains",
@@ -1285,9 +1501,9 @@
       "source_file": "README.md",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_discord_bot_eradicateurs_albion_online_guild",
-      "target": "readme_available_commands",
-      "confidence_score": 1.0
+      "target": "readme_available_commands"
     },
     {
       "relation": "contains",
@@ -1295,11 +1511,11 @@
       "source_file": "README.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_discord_bot_eradicateurs_albion_online_guild",
-      "target": "readme_setup",
-      "confidence_score": 1.0
+      "target": "readme_setup"
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "03108b710be3a17276a04d01941f31975f95e32f"
+  "built_at_commit": "caa4308786fd239b6fd481a2c8d8652ac10d1c91"
 }
