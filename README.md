@@ -1,4 +1,6 @@
-# Discord Bot — Albion Online Guild
+# Discord Bot - ERADICATEURS - Albion Online Guild
+
+> 🇫🇷 [Lire en français](README.fr.md)
 
 ## Setup
 
