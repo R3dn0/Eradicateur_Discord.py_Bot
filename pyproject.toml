@@ -1,0 +1,15 @@
+[project]
+name = "eradicateur-bot"
+version = "0.1.0"
+description = "Discord bot for the ERADICATEURS Albion Online guild"
+requires-python = ">=3.12"
+dependencies = ["discord.py>=2.4,<3.0", "python-dotenv>=1.0", "aiosqlite>=0.19"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0", "pytest-asyncio>=0.21", "ruff>=0.4.0"]
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
