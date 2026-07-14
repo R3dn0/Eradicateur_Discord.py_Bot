@@ -90,8 +90,8 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1784038507.9902031,
-    "ast_hash": "d290316a8d0bad6c8412670fc8336d42",
+    "mtime": 1784039693.136272,
+    "ast_hash": "51dce3274b9dd3f16b36c93b4c863d49",
     "semantic_hash": ""
   },
   ".pre-commit-config.yaml": {
@@ -102,6 +102,11 @@
   "requirements-dev.txt": {
     "mtime": 1784038501.1662047,
     "ast_hash": "6a7526dce822f35e43b568b749bbb5a4",
+    "semantic_hash": ""
+  },
+  ".github/pull_request_template.md": {
+    "mtime": 1784040610.1087484,
+    "ast_hash": "5dfb392b04f9b5488ef7446b9338be6e",
     "semantic_hash": ""
   }
 }

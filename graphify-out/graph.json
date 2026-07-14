@@ -4,14 +4,54 @@
   "graph": {},
   "nodes": [
     {
+      "label": "pull_request_template.md",
+      "file_type": "document",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "github_pull_request_template",
+      "community": 12,
+      "norm_label": "pull_request_template.md"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "github_pull_request_template_summary",
+      "community": 12,
+      "norm_label": "summary"
+    },
+    {
+      "label": "Type of change",
+      "file_type": "document",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "github_pull_request_template_type_of_change",
+      "community": 12,
+      "norm_label": "type of change"
+    },
+    {
+      "label": "Checklist",
+      "file_type": "document",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "github_pull_request_template_checklist",
+      "community": 12,
+      "norm_label": "checklist"
+    },
+    {
       "label": "graphify.js",
       "file_type": "code",
       "source_file": ".opencode/plugins/graphify.js",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "plugins_graphify",
       "community": 5,
-      "norm_label": "graphify.js"
+      "norm_label": "graphify.js",
+      "id": "plugins_graphify"
     },
     {
       "label": "GraphifyPlugin()",
@@ -19,9 +59,9 @@
       "source_file": ".opencode/plugins/graphify.js",
       "source_location": "L12",
       "_origin": "ast",
-      "id": "plugins_graphify_graphifyplugin",
       "community": 5,
-      "norm_label": "graphifyplugin()"
+      "norm_label": "graphifyplugin()",
+      "id": "plugins_graphify_graphifyplugin"
     },
     {
       "label": "__init__.py",
@@ -29,9 +69,9 @@
       "source_file": "bot/__init__.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "bot_init",
       "community": 7,
-      "norm_label": "__init__.py"
+      "norm_label": "__init__.py",
+      "id": "bot_init"
     },
     {
       "label": "__init__.py",
@@ -39,9 +79,9 @@
       "source_file": "bot/cogs/__init__.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "cogs_init",
       "community": 8,
-      "norm_label": "__init__.py"
+      "norm_label": "__init__.py",
+      "id": "cogs_init"
     },
     {
       "label": "guild_commands.py",
@@ -49,9 +89,9 @@
       "source_file": "bot/cogs/guild_commands.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "cogs_guild_commands",
       "community": 2,
-      "norm_label": "guild_commands.py"
+      "norm_label": "guild_commands.py",
+      "id": "cogs_guild_commands"
     },
     {
       "label": "GuildCommands",
@@ -59,9 +99,9 @@
       "source_file": "bot/cogs/guild_commands.py",
       "source_location": "L9",
       "_origin": "ast",
-      "id": "cogs_guild_commands_guildcommands",
       "community": 0,
-      "norm_label": "guildcommands"
+      "norm_label": "guildcommands",
+      "id": "cogs_guild_commands_guildcommands"
     },
     {
       "label": ".__init__()",
@@ -69,9 +109,9 @@
       "source_file": "bot/cogs/guild_commands.py",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "cogs_guild_commands_guildcommands_init",
       "community": 0,
-      "norm_label": ".__init__()"
+      "norm_label": ".__init__()",
+      "id": "cogs_guild_commands_guildcommands_init"
     },
     {
       "label": "Bot",
@@ -79,9 +119,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "bot",
       "community": 0,
-      "norm_label": "bot"
+      "norm_label": "bot",
+      "id": "bot"
     },
     {
       "label": ".ping()",
@@ -89,9 +129,9 @@
       "source_file": "bot/cogs/guild_commands.py",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "cogs_guild_commands_guildcommands_ping",
       "community": 0,
-      "norm_label": ".ping()"
+      "norm_label": ".ping()",
+      "id": "cogs_guild_commands_guildcommands_ping"
     },
     {
       "label": "Interaction",
@@ -99,9 +139,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "interaction",
       "community": 0,
-      "norm_label": "interaction"
+      "norm_label": "interaction",
+      "id": "interaction"
     },
     {
       "label": ".register()",
@@ -109,9 +149,9 @@
       "source_file": "bot/cogs/guild_commands.py",
       "source_location": "L31",
       "_origin": "ast",
-      "id": "cogs_guild_commands_guildcommands_register",
       "community": 0,
-      "norm_label": ".register()"
+      "norm_label": ".register()",
+      "id": "cogs_guild_commands_guildcommands_register"
     },
     {
       "label": ".members()",
@@ -119,9 +159,9 @@
       "source_file": "bot/cogs/guild_commands.py",
       "source_location": "L43",
       "_origin": "ast",
-      "id": "cogs_guild_commands_guildcommands_members",
       "community": 0,
-      "norm_label": ".members()"
+      "norm_label": ".members()",
+      "id": "cogs_guild_commands_guildcommands_members"
     },
     {
       "label": "setup()",
@@ -129,9 +169,9 @@
       "source_file": "bot/cogs/guild_commands.py",
       "source_location": "L54",
       "_origin": "ast",
-      "id": "cogs_guild_commands_setup",
       "community": 2,
-      "norm_label": "setup()"
+      "norm_label": "setup()",
+      "id": "cogs_guild_commands_setup"
     },
     {
       "label": "config.py",
@@ -139,9 +179,9 @@
       "source_file": "bot/config.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "bot_config",
       "community": 2,
-      "norm_label": "config.py"
+      "norm_label": "config.py",
+      "id": "bot_config"
     },
     {
       "label": "Config",
@@ -149,9 +189,9 @@
       "source_file": "bot/config.py",
       "source_location": "L10",
       "_origin": "ast",
-      "id": "bot_config_config",
       "community": 2,
-      "norm_label": "config"
+      "norm_label": "config",
+      "id": "bot_config_config"
     },
     {
       "label": ".from_env()",
@@ -159,9 +199,9 @@
       "source_file": "bot/config.py",
       "source_location": "L16",
       "_origin": "ast",
-      "id": "bot_config_config_from_env",
       "community": 2,
-      "norm_label": ".from_env()"
+      "norm_label": ".from_env()",
+      "id": "bot_config_config_from_env"
     },
     {
       "label": "i18n.py",
@@ -169,9 +209,9 @@
       "source_file": "bot/i18n.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "bot_i18n",
       "community": 2,
-      "norm_label": "i18n.py"
+      "norm_label": "i18n.py",
+      "id": "bot_i18n"
     },
     {
       "label": "JSONTranslator",
@@ -179,9 +219,9 @@
       "source_file": "bot/i18n.py",
       "source_location": "L11",
       "_origin": "ast",
-      "id": "bot_i18n_jsontranslator",
       "community": 2,
-      "norm_label": "jsontranslator"
+      "norm_label": "jsontranslator",
+      "id": "bot_i18n_jsontranslator"
     },
     {
       "label": ".__init__()",
@@ -189,9 +229,9 @@
       "source_file": "bot/i18n.py",
       "source_location": "L12",
       "_origin": "ast",
-      "id": "bot_i18n_jsontranslator_init",
       "community": 2,
-      "norm_label": ".__init__()"
+      "norm_label": ".__init__()",
+      "id": "bot_i18n_jsontranslator_init"
     },
     {
       "label": ".load()",
@@ -199,9 +239,9 @@
       "source_file": "bot/i18n.py",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "bot_i18n_jsontranslator_load",
       "community": 2,
-      "norm_label": ".load()"
+      "norm_label": ".load()",
+      "id": "bot_i18n_jsontranslator_load"
     },
     {
       "label": ".translate()",
@@ -209,9 +249,9 @@
       "source_file": "bot/i18n.py",
       "source_location": "L23",
       "_origin": "ast",
-      "id": "bot_i18n_jsontranslator_translate",
       "community": 1,
-      "norm_label": ".translate()"
+      "norm_label": ".translate()",
+      "id": "bot_i18n_jsontranslator_translate"
     },
     {
       "label": "locale_str",
@@ -219,9 +259,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "locale_str",
       "community": 1,
-      "norm_label": "locale_str"
+      "norm_label": "locale_str",
+      "id": "locale_str"
     },
     {
       "label": "Locale",
@@ -229,9 +269,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "locale",
       "community": 1,
-      "norm_label": "locale"
+      "norm_label": "locale",
+      "id": "locale"
     },
     {
       "label": "TranslationContextTypes",
@@ -239,9 +279,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "translationcontexttypes",
       "community": 1,
-      "norm_label": "translationcontexttypes"
+      "norm_label": "translationcontexttypes",
+      "id": "translationcontexttypes"
     },
     {
       "label": "main.py",
@@ -249,9 +289,9 @@
       "source_file": "bot/main.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "bot_main",
       "community": 2,
-      "norm_label": "main.py"
+      "norm_label": "main.py",
+      "id": "bot_main"
     },
     {
       "label": "EradicateurBot",
@@ -259,9 +299,9 @@
       "source_file": "bot/main.py",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "bot_main_eradicateurbot",
       "community": 2,
-      "norm_label": "eradicateurbot"
+      "norm_label": "eradicateurbot",
+      "id": "bot_main_eradicateurbot"
     },
     {
       "label": ".__init__()",
@@ -269,9 +309,9 @@
       "source_file": "bot/main.py",
       "source_location": "L16",
       "_origin": "ast",
-      "id": "bot_main_eradicateurbot_init",
       "community": 2,
-      "norm_label": ".__init__()"
+      "norm_label": ".__init__()",
+      "id": "bot_main_eradicateurbot_init"
     },
     {
       "label": ".setup_hook()",
@@ -279,9 +319,9 @@
       "source_file": "bot/main.py",
       "source_location": "L22",
       "_origin": "ast",
-      "id": "bot_main_eradicateurbot_setup_hook",
       "community": 2,
-      "norm_label": ".setup_hook()"
+      "norm_label": ".setup_hook()",
+      "id": "bot_main_eradicateurbot_setup_hook"
     },
     {
       "label": ".on_ready()",
@@ -289,9 +329,9 @@
       "source_file": "bot/main.py",
       "source_location": "L42",
       "_origin": "ast",
-      "id": "bot_main_eradicateurbot_on_ready",
       "community": 2,
-      "norm_label": ".on_ready()"
+      "norm_label": ".on_ready()",
+      "id": "bot_main_eradicateurbot_on_ready"
     },
     {
       "label": "main()",
@@ -299,9 +339,9 @@
       "source_file": "bot/main.py",
       "source_location": "L47",
       "_origin": "ast",
-      "id": "bot_main_main",
       "community": 2,
-      "norm_label": "main()"
+      "norm_label": "main()",
+      "id": "bot_main_main"
     },
     {
       "label": "__init__.py",
@@ -309,9 +349,9 @@
       "source_file": "bot/repositories/__init__.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "repositories_init",
       "community": 9,
-      "norm_label": "__init__.py"
+      "norm_label": "__init__.py",
+      "id": "repositories_init"
     },
     {
       "label": "member_repository.py",
@@ -319,9 +359,9 @@
       "source_file": "bot/repositories/member_repository.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "repositories_member_repository",
-      "community": 6,
-      "norm_label": "member_repository.py"
+      "community": 4,
+      "norm_label": "member_repository.py",
+      "id": "repositories_member_repository"
     },
     {
       "label": "GuildMember",
@@ -329,9 +369,9 @@
       "source_file": "bot/repositories/member_repository.py",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "repositories_member_repository_guildmember",
       "community": 6,
-      "norm_label": "guildmember"
+      "norm_label": "guildmember",
+      "id": "repositories_member_repository_guildmember"
     },
     {
       "label": "MemberRepository",
@@ -339,9 +379,9 @@
       "source_file": "bot/repositories/member_repository.py",
       "source_location": "L13",
       "_origin": "ast",
-      "id": "repositories_member_repository_memberrepository",
       "community": 4,
-      "norm_label": "memberrepository"
+      "norm_label": "memberrepository",
+      "id": "repositories_member_repository_memberrepository"
     },
     {
       "label": ".__init__()",
@@ -349,9 +389,9 @@
       "source_file": "bot/repositories/member_repository.py",
       "source_location": "L16",
       "_origin": "ast",
-      "id": "repositories_member_repository_memberrepository_init",
       "community": 4,
-      "norm_label": ".__init__()"
+      "norm_label": ".__init__()",
+      "id": "repositories_member_repository_memberrepository_init"
     },
     {
       "label": "._connect()",
@@ -359,9 +399,9 @@
       "source_file": "bot/repositories/member_repository.py",
       "source_location": "L21",
       "_origin": "ast",
-      "id": "repositories_member_repository_memberrepository_connect",
       "community": 4,
-      "norm_label": "._connect()"
+      "norm_label": "._connect()",
+      "id": "repositories_member_repository_memberrepository_connect"
     },
     {
       "label": "Connection",
@@ -369,9 +409,9 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "id": "connection",
       "community": 4,
-      "norm_label": "connection"
+      "norm_label": "connection",
+      "id": "connection"
     },
     {
       "label": "._init_schema()",
@@ -379,9 +419,9 @@
       "source_file": "bot/repositories/member_repository.py",
       "source_location": "L26",
       "_origin": "ast",
-      "id": "repositories_member_repository_memberrepository_init_schema",
       "community": 4,
-      "norm_label": "._init_schema()"
+      "norm_label": "._init_schema()",
+      "id": "repositories_member_repository_memberrepository_init_schema"
     },
     {
       "label": ".add()",
@@ -389,9 +429,9 @@
       "source_file": "bot/repositories/member_repository.py",
       "source_location": "L36",
       "_origin": "ast",
-      "id": "repositories_member_repository_memberrepository_add",
       "community": 4,
-      "norm_label": ".add()"
+      "norm_label": ".add()",
+      "id": "repositories_member_repository_memberrepository_add"
     },
     {
       "label": ".get_by_discord_id()",
@@ -399,9 +439,9 @@
       "source_file": "bot/repositories/member_repository.py",
       "source_location": "L43",
       "_origin": "ast",
-      "id": "repositories_member_repository_memberrepository_get_by_discord_id",
       "community": 4,
-      "norm_label": ".get_by_discord_id()"
+      "norm_label": ".get_by_discord_id()",
+      "id": "repositories_member_repository_memberrepository_get_by_discord_id"
     },
     {
       "label": ".list_all()",
@@ -409,9 +449,9 @@
       "source_file": "bot/repositories/member_repository.py",
       "source_location": "L50",
       "_origin": "ast",
-      "id": "repositories_member_repository_memberrepository_list_all",
       "community": 4,
-      "norm_label": ".list_all()"
+      "norm_label": ".list_all()",
+      "id": "repositories_member_repository_memberrepository_list_all"
     },
     {
       "label": "SQLite data access for guild members.",
@@ -419,9 +459,9 @@
       "source_file": "bot/repositories/member_repository.py",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "repositories_member_repository_rationale_14",
       "community": 4,
-      "norm_label": "sqlite data access for guild members."
+      "norm_label": "sqlite data access for guild members.",
+      "id": "repositories_member_repository_rationale_14"
     },
     {
       "label": "__init__.py",
@@ -429,9 +469,9 @@
       "source_file": "bot/services/__init__.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "services_init",
       "community": 10,
-      "norm_label": "__init__.py"
+      "norm_label": "__init__.py",
+      "id": "services_init"
     },
     {
       "label": "__init__.py",
@@ -439,9 +479,9 @@
       "source_file": "tests/__init__.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tests_init",
       "community": 11,
-      "norm_label": "__init__.py"
+      "norm_label": "__init__.py",
+      "id": "tests_init"
     },
     {
       "label": "conftest.py",
@@ -449,9 +489,9 @@
       "source_file": "tests/conftest.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "tests_conftest",
       "community": 4,
-      "norm_label": "conftest.py"
+      "norm_label": "conftest.py",
+      "id": "tests_conftest"
     },
     {
       "label": "repo()",
@@ -459,9 +499,9 @@
       "source_file": "tests/conftest.py",
       "source_location": "L7",
       "_origin": "ast",
-      "id": "tests_conftest_repo",
       "community": 4,
-      "norm_label": "repo()"
+      "norm_label": "repo()",
+      "id": "tests_conftest_repo"
     },
     {
       "label": "test_member_repository.py",
@@ -469,9 +509,9 @@
       "source_file": "tests/repositories/test_member_repository.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "repositories_test_member_repository",
       "community": 6,
-      "norm_label": "test_member_repository.py"
+      "norm_label": "test_member_repository.py",
+      "id": "repositories_test_member_repository"
     },
     {
       "label": "TestMemberRepository",
@@ -479,9 +519,9 @@
       "source_file": "tests/repositories/test_member_repository.py",
       "source_location": "L4",
       "_origin": "ast",
-      "id": "repositories_test_member_repository_testmemberrepository",
       "community": 6,
-      "norm_label": "testmemberrepository"
+      "norm_label": "testmemberrepository",
+      "id": "repositories_test_member_repository_testmemberrepository"
     },
     {
       "label": ".test_add_and_get()",
@@ -489,9 +529,9 @@
       "source_file": "tests/repositories/test_member_repository.py",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "repositories_test_member_repository_testmemberrepository_test_add_and_get",
       "community": 6,
-      "norm_label": ".test_add_and_get()"
+      "norm_label": ".test_add_and_get()",
+      "id": "repositories_test_member_repository_testmemberrepository_test_add_and_get"
     },
     {
       "label": ".test_get_unknown_returns_none()",
@@ -499,9 +539,9 @@
       "source_file": "tests/repositories/test_member_repository.py",
       "source_location": "L14",
       "_origin": "ast",
-      "id": "repositories_test_member_repository_testmemberrepository_test_get_unknown_returns_none",
       "community": 6,
-      "norm_label": ".test_get_unknown_returns_none()"
+      "norm_label": ".test_get_unknown_returns_none()",
+      "id": "repositories_test_member_repository_testmemberrepository_test_get_unknown_returns_none"
     },
     {
       "label": ".test_list_all_empty_and_count()",
@@ -509,9 +549,9 @@
       "source_file": "tests/repositories/test_member_repository.py",
       "source_location": "L18",
       "_origin": "ast",
-      "id": "repositories_test_member_repository_testmemberrepository_test_list_all_empty_and_count",
       "community": 6,
-      "norm_label": ".test_list_all_empty_and_count()"
+      "norm_label": ".test_list_all_empty_and_count()",
+      "id": "repositories_test_member_repository_testmemberrepository_test_list_all_empty_and_count"
     },
     {
       "label": ".test_add_overwrites_existing()",
@@ -519,9 +559,9 @@
       "source_file": "tests/repositories/test_member_repository.py",
       "source_location": "L25",
       "_origin": "ast",
-      "id": "repositories_test_member_repository_testmemberrepository_test_add_overwrites_existing",
       "community": 6,
-      "norm_label": ".test_add_overwrites_existing()"
+      "norm_label": ".test_add_overwrites_existing()",
+      "id": "repositories_test_member_repository_testmemberrepository_test_add_overwrites_existing"
     },
     {
       "label": "README.fr.md",
@@ -529,9 +569,9 @@
       "source_file": "README.fr.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "readme_fr",
       "community": 3,
-      "norm_label": "readme.fr.md"
+      "norm_label": "readme.fr.md",
+      "id": "readme_fr"
     },
     {
       "label": "Bot Discord - ERADICATEURS - Guilde Albion Online",
@@ -539,9 +579,9 @@
       "source_file": "README.fr.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "readme_fr_bot_discord_eradicateurs_guilde_albion_online",
       "community": 3,
-      "norm_label": "bot discord - eradicateurs - guilde albion online"
+      "norm_label": "bot discord - eradicateurs - guilde albion online",
+      "id": "readme_fr_bot_discord_eradicateurs_guilde_albion_online"
     },
     {
       "label": "Setup",
@@ -549,9 +589,9 @@
       "source_file": "README.fr.md",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "readme_fr_setup",
       "community": 3,
-      "norm_label": "setup"
+      "norm_label": "setup",
+      "id": "readme_fr_setup"
     },
     {
       "label": "Commandes disponibles",
@@ -559,9 +599,9 @@
       "source_file": "README.fr.md",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "readme_fr_commandes_disponibles",
       "community": 3,
-      "norm_label": "commandes disponibles"
+      "norm_label": "commandes disponibles",
+      "id": "readme_fr_commandes_disponibles"
     },
     {
       "label": "README.md",
@@ -569,9 +609,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "readme",
       "community": 3,
-      "norm_label": "readme.md"
+      "norm_label": "readme.md",
+      "id": "readme"
     },
     {
       "label": "Discord Bot - ERADICATEURS - Albion Online Guild",
@@ -579,9 +619,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "readme_discord_bot_eradicateurs_albion_online_guild",
       "community": 3,
-      "norm_label": "discord bot - eradicateurs - albion online guild"
+      "norm_label": "discord bot - eradicateurs - albion online guild",
+      "id": "readme_discord_bot_eradicateurs_albion_online_guild"
     },
     {
       "label": "Setup",
@@ -589,9 +629,9 @@
       "source_file": "README.md",
       "source_location": "L5",
       "_origin": "ast",
-      "id": "readme_setup",
       "community": 3,
-      "norm_label": "setup"
+      "norm_label": "setup",
+      "id": "readme_setup"
     },
     {
       "label": "Available commands",
@@ -599,12 +639,42 @@
       "source_file": "README.md",
       "source_location": "L15",
       "_origin": "ast",
-      "id": "readme_available_commands",
       "community": 3,
-      "norm_label": "available commands"
+      "norm_label": "available commands",
+      "id": "readme_available_commands"
     }
   ],
   "links": [
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "github_pull_request_template",
+      "target": "github_pull_request_template_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "github_pull_request_template",
+      "target": "github_pull_request_template_summary",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "github_pull_request_template",
+      "target": "github_pull_request_template_type_of_change",
+      "confidence_score": 1.0
+    },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
@@ -1180,9 +1250,9 @@
       "source_file": "tests/repositories/test_member_repository.py",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "repositories_test_member_repository",
-      "target": "repositories_member_repository_guildmember",
-      "confidence_score": 1.0
+      "target": "repositories_member_repository_guildmember"
     },
     {
       "relation": "uses",
@@ -1190,9 +1260,9 @@
       "source_file": "tests/repositories/test_member_repository.py",
       "source_location": "L1",
       "weight": 0.8,
+      "confidence_score": 0.5,
       "source": "repositories_test_member_repository_testmemberrepository",
-      "target": "repositories_member_repository_guildmember",
-      "confidence_score": 0.5
+      "target": "repositories_member_repository_guildmember"
     },
     {
       "relation": "calls",
@@ -1304,9 +1374,9 @@
       "source_file": "tests/conftest.py",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_conftest",
-      "target": "repositories_member_repository_memberrepository",
-      "confidence_score": 1.0
+      "target": "repositories_member_repository_memberrepository"
     },
     {
       "relation": "calls",
@@ -1391,9 +1461,9 @@
       "source_file": "tests/conftest.py",
       "source_location": "L7",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_conftest",
-      "target": "tests_conftest_repo",
-      "confidence_score": 1.0
+      "target": "tests_conftest_repo"
     },
     {
       "relation": "contains",
@@ -1401,9 +1471,9 @@
       "source_file": "tests/repositories/test_member_repository.py",
       "source_location": "L4",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "repositories_test_member_repository",
-      "target": "repositories_test_member_repository_testmemberrepository",
-      "confidence_score": 1.0
+      "target": "repositories_test_member_repository_testmemberrepository"
     },
     {
       "relation": "method",
@@ -1411,9 +1481,9 @@
       "source_file": "tests/repositories/test_member_repository.py",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "repositories_test_member_repository_testmemberrepository",
-      "target": "repositories_test_member_repository_testmemberrepository_test_add_and_get",
-      "confidence_score": 1.0
+      "target": "repositories_test_member_repository_testmemberrepository_test_add_and_get"
     },
     {
       "relation": "method",
@@ -1421,9 +1491,9 @@
       "source_file": "tests/repositories/test_member_repository.py",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "repositories_test_member_repository_testmemberrepository",
-      "target": "repositories_test_member_repository_testmemberrepository_test_add_overwrites_existing",
-      "confidence_score": 1.0
+      "target": "repositories_test_member_repository_testmemberrepository_test_add_overwrites_existing"
     },
     {
       "relation": "method",
@@ -1431,9 +1501,9 @@
       "source_file": "tests/repositories/test_member_repository.py",
       "source_location": "L14",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "repositories_test_member_repository_testmemberrepository",
-      "target": "repositories_test_member_repository_testmemberrepository_test_get_unknown_returns_none",
-      "confidence_score": 1.0
+      "target": "repositories_test_member_repository_testmemberrepository_test_get_unknown_returns_none"
     },
     {
       "relation": "method",
@@ -1441,9 +1511,9 @@
       "source_file": "tests/repositories/test_member_repository.py",
       "source_location": "L18",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "repositories_test_member_repository_testmemberrepository",
-      "target": "repositories_test_member_repository_testmemberrepository_test_list_all_empty_and_count",
-      "confidence_score": 1.0
+      "target": "repositories_test_member_repository_testmemberrepository_test_list_all_empty_and_count"
     },
     {
       "relation": "references",
@@ -1517,5 +1587,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "caa4308786fd239b6fd481a2c8d8652ac10d1c91"
+  "built_at_commit": "52b29c77e3d91e85a0b7847bafac453258cd8645"
 }
