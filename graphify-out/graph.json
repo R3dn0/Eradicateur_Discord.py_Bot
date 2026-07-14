@@ -1,0 +1,998 @@
+{
+  "directed": false,
+  "multigraph": false,
+  "graph": {},
+  "nodes": [
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "bot/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "bot_init",
+      "community": 7,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "bot/cogs/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "cogs_init",
+      "community": 8,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "guild_commands.py",
+      "file_type": "code",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "cogs_guild_commands",
+      "community": 1,
+      "norm_label": "guild_commands.py"
+    },
+    {
+      "label": "GuildCommands",
+      "file_type": "code",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "cogs_guild_commands_guildcommands",
+      "community": 0,
+      "norm_label": "guildcommands"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L11",
+      "_origin": "ast",
+      "id": "cogs_guild_commands_guildcommands_init",
+      "community": 0,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "Bot",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "bot",
+      "community": 0,
+      "norm_label": "bot"
+    },
+    {
+      "label": ".ping()",
+      "file_type": "code",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "cogs_guild_commands_guildcommands_ping",
+      "community": 0,
+      "norm_label": ".ping()"
+    },
+    {
+      "label": "Interaction",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "interaction",
+      "community": 0,
+      "norm_label": "interaction"
+    },
+    {
+      "label": ".register()",
+      "file_type": "code",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "cogs_guild_commands_guildcommands_register",
+      "community": 0,
+      "norm_label": ".register()"
+    },
+    {
+      "label": ".members()",
+      "file_type": "code",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "cogs_guild_commands_guildcommands_members",
+      "community": 0,
+      "norm_label": ".members()"
+    },
+    {
+      "label": "setup()",
+      "file_type": "code",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "cogs_guild_commands_setup",
+      "community": 1,
+      "norm_label": "setup()"
+    },
+    {
+      "label": "config.py",
+      "file_type": "code",
+      "source_file": "bot/config.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "bot_config",
+      "community": 2,
+      "norm_label": "config.py"
+    },
+    {
+      "label": "Config",
+      "file_type": "code",
+      "source_file": "bot/config.py",
+      "source_location": "L10",
+      "_origin": "ast",
+      "id": "bot_config_config",
+      "community": 2,
+      "norm_label": "config"
+    },
+    {
+      "label": ".from_env()",
+      "file_type": "code",
+      "source_file": "bot/config.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "bot_config_config_from_env",
+      "community": 2,
+      "norm_label": ".from_env()"
+    },
+    {
+      "label": "main.py",
+      "file_type": "code",
+      "source_file": "bot/main.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "bot_main",
+      "community": 2,
+      "norm_label": "main.py"
+    },
+    {
+      "label": "AlbionBot",
+      "file_type": "code",
+      "source_file": "bot/main.py",
+      "source_location": "L15",
+      "_origin": "ast",
+      "id": "bot_main_albionbot",
+      "community": 1,
+      "norm_label": "albionbot"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/main.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "bot_main_albionbot_init",
+      "community": 1,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".setup_hook()",
+      "file_type": "code",
+      "source_file": "bot/main.py",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "bot_main_albionbot_setup_hook",
+      "community": 1,
+      "norm_label": ".setup_hook()"
+    },
+    {
+      "label": ".on_ready()",
+      "file_type": "code",
+      "source_file": "bot/main.py",
+      "source_location": "L38",
+      "_origin": "ast",
+      "id": "bot_main_albionbot_on_ready",
+      "community": 1,
+      "norm_label": ".on_ready()"
+    },
+    {
+      "label": "main()",
+      "file_type": "code",
+      "source_file": "bot/main.py",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "bot_main_main",
+      "community": 2,
+      "norm_label": "main()"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "bot/repositories/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "repositories_init",
+      "community": 9,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "member_repository.py",
+      "file_type": "code",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "repositories_member_repository",
+      "community": 4,
+      "norm_label": "member_repository.py"
+    },
+    {
+      "label": "GuildMember",
+      "file_type": "code",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L7",
+      "_origin": "ast",
+      "id": "repositories_member_repository_guildmember",
+      "community": 4,
+      "norm_label": "guildmember"
+    },
+    {
+      "label": "MemberRepository",
+      "file_type": "code",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "repositories_member_repository_memberrepository",
+      "community": 5,
+      "norm_label": "memberrepository"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "repositories_member_repository_memberrepository_init",
+      "community": 5,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._connect()",
+      "file_type": "code",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L21",
+      "_origin": "ast",
+      "id": "repositories_member_repository_memberrepository_connect",
+      "community": 6,
+      "norm_label": "._connect()"
+    },
+    {
+      "label": "Connection",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "connection",
+      "community": 6,
+      "norm_label": "connection"
+    },
+    {
+      "label": "._init_schema()",
+      "file_type": "code",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L26",
+      "_origin": "ast",
+      "id": "repositories_member_repository_memberrepository_init_schema",
+      "community": 5,
+      "norm_label": "._init_schema()"
+    },
+    {
+      "label": ".add()",
+      "file_type": "code",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L36",
+      "_origin": "ast",
+      "id": "repositories_member_repository_memberrepository_add",
+      "community": 4,
+      "norm_label": ".add()"
+    },
+    {
+      "label": ".get_by_discord_id()",
+      "file_type": "code",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L43",
+      "_origin": "ast",
+      "id": "repositories_member_repository_memberrepository_get_by_discord_id",
+      "community": 4,
+      "norm_label": ".get_by_discord_id()"
+    },
+    {
+      "label": ".list_all()",
+      "file_type": "code",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L50",
+      "_origin": "ast",
+      "id": "repositories_member_repository_memberrepository_list_all",
+      "community": 6,
+      "norm_label": ".list_all()"
+    },
+    {
+      "label": "SQLite data access for guild members.",
+      "file_type": "rationale",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "repositories_member_repository_rationale_14",
+      "community": 5,
+      "norm_label": "sqlite data access for guild members."
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "bot/services/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "services_init",
+      "community": 10,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "tests/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "tests_init",
+      "community": 11,
+      "norm_label": "__init__.py"
+    },
+    {
+      "label": "README.md",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme",
+      "community": 3,
+      "norm_label": "readme.md"
+    },
+    {
+      "label": "Discord Bot \u2014 Albion Online Guild",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "readme_discord_bot_albion_online_guild",
+      "community": 3,
+      "norm_label": "discord bot \u2014 albion online guild"
+    },
+    {
+      "label": "Setup",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L3",
+      "_origin": "ast",
+      "id": "readme_setup",
+      "community": 3,
+      "norm_label": "setup"
+    },
+    {
+      "label": "Available commands",
+      "file_type": "document",
+      "source_file": "README.md",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "readme_available_commands",
+      "community": 3,
+      "norm_label": "available commands"
+    }
+  ],
+  "links": [
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "cogs_guild_commands",
+      "target": "bot_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "cogs_guild_commands",
+      "target": "bot_main_albionbot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "cogs_guild_commands",
+      "target": "cogs_guild_commands_guildcommands",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "cogs_guild_commands",
+      "target": "cogs_guild_commands_setup",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "cogs_guild_commands",
+      "target": "repositories_member_repository_guildmember",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "cogs_guild_commands",
+      "target": "repositories_member_repository_memberrepository",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L6",
+      "weight": 0.8,
+      "source": "cogs_guild_commands_guildcommands",
+      "target": "bot_main_albionbot",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "cogs_guild_commands_guildcommands",
+      "target": "cogs_guild_commands_guildcommands_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "cogs_guild_commands_guildcommands",
+      "target": "cogs_guild_commands_guildcommands_members",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "cogs_guild_commands_guildcommands",
+      "target": "cogs_guild_commands_guildcommands_ping",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "cogs_guild_commands_guildcommands",
+      "target": "cogs_guild_commands_guildcommands_register",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L7",
+      "weight": 0.8,
+      "source": "cogs_guild_commands_guildcommands",
+      "target": "repositories_member_repository_guildmember",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L7",
+      "weight": 0.8,
+      "source": "cogs_guild_commands_guildcommands",
+      "target": "repositories_member_repository_memberrepository",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "cogs_guild_commands_setup",
+      "target": "cogs_guild_commands_guildcommands",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "cogs_guild_commands_guildcommands_init",
+      "target": "bot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "source": "cogs_guild_commands_guildcommands_init",
+      "target": "repositories_member_repository_memberrepository",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "cogs_guild_commands_guildcommands_ping",
+      "target": "interaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L32",
+      "weight": 1.0,
+      "source": "cogs_guild_commands_guildcommands_members",
+      "target": "interaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "source": "cogs_guild_commands_guildcommands_register",
+      "target": "interaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "source": "cogs_guild_commands_guildcommands_register",
+      "target": "repositories_member_repository_guildmember"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "cogs_guild_commands_setup",
+      "target": "bot_main_albionbot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/config.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "bot_config",
+      "target": "bot_config_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "bot_main",
+      "target": "bot_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/config.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "bot_config_config",
+      "target": "bot_config_config_from_env",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "bot_main",
+      "target": "bot_config_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/main.py",
+      "source_location": "L7",
+      "weight": 0.8,
+      "source": "bot_main_albionbot",
+      "target": "bot_config_config",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "bot_main_albionbot_init",
+      "target": "bot_config_config",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/main.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "bot_main_main",
+      "target": "bot_config_config_from_env"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "source": "bot_main",
+      "target": "bot_main_albionbot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "bot_main",
+      "target": "bot_main_main",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "source": "bot_main",
+      "target": "repositories_member_repository_memberrepository",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "bot_main_albionbot",
+      "target": "bot_main_albionbot_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L38",
+      "weight": 1.0,
+      "source": "bot_main_albionbot",
+      "target": "bot_main_albionbot_on_ready",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "bot_main_albionbot",
+      "target": "bot_main_albionbot_setup_hook",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/main.py",
+      "source_location": "L8",
+      "weight": 0.8,
+      "source": "bot_main_albionbot",
+      "target": "repositories_member_repository_memberrepository",
+      "confidence_score": 0.5
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "source": "bot_main_main",
+      "target": "bot_main_albionbot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/main.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "bot_main_albionbot_init",
+      "target": "repositories_member_repository_memberrepository"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "repositories_member_repository",
+      "target": "repositories_member_repository_guildmember",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "repositories_member_repository",
+      "target": "repositories_member_repository_memberrepository",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository_add",
+      "target": "repositories_member_repository_guildmember",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository_get_by_discord_id",
+      "target": "repositories_member_repository_guildmember",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository_list_all",
+      "target": "repositories_member_repository_guildmember",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository",
+      "target": "repositories_member_repository_memberrepository_add",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository",
+      "target": "repositories_member_repository_memberrepository_connect",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository",
+      "target": "repositories_member_repository_memberrepository_get_by_discord_id",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository",
+      "target": "repositories_member_repository_memberrepository_init",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository",
+      "target": "repositories_member_repository_memberrepository_init_schema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository",
+      "target": "repositories_member_repository_memberrepository_list_all",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "rationale_for",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "repositories_member_repository_rationale_14",
+      "target": "repositories_member_repository_memberrepository",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository_init",
+      "target": "repositories_member_repository_memberrepository_init_schema",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L37",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository_add",
+      "target": "repositories_member_repository_memberrepository_connect",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository_connect",
+      "target": "connection",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L44",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository_get_by_discord_id",
+      "target": "repositories_member_repository_memberrepository_connect",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository_init_schema",
+      "target": "repositories_member_repository_memberrepository_connect",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/member_repository.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "source": "repositories_member_repository_memberrepository_list_all",
+      "target": "repositories_member_repository_memberrepository_connect",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "readme",
+      "target": "readme_discord_bot_albion_online_guild",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "readme_discord_bot_albion_online_guild",
+      "target": "readme_available_commands",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "README.md",
+      "source_location": "L3",
+      "weight": 1.0,
+      "source": "readme_discord_bot_albion_online_guild",
+      "target": "readme_setup",
+      "confidence_score": 1.0
+    }
+  ],
+  "hyperedges": []
+}

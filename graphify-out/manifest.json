@@ -1,0 +1,67 @@
+{
+  ".opencode/opencode.json": {
+    "mtime": 1784021467.2971725,
+    "ast_hash": "abcc8b9dcd80bca5f9dde6d9f0c3ae79",
+    "semantic_hash": "abcc8b9dcd80bca5f9dde6d9f0c3ae79"
+  },
+  ".opencode/plugins/graphify.js": {
+    "mtime": 1784021467.2970798,
+    "ast_hash": "d12d57c380c6f01a0a3c3d480824d09f",
+    "semantic_hash": "d12d57c380c6f01a0a3c3d480824d09f"
+  },
+  "bot/__init__.py": {
+    "mtime": 1784022398.184344,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "bot/cogs/__init__.py": {
+    "mtime": 1784021996.4454787,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "bot/cogs/guild_commands.py": {
+    "mtime": 1784022815.3642004,
+    "ast_hash": "8a2ca52f7930071d8939ed7a53dac282",
+    "semantic_hash": ""
+  },
+  "bot/config.py": {
+    "mtime": 1784022828.6972823,
+    "ast_hash": "1dd7b1f130d6d53c1442ab165dc7658e",
+    "semantic_hash": ""
+  },
+  "bot/main.py": {
+    "mtime": 1784022812.1882014,
+    "ast_hash": "76b09ded19a309f6218a49c702a2c8c9",
+    "semantic_hash": ""
+  },
+  "bot/repositories/__init__.py": {
+    "mtime": 1784022120.867018,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "bot/repositories/member_repository.py": {
+    "mtime": 1784022817.0881999,
+    "ast_hash": "9e0a7d5825d07e8c0bf1a4e0a8599952",
+    "semantic_hash": ""
+  },
+  "bot/services/__init__.py": {
+    "mtime": 1784022125.3632183,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "tests/__init__.py": {
+    "mtime": 1784021997.6495323,
+    "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": ""
+  },
+  "README.md": {
+    "mtime": 1784022819.4681995,
+    "ast_hash": "55c6894da8557c59cf60c77265fdf1e7",
+    "semantic_hash": ""
+  },
+  "requirements.txt": {
+    "mtime": 1784022041.9154904,
+    "ast_hash": "0b202fa924cadcfe9aad111af39135d6",
+    "semantic_hash": ""
+  }
+}
