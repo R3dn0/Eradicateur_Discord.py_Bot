@@ -1,0 +1,10 @@
+{
+    "ping_name": "ping",
+    "ping_description": "Vérifie que le bot répond",
+    "register_name": "inscrire",
+    "register_description": "Enregistre ton pseudo Albion",
+    "register_ign_name": "pseudo",
+    "register_ign_description": "Ton pseudo Albion Online",
+    "members_name": "membres",
+    "members_description": "Liste les membres enregistrés"
+}

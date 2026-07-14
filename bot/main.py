@@ -5,8 +5,8 @@ import discord
 from discord.ext import commands
 
 from bot.config import Config
+from bot.i18n import JSONTranslator
 from bot.repositories.member_repository import MemberRepository
-
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("eradicateur_bot")
@@ -20,6 +20,10 @@ class EradicateurBot(commands.Bot):
         self.repository = MemberRepository(config.database_path)
 
     async def setup_hook(self) -> None:
+        translator = JSONTranslator()
+        await translator.load()
+        await self.tree.set_translator(translator)
+
         await self.load_extension("bot.cogs.guild_commands")
 
         if self.config.guild_id:
