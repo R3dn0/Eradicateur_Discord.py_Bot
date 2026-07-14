@@ -20,18 +20,18 @@
     "semantic_hash": ""
   },
   "bot/cogs/guild_commands.py": {
-    "mtime": 1784022815.3642004,
-    "ast_hash": "8a2ca52f7930071d8939ed7a53dac282",
+    "mtime": 1784036708.0317304,
+    "ast_hash": "6cdd93e6b73697021e9d2996c71636f9",
     "semantic_hash": ""
   },
   "bot/config.py": {
-    "mtime": 1784022828.6972823,
-    "ast_hash": "1dd7b1f130d6d53c1442ab165dc7658e",
+    "mtime": 1784024020.1340883,
+    "ast_hash": "df61081ee59dfea89f12bccba5329230",
     "semantic_hash": ""
   },
   "bot/main.py": {
-    "mtime": 1784022812.1882014,
-    "ast_hash": "76b09ded19a309f6218a49c702a2c8c9",
+    "mtime": 1784036708.0320914,
+    "ast_hash": "601ed22c1ffd3c7d8b4e70ef07919894",
     "semantic_hash": ""
   },
   "bot/repositories/__init__.py": {
@@ -55,13 +55,28 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1784022819.4681995,
-    "ast_hash": "55c6894da8557c59cf60c77265fdf1e7",
+    "mtime": 1784036708.0316188,
+    "ast_hash": "19fc17df0b0eab70b303b7d4b53ef28a",
     "semantic_hash": ""
   },
   "requirements.txt": {
     "mtime": 1784022041.9154904,
     "ast_hash": "0b202fa924cadcfe9aad111af39135d6",
+    "semantic_hash": ""
+  },
+  "bot/i18n.py": {
+    "mtime": 1784036708.031802,
+    "ast_hash": "2ab4418c359399b32ca632bea78343a4",
+    "semantic_hash": ""
+  },
+  "bot/locales/fr.json": {
+    "mtime": 1784036708.0320034,
+    "ast_hash": "4d3cd53476100678e75477809b24353e",
+    "semantic_hash": ""
+  },
+  "README.fr.md": {
+    "mtime": 1784036708.0315084,
+    "ast_hash": "0bd0b610e60108141d49eb07d52b3972",
     "semantic_hash": ""
   }
 }
