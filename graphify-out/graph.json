@@ -93,7 +93,7 @@
       "source_location": "L33",
       "_origin": "ast",
       "id": "commands_guide_adding_a_command",
-      "community": 14,
+      "community": 6,
       "norm_label": "adding a command"
     },
     {
@@ -103,7 +103,7 @@
       "source_location": "L35",
       "_origin": "ast",
       "id": "commands_guide_1_service_if_business_logic_needed",
-      "community": 14,
+      "community": 6,
       "norm_label": "1. service (if business logic needed)"
     },
     {
@@ -113,7 +113,7 @@
       "source_location": "L60",
       "_origin": "ast",
       "id": "commands_guide_2_cog",
-      "community": 14,
+      "community": 6,
       "norm_label": "2. cog"
     },
     {
@@ -123,7 +123,7 @@
       "source_location": "L96",
       "_origin": "ast",
       "id": "commands_guide_3_translations",
-      "community": 14,
+      "community": 6,
       "norm_label": "3. translations"
     },
     {
@@ -133,7 +133,7 @@
       "source_location": "L107",
       "_origin": "ast",
       "id": "commands_guide_4_load_the_cog",
-      "community": 14,
+      "community": 6,
       "norm_label": "4. load the cog"
     },
     {
@@ -143,7 +143,7 @@
       "source_location": "L115",
       "_origin": "ast",
       "id": "commands_guide_5_test",
-      "community": 14,
+      "community": 6,
       "norm_label": "5. test"
     },
     {
@@ -293,7 +293,7 @@
       "source_location": "L236",
       "_origin": "ast",
       "id": "commands_guide_responses",
-      "community": 15,
+      "community": 6,
       "norm_label": "responses"
     },
     {
@@ -303,7 +303,7 @@
       "source_location": "L238",
       "_origin": "ast",
       "id": "commands_guide_ephemeral_response_visible_only_to_user",
-      "community": 15,
+      "community": 6,
       "norm_label": "ephemeral response (visible only to user)"
     },
     {
@@ -313,7 +313,7 @@
       "source_location": "L243",
       "_origin": "ast",
       "id": "commands_guide_normal_response",
-      "community": 15,
+      "community": 6,
       "norm_label": "normal response"
     },
     {
@@ -323,7 +323,7 @@
       "source_location": "L248",
       "_origin": "ast",
       "id": "commands_guide_embed_response",
-      "community": 15,
+      "community": 6,
       "norm_label": "embed response"
     },
     {
@@ -333,7 +333,7 @@
       "source_location": "L255",
       "_origin": "ast",
       "id": "commands_guide_deferred_response_for_long_processing",
-      "community": 15,
+      "community": 6,
       "norm_label": "deferred response (for long processing)"
     },
     {
@@ -343,7 +343,7 @@
       "source_location": "L262",
       "_origin": "ast",
       "id": "commands_guide_edit_an_existing_response",
-      "community": 15,
+      "community": 6,
       "norm_label": "edit an existing response"
     },
     {
@@ -427,10 +427,20 @@
       "norm_label": "writing tests"
     },
     {
-      "label": "Testing patterns",
+      "label": "Opt-out role for payout DMs",
       "file_type": "document",
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L393",
+      "_origin": "ast",
+      "id": "commands_guide_opt_out_role_for_payout_dms",
+      "community": 6,
+      "norm_label": "opt-out role for payout dms"
+    },
+    {
+      "label": "Testing patterns",
+      "file_type": "document",
+      "source_file": "COMMANDS_GUIDE.md",
+      "source_location": "L407",
       "_origin": "ast",
       "id": "commands_guide_testing_patterns",
       "community": 6,
@@ -440,7 +450,7 @@
       "label": "Running tests",
       "file_type": "document",
       "source_file": "COMMANDS_GUIDE.md",
-      "source_location": "L440",
+      "source_location": "L454",
       "_origin": "ast",
       "id": "commands_guide_running_tests",
       "community": 6,
@@ -450,11 +460,51 @@
       "label": "Pre-commit checklist",
       "file_type": "document",
       "source_file": "COMMANDS_GUIDE.md",
-      "source_location": "L456",
+      "source_location": "L470",
       "_origin": "ast",
       "id": "commands_guide_pre_commit_checklist",
       "community": 6,
       "norm_label": "pre-commit checklist"
+    },
+    {
+      "label": "Modal patterns",
+      "file_type": "document",
+      "source_file": "COMMANDS_GUIDE.md",
+      "source_location": "L480",
+      "_origin": "ast",
+      "id": "commands_guide_modal_patterns",
+      "community": 6,
+      "norm_label": "modal patterns"
+    },
+    {
+      "label": "Multi-step flows (Modal \u2192 Select \u2192 Confirm)",
+      "file_type": "document",
+      "source_file": "COMMANDS_GUIDE.md",
+      "source_location": "L500",
+      "_origin": "ast",
+      "id": "commands_guide_multi_step_flows_modal_select_confirm",
+      "community": 6,
+      "norm_label": "multi-step flows (modal \u2192 select \u2192 confirm)"
+    },
+    {
+      "label": "Atomic transactions across repositories",
+      "file_type": "document",
+      "source_file": "COMMANDS_GUIDE.md",
+      "source_location": "L510",
+      "_origin": "ast",
+      "id": "commands_guide_atomic_transactions_across_repositories",
+      "community": 6,
+      "norm_label": "atomic transactions across repositories"
+    },
+    {
+      "label": "Public recap embed after confirm",
+      "file_type": "document",
+      "source_file": "COMMANDS_GUIDE.md",
+      "source_location": "L531",
+      "_origin": "ast",
+      "id": "commands_guide_public_recap_embed_after_confirm",
+      "community": 6,
+      "norm_label": "public recap embed after confirm"
     },
     {
       "label": "README.fr.md",
@@ -500,7 +550,7 @@
       "label": "Structure du projet",
       "file_type": "document",
       "source_file": "README.fr.md",
-      "source_location": "L25",
+      "source_location": "L27",
       "_origin": "ast",
       "id": "readme_fr_structure_du_projet",
       "community": 5,
@@ -550,7 +600,7 @@
       "label": "Project structure",
       "file_type": "document",
       "source_file": "README.md",
-      "source_location": "L25",
+      "source_location": "L27",
       "_origin": "ast",
       "id": "readme_project_structure",
       "community": 5,
@@ -559,11 +609,11 @@
     {
       "label": "__init__.py",
       "file_type": "code",
-      "source_file": "bot/cogs/__init__.py",
+      "source_file": "bot/__init__.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "cogs_init",
-      "community": 0,
+      "id": "bot_init",
+      "community": 2,
       "norm_label": "__init__.py"
     },
     {
@@ -577,10 +627,230 @@
       "norm_label": "payout.py"
     },
     {
+      "label": "PayoutCreateModal",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "cogs_payout_payoutcreatemodal",
+      "community": 0,
+      "norm_label": "payoutcreatemodal"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "cogs_payout_payoutcreatemodal_init",
+      "community": 0,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".on_submit()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L45",
+      "_origin": "ast",
+      "id": "cogs_payout_payoutcreatemodal_on_submit",
+      "community": 0,
+      "norm_label": ".on_submit()"
+    },
+    {
+      "label": "Interaction",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "interaction",
+      "community": 0,
+      "norm_label": "interaction"
+    },
+    {
+      "label": "ParticipantSelectView",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L85",
+      "_origin": "ast",
+      "id": "cogs_payout_participantselectview",
+      "community": 0,
+      "norm_label": "participantselectview"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L86",
+      "_origin": "ast",
+      "id": "cogs_payout_participantselectview_init",
+      "community": 3,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "._build_recap()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L124",
+      "_origin": "ast",
+      "id": "cogs_payout_participantselectview_build_recap",
+      "community": 0,
+      "norm_label": "._build_recap()"
+    },
+    {
+      "label": "._update_button_states()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L128",
+      "_origin": "ast",
+      "id": "cogs_payout_participantselectview_update_button_states",
+      "community": 0,
+      "norm_label": "._update_button_states()"
+    },
+    {
+      "label": ".on_participants_selected()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L139",
+      "_origin": "ast",
+      "id": "cogs_payout_participantselectview_on_participants_selected",
+      "community": 0,
+      "norm_label": ".on_participants_selected()"
+    },
+    {
+      "label": "UserSelect",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "userselect",
+      "community": 0,
+      "norm_label": "userselect"
+    },
+    {
+      "label": ".terminer()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L152",
+      "_origin": "ast",
+      "id": "cogs_payout_participantselectview_terminer",
+      "community": 0,
+      "norm_label": ".terminer()"
+    },
+    {
+      "label": "Button",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "button",
+      "community": 0,
+      "norm_label": "button"
+    },
+    {
+      "label": ".retirer()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L245",
+      "_origin": "ast",
+      "id": "cogs_payout_participantselectview_retirer",
+      "community": 0,
+      "norm_label": ".retirer()"
+    },
+    {
+      "label": ".annuler()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L262",
+      "_origin": "ast",
+      "id": "cogs_payout_participantselectview_annuler",
+      "community": 0,
+      "norm_label": ".annuler()"
+    },
+    {
+      "label": "RemoveParticipantsView",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L278",
+      "_origin": "ast",
+      "id": "cogs_payout_removeparticipantsview",
+      "community": 0,
+      "norm_label": "removeparticipantsview"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L279",
+      "_origin": "ast",
+      "id": "cogs_payout_removeparticipantsview_init",
+      "community": 0,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".on_remove_selected()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L300",
+      "_origin": "ast",
+      "id": "cogs_payout_removeparticipantsview_on_remove_selected",
+      "community": 0,
+      "norm_label": ".on_remove_selected()"
+    },
+    {
+      "label": ".retour()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L313",
+      "_origin": "ast",
+      "id": "cogs_payout_removeparticipantsview_retour",
+      "community": 0,
+      "norm_label": ".retour()"
+    },
+    {
+      "label": "ConfirmCancelView",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L325",
+      "_origin": "ast",
+      "id": "cogs_payout_confirmcancelview",
+      "community": 0,
+      "norm_label": "confirmcancelview"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L326",
+      "_origin": "ast",
+      "id": "cogs_payout_confirmcancelview_init",
+      "community": 0,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".confirm()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L362",
+      "_origin": "ast",
+      "id": "cogs_payout_confirmcancelview_confirm",
+      "community": 0,
+      "norm_label": ".confirm()"
+    },
+    {
+      "label": ".cancel()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L486",
+      "_origin": "ast",
+      "id": "cogs_payout_confirmcancelview_cancel",
+      "community": 0,
+      "norm_label": ".cancel()"
+    },
+    {
       "label": "PayoutCog",
       "file_type": "code",
       "source_file": "bot/cogs/payout.py",
-      "source_location": "L10",
+      "source_location": "L503",
       "_origin": "ast",
       "id": "cogs_payout_payoutcog",
       "community": 0,
@@ -590,7 +860,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "bot/cogs/payout.py",
-      "source_location": "L18",
+      "source_location": "L511",
       "_origin": "ast",
       "id": "cogs_payout_payoutcog_init",
       "community": 0,
@@ -607,24 +877,24 @@
       "norm_label": "eradicateurbot"
     },
     {
+      "label": ".create()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L521",
+      "_origin": "ast",
+      "id": "cogs_payout_payoutcog_create",
+      "community": 0,
+      "norm_label": ".create()"
+    },
+    {
       "label": ".config_roles()",
       "file_type": "code",
       "source_file": "bot/cogs/payout.py",
-      "source_location": "L29",
+      "source_location": "L576",
       "_origin": "ast",
       "id": "cogs_payout_payoutcog_config_roles",
       "community": 0,
       "norm_label": ".config_roles()"
-    },
-    {
-      "label": "Interaction",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "interaction",
-      "community": 0,
-      "norm_label": "interaction"
     },
     {
       "label": "Role",
@@ -640,7 +910,7 @@
       "label": ".config_rates()",
       "file_type": "code",
       "source_file": "bot/cogs/payout.py",
-      "source_location": "L52",
+      "source_location": "L606",
       "_origin": "ast",
       "id": "cogs_payout_payoutcog_config_rates",
       "community": 0,
@@ -650,7 +920,7 @@
       "label": ".config_show()",
       "file_type": "code",
       "source_file": "bot/cogs/payout.py",
-      "source_location": "L88",
+      "source_location": "L646",
       "_origin": "ast",
       "id": "cogs_payout_payoutcog_config_show",
       "community": 0,
@@ -660,41 +930,11 @@
       "label": "setup()",
       "file_type": "code",
       "source_file": "bot/cogs/payout.py",
-      "source_location": "L116",
+      "source_location": "L683",
       "_origin": "ast",
       "id": "cogs_payout_setup",
       "community": 0,
       "norm_label": "setup()"
-    },
-    {
-      "label": "config.py",
-      "file_type": "code",
-      "source_file": "bot/config.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "bot_config",
-      "community": 2,
-      "norm_label": "config.py"
-    },
-    {
-      "label": "Config",
-      "file_type": "code",
-      "source_file": "bot/config.py",
-      "source_location": "L10",
-      "_origin": "ast",
-      "id": "bot_config_config",
-      "community": 2,
-      "norm_label": "config"
-    },
-    {
-      "label": ".from_env()",
-      "file_type": "code",
-      "source_file": "bot/config.py",
-      "source_location": "L16",
-      "_origin": "ast",
-      "id": "bot_config_config_from_env",
-      "community": 2,
-      "norm_label": ".from_env()"
     },
     {
       "label": "main.py",
@@ -710,7 +950,7 @@
       "label": "EradicateurBot",
       "file_type": "code",
       "source_file": "bot/main.py",
-      "source_location": "L22",
+      "source_location": "L24",
       "_origin": "ast",
       "id": "bot_main_eradicateurbot",
       "community": 2,
@@ -720,27 +960,57 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "bot/main.py",
-      "source_location": "L23",
+      "source_location": "L25",
       "_origin": "ast",
       "id": "bot_main_eradicateurbot_init",
       "community": 2,
       "norm_label": ".__init__()"
     },
     {
+      "label": "Config",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "config",
+      "community": 2,
+      "norm_label": "config"
+    },
+    {
       "label": ".setup_hook()",
       "file_type": "code",
       "source_file": "bot/main.py",
-      "source_location": "L34",
+      "source_location": "L37",
       "_origin": "ast",
       "id": "bot_main_eradicateurbot_setup_hook",
-      "community": 2,
+      "community": 3,
       "norm_label": ".setup_hook()"
+    },
+    {
+      "label": ".translate()",
+      "file_type": "code",
+      "source_file": "bot/main.py",
+      "source_location": "L68",
+      "_origin": "ast",
+      "id": "bot_main_eradicateurbot_translate",
+      "community": 2,
+      "norm_label": ".translate()"
+    },
+    {
+      "label": "Locale",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "locale",
+      "community": 2,
+      "norm_label": "locale"
     },
     {
       "label": ".close()",
       "file_type": "code",
       "source_file": "bot/main.py",
-      "source_location": "L64",
+      "source_location": "L76",
       "_origin": "ast",
       "id": "bot_main_eradicateurbot_close",
       "community": 2,
@@ -750,7 +1020,7 @@
       "label": ".on_ready()",
       "file_type": "code",
       "source_file": "bot/main.py",
-      "source_location": "L69",
+      "source_location": "L81",
       "_origin": "ast",
       "id": "bot_main_eradicateurbot_on_ready",
       "community": 2,
@@ -760,7 +1030,7 @@
       "label": "main()",
       "file_type": "code",
       "source_file": "bot/main.py",
-      "source_location": "L74",
+      "source_location": "L86",
       "_origin": "ast",
       "id": "bot_main_main",
       "community": 2,
@@ -773,7 +1043,7 @@
       "source_location": "L1",
       "_origin": "ast",
       "id": "repositories_init",
-      "community": 3,
+      "community": 1,
       "norm_label": "__init__.py"
     },
     {
@@ -800,7 +1070,7 @@
       "label": "PayoutConfigRepository",
       "file_type": "code",
       "source_file": "bot/repositories/payout_config_repository.py",
-      "source_location": "L20",
+      "source_location": "L25",
       "_origin": "ast",
       "id": "repositories_payout_config_repository_payoutconfigrepository",
       "community": 3,
@@ -810,7 +1080,7 @@
       "label": ".__init__()",
       "file_type": "code",
       "source_file": "bot/repositories/payout_config_repository.py",
-      "source_location": "L21",
+      "source_location": "L26",
       "_origin": "ast",
       "id": "repositories_payout_config_repository_payoutconfigrepository_init",
       "community": 1,
@@ -830,17 +1100,27 @@
       "label": "._ensure_table()",
       "file_type": "code",
       "source_file": "bot/repositories/payout_config_repository.py",
-      "source_location": "L24",
+      "source_location": "L29",
       "_origin": "ast",
       "id": "repositories_payout_config_repository_payoutconfigrepository_ensure_table",
       "community": 3,
       "norm_label": "._ensure_table()"
     },
     {
+      "label": "._migrate()",
+      "file_type": "code",
+      "source_file": "bot/repositories/payout_config_repository.py",
+      "source_location": "L53",
+      "_origin": "ast",
+      "id": "repositories_payout_config_repository_payoutconfigrepository_migrate",
+      "community": 3,
+      "norm_label": "._migrate()"
+    },
+    {
       "label": ".get_config()",
       "file_type": "code",
       "source_file": "bot/repositories/payout_config_repository.py",
-      "source_location": "L47",
+      "source_location": "L62",
       "_origin": "ast",
       "id": "repositories_payout_config_repository_payoutconfigrepository_get_config",
       "community": 3,
@@ -850,7 +1130,7 @@
       "label": ".update_rates()",
       "file_type": "code",
       "source_file": "bot/repositories/payout_config_repository.py",
-      "source_location": "L61",
+      "source_location": "L77",
       "_origin": "ast",
       "id": "repositories_payout_config_repository_payoutconfigrepository_update_rates",
       "community": 3,
@@ -860,181 +1140,91 @@
       "label": ".update_roles()",
       "file_type": "code",
       "source_file": "bot/repositories/payout_config_repository.py",
-      "source_location": "L74",
+      "source_location": "L90",
       "_origin": "ast",
       "id": "repositories_payout_config_repository_payoutconfigrepository_update_roles",
       "community": 3,
       "norm_label": ".update_roles()"
     },
     {
-      "label": "transaction_repository.py",
+      "label": "payout_repository.py",
       "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
+      "source_file": "bot/repositories/payout_repository.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "repositories_transaction_repository",
+      "id": "repositories_payout_repository",
       "community": 1,
-      "norm_label": "transaction_repository.py"
+      "norm_label": "payout_repository.py"
     },
     {
-      "label": "Transaction",
+      "label": "Payout",
       "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L6",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L24",
       "_origin": "ast",
-      "id": "repositories_transaction_repository_transaction",
+      "id": "repositories_payout_repository_payout",
       "community": 1,
-      "norm_label": "transaction"
+      "norm_label": "payout"
+    },
+    {
+      "label": "PayoutRepository",
+      "file_type": "code",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "repositories_payout_repository_payoutrepository",
+      "community": 1,
+      "norm_label": "payoutrepository"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L40",
+      "_origin": "ast",
+      "id": "repositories_payout_repository_payoutrepository_init",
+      "community": 1,
+      "norm_label": ".__init__()"
     },
     {
       "label": "TransactionRepository",
       "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L16",
+      "source_file": "",
+      "source_location": "",
       "_origin": "ast",
-      "id": "repositories_transaction_repository_transactionrepository",
+      "id": "transactionrepository",
       "community": 1,
       "norm_label": "transactionrepository"
     },
     {
-      "label": ".__init__()",
+      "label": "._ensure_tables()",
       "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L17",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L48",
       "_origin": "ast",
-      "id": "repositories_transaction_repository_transactionrepository_init",
+      "id": "repositories_payout_repository_payoutrepository_ensure_tables",
       "community": 1,
-      "norm_label": ".__init__()"
+      "norm_label": "._ensure_tables()"
     },
     {
-      "label": "._ensure_table()",
+      "label": "._migrate()",
       "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L20",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L81",
       "_origin": "ast",
-      "id": "repositories_transaction_repository_transactionrepository_ensure_table",
+      "id": "repositories_payout_repository_payoutrepository_migrate",
       "community": 1,
-      "norm_label": "._ensure_table()"
+      "norm_label": "._migrate()"
     },
     {
-      "label": ".add_transaction()",
+      "label": ".create_payout()",
       "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L35",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L88",
       "_origin": "ast",
-      "id": "repositories_transaction_repository_transactionrepository_add_transaction",
+      "id": "repositories_payout_repository_payoutrepository_create_payout",
       "community": 1,
-      "norm_label": ".add_transaction()"
-    },
-    {
-      "label": ".get_balance()",
-      "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L55",
-      "_origin": "ast",
-      "id": "repositories_transaction_repository_transactionrepository_get_balance",
-      "community": 1,
-      "norm_label": ".get_balance()"
-    },
-    {
-      "label": ".list_transactions()",
-      "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L64",
-      "_origin": "ast",
-      "id": "repositories_transaction_repository_transactionrepository_list_transactions",
-      "community": 1,
-      "norm_label": ".list_transactions()"
-    },
-    {
-      "label": "__init__.py",
-      "file_type": "code",
-      "source_file": "bot/services/__init__.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "services_init",
-      "community": 3,
-      "norm_label": "__init__.py"
-    },
-    {
-      "label": "payout_config_service.py",
-      "file_type": "code",
-      "source_file": "bot/services/payout_config_service.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "services_payout_config_service",
-      "community": 3,
-      "norm_label": "payout_config_service.py"
-    },
-    {
-      "label": "PayoutRates",
-      "file_type": "code",
-      "source_file": "bot/services/payout_config_service.py",
-      "source_location": "L11",
-      "_origin": "ast",
-      "id": "services_payout_config_service_payoutrates",
-      "community": 3,
-      "norm_label": "payoutrates"
-    },
-    {
-      "label": "PayoutConfigService",
-      "file_type": "code",
-      "source_file": "bot/services/payout_config_service.py",
-      "source_location": "L17",
-      "_origin": "ast",
-      "id": "services_payout_config_service_payoutconfigservice",
-      "community": 3,
-      "norm_label": "payoutconfigservice"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "bot/services/payout_config_service.py",
-      "source_location": "L18",
-      "_origin": "ast",
-      "id": "services_payout_config_service_payoutconfigservice_init",
-      "community": 3,
-      "norm_label": ".__init__()"
-    },
-    {
-      "label": ".get_rates()",
-      "file_type": "code",
-      "source_file": "bot/services/payout_config_service.py",
-      "source_location": "L21",
-      "_origin": "ast",
-      "id": "services_payout_config_service_payoutconfigservice_get_rates",
-      "community": 3,
-      "norm_label": ".get_rates()"
-    },
-    {
-      "label": ".is_officer()",
-      "file_type": "code",
-      "source_file": "bot/services/payout_config_service.py",
-      "source_location": "L29",
-      "_origin": "ast",
-      "id": "services_payout_config_service_payoutconfigservice_is_officer",
-      "community": 3,
-      "norm_label": ".is_officer()"
-    },
-    {
-      "label": "Member",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "id": "member",
-      "community": 3,
-      "norm_label": "member"
-    },
-    {
-      "label": ".is_leader()",
-      "file_type": "code",
-      "source_file": "bot/services/payout_config_service.py",
-      "source_location": "L37",
-      "_origin": "ast",
-      "id": "services_payout_config_service_payoutconfigservice_is_leader",
-      "community": 3,
-      "norm_label": ".is_leader()"
+      "norm_label": ".create_payout()"
     },
     {
       "label": "eradicateur-bot",
@@ -1093,7 +1283,7 @@
       "label": "test_update_rates_persists()",
       "file_type": "code",
       "source_file": "tests/repositories/test_payout_config_repository.py",
-      "source_location": "L34",
+      "source_location": "L35",
       "_origin": "ast",
       "id": "repositories_test_payout_config_repository_test_update_rates_persists",
       "community": 3,
@@ -1103,7 +1293,7 @@
       "label": "test_update_roles_persists()",
       "file_type": "code",
       "source_file": "tests/repositories/test_payout_config_repository.py",
-      "source_location": "L43",
+      "source_location": "L44",
       "_origin": "ast",
       "id": "repositories_test_payout_config_repository_test_update_roles_persists",
       "community": 3,
@@ -1113,131 +1303,291 @@
       "label": "test_update_roles_can_clear()",
       "file_type": "code",
       "source_file": "tests/repositories/test_payout_config_repository.py",
-      "source_location": "L51",
+      "source_location": "L53",
       "_origin": "ast",
       "id": "repositories_test_payout_config_repository_test_update_roles_can_clear",
       "community": 3,
       "norm_label": "test_update_roles_can_clear()"
     },
     {
-      "label": "test_transaction_repository.py",
+      "label": "test_update_roles_persists_no_dm_role()",
       "file_type": "code",
-      "source_file": "tests/repositories/test_transaction_repository.py",
+      "source_file": "tests/repositories/test_payout_config_repository.py",
+      "source_location": "L63",
+      "_origin": "ast",
+      "id": "repositories_test_payout_config_repository_test_update_roles_persists_no_dm_role",
+      "community": 3,
+      "norm_label": "test_update_roles_persists_no_dm_role()"
+    },
+    {
+      "label": "test_update_roles_can_clear_no_dm()",
+      "file_type": "code",
+      "source_file": "tests/repositories/test_payout_config_repository.py",
+      "source_location": "L76",
+      "_origin": "ast",
+      "id": "repositories_test_payout_config_repository_test_update_roles_can_clear_no_dm",
+      "community": 3,
+      "norm_label": "test_update_roles_can_clear_no_dm()"
+    },
+    {
+      "label": "test_payout_repository.py",
+      "file_type": "code",
+      "source_file": "tests/repositories/test_payout_repository.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "repositories_test_transaction_repository",
+      "id": "repositories_test_payout_repository",
       "community": 1,
-      "norm_label": "test_transaction_repository.py"
+      "norm_label": "test_payout_repository.py"
     },
     {
       "label": "db()",
       "file_type": "code",
-      "source_file": "tests/repositories/test_transaction_repository.py",
-      "source_location": "L10",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L11",
       "_origin": "ast",
-      "id": "repositories_test_transaction_repository_db",
+      "id": "repositories_test_payout_repository_db",
       "community": 1,
       "norm_label": "db()"
     },
     {
       "label": "repo()",
       "file_type": "code",
-      "source_file": "tests/repositories/test_transaction_repository.py",
-      "source_location": "L18",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L19",
       "_origin": "ast",
-      "id": "repositories_test_transaction_repository_repo",
+      "id": "repositories_test_payout_repository_repo",
       "community": 1,
       "norm_label": "repo()"
     },
     {
-      "label": "test_get_balance_returns_zero_for_unknown()",
+      "label": "test_create_payout_returns_id()",
       "file_type": "code",
-      "source_file": "tests/repositories/test_transaction_repository.py",
-      "source_location": "L23",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L25",
       "_origin": "ast",
-      "id": "repositories_test_transaction_repository_test_get_balance_returns_zero_for_unknown",
+      "id": "repositories_test_payout_repository_test_create_payout_returns_id",
       "community": 1,
-      "norm_label": "test_get_balance_returns_zero_for_unknown()"
+      "norm_label": "test_create_payout_returns_id()"
     },
     {
-      "label": "test_add_and_balance_single()",
+      "label": "test_create_payout_persists_row()",
       "file_type": "code",
-      "source_file": "tests/repositories/test_transaction_repository.py",
-      "source_location": "L29",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L43",
       "_origin": "ast",
-      "id": "repositories_test_transaction_repository_test_add_and_balance_single",
+      "id": "repositories_test_payout_repository_test_create_payout_persists_row",
       "community": 1,
-      "norm_label": "test_add_and_balance_single()"
+      "norm_label": "test_create_payout_persists_row()"
     },
     {
-      "label": "test_balance_sums_multiple()",
+      "label": "test_create_payout_creates_transactions()",
       "file_type": "code",
-      "source_file": "tests/repositories/test_transaction_repository.py",
-      "source_location": "L36",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L74",
       "_origin": "ast",
-      "id": "repositories_test_transaction_repository_test_balance_sums_multiple",
+      "id": "repositories_test_payout_repository_test_create_payout_creates_transactions",
       "community": 1,
-      "norm_label": "test_balance_sums_multiple()"
+      "norm_label": "test_create_payout_creates_transactions()"
     },
     {
-      "label": "test_balance_is_per_user()",
+      "label": "test_rollback_on_transaction_failure()",
       "file_type": "code",
-      "source_file": "tests/repositories/test_transaction_repository.py",
-      "source_location": "L45",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L97",
       "_origin": "ast",
-      "id": "repositories_test_transaction_repository_test_balance_is_per_user",
+      "id": "repositories_test_payout_repository_test_rollback_on_transaction_failure",
       "community": 1,
-      "norm_label": "test_balance_is_per_user()"
+      "norm_label": "test_rollback_on_transaction_failure()"
     },
     {
-      "label": "test_list_transactions_orders_desc()",
+      "label": "test_buyback_value_formula()",
       "file_type": "code",
-      "source_file": "tests/repositories/test_transaction_repository.py",
-      "source_location": "L53",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L137",
       "_origin": "ast",
-      "id": "repositories_test_transaction_repository_test_list_transactions_orders_desc",
+      "id": "repositories_test_payout_repository_test_buyback_value_formula",
       "community": 1,
-      "norm_label": "test_list_transactions_orders_desc()"
+      "norm_label": "test_buyback_value_formula()"
     },
     {
-      "label": "Bot",
+      "label": "test_cogs.py",
       "file_type": "code",
-      "source_file": "",
-      "source_location": "",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L1",
       "_origin": "ast",
+      "id": "tests_test_cogs",
       "community": 0,
-      "norm_label": "bot",
-      "id": "bot"
+      "norm_label": "test_cogs.py"
     },
     {
-      "label": "locale_str",
+      "label": "TestPingCommand",
       "file_type": "code",
-      "source_file": "",
-      "source_location": "",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L12",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "locale_str",
-      "id": "locale_str"
+      "id": "tests_test_cogs_testpingcommand",
+      "community": 0,
+      "norm_label": "testpingcommand"
     },
     {
-      "label": "Locale",
+      "label": ".cog()",
       "file_type": "code",
-      "source_file": "",
-      "source_location": "",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L14",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "locale",
-      "id": "locale"
+      "id": "tests_test_cogs_testpingcommand_cog",
+      "community": 0,
+      "norm_label": ".cog()"
     },
     {
-      "label": "TranslationContextTypes",
+      "label": ".test_ping_responds()",
       "file_type": "code",
-      "source_file": "",
-      "source_location": "",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L20",
       "_origin": "ast",
-      "community": 2,
-      "norm_label": "translationcontexttypes",
-      "id": "translationcontexttypes"
+      "id": "tests_test_cogs_testpingcommand_test_ping_responds",
+      "community": 0,
+      "norm_label": ".test_ping_responds()"
+    },
+    {
+      "label": "TestPayoutDeduplication",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L30",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testpayoutdeduplication",
+      "community": 0,
+      "norm_label": "testpayoutdeduplication"
+    },
+    {
+      "label": ".test_deduplicates_across_batches()",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L31",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testpayoutdeduplication_test_deduplicates_across_batches",
+      "community": 0,
+      "norm_label": ".test_deduplicates_across_batches()"
+    },
+    {
+      "label": ".test_remove_flow_deduplicates_correctly()",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L49",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testpayoutdeduplication_test_remove_flow_deduplicates_correctly",
+      "community": 0,
+      "norm_label": ".test_remove_flow_deduplicates_correctly()"
+    },
+    {
+      "label": "TestConfirmCancelViewDMNotifications",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L74",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "community": 14,
+      "norm_label": "testconfirmcancelviewdmnotifications"
+    },
+    {
+      "label": ".view()",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L76",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_view",
+      "community": 14,
+      "norm_label": ".view()"
+    },
+    {
+      "label": "._setup_bot()",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L94",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_setup_bot",
+      "community": 14,
+      "norm_label": "._setup_bot()"
+    },
+    {
+      "label": "._setup_interaction()",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L125",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_setup_interaction",
+      "community": 14,
+      "norm_label": "._setup_interaction()"
+    },
+    {
+      "label": ".no_dm_role_id()",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L138",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_no_dm_role_id",
+      "community": 14,
+      "norm_label": ".no_dm_role_id()"
+    },
+    {
+      "label": ".guild()",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L142",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_guild",
+      "community": 14,
+      "norm_label": ".guild()"
+    },
+    {
+      "label": ".test_dm_failure_does_not_block_others()",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L170",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_test_dm_failure_does_not_block_others",
+      "community": 14,
+      "norm_label": ".test_dm_failure_does_not_block_others()"
+    },
+    {
+      "label": ".no_dm_role_id_111()",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L200",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_no_dm_role_id_111",
+      "community": 14,
+      "norm_label": ".no_dm_role_id_111()"
+    },
+    {
+      "label": ".guild_with_optout()",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L204",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_guild_with_optout",
+      "community": 14,
+      "norm_label": ".guild_with_optout()"
+    },
+    {
+      "label": ".test_confirm_skips_dm_for_opt_out_role()",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L226",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_test_confirm_skips_dm_for_opt_out_role",
+      "community": 14,
+      "norm_label": ".test_confirm_skips_dm_for_opt_out_role()"
+    },
+    {
+      "label": ".test_confirm_sends_dm_without_opt_out_role()",
+      "file_type": "code",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L278",
+      "_origin": "ast",
+      "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_test_confirm_sends_dm_without_opt_out_role",
+      "community": 14,
+      "norm_label": ".test_confirm_sends_dm_without_opt_out_role()"
     },
     {
       "label": "opencode.json",
@@ -1322,12 +1672,12 @@
     {
       "label": "__init__.py",
       "file_type": "code",
-      "source_file": "bot/__init__.py",
+      "source_file": "bot/cogs/__init__.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 2,
+      "community": 0,
       "norm_label": "__init__.py",
-      "id": "bot_init"
+      "id": "cogs_init"
     },
     {
       "label": "guild_commands.py",
@@ -1360,6 +1710,16 @@
       "id": "cogs_guild_commands_guildcommands_init"
     },
     {
+      "label": "Bot",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 0,
+      "norm_label": "bot",
+      "id": "bot"
+    },
+    {
       "label": ".ping()",
       "file_type": "code",
       "source_file": "bot/cogs/guild_commands.py",
@@ -1378,6 +1738,36 @@
       "community": 0,
       "norm_label": "setup()",
       "id": "cogs_guild_commands_setup"
+    },
+    {
+      "label": "config.py",
+      "file_type": "code",
+      "source_file": "bot/config.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "config.py",
+      "id": "bot_config"
+    },
+    {
+      "label": "Config",
+      "file_type": "code",
+      "source_file": "bot/config.py",
+      "source_location": "L10",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "config",
+      "id": "bot_config_config"
+    },
+    {
+      "label": ".from_env()",
+      "file_type": "code",
+      "source_file": "bot/config.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": ".from_env()",
+      "id": "bot_config_config_from_env"
     },
     {
       "label": "i18n.py",
@@ -1430,6 +1820,196 @@
       "id": "bot_i18n_jsontranslator_translate"
     },
     {
+      "label": "locale_str",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "locale_str",
+      "id": "locale_str"
+    },
+    {
+      "label": "TranslationContextTypes",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "translationcontexttypes",
+      "id": "translationcontexttypes"
+    },
+    {
+      "label": "transaction_repository.py",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "transaction_repository.py",
+      "id": "repositories_transaction_repository"
+    },
+    {
+      "label": "Transaction",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L6",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "transaction",
+      "id": "repositories_transaction_repository_transaction"
+    },
+    {
+      "label": "TransactionRepository",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "transactionrepository",
+      "id": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".__init__()",
+      "id": "repositories_transaction_repository_transactionrepository_init"
+    },
+    {
+      "label": "._ensure_table()",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "._ensure_table()",
+      "id": "repositories_transaction_repository_transactionrepository_ensure_table"
+    },
+    {
+      "label": ".add_transaction()",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L35",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".add_transaction()",
+      "id": "repositories_transaction_repository_transactionrepository_add_transaction"
+    },
+    {
+      "label": ".get_balance()",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L55",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".get_balance()",
+      "id": "repositories_transaction_repository_transactionrepository_get_balance"
+    },
+    {
+      "label": ".list_transactions()",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L64",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": ".list_transactions()",
+      "id": "repositories_transaction_repository_transactionrepository_list_transactions"
+    },
+    {
+      "label": "__init__.py",
+      "file_type": "code",
+      "source_file": "bot/services/__init__.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "__init__.py",
+      "id": "services_init"
+    },
+    {
+      "label": "payout_config_service.py",
+      "file_type": "code",
+      "source_file": "bot/services/payout_config_service.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "payout_config_service.py",
+      "id": "services_payout_config_service"
+    },
+    {
+      "label": "PayoutRates",
+      "file_type": "code",
+      "source_file": "bot/services/payout_config_service.py",
+      "source_location": "L11",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "payoutrates",
+      "id": "services_payout_config_service_payoutrates"
+    },
+    {
+      "label": "PayoutConfigService",
+      "file_type": "code",
+      "source_file": "bot/services/payout_config_service.py",
+      "source_location": "L17",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "payoutconfigservice",
+      "id": "services_payout_config_service_payoutconfigservice"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/services/payout_config_service.py",
+      "source_location": "L18",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": ".__init__()",
+      "id": "services_payout_config_service_payoutconfigservice_init"
+    },
+    {
+      "label": ".get_rates()",
+      "file_type": "code",
+      "source_file": "bot/services/payout_config_service.py",
+      "source_location": "L21",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": ".get_rates()",
+      "id": "services_payout_config_service_payoutconfigservice_get_rates"
+    },
+    {
+      "label": ".is_officer()",
+      "file_type": "code",
+      "source_file": "bot/services/payout_config_service.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": ".is_officer()",
+      "id": "services_payout_config_service_payoutconfigservice_is_officer"
+    },
+    {
+      "label": "Member",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": "member",
+      "id": "member"
+    },
+    {
+      "label": ".is_leader()",
+      "file_type": "code",
+      "source_file": "bot/services/payout_config_service.py",
+      "source_location": "L37",
+      "_origin": "ast",
+      "community": 3,
+      "norm_label": ".is_leader()",
+      "id": "services_payout_config_service_payoutconfigservice_is_leader"
+    },
+    {
       "label": "__init__.py",
       "file_type": "code",
       "source_file": "tests/__init__.py",
@@ -1440,44 +2020,144 @@
       "id": "tests_init"
     },
     {
-      "label": "test_cogs.py",
+      "label": "test_transaction_repository.py",
       "file_type": "code",
-      "source_file": "tests/test_cogs.py",
+      "source_file": "tests/repositories/test_transaction_repository.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 0,
-      "norm_label": "test_cogs.py",
-      "id": "tests_test_cogs"
+      "community": 1,
+      "norm_label": "test_transaction_repository.py",
+      "id": "repositories_test_transaction_repository"
     },
     {
-      "label": "TestPingCommand",
+      "label": "db()",
       "file_type": "code",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L7",
+      "source_file": "tests/repositories/test_transaction_repository.py",
+      "source_location": "L10",
       "_origin": "ast",
-      "community": 0,
-      "norm_label": "testpingcommand",
-      "id": "tests_test_cogs_testpingcommand"
+      "community": 1,
+      "norm_label": "db()",
+      "id": "repositories_test_transaction_repository_db"
     },
     {
-      "label": ".cog()",
+      "label": "repo()",
       "file_type": "code",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L9",
+      "source_file": "tests/repositories/test_transaction_repository.py",
+      "source_location": "L18",
       "_origin": "ast",
-      "community": 0,
-      "norm_label": ".cog()",
-      "id": "tests_test_cogs_testpingcommand_cog"
+      "community": 1,
+      "norm_label": "repo()",
+      "id": "repositories_test_transaction_repository_repo"
     },
     {
-      "label": ".test_ping_responds()",
+      "label": "test_get_balance_returns_zero_for_unknown()",
       "file_type": "code",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L15",
+      "source_file": "tests/repositories/test_transaction_repository.py",
+      "source_location": "L23",
       "_origin": "ast",
-      "community": 0,
-      "norm_label": ".test_ping_responds()",
-      "id": "tests_test_cogs_testpingcommand_test_ping_responds"
+      "community": 1,
+      "norm_label": "test_get_balance_returns_zero_for_unknown()",
+      "id": "repositories_test_transaction_repository_test_get_balance_returns_zero_for_unknown"
+    },
+    {
+      "label": "test_add_and_balance_single()",
+      "file_type": "code",
+      "source_file": "tests/repositories/test_transaction_repository.py",
+      "source_location": "L29",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "test_add_and_balance_single()",
+      "id": "repositories_test_transaction_repository_test_add_and_balance_single"
+    },
+    {
+      "label": "test_balance_sums_multiple()",
+      "file_type": "code",
+      "source_file": "tests/repositories/test_transaction_repository.py",
+      "source_location": "L36",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "test_balance_sums_multiple()",
+      "id": "repositories_test_transaction_repository_test_balance_sums_multiple"
+    },
+    {
+      "label": "test_balance_is_per_user()",
+      "file_type": "code",
+      "source_file": "tests/repositories/test_transaction_repository.py",
+      "source_location": "L45",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "test_balance_is_per_user()",
+      "id": "repositories_test_transaction_repository_test_balance_is_per_user"
+    },
+    {
+      "label": "test_list_transactions_orders_desc()",
+      "file_type": "code",
+      "source_file": "tests/repositories/test_transaction_repository.py",
+      "source_location": "L53",
+      "_origin": "ast",
+      "community": 1,
+      "norm_label": "test_list_transactions_orders_desc()",
+      "id": "repositories_test_transaction_repository_test_list_transactions_orders_desc"
+    },
+    {
+      "label": "pull_request_template.md",
+      "file_type": "document",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "pull_request_template.md",
+      "id": "github_pull_request_template"
+    },
+    {
+      "label": "Summary",
+      "file_type": "document",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "summary",
+      "id": "github_pull_request_template_summary"
+    },
+    {
+      "label": "Type of change",
+      "file_type": "document",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L5",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "type of change",
+      "id": "github_pull_request_template_type_of_change"
+    },
+    {
+      "label": "Checklist",
+      "file_type": "document",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L13",
+      "_origin": "ast",
+      "community": 16,
+      "norm_label": "checklist",
+      "id": "github_pull_request_template_checklist"
+    },
+    {
+      "label": "AGENTS.md",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "agents.md",
+      "id": "agents"
+    },
+    {
+      "label": "graphify",
+      "file_type": "document",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 8,
+      "norm_label": "graphify",
+      "id": "agents_graphify"
     },
     {
       "label": "Pull Request Template",
@@ -1597,19 +2277,6 @@
       "id": "pre_commit_config_doc"
     },
     {
-      "label": "AGENTS.md",
-      "file_type": "document",
-      "source_file": "AGENTS.md",
-      "source_location": null,
-      "source_url": null,
-      "captured_at": null,
-      "author": null,
-      "contributor": null,
-      "community": 8,
-      "norm_label": "agents.md",
-      "id": "agents_doc"
-    },
-    {
       "label": "Graphify CLI Tool",
       "file_type": "concept",
       "source_file": "AGENTS.md",
@@ -1708,9 +2375,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide",
-      "target": "commands_guide_discord_commands_guide",
-      "confidence_score": 1.0
+      "target": "commands_guide_discord_commands_guide"
     },
     {
       "relation": "contains",
@@ -1718,9 +2385,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L33",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_discord_commands_guide",
-      "target": "commands_guide_adding_a_command",
-      "confidence_score": 1.0
+      "target": "commands_guide_adding_a_command"
     },
     {
       "relation": "contains",
@@ -1728,9 +2395,19 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_discord_commands_guide",
-      "target": "commands_guide_architecture",
-      "confidence_score": 1.0
+      "target": "commands_guide_architecture"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "COMMANDS_GUIDE.md",
+      "source_location": "L496",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_guide_discord_commands_guide",
+      "target": "commands_guide_atomic_transactions_across_repositories"
     },
     {
       "relation": "contains",
@@ -1738,9 +2415,29 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L286",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_discord_commands_guide",
-      "target": "commands_guide_concrete_examples",
-      "confidence_score": 1.0
+      "target": "commands_guide_concrete_examples"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "COMMANDS_GUIDE.md",
+      "source_location": "L466",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_guide_discord_commands_guide",
+      "target": "commands_guide_modal_patterns"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "COMMANDS_GUIDE.md",
+      "source_location": "L486",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_guide_discord_commands_guide",
+      "target": "commands_guide_multi_step_flows_modal_select_confirm"
     },
     {
       "relation": "contains",
@@ -1748,8 +2445,18 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L267",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_discord_commands_guide",
-      "target": "commands_guide_nested_command_subgroups",
+      "target": "commands_guide_nested_command_subgroups"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "COMMANDS_GUIDE.md",
+      "source_location": "L393",
+      "weight": 1.0,
+      "source": "commands_guide_discord_commands_guide",
+      "target": "commands_guide_opt_out_role_for_payout_dms",
       "confidence_score": 1.0
     },
     {
@@ -1758,9 +2465,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L13",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_discord_commands_guide",
-      "target": "commands_guide_organizing_cogs",
-      "confidence_score": 1.0
+      "target": "commands_guide_organizing_cogs"
     },
     {
       "relation": "contains",
@@ -1768,9 +2475,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L141",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_discord_commands_guide",
-      "target": "commands_guide_parameter_types",
-      "confidence_score": 1.0
+      "target": "commands_guide_parameter_types"
     },
     {
       "relation": "contains",
@@ -1778,9 +2485,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L197",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_discord_commands_guide",
-      "target": "commands_guide_permissions",
-      "confidence_score": 1.0
+      "target": "commands_guide_permissions"
     },
     {
       "relation": "contains",
@@ -1788,9 +2495,19 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L456",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_discord_commands_guide",
-      "target": "commands_guide_pre_commit_checklist",
-      "confidence_score": 1.0
+      "target": "commands_guide_pre_commit_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "COMMANDS_GUIDE.md",
+      "source_location": "L517",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "commands_guide_discord_commands_guide",
+      "target": "commands_guide_public_recap_embed_after_confirm"
     },
     {
       "relation": "contains",
@@ -1798,9 +2515,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L236",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_discord_commands_guide",
-      "target": "commands_guide_responses",
-      "confidence_score": 1.0
+      "target": "commands_guide_responses"
     },
     {
       "relation": "contains",
@@ -1808,9 +2525,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L357",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_discord_commands_guide",
-      "target": "commands_guide_testing",
-      "confidence_score": 1.0
+      "target": "commands_guide_testing"
     },
     {
       "relation": "contains",
@@ -1818,9 +2535,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L17",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_organizing_cogs",
-      "target": "commands_guide_for_example",
-      "confidence_score": 1.0
+      "target": "commands_guide_for_example"
     },
     {
       "relation": "contains",
@@ -1828,9 +2545,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L35",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_adding_a_command",
-      "target": "commands_guide_1_service_if_business_logic_needed",
-      "confidence_score": 1.0
+      "target": "commands_guide_1_service_if_business_logic_needed"
     },
     {
       "relation": "contains",
@@ -1838,9 +2555,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L60",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_adding_a_command",
-      "target": "commands_guide_2_cog",
-      "confidence_score": 1.0
+      "target": "commands_guide_2_cog"
     },
     {
       "relation": "contains",
@@ -1848,9 +2565,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L96",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_adding_a_command",
-      "target": "commands_guide_3_translations",
-      "confidence_score": 1.0
+      "target": "commands_guide_3_translations"
     },
     {
       "relation": "contains",
@@ -1858,9 +2575,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L107",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_adding_a_command",
-      "target": "commands_guide_4_load_the_cog",
-      "confidence_score": 1.0
+      "target": "commands_guide_4_load_the_cog"
     },
     {
       "relation": "contains",
@@ -1868,9 +2585,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L115",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_adding_a_command",
-      "target": "commands_guide_5_test",
-      "confidence_score": 1.0
+      "target": "commands_guide_5_test"
     },
     {
       "relation": "contains",
@@ -1878,9 +2595,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L161",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_parameter_types",
-      "target": "commands_guide_boolean",
-      "confidence_score": 1.0
+      "target": "commands_guide_boolean"
     },
     {
       "relation": "contains",
@@ -1888,9 +2605,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L155",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_parameter_types",
-      "target": "commands_guide_decimal",
-      "confidence_score": 1.0
+      "target": "commands_guide_decimal"
     },
     {
       "relation": "contains",
@@ -1898,9 +2615,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L167",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_parameter_types",
-      "target": "commands_guide_discord_user",
-      "confidence_score": 1.0
+      "target": "commands_guide_discord_user"
     },
     {
       "relation": "contains",
@@ -1908,9 +2625,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L185",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_parameter_types",
-      "target": "commands_guide_fixed_choices_enum",
-      "confidence_score": 1.0
+      "target": "commands_guide_fixed_choices_enum"
     },
     {
       "relation": "contains",
@@ -1918,9 +2635,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L149",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_parameter_types",
-      "target": "commands_guide_number",
-      "confidence_score": 1.0
+      "target": "commands_guide_number"
     },
     {
       "relation": "contains",
@@ -1928,9 +2645,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L179",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_parameter_types",
-      "target": "commands_guide_role",
-      "confidence_score": 1.0
+      "target": "commands_guide_role"
     },
     {
       "relation": "contains",
@@ -1938,9 +2655,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L143",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_parameter_types",
-      "target": "commands_guide_simple_text",
-      "confidence_score": 1.0
+      "target": "commands_guide_simple_text"
     },
     {
       "relation": "contains",
@@ -1948,9 +2665,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L173",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_parameter_types",
-      "target": "commands_guide_text_channel",
-      "confidence_score": 1.0
+      "target": "commands_guide_text_channel"
     },
     {
       "relation": "contains",
@@ -1958,9 +2675,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L199",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_permissions",
-      "target": "commands_guide_admin_only",
-      "confidence_score": 1.0
+      "target": "commands_guide_admin_only"
     },
     {
       "relation": "contains",
@@ -1968,9 +2685,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L211",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_permissions",
-      "target": "commands_guide_manage_messages",
-      "confidence_score": 1.0
+      "target": "commands_guide_manage_messages"
     },
     {
       "relation": "contains",
@@ -1978,9 +2695,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L205",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_permissions",
-      "target": "commands_guide_manage_server",
-      "confidence_score": 1.0
+      "target": "commands_guide_manage_server"
     },
     {
       "relation": "contains",
@@ -1988,9 +2705,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L217",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_permissions",
-      "target": "commands_guide_role_based_permissions",
-      "confidence_score": 1.0
+      "target": "commands_guide_role_based_permissions"
     },
     {
       "relation": "contains",
@@ -1998,9 +2715,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L255",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_responses",
-      "target": "commands_guide_deferred_response_for_long_processing",
-      "confidence_score": 1.0
+      "target": "commands_guide_deferred_response_for_long_processing"
     },
     {
       "relation": "contains",
@@ -2008,9 +2725,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L262",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_responses",
-      "target": "commands_guide_edit_an_existing_response",
-      "confidence_score": 1.0
+      "target": "commands_guide_edit_an_existing_response"
     },
     {
       "relation": "contains",
@@ -2018,9 +2735,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L248",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_responses",
-      "target": "commands_guide_embed_response",
-      "confidence_score": 1.0
+      "target": "commands_guide_embed_response"
     },
     {
       "relation": "contains",
@@ -2028,9 +2745,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L238",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_responses",
-      "target": "commands_guide_ephemeral_response_visible_only_to_user",
-      "confidence_score": 1.0
+      "target": "commands_guide_ephemeral_response_visible_only_to_user"
     },
     {
       "relation": "contains",
@@ -2038,9 +2755,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L243",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_responses",
-      "target": "commands_guide_normal_response",
-      "confidence_score": 1.0
+      "target": "commands_guide_normal_response"
     },
     {
       "relation": "contains",
@@ -2048,9 +2765,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L336",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_concrete_examples",
-      "target": "commands_guide_admin_command_with_confirmation",
-      "confidence_score": 1.0
+      "target": "commands_guide_admin_command_with_confirmation"
     },
     {
       "relation": "contains",
@@ -2058,9 +2775,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L304",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_concrete_examples",
-      "target": "commands_guide_command_with_multiple_arguments",
-      "confidence_score": 1.0
+      "target": "commands_guide_command_with_multiple_arguments"
     },
     {
       "relation": "contains",
@@ -2068,9 +2785,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L288",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_concrete_examples",
-      "target": "commands_guide_help_command",
-      "confidence_score": 1.0
+      "target": "commands_guide_help_command"
     },
     {
       "relation": "contains",
@@ -2078,9 +2795,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L440",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_testing",
-      "target": "commands_guide_running_tests",
-      "confidence_score": 1.0
+      "target": "commands_guide_running_tests"
     },
     {
       "relation": "contains",
@@ -2088,9 +2805,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L359",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_testing",
-      "target": "commands_guide_setup",
-      "confidence_score": 1.0
+      "target": "commands_guide_setup"
     },
     {
       "relation": "contains",
@@ -2098,9 +2815,9 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L393",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_testing",
-      "target": "commands_guide_testing_patterns",
-      "confidence_score": 1.0
+      "target": "commands_guide_testing_patterns"
     },
     {
       "relation": "contains",
@@ -2108,8 +2825,28 @@
       "source_file": "COMMANDS_GUIDE.md",
       "source_location": "L368",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "commands_guide_testing",
-      "target": "commands_guide_writing_tests",
+      "target": "commands_guide_writing_tests"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "COMMANDS_GUIDE.md",
+      "source_location": "L454",
+      "weight": 1.0,
+      "source": "commands_guide_opt_out_role_for_payout_dms",
+      "target": "commands_guide_running_tests",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "COMMANDS_GUIDE.md",
+      "source_location": "L407",
+      "weight": 1.0,
+      "source": "commands_guide_opt_out_role_for_payout_dms",
+      "target": "commands_guide_testing_patterns",
       "confidence_score": 1.0
     },
     {
@@ -2118,9 +2855,9 @@
       "source_file": "README.md",
       "source_location": "L3",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme",
-      "target": "readme_fr",
-      "confidence_score": 1.0
+      "target": "readme_fr"
     },
     {
       "relation": "contains",
@@ -2128,9 +2865,9 @@
       "source_file": "README.fr.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_fr",
-      "target": "readme_fr_bot_discord_eradicateurs_guilde_albion_online",
-      "confidence_score": 1.0
+      "target": "readme_fr_bot_discord_eradicateurs_guilde_albion_online"
     },
     {
       "relation": "contains",
@@ -2138,9 +2875,9 @@
       "source_file": "README.fr.md",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_fr_bot_discord_eradicateurs_guilde_albion_online",
-      "target": "readme_fr_commandes_disponibles",
-      "confidence_score": 1.0
+      "target": "readme_fr_commandes_disponibles"
     },
     {
       "relation": "contains",
@@ -2148,9 +2885,9 @@
       "source_file": "README.fr.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_fr_bot_discord_eradicateurs_guilde_albion_online",
-      "target": "readme_fr_setup",
-      "confidence_score": 1.0
+      "target": "readme_fr_setup"
     },
     {
       "relation": "contains",
@@ -2158,9 +2895,9 @@
       "source_file": "README.fr.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_fr_bot_discord_eradicateurs_guilde_albion_online",
-      "target": "readme_fr_structure_du_projet",
-      "confidence_score": 1.0
+      "target": "readme_fr_structure_du_projet"
     },
     {
       "relation": "contains",
@@ -2168,9 +2905,9 @@
       "source_file": "README.md",
       "source_location": "L1",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme",
-      "target": "readme_discord_bot_eradicateurs_albion_online_guild",
-      "confidence_score": 1.0
+      "target": "readme_discord_bot_eradicateurs_albion_online_guild"
     },
     {
       "relation": "contains",
@@ -2178,9 +2915,9 @@
       "source_file": "README.md",
       "source_location": "L15",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_discord_bot_eradicateurs_albion_online_guild",
-      "target": "readme_available_commands",
-      "confidence_score": 1.0
+      "target": "readme_available_commands"
     },
     {
       "relation": "contains",
@@ -2188,9 +2925,9 @@
       "source_file": "README.md",
       "source_location": "L25",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_discord_bot_eradicateurs_albion_online_guild",
-      "target": "readme_project_structure",
-      "confidence_score": 1.0
+      "target": "readme_project_structure"
     },
     {
       "relation": "contains",
@@ -2198,31 +2935,86 @@
       "source_file": "README.md",
       "source_location": "L5",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "readme_discord_bot_eradicateurs_albion_online_guild",
-      "target": "readme_setup",
-      "confidence_score": 1.0
+      "target": "readme_setup"
     },
     {
       "relation": "re_exports",
       "context": "export",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/__init__.py",
+      "source_file": "bot/__init__.py",
       "source_location": "L1",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "cogs_init",
-      "target": "cogs_guild_commands"
+      "source": "bot_init",
+      "target": "bot_config"
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/__init__.py",
+      "source_file": "bot/__init__.py",
       "source_location": "L1",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "cogs_init",
-      "target": "cogs_guild_commands_guildcommands"
+      "source": "bot_init",
+      "target": "bot_config_config"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/__init__.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_init",
+      "target": "bot_i18n"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/__init__.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_init",
+      "target": "bot_i18n_jsontranslator"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/__init__.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_init",
+      "target": "bot_main"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/__init__.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_init",
+      "target": "bot_main_eradicateurbot"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/__init__.py",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_init",
+      "target": "bot_main_main"
     },
     {
       "relation": "re_exports",
@@ -2234,17 +3026,6 @@
       "confidence_score": 1.0,
       "source": "cogs_init",
       "target": "cogs_payout"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/__init__.py",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_init",
-      "target": "cogs_payout_payoutcog"
     },
     {
       "relation": "imports_from",
@@ -2272,6 +3053,26 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "bot/cogs/payout.py",
+      "source_location": "L130",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout",
+      "target": "cogs_payout_confirmcancelview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout",
+      "target": "cogs_payout_participantselectview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
       "source_location": "L10",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -2282,11 +3083,828 @@
       "relation": "contains",
       "confidence": "EXTRACTED",
       "source_file": "bot/cogs/payout.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout",
+      "target": "cogs_payout_payoutcreatemodal"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L278",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout",
+      "target": "cogs_payout_removeparticipantsview"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
       "source_location": "L116",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "cogs_payout",
       "target": "cogs_payout_setup"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L229",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_payoutcog_create",
+      "target": "cogs_payout_payoutcreatemodal"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "cogs_payout_payoutcreatemodal",
+      "target": "bot_main_eradicateurbot"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_payoutcreatemodal",
+      "target": "cogs_payout_payoutcreatemodal_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_payoutcreatemodal",
+      "target": "cogs_payout_payoutcreatemodal_on_submit"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_payoutcreatemodal_init",
+      "target": "cogs_payout_payoutcog_init"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_payoutcreatemodal_on_submit",
+      "target": "cogs_payout_participantselectview"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_payoutcreatemodal_on_submit",
+      "target": "interaction"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands_guildcommands_ping",
+      "target": "interaction"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L183",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_confirmcancelview_cancel",
+      "target": "interaction"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_confirmcancelview_confirm",
+      "target": "interaction"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L214",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_annuler",
+      "target": "interaction"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_on_participants_selected",
+      "target": "interaction"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L245",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_retirer",
+      "target": "interaction"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_terminer",
+      "target": "interaction"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L52",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_payoutcog_config_rates",
+      "target": "interaction"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L29",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_payoutcog_config_roles",
+      "target": "interaction"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L88",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_payoutcog_config_show",
+      "target": "interaction"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L215",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_payoutcog_create",
+      "target": "interaction"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L300",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_removeparticipantsview_on_remove_selected",
+      "target": "interaction"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L313",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_removeparticipantsview_retour",
+      "target": "interaction"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "cogs_payout_participantselectview",
+      "target": "bot_main_eradicateurbot"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L214",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview",
+      "target": "cogs_payout_participantselectview_annuler"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L124",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview",
+      "target": "cogs_payout_participantselectview_build_recap"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L49",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview",
+      "target": "cogs_payout_participantselectview_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview",
+      "target": "cogs_payout_participantselectview_on_participants_selected"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L245",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview",
+      "target": "cogs_payout_participantselectview_retirer"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview",
+      "target": "cogs_payout_participantselectview_terminer"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L128",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview",
+      "target": "cogs_payout_participantselectview_update_button_states"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L279",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_removeparticipantsview_init",
+      "target": "cogs_payout_participantselectview"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs",
+      "target": "cogs_payout_participantselectview"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "cogs_payout_participantselectview"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpayoutdeduplication",
+      "target": "cogs_payout_participantselectview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testpayoutdeduplication_test_deduplicates_across_batches",
+      "target": "cogs_payout_participantselectview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testpayoutdeduplication_test_remove_flow_deduplicates_correctly",
+      "target": "cogs_payout_participantselectview"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpingcommand",
+      "target": "cogs_payout_participantselectview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_init",
+      "target": "cogs_payout_payoutcog_init"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_init",
+      "target": "member"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L147",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_on_participants_selected",
+      "target": "cogs_payout_participantselectview_build_recap"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L308",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_removeparticipantsview_on_remove_selected",
+      "target": "cogs_payout_participantselectview_build_recap"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L320",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_removeparticipantsview_retour",
+      "target": "cogs_payout_participantselectview_build_recap"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L145",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_on_participants_selected",
+      "target": "cogs_payout_participantselectview_update_button_states"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L306",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_removeparticipantsview_on_remove_selected",
+      "target": "cogs_payout_participantselectview_update_button_states"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L318",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_removeparticipantsview_retour",
+      "target": "cogs_payout_participantselectview_update_button_states"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L113",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_on_participants_selected",
+      "target": "cogs_payout_confirmcancelview"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_on_participants_selected",
+      "target": "userselect"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L300",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_removeparticipantsview_on_remove_selected",
+      "target": "userselect"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L121",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_terminer",
+      "target": "button"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L192",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_terminer",
+      "target": "cogs_payout_confirmcancelview"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L183",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_confirmcancelview_cancel",
+      "target": "button"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_confirmcancelview_confirm",
+      "target": "button"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L214",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_annuler",
+      "target": "button"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L245",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_retirer",
+      "target": "button"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L313",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_removeparticipantsview_retour",
+      "target": "button"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L250",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_participantselectview_retirer",
+      "target": "cogs_payout_removeparticipantsview"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "cogs_payout_removeparticipantsview",
+      "target": "bot_main_eradicateurbot"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L279",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_removeparticipantsview",
+      "target": "cogs_payout_removeparticipantsview_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L300",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_removeparticipantsview",
+      "target": "cogs_payout_removeparticipantsview_on_remove_selected"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L313",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_removeparticipantsview",
+      "target": "cogs_payout_removeparticipantsview_retour"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs",
+      "target": "cogs_payout_removeparticipantsview"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "cogs_payout_removeparticipantsview"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpayoutdeduplication",
+      "target": "cogs_payout_removeparticipantsview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L59",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testpayoutdeduplication_test_remove_flow_deduplicates_correctly",
+      "target": "cogs_payout_removeparticipantsview"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpingcommand",
+      "target": "cogs_payout_removeparticipantsview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L286",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_removeparticipantsview_init",
+      "target": "cogs_payout_payoutcog_init"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "cogs_payout_confirmcancelview",
+      "target": "bot_main_eradicateurbot"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L183",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_confirmcancelview",
+      "target": "cogs_payout_confirmcancelview_cancel"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L153",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_confirmcancelview",
+      "target": "cogs_payout_confirmcancelview_confirm"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L131",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_confirmcancelview",
+      "target": "cogs_payout_confirmcancelview_init"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs",
+      "target": "cogs_payout_confirmcancelview"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "cogs_payout_confirmcancelview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications_view",
+      "target": "cogs_payout_confirmcancelview"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpayoutdeduplication",
+      "target": "cogs_payout_confirmcancelview"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpingcommand",
+      "target": "cogs_payout_confirmcancelview"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L142",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_confirmcancelview_init",
+      "target": "cogs_payout_payoutcog_init"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/__init__.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_init",
+      "target": "cogs_payout_payoutcog"
     },
     {
       "relation": "uses",
@@ -2332,6 +3950,16 @@
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "bot/cogs/payout.py",
+      "source_location": "L215",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_payoutcog",
+      "target": "cogs_payout_payoutcog_create"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
       "source_location": "L18",
       "weight": 1.0,
       "confidence_score": 1.0,
@@ -2348,6 +3976,17 @@
       "confidence_score": 1.0,
       "source": "cogs_payout_setup",
       "target": "cogs_payout_payoutcog"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout.py",
+      "source_location": "L414",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_payout_payoutcog_init",
+      "target": "bot_main_eradicateurbot"
     },
     {
       "relation": "references",
@@ -2391,72 +4030,18 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "cogs_payout_payoutcog_config_roles",
-      "target": "interaction"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout.py",
-      "source_location": "L29",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_payout_payoutcog_config_roles",
       "target": "role"
     },
     {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_guild_commands_guildcommands_ping",
-      "target": "interaction"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
       "source_file": "bot/cogs/payout.py",
-      "source_location": "L52",
+      "source_location": "L566",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "cogs_payout_payoutcog_config_rates",
-      "target": "interaction"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout.py",
-      "source_location": "L88",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_payout_payoutcog_config_show",
-      "target": "interaction"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/config.py",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_config",
-      "target": "bot_config_config"
-    },
-    {
-      "relation": "re_exports",
-      "context": "export",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/__init__.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_init",
-      "target": "bot_config"
+      "source": "cogs_payout_setup",
+      "target": "bot_main_eradicateurbot"
     },
     {
       "relation": "imports_from",
@@ -2470,27 +4055,6 @@
       "target": "bot_config"
     },
     {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/config.py",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_config_config",
-      "target": "bot_config_config_from_env"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/__init__.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_init",
-      "target": "bot_config_config"
-    },
-    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -2500,49 +4064,6 @@
       "confidence_score": 1.0,
       "source": "bot_main",
       "target": "bot_config_config"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/main.py",
-      "source_location": "L8",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "bot_main_eradicateurbot",
-      "target": "bot_config_config"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/main.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_main_eradicateurbot_init",
-      "target": "bot_config_config"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/main.py",
-      "source_location": "L75",
-      "weight": 1.0,
-      "source": "bot_main_main",
-      "target": "bot_config_config_from_env"
-    },
-    {
-      "relation": "re_exports",
-      "context": "export",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/__init__.py",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_init",
-      "target": "bot_main"
     },
     {
       "relation": "imports_from",
@@ -2606,6 +4127,17 @@
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "bot_main",
+      "target": "repositories_payout_repository_payoutrepository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_main",
       "target": "repositories_transaction_repository_transactionrepository"
     },
     {
@@ -2631,15 +4163,14 @@
       "target": "bot_main"
     },
     {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/__init__.py",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_init",
-      "target": "bot_main_eradicateurbot"
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/main.py",
+      "source_location": "L8",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "bot_main_eradicateurbot",
+      "target": "bot_config_config"
     },
     {
       "relation": "uses",
@@ -2692,6 +4223,16 @@
       "target": "bot_main_eradicateurbot_setup_hook"
     },
     {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L68",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_main_eradicateurbot",
+      "target": "bot_main_eradicateurbot_translate"
+    },
+    {
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "bot/main.py",
@@ -2700,6 +4241,16 @@
       "confidence_score": 0.5,
       "source": "bot_main_eradicateurbot",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/main.py",
+      "source_location": "L13",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "bot_main_eradicateurbot",
+      "target": "repositories_payout_repository_payoutrepository"
     },
     {
       "relation": "uses",
@@ -2754,6 +4305,28 @@
       "target": "bot_main_eradicateurbot"
     },
     {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_main_eradicateurbot_init",
+      "target": "bot_config_config"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_main_eradicateurbot_init",
+      "target": "config"
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -2781,6 +4354,17 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "bot/main.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "bot_main_eradicateurbot_setup_hook",
+      "target": "repositories_payout_repository_payoutrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/main.py",
       "source_location": "L45",
       "weight": 1.0,
       "source": "bot_main_eradicateurbot_setup_hook",
@@ -2798,15 +4382,48 @@
       "target": "services_payout_config_service_payoutconfigservice"
     },
     {
-      "relation": "imports",
-      "context": "import",
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "bot/main.py",
+      "source_location": "L48",
+      "weight": 1.0,
+      "source": "bot_main_eradicateurbot_setup_hook",
+      "target": "transactionrepository"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
       "confidence": "EXTRACTED",
-      "source_file": "bot/__init__.py",
-      "source_location": "L3",
+      "source_file": "bot/main.py",
+      "source_location": "L68",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "bot_init",
-      "target": "bot_main_main"
+      "source": "bot_main_eradicateurbot_translate",
+      "target": "locale"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/i18n.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_i18n_jsontranslator_translate",
+      "target": "locale"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/main.py",
+      "source_location": "L75",
+      "weight": 1.0,
+      "source": "bot_main_main",
+      "target": "bot_config_config_from_env"
     },
     {
       "relation": "re_exports",
@@ -2829,6 +4446,28 @@
       "confidence_score": 1.0,
       "source": "repositories_init",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/__init__.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_init",
+      "target": "repositories_payout_repository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/__init__.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_init",
+      "target": "repositories_payout_repository_payoutrepository"
     },
     {
       "relation": "re_exports",
@@ -2912,6 +4551,16 @@
       "confidence_score": 1.0,
       "source": "repositories_payout_config_repository_payoutconfigrepository",
       "target": "repositories_payout_config_repository_payoutconfigrepository_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_config_repository.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "source": "repositories_payout_config_repository_payoutconfigrepository",
+      "target": "repositories_payout_config_repository_payoutconfigrepository_migrate",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -3012,12 +4661,34 @@
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository_payoutrepository_init",
+      "target": "connection"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
       "source_file": "bot/repositories/transaction_repository.py",
       "source_location": "L17",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "repositories_transaction_repository_transactionrepository_init",
       "target": "connection"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_config_repository.py",
+      "source_location": "L50",
+      "weight": 1.0,
+      "source": "repositories_payout_config_repository_payoutconfigrepository_ensure_table",
+      "target": "repositories_payout_config_repository_payoutconfigrepository_migrate",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -3051,6 +4722,784 @@
       "confidence_score": 1.0,
       "source": "repositories_payout_config_repository_payoutconfigrepository_update_roles",
       "target": "repositories_payout_config_repository_payoutconfigrepository_ensure_table"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository",
+      "target": "repositories_payout_repository_payout"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository",
+      "target": "repositories_payout_repository_payoutrepository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L4",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "repositories_payout_repository_payout",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository_payoutrepository",
+      "target": "repositories_payout_repository_payoutrepository_create_payout"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository_payoutrepository",
+      "target": "repositories_payout_repository_payoutrepository_ensure_tables"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository_payoutrepository",
+      "target": "repositories_payout_repository_payoutrepository_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L81",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository_payoutrepository",
+      "target": "repositories_payout_repository_payoutrepository_migrate"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L4",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "repositories_payout_repository_payoutrepository",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_repository",
+      "target": "repositories_payout_repository_payoutrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "source": "repositories_test_payout_repository_repo",
+      "target": "repositories_payout_repository_payoutrepository"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository_payoutrepository_init",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository_payoutrepository_init",
+      "target": "transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "INFERRED",
+      "confidence_score": 0.8,
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "repositories_test_payout_repository_repo",
+      "target": "transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository_payoutrepository_create_payout",
+      "target": "repositories_payout_repository_payoutrepository_ensure_tables"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L78",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository_payoutrepository_ensure_tables",
+      "target": "repositories_payout_repository_payoutrepository_migrate"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_config_repository.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_config_repository",
+      "target": "repositories_test_payout_config_repository_db"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_config_repository.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_config_repository",
+      "target": "repositories_test_payout_config_repository_repo"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_config_repository.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_config_repository",
+      "target": "repositories_test_payout_config_repository_test_get_config_creates_defaults"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_config_repository.py",
+      "source_location": "L34",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_config_repository",
+      "target": "repositories_test_payout_config_repository_test_update_rates_persists"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_config_repository.py",
+      "source_location": "L51",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_config_repository",
+      "target": "repositories_test_payout_config_repository_test_update_roles_can_clear"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_config_repository.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "source": "repositories_test_payout_config_repository",
+      "target": "repositories_test_payout_config_repository_test_update_roles_can_clear_no_dm",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_config_repository.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_config_repository",
+      "target": "repositories_test_payout_config_repository_test_update_roles_persists"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_config_repository.py",
+      "source_location": "L63",
+      "weight": 1.0,
+      "source": "repositories_test_payout_config_repository",
+      "target": "repositories_test_payout_config_repository_test_update_roles_persists_no_dm_role",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_repository",
+      "target": "repositories_test_payout_repository_db"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_repository",
+      "target": "repositories_test_payout_repository_repo"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L137",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_repository",
+      "target": "repositories_test_payout_repository_test_buyback_value_formula"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L71",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_repository",
+      "target": "repositories_test_payout_repository_test_create_payout_creates_transactions"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L42",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_repository",
+      "target": "repositories_test_payout_repository_test_create_payout_persists_row"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L25",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_repository",
+      "target": "repositories_test_payout_repository_test_create_payout_returns_id"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L93",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_repository",
+      "target": "repositories_test_payout_repository_test_rollback_on_transaction_failure"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_repository",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "repositories_test_payout_repository_repo",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L74",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs",
+      "target": "tests_test_cogs_testconfirmcancelviewdmnotifications"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L26",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs",
+      "target": "tests_test_cogs_testpayoutdeduplication"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs",
+      "target": "tests_test_cogs_testpingcommand"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L4",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpingcommand",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs_testpingcommand",
+      "target": "tests_test_cogs_testpingcommand_cog"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs_testpingcommand",
+      "target": "tests_test_cogs_testpingcommand_test_ping_responds"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testpingcommand_cog",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L4",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpayoutdeduplication",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs_testpayoutdeduplication",
+      "target": "tests_test_cogs_testpayoutdeduplication_test_deduplicates_across_batches"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L45",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs_testpayoutdeduplication",
+      "target": "tests_test_cogs_testpayoutdeduplication_test_remove_flow_deduplicates_correctly"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L4",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L142",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "tests_test_cogs_testconfirmcancelviewdmnotifications_guild",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L204",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "tests_test_cogs_testconfirmcancelviewdmnotifications_guild_with_optout",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L138",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "tests_test_cogs_testconfirmcancelviewdmnotifications_no_dm_role_id",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L200",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "tests_test_cogs_testconfirmcancelviewdmnotifications_no_dm_role_id_111",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "tests_test_cogs_testconfirmcancelviewdmnotifications_setup_bot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L125",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "tests_test_cogs_testconfirmcancelviewdmnotifications_setup_interaction",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L278",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "tests_test_cogs_testconfirmcancelviewdmnotifications_test_confirm_sends_dm_without_opt_out_role",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L226",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "tests_test_cogs_testconfirmcancelviewdmnotifications_test_confirm_skips_dm_for_opt_out_role",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L94",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "tests_test_cogs_testconfirmcancelviewdmnotifications_test_dm_failure_does_not_block_others"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "tests_test_cogs_testconfirmcancelviewdmnotifications_view"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".opencode/opencode.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "opencode_opencode",
+      "target": "opencode_opencode_plugin"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".opencode/opencode.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "opencode_opencode",
+      "target": "opencode_opencode_schema"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".opencode/package.json",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "opencode_package",
+      "target": "opencode_package_dependencies"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".opencode/package.json",
+      "source_location": "L3",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "opencode_package_dependencies",
+      "target": "opencode_package_dependencies_opencode_ai_plugin"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".opencode/plugins/graphify.js",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "plugins_graphify",
+      "target": "plugins_graphify_graphifyplugin"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/__init__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_init",
+      "target": "cogs_guild_commands"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/__init__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_init",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands",
+      "target": "cogs_guild_commands_setup"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands_guildcommands",
+      "target": "cogs_guild_commands_guildcommands_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands_guildcommands",
+      "target": "cogs_guild_commands_guildcommands_ping"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands_setup",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands_guildcommands_init",
+      "target": "bot"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/config.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_config",
+      "target": "bot_config_config"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/config.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_config_config",
+      "target": "bot_config_config_from_env"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/i18n.py",
+      "source_location": "L11",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_i18n",
+      "target": "bot_i18n_jsontranslator"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/i18n.py",
+      "source_location": "L12",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_i18n_jsontranslator",
+      "target": "bot_i18n_jsontranslator_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/i18n.py",
+      "source_location": "L15",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_i18n_jsontranslator",
+      "target": "bot_i18n_jsontranslator_load"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/i18n.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_i18n_jsontranslator",
+      "target": "bot_i18n_jsontranslator_translate"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/i18n.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_i18n_jsontranslator_translate",
+      "target": "locale_str"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/i18n.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_i18n_jsontranslator_translate",
+      "target": "translationcontexttypes"
     },
     {
       "relation": "contains",
@@ -3306,66 +5755,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "tests/repositories/test_payout_config_repository.py",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_test_payout_config_repository",
-      "target": "repositories_test_payout_config_repository_db"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/repositories/test_payout_config_repository.py",
-      "source_location": "L18",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_test_payout_config_repository",
-      "target": "repositories_test_payout_config_repository_repo"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/repositories/test_payout_config_repository.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_test_payout_config_repository",
-      "target": "repositories_test_payout_config_repository_test_get_config_creates_defaults"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/repositories/test_payout_config_repository.py",
-      "source_location": "L34",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_test_payout_config_repository",
-      "target": "repositories_test_payout_config_repository_test_update_rates_persists"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/repositories/test_payout_config_repository.py",
-      "source_location": "L51",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_test_payout_config_repository",
-      "target": "repositories_test_payout_config_repository_test_update_roles_can_clear"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/repositories/test_payout_config_repository.py",
-      "source_location": "L43",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_test_payout_config_repository",
-      "target": "repositories_test_payout_config_repository_test_update_roles_persists"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "tests/repositories/test_transaction_repository.py",
       "source_location": "L10",
       "weight": 1.0,
@@ -3434,273 +5823,64 @@
       "target": "repositories_test_transaction_repository_test_list_transactions_orders_desc"
     },
     {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "github_pull_request_template",
+      "target": "github_pull_request_template_checklist"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "github_pull_request_template",
+      "target": "github_pull_request_template_summary"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": ".github/pull_request_template.md",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "github_pull_request_template",
+      "target": "github_pull_request_template_type_of_change"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "AGENTS.md",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "agents",
+      "target": "agents_graphify"
+    },
+    {
       "relation": "references",
-      "context": "parameter_type",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L9",
-      "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "cogs_guild_commands_guildcommands_init",
-      "target": "bot"
+      "source_file": "AGENTS.md",
+      "source_location": null,
+      "weight": 1.0,
+      "source": "agents",
+      "target": "agents_graphify_knowledge_graph"
     },
     {
       "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/i18n.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_i18n_jsontranslator_translate",
-      "target": "locale_str"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/i18n.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_i18n_jsontranslator_translate",
-      "target": "locale"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/i18n.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_i18n_jsontranslator_translate",
-      "target": "translationcontexttypes"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": ".opencode/opencode.json",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "opencode_opencode",
-      "target": "opencode_opencode_plugin"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": ".opencode/opencode.json",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "opencode_opencode",
-      "target": "opencode_opencode_schema"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": ".opencode/package.json",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "opencode_package",
-      "target": "opencode_package_dependencies"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": ".opencode/package.json",
-      "source_location": "L3",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "opencode_package_dependencies",
-      "target": "opencode_package_dependencies_opencode_ai_plugin"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": ".opencode/plugins/graphify.js",
-      "source_location": "L12",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "plugins_graphify",
-      "target": "plugins_graphify_graphifyplugin"
-    },
-    {
-      "relation": "re_exports",
-      "context": "export",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/__init__.py",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_init",
-      "target": "bot_i18n"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/__init__.py",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_init",
-      "target": "bot_i18n_jsontranslator"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_guild_commands",
-      "target": "cogs_guild_commands_guildcommands"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_guild_commands",
-      "target": "cogs_guild_commands_setup"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_guild_commands_guildcommands",
-      "target": "cogs_guild_commands_guildcommands_init"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_guild_commands_guildcommands",
-      "target": "cogs_guild_commands_guildcommands_ping"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_guild_commands_setup",
-      "target": "cogs_guild_commands_guildcommands"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_cogs",
-      "target": "cogs_guild_commands_guildcommands"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L4",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "tests_test_cogs_testpingcommand",
-      "target": "cogs_guild_commands_guildcommands"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L12",
+      "source_file": "AGENTS.md",
+      "source_location": null,
       "weight": 1.0,
-      "source": "tests_test_cogs_testpingcommand_cog",
-      "target": "cogs_guild_commands_guildcommands"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/i18n.py",
-      "source_location": "L11",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_i18n",
-      "target": "bot_i18n_jsontranslator"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/i18n.py",
-      "source_location": "L12",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_i18n_jsontranslator",
-      "target": "bot_i18n_jsontranslator_init"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/i18n.py",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_i18n_jsontranslator",
-      "target": "bot_i18n_jsontranslator_load"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/i18n.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_i18n_jsontranslator",
-      "target": "bot_i18n_jsontranslator_translate"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_cogs",
-      "target": "tests_test_cogs_testpingcommand"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_cogs_testpingcommand",
-      "target": "tests_test_cogs_testpingcommand_cog"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L15",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_cogs_testpingcommand",
-      "target": "tests_test_cogs_testpingcommand_test_ping_responds"
+      "source": "agents",
+      "target": "agents_graphify_tool"
     },
     {
       "relation": "references",
@@ -3846,26 +6026,6 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "AGENTS.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "agents_doc",
-      "target": "agents_graphify_knowledge_graph"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "AGENTS.md",
-      "source_location": null,
-      "weight": 1.0,
-      "source": "agents_doc",
-      "target": "agents_graphify_tool"
-    },
-    {
-      "relation": "references",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
       "source_file": "requirements.txt",
       "source_location": null,
       "weight": 1.0,
@@ -3925,5 +6085,5 @@
       "source_file": "README.md"
     }
   ],
-  "built_at_commit": "02313698c1eb98893560941429452209365423f8"
+  "built_at_commit": "17468f43578df1920990801a5d5fb8c185e2ad3e"
 }

@@ -15,12 +15,14 @@ python -m bot.main
 ## Available commands
 
 **General** (`guild_commands.py`):
-- `/ping` - check that the bot responds
+- `/ping` - check that the bot responds *(No restriction)*
 
 **Payout / Ledger** (`payout.py`):
-- `/payout config roles <officer> <leader>` — set the officer and leader roles for payout management (Administrator only)
-- `/payout config rates <market> <guild> <transport>` — update tax rates used in payout calculations (Leader role required)
-- `/payout config show` — display current payout configuration (no restriction)
+
+- `/payout create` — open a modal to create a new payout. On confirm, posts a public recap embed and notifies each participant by DM with their received amount and new balance. *(Requires: Officer role)*
+- `/payout config roles` — set the officer and leader roles for payout management, plus an optional `no_dm` role whose members opt out of payout DMs. *(Requires: Administrator permission)*
+- `/payout config rates` — update tax rates used in payout calculations. *(Requires: Leader role)*
+- `/payout config show` — display current payout configuration including the opt-out role if configured. *(No restriction)*
 
 ## Project structure
 

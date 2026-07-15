@@ -390,6 +390,20 @@ class TestMyCog:
         interaction.response.send_message.assert_awaited_once()
 ```
 
+## Opt-out role for payout DMs
+
+An optional `no_dm` role can be set via `/payout config roles`. Members who hold this role will not receive a DM notification when a payout is confirmed. The skipped participants are reported in the ephemeral success message with a neutral note (not an error).
+
+**Behavior:**
+- If the `no_dm` parameter is omitted in a subsequent `/payout config roles` call, the previously configured value is preserved.
+- To clear the opt-out, an admin must intentionally pass a new role or the value is kept.
+- Skipped DMs are not counted as failures and do not trigger the "Impossible de contacter en MP" warning.
+
+**Implementation:**
+- Repository: `update_roles()` accepts an optional `no_dm_role_id: int | None = None` parameter. The SQL UPDATE always sets the column; the "preserve unless provided" logic lives in the command handler.
+- Migration: `_migrate()` uses `PRAGMA table_info` + `ALTER TABLE ADD COLUMN` (see `payout_config_repository.py`), following the same pattern as `payout_repository.py`.
+- Cog: `ConfirmCancelView.confirm()` fetches the current config, checks `member.get_role(no_dm_role_id)` before sending, and tracks three outcomes (sent, skipped, failed).
+
 ### Testing patterns
 
 **Test command response:**
@@ -461,3 +475,92 @@ pytest --cov=bot
 - [ ] `locale_str` used for name and description
 - [ ] Permissions set if admin command
 - [ ] Tests written and passing (`pytest`)
+- [ ] New repository wired in `bot/main.py` and exported from `bot/repositories/__init__.py`
+
+## Modal patterns
+
+Discord modals collect structured input before a command proceeds:
+
+```python
+class MyModal(discord.ui.Modal, title="Modal Title"):
+    field_name = discord.ui.TextInput(
+        label="Field label shown to the user",
+        placeholder="Placeholder text",
+        required=True,
+    )
+
+    async def on_submit(self, interaction: discord.Interaction) -> None:
+        value = self.field_name.value
+        await interaction.response.send_message(f"Got: {value}", ephemeral=True)
+
+# In the command:
+await interaction.response.send_modal(MyModal())
+```
+
+## Multi-step flows (Modal → Select → Confirm)
+
+Commands that need multiple user inputs before writing to the database follow this pattern:
+
+1. **Slash command** sends a modal (`interaction.response.send_modal(...)`)
+2. **Modal `on_submit`** sends an ephemeral message with a `View` (e.g. `UserSelect`)
+3. **View callback** computes results and edits the message to show a summary + confirm/cancel `View`
+4. **Confirm** writes to the database atomically, DMs each participant with their received amount and new balance, then edits the message to a final state
+5. **Cancel** edits the message to a cancelled state without writing anything
+
+## Atomic transactions across repositories
+
+When a single operation must write to multiple tables atomically, manage the transaction at the repository level rather than modifying `TransactionRepository`:
+
+```python
+class CombinedRepository:
+    async def create_with_children(self, ...) -> int:
+        await self._ensure_tables()
+        try:
+            await self._db.execute("BEGIN")
+            cursor = await self._db.execute("INSERT INTO parent ...")
+            parent_id = cursor.lastrowid
+            for child in children:
+                await self._db.execute("INSERT INTO child ...", (..., parent_id))
+            await self._db.commit()
+            return parent_id
+        except BaseException:
+            await self._db.rollback()
+            raise
+```
+
+## Public recap embed after confirm
+
+When a command needs to send a public recap message after a confirm step:
+
+1. Keep all interactive steps ephemeral (modal, select, confirm buttons)
+2. On confirm, persist to DB then:
+    - DM each participant with their received amount and new total balance (wrap each in try/except, collect failures)
+    - `interaction.channel.send(embed=public_embed)` — public message
+    - `interaction.response.edit_message(content="Done", embed=None)` — ephemeral update (append a failure note if DMs failed)
+3. Compute buyback / informational values at confirm time so they reflect the rates used at that moment
+
+```python
+async def confirm(self, interaction, button):
+    bot = interaction.client
+    payout_id = await repo.create_payout(...)
+
+    failed_dms = []
+    for pid in participant_ids:
+        member = guild.get_member(pid) or await guild.fetch_member(pid)
+        balance = await bot.transaction_repo.get_balance(pid)
+        try:
+            await member.send(embed=...)
+        except (discord.Forbidden, discord.HTTPException):
+            failed_dms.append(pid)
+
+    public_embed = discord.Embed(title=f"Payout #{payout_id}", color=discord.Color.green())
+    public_embed.add_field(name="Amount", value=f"{amount:,.0f}")
+    await interaction.channel.send(embed=public_embed)
+
+    success = f"Payout #{payout_id} created."
+    if failed_dms:
+        success += "\n⚠️ Could not reach: " + ", ".join(f"<@{pid}>" for pid in failed_dms)
+    await interaction.response.edit_message(
+        content=success, embed=None, view=self,
+    )
+```

@@ -9,12 +9,17 @@ class PayoutConfig:
     tax_transport: float
     officer_role_id: int | None
     leader_role_id: int | None
+    no_dm_role_id: int | None
     updated_at: str
 
 
 _DEFAULT_MARKET = 0.02
 _DEFAULT_GUILD = 0.10
 _DEFAULT_TRANSPORT = 0.03
+
+_PAYOUT_CONFIG_COLUMNS: dict[str, str] = {
+    "no_dm_role_id": "INTEGER",
+}
 
 
 class PayoutConfigRepository:
@@ -42,7 +47,17 @@ class PayoutConfigRepository:
         """,
             (_DEFAULT_MARKET, _DEFAULT_GUILD, _DEFAULT_TRANSPORT),
         )
+        await self._migrate()
         await self._db.commit()
+
+    async def _migrate(self) -> None:
+        cursor = await self._db.execute("PRAGMA table_info(payout_config)")
+        existing = {row["name"] for row in await cursor.fetchall()}
+        for col_name, col_type in _PAYOUT_CONFIG_COLUMNS.items():
+            if col_name not in existing:
+                await self._db.execute(
+                    f"ALTER TABLE payout_config ADD COLUMN {col_name} {col_type}"
+                )
 
     async def get_config(self) -> PayoutConfig:
         await self._ensure_table()
@@ -55,6 +70,7 @@ class PayoutConfigRepository:
             tax_transport=row["tax_transport"],
             officer_role_id=row["officer_role_id"],
             leader_role_id=row["leader_role_id"],
+            no_dm_role_id=row["no_dm_role_id"],
             updated_at=row["updated_at"],
         )
 
@@ -71,15 +87,20 @@ class PayoutConfigRepository:
         )
         await self._db.commit()
 
-    async def update_roles(self, officer_role_id: int | None, leader_role_id: int | None) -> None:
+    async def update_roles(
+        self,
+        officer_role_id: int | None,
+        leader_role_id: int | None,
+        no_dm_role_id: int | None = None,
+    ) -> None:
         await self._ensure_table()
         await self._db.execute(
             """
             UPDATE payout_config
-            SET officer_role_id = ?, leader_role_id = ?,
+            SET officer_role_id = ?, leader_role_id = ?, no_dm_role_id = ?,
                 updated_at = datetime('now')
             WHERE id = 1
         """,
-            (officer_role_id, leader_role_id),
+            (officer_role_id, leader_role_id, no_dm_role_id),
         )
         await self._db.commit()

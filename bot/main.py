@@ -3,6 +3,7 @@ import logging
 
 import aiosqlite
 import discord
+from discord import app_commands
 from discord.ext import commands
 
 from bot.config import Config
@@ -10,6 +11,7 @@ from bot.i18n import JSONTranslator
 from bot.repositories.payout_config_repository import (
     PayoutConfigRepository,
 )
+from bot.repositories.payout_repository import PayoutRepository
 from bot.repositories.transaction_repository import (
     TransactionRepository,
 )
@@ -24,10 +26,11 @@ class EradicateurBot(commands.Bot):
         intents = discord.Intents.default()
         intents.message_content = True
         intents.members = True
-        super().__init__(command_prefix="", intents=intents)
+        super().__init__(command_prefix="/", intents=intents)
         self.config = config
         self.db: aiosqlite.Connection | None = None
         self.payout_config_repo: PayoutConfigRepository | None = None
+        self.payout_repo: PayoutRepository | None = None
         self.transaction_repo: TransactionRepository | None = None
         self.payout_config_service: PayoutConfigService | None = None
 
@@ -43,6 +46,7 @@ class EradicateurBot(commands.Bot):
 
         self.payout_config_repo = PayoutConfigRepository(self.db)
         self.transaction_repo = TransactionRepository(self.db)
+        self.payout_repo = PayoutRepository(self.db, self.transaction_repo)
         self.payout_config_service = PayoutConfigService(self.payout_config_repo)
 
         await self.load_extension("bot.cogs.guild_commands")
@@ -60,6 +64,14 @@ class EradicateurBot(commands.Bot):
         else:
             await self.tree.sync()
             logger.info("Slash commands synced globally (may take up to 1h)")
+
+    async def translate(self, key: str, locale: discord.Locale) -> str:
+        translator = self.tree.translator
+        if translator is None:
+            return key
+        ls = app_commands.locale_str(key, key=key)
+        result = await translator.translate(ls, locale, None)
+        return result or key
 
     async def close(self) -> None:
         if self.db is not None:

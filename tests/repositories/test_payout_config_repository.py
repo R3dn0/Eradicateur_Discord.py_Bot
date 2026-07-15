@@ -27,6 +27,7 @@ async def test_get_config_creates_defaults(repo):
     assert config.tax_transport == 0.03
     assert config.officer_role_id is None
     assert config.leader_role_id is None
+    assert config.no_dm_role_id is None
     assert config.updated_at is not None
 
 
@@ -45,6 +46,7 @@ async def test_update_roles_persists(repo):
     config = await repo.get_config()
     assert config.officer_role_id == 12345
     assert config.leader_role_id == 67890
+    assert config.no_dm_role_id is None
 
 
 @pytest.mark.asyncio
@@ -54,3 +56,33 @@ async def test_update_roles_can_clear(repo):
     config = await repo.get_config()
     assert config.officer_role_id is None
     assert config.leader_role_id is None
+    assert config.no_dm_role_id is None
+
+
+@pytest.mark.asyncio
+async def test_update_roles_persists_no_dm_role(repo):
+    await repo.update_roles(
+        officer_role_id=12345,
+        leader_role_id=67890,
+        no_dm_role_id=99999,
+    )
+    config = await repo.get_config()
+    assert config.officer_role_id == 12345
+    assert config.leader_role_id == 67890
+    assert config.no_dm_role_id == 99999
+
+
+@pytest.mark.asyncio
+async def test_update_roles_can_clear_no_dm(repo):
+    await repo.update_roles(
+        officer_role_id=111,
+        leader_role_id=222,
+        no_dm_role_id=999,
+    )
+    await repo.update_roles(
+        officer_role_id=111,
+        leader_role_id=222,
+        no_dm_role_id=None,
+    )
+    config = await repo.get_config()
+    assert config.no_dm_role_id is None
