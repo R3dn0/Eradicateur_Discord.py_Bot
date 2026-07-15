@@ -214,6 +214,25 @@ async def cmd(self, interaction: discord.Interaction) -> None:
 async def cmd(self, interaction: discord.Interaction) -> None:
 ```
 
+### Role-based permissions
+
+```python
+if not isinstance(interaction.user, discord.Member):
+    await interaction.response.send_message(
+        "This command must be used in a server.", ephemeral=True
+    )
+    return
+
+bot: EradicateurBot = self.bot
+if not await bot.payout_config_service.is_leader(interaction.user):
+    await interaction.response.send_message(
+        "You need the leader role.", ephemeral=True
+    )
+    return
+```
+
+Use when roles are configured at runtime (`/payout config roles`) instead of hardcoded via `@app_commands.default_permissions(administrator=True)`.
+
 ## Responses
 
 ### Ephemeral response (visible only to user)
@@ -243,6 +262,25 @@ await interaction.followup.send("Result")
 ### Edit an existing response
 ```python
 await interaction.edit_original_response(content="New content")
+```
+
+## Nested command subgroups
+
+❌ Wrong — space in command name:
+
+```python
+@app_commands.command(name="config roles", description="...")
+```
+
+✅ Correct — `app_commands.Group` as class attribute + `@group.command`:
+
+```python
+class PayoutCog(commands.GroupCog, group_name="payout"):
+    config = app_commands.Group(name="config", description="Configure payout settings")
+
+    @config.command(name="roles", description="Set the officer and leader roles")
+    async def config_roles(self, interaction: discord.Interaction, ...) -> None:
+        ...
 ```
 
 ## Concrete examples

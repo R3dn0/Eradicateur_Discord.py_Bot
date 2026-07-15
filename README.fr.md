@@ -17,6 +17,11 @@ python -m bot.main
 **Général** (`guild_commands.py`) :
 - `/ping` - vérifie que le bot répond
 
+**Payout / Comptabilité** (`payout.py`) :
+- `/payout config roles <officier> <leader>` — définit les rôles officier et leader pour la gestion des paiements (Administrateur uniquement)
+- `/payout config rates <marché> <guilde> <transport>` — modifie les taux d'imposition utilisés dans les calculs de paiement (rôle Leader requis)
+- `/payout config show` — affiche la configuration actuelle des paiements (aucune restriction)
+
 ## Structure du projet
 
 ```

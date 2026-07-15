@@ -17,6 +17,11 @@ python -m bot.main
 **General** (`guild_commands.py`):
 - `/ping` - check that the bot responds
 
+**Payout / Ledger** (`payout.py`):
+- `/payout config roles <officer> <leader>` — set the officer and leader roles for payout management (Administrator only)
+- `/payout config rates <market> <guild> <transport>` — update tax rates used in payout calculations (Leader role required)
+- `/payout config show` — display current payout configuration (no restriction)
+
 ## Project structure
 
 ```

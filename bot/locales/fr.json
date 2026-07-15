@@ -1,4 +1,14 @@
 {
     "ping_name": "ping",
-    "ping_description": "Vérifie que le bot répond"
+    "ping_description": "Vérifie que le bot répond",
+    "payout_name": "payout",
+    "payout_description": "Commandes de gestion des payout",
+    "payout_config_name": "config",
+    "payout_config_description": "Configurer les paramètres de paiement",
+    "payout_config_roles_name": "rôles",
+    "payout_config_roles_description": "Définit les rôles officier et leader pour la gestion des payout",
+    "payout_config_rates_name": "taux",
+    "payout_config_rates_description": "Modifie les taux d'imposition utilisés dans les calculs de paiement",
+    "payout_config_show_name": "afficher",
+    "payout_config_show_description": "Affiche la configuration actuelle des payout"
 }

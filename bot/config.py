@@ -19,9 +19,7 @@ class Config:
             raise RuntimeError("DISCORD_TOKEN missing from .env")
 
         guild_id_raw = os.getenv("GUILD_ID", "")
-        guild_ids = [
-            int(gid.strip()) for gid in guild_id_raw.split(",") if gid.strip()
-        ]
+        guild_ids = [int(gid.strip()) for gid in guild_id_raw.split(",") if gid.strip()]
         return cls(
             discord_token=token,
             guild_id=guild_ids,
