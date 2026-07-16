@@ -576,8 +576,8 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
     async def config_roles(
         self,
         interaction: discord.Interaction,
-        officer: discord.Role,
         leader: discord.Role,
+        officer: discord.Role,
         no_dm: discord.Role | None = None,
     ) -> None:
         assert self.bot.payout_config_repo is not None
@@ -586,12 +586,12 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
         no_dm_role_id = config.no_dm_role_id if no_dm is None else no_dm.id
 
         await self.bot.payout_config_repo.update_roles(
-            officer_role_id=officer.id,
             leader_role_id=leader.id,
+            officer_role_id=officer.id,
             no_dm_role_id=no_dm_role_id,
         )
 
-        msg = f"Roles configured: officer = {officer.mention}, " f"leader = {leader.mention}"
+        msg = f"Roles configured: officer = {officer.mention}, leader = {leader.mention}"
         if no_dm:
             msg += f", no-DM = {no_dm.mention}"
         await interaction.response.send_message(msg, ephemeral=True)
@@ -648,14 +648,14 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
         config = await self.bot.payout_config_repo.get_config()
 
         guild = interaction.guild
-        officer_role = (
-            guild.get_role(config.officer_role_id) if config.officer_role_id and guild else None
-        )
-        officer = officer_role.mention if officer_role else "*Not configured*"
         leader_role = (
             guild.get_role(config.leader_role_id) if config.leader_role_id and guild else None
         )
         leader = leader_role.mention if leader_role else "*Not configured*"
+        officer_role = (
+            guild.get_role(config.officer_role_id) if config.officer_role_id and guild else None
+        )
+        officer = officer_role.mention if officer_role else "*Not configured*"
         no_dm_role = (
             guild.get_role(config.no_dm_role_id) if config.no_dm_role_id and guild else None
         )
@@ -672,8 +672,8 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
         embed.add_field(name="Market tax", value=f"{_fmt(config.tax_market)}", inline=True)
         embed.add_field(name="Guild tax", value=f"{_fmt(config.tax_guild)}", inline=True)
         embed.add_field(name="Transport tax", value=f"{_fmt(config.tax_transport)}", inline=True)
-        embed.add_field(name="Officer role", value=officer, inline=False)
         embed.add_field(name="Leader role", value=leader, inline=False)
+        embed.add_field(name="Officer role", value=officer, inline=False)
         embed.add_field(name="No-DM role", value=no_dm, inline=False)
         embed.set_footer(text=f"Last updated: {config.updated_at}")
 
