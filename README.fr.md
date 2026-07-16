@@ -20,8 +20,11 @@ python -m bot.main
 **Payout / Comptabilité** (`payout/`) :
 
 - `/payout creer` — ouvre un modal pour créer un nouveau payout. Après confirmation, publie un récapitulatif public et notifie chaque participant par MP avec le montant reçu et son nouveau solde. *(Nécessite : rôle Officier)*
+- `/payout payer` — retire manuellement un montant du solde d'un joueur (refusé si solde insuffisant). *(Nécessite : rôle Officier ou Leader, selon `/payout config permissions`)*
+- `/payout ajouter` — crédite manuellement le solde d'un joueur avec une raison. *(Nécessite : rôle Officier ou Leader, selon `/payout config permissions`)*
 - `/payout config roles` — définit les rôles officier et leader pour la gestion des payouts. *(Nécessite : permission Administrateur Discord)*
 - `/payout config taux` — modifie les taux d'imposition utilisés dans les calculs de paiement. *(Nécessite : rôle Leader)*
+- `/payout config permissions` — définit le niveau de permission requis pour `/payout payer` et `/payout ajouter`. *(Nécessite : rôle Leader)*
 - `/payout config afficher` — affiche la configuration actuelle des payouts. *(Aucune restriction)*
 
 **Configuration** (`config/`) :

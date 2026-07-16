@@ -43,9 +43,14 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
         )
 
         if role:
-            msg = f"Notification opt-out role set to {role.mention}."
+            template = await self.bot.translate(
+                "config_nonotification_role_set", interaction.locale
+            )
+            msg = template.replace("{role}", role.mention)
         else:
-            msg = "Notification opt-out role cleared."
+            msg = await self.bot.translate(
+                "config_nonotification_role_cleared", interaction.locale
+            )
         await interaction.response.send_message(msg, ephemeral=True)
 
     @nonotification.command(
@@ -65,16 +70,33 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
             if config.notification_opt_out_role_id and guild
             else None
         )
-        role_str = role.mention if role else "*Not configured*"
+        not_configured = await self.bot.translate("payout_not_configured", interaction.locale)
+        role_str = role.mention if role else not_configured
 
         embed = discord.Embed(
-            title="Notification Configuration",
+            title=await self.bot.translate(
+                "config_nonotification_show_embed_title", interaction.locale
+            ),
             color=discord.Color.blue(),
         )
-        embed.add_field(name="Opt-out role", value=role_str, inline=False)
+        embed.add_field(
+            name=await self.bot.translate(
+                "config_nonotification_show_opt_out_role", interaction.locale
+            ),
+            value=role_str, inline=False,
+        )
         if config.updated_by:
-            embed.set_footer(text=f"Last updated by <@{config.updated_by}> on {config.updated_at}")
+            footer = await self.bot.translate(
+                "config_nonotification_show_updated_by", interaction.locale
+            )
+            embed.set_footer(
+                text=footer.replace("{user}", f"<@{config.updated_by}>")
+                .replace("{date}", config.updated_at)
+            )
         else:
-            embed.set_footer(text=f"Last updated: {config.updated_at}")
+            footer = await self.bot.translate(
+                "config_nonotification_show_updated", interaction.locale
+            )
+            embed.set_footer(text=footer.replace("{date}", config.updated_at))
 
         await interaction.response.send_message(embed=embed, ephemeral=True)

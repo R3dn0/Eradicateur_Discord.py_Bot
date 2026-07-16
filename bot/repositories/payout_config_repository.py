@@ -9,9 +9,9 @@ class PayoutConfig:
     tax_transport: float
     officer_role_id: int | None
     leader_role_id: int | None
-    no_dm_role_id: int | None
     updated_at: str
     updated_by: int | None
+    pay_add_permission_level: str = "officer"
 
 
 _DEFAULT_MARKET = 0.02
@@ -19,8 +19,8 @@ _DEFAULT_GUILD = 0.10
 _DEFAULT_TRANSPORT = 0.03
 
 _PAYOUT_CONFIG_COLUMNS: dict[str, str] = {
-    "no_dm_role_id": "INTEGER",
     "updated_by": "INTEGER",
+    "pay_add_permission_level": "TEXT NOT NULL DEFAULT 'officer'",
 }
 
 
@@ -72,9 +72,9 @@ class PayoutConfigRepository:
             tax_transport=row["tax_transport"],
             officer_role_id=row["officer_role_id"],
             leader_role_id=row["leader_role_id"],
-            no_dm_role_id=row["no_dm_role_id"],
             updated_at=row["updated_at"],
             updated_by=row["updated_by"],
+            pay_add_permission_level=row["pay_add_permission_level"],
         )
 
     async def update_rates(self, market: float, guild: float, transport: float, *, updated_by: int) -> None:
@@ -108,5 +108,21 @@ class PayoutConfigRepository:
             WHERE id = 1
         """,
             (officer_role_id, leader_role_id, updated_by),
+        )
+        await self._db.commit()
+
+    async def update_pay_add_permission_level(self, level: str, *, updated_by: int) -> None:
+        if level not in ("officer", "leader"):
+            raise ValueError(f"Invalid permission level: {level!r}")
+        await self._ensure_table()
+        await self._db.execute(
+            """
+            UPDATE payout_config
+            SET pay_add_permission_level = ?,
+                updated_at = datetime('now'),
+                updated_by = ?
+            WHERE id = 1
+        """,
+            (level, updated_by),
         )
         await self._db.commit()

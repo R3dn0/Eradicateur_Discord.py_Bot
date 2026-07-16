@@ -3,6 +3,7 @@ from unittest.mock import AsyncMock, MagicMock
 import discord
 from bot.cogs.guild_commands import GuildCommands
 from bot.cogs.payout.cog import PayoutCog
+from bot.repositories.payout_config_repository import PayoutConfig
 from bot.cogs.payout.views import (
     ConfirmCancelView,
     ParticipantSelectView,
@@ -348,6 +349,7 @@ class TestPayoutConfigRates:
         bot.payout_config_service.is_leader = AsyncMock(return_value=True)
         bot.payout_config_repo = MagicMock()
         bot.payout_config_repo.update_rates = AsyncMock()
+        bot.translate = AsyncMock(side_effect=lambda key, locale: key)
         return PayoutCog(bot)
 
     @pytest.fixture
@@ -356,6 +358,7 @@ class TestPayoutConfigRates:
         interaction.response = AsyncMock()
         interaction.user = MagicMock(spec=discord.Member)
         interaction.user.id = 12345
+        interaction.locale = "fr"
         return interaction
 
     @pytest.mark.asyncio
@@ -371,7 +374,7 @@ class TestPayoutConfigRates:
         cog.bot.payout_config_repo.update_rates.assert_not_called()
         interaction.response.send_message.assert_awaited_once()
         call_args = interaction.response.send_message.call_args
-        assert "between 0 and 100" in call_args[0][0]
+        assert "payout_config_rates_invalid" in call_args[0][0]
         assert call_args[1]["ephemeral"] is True
 
     @pytest.mark.asyncio
@@ -385,3 +388,217 @@ class TestPayoutConfigRates:
         await cog.config_rates.callback(cog, interaction, market=0.0, guild=10.0, transport=5.0)
         cog.bot.payout_config_repo.update_rates.assert_not_called()
         interaction.response.send_message.assert_awaited_once()
+
+
+class TestPayoutPay:
+    @pytest.fixture
+    def config(self):
+        return PayoutConfig(
+            tax_market=0.02,
+            tax_guild=0.10,
+            tax_transport=0.03,
+            officer_role_id=None,
+            leader_role_id=None,
+            updated_at="2024-01-01",
+            updated_by=None,
+            pay_add_permission_level="officer",
+        )
+
+    @pytest.fixture
+    def cog(self, config):
+        bot = MagicMock()
+        bot.payout_config_repo = MagicMock()
+        bot.payout_config_repo.get_config = AsyncMock(return_value=config)
+        bot.payout_config_service = MagicMock()
+        bot.payout_config_service.is_officer = AsyncMock(return_value=True)
+        bot.payout_config_service.is_leader = AsyncMock(return_value=False)
+        bot.transaction_repo = MagicMock()
+        bot.transaction_repo.add_transaction = AsyncMock(return_value=1)
+        bot.translate = AsyncMock(side_effect=lambda key, locale: key)
+        return PayoutCog(bot)
+
+    @pytest.fixture
+    def interaction(self):
+        interaction = AsyncMock(spec=discord.Interaction)
+        interaction.response = AsyncMock()
+        interaction.user = MagicMock(spec=discord.Member)
+        interaction.user.id = 999
+        return interaction
+
+    @pytest.fixture
+    def joueur(self):
+        member = MagicMock(spec=discord.Member)
+        member.id = 111
+        member.mention = "<@111>"
+        return member
+
+    @pytest.mark.asyncio
+    async def test_pay_rejects_excessive_amount(self, cog, interaction, joueur):
+        cog.bot.transaction_repo.get_balance = AsyncMock(return_value=1000.0)
+        await cog.pay.callback(cog, interaction, joueur=joueur, montant=2000.0)
+        cog.bot.transaction_repo.add_transaction.assert_not_called()
+        interaction.response.send_message.assert_awaited_once()
+        call_args = interaction.response.send_message.call_args
+        assert "payout_insufficient_balance" in call_args[0][0]
+        assert call_args[1]["ephemeral"] is True
+
+    @pytest.mark.asyncio
+    async def test_pay_succeeds_when_sufficient(self, cog, interaction, joueur):
+        cog.bot.transaction_repo.get_balance = AsyncMock(return_value=5000.0)
+        await cog.pay.callback(cog, interaction, joueur=joueur, montant=2000.0)
+        cog.bot.transaction_repo.add_transaction.assert_awaited_once_with(
+            discord_id=111,
+            amount=-2000.0,
+            reason="Manual withdrawal",
+            created_by=999,
+        )
+        interaction.response.send_message.assert_awaited_once()
+        call_args = interaction.response.send_message.call_args
+        assert "payout_paid" in call_args[0][0]
+        assert call_args[1]["ephemeral"] is True
+
+    @pytest.mark.asyncio
+    async def test_pay_rejects_non_positive(self, cog, interaction, joueur):
+        cog.bot.transaction_repo.get_balance = AsyncMock(return_value=1000.0)
+        await cog.pay.callback(cog, interaction, joueur=joueur, montant=0.0)
+        cog.bot.transaction_repo.add_transaction.assert_not_called()
+        interaction.response.send_message.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_pay_allows_officer_when_level_is_officer(self, cog, interaction, joueur):
+        cog.bot.payout_config_service.is_officer = AsyncMock(return_value=True)
+        cog.bot.transaction_repo.get_balance = AsyncMock(return_value=5000.0)
+        await cog.pay.callback(cog, interaction, joueur=joueur, montant=1000.0)
+        cog.bot.transaction_repo.add_transaction.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_pay_rejects_officer_when_level_is_leader(self, cog, interaction, joueur):
+        cog.bot.payout_config_repo.get_config = AsyncMock(
+            return_value=PayoutConfig(
+                tax_market=0.02, tax_guild=0.10, tax_transport=0.03,
+                officer_role_id=None, leader_role_id=None,
+                updated_at="2024-01-01", updated_by=None,
+                pay_add_permission_level="leader",
+            )
+        )
+        cog.bot.payout_config_service.is_officer = AsyncMock(return_value=True)
+        cog.bot.payout_config_service.is_leader = AsyncMock(return_value=False)
+        await cog.pay.callback(cog, interaction, joueur=joueur, montant=1000.0)
+        cog.bot.transaction_repo.add_transaction.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_pay_allows_leader_when_level_is_leader(self, cog, interaction, joueur):
+        cog.bot.payout_config_repo.get_config = AsyncMock(
+            return_value=PayoutConfig(
+                tax_market=0.02, tax_guild=0.10, tax_transport=0.03,
+                officer_role_id=None, leader_role_id=None,
+                updated_at="2024-01-01", updated_by=None,
+                pay_add_permission_level="leader",
+            )
+        )
+        cog.bot.payout_config_service.is_leader = AsyncMock(return_value=True)
+        cog.bot.transaction_repo.get_balance = AsyncMock(return_value=5000.0)
+        await cog.pay.callback(cog, interaction, joueur=joueur, montant=1000.0)
+        cog.bot.transaction_repo.add_transaction.assert_awaited_once()
+
+
+class TestPayoutAdd:
+    @pytest.fixture
+    def config(self):
+        return PayoutConfig(
+            tax_market=0.02,
+            tax_guild=0.10,
+            tax_transport=0.03,
+            officer_role_id=None,
+            leader_role_id=None,
+            updated_at="2024-01-01",
+            updated_by=None,
+            pay_add_permission_level="officer",
+        )
+
+    @pytest.fixture
+    def cog(self, config):
+        bot = MagicMock()
+        bot.payout_config_repo = MagicMock()
+        bot.payout_config_repo.get_config = AsyncMock(return_value=config)
+        bot.payout_config_service = MagicMock()
+        bot.payout_config_service.is_officer = AsyncMock(return_value=True)
+        bot.payout_config_service.is_leader = AsyncMock(return_value=False)
+        bot.transaction_repo = MagicMock()
+        bot.transaction_repo.add_transaction = AsyncMock(return_value=1)
+        bot.translate = AsyncMock(side_effect=lambda key, locale: key)
+        return PayoutCog(bot)
+
+    @pytest.fixture
+    def interaction(self):
+        interaction = AsyncMock(spec=discord.Interaction)
+        interaction.response = AsyncMock()
+        interaction.user = MagicMock(spec=discord.Member)
+        interaction.user.id = 999
+        return interaction
+
+    @pytest.fixture
+    def joueur(self):
+        member = MagicMock(spec=discord.Member)
+        member.id = 111
+        member.mention = "<@111>"
+        return member
+
+    @pytest.mark.asyncio
+    async def test_add_persists_and_updates_balance(self, cog, interaction, joueur):
+        cog.bot.transaction_repo.get_balance = AsyncMock(return_value=7000.0)
+        await cog.add.callback(cog, interaction, joueur=joueur, montant=3000.0, raison="Bonus")
+        cog.bot.transaction_repo.add_transaction.assert_awaited_once_with(
+            discord_id=111,
+            amount=3000.0,
+            reason="Bonus",
+            created_by=999,
+        )
+        interaction.response.send_message.assert_awaited_once()
+        call_args = interaction.response.send_message.call_args
+        assert "payout_credited" in call_args[0][0]
+        assert call_args[1]["ephemeral"] is True
+
+    @pytest.mark.asyncio
+    async def test_add_rejects_non_positive(self, cog, interaction, joueur):
+        cog.bot.transaction_repo.get_balance = AsyncMock(return_value=1000.0)
+        await cog.add.callback(cog, interaction, joueur=joueur, montant=-5.0, raison="Test")
+        cog.bot.transaction_repo.add_transaction.assert_not_called()
+        interaction.response.send_message.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_add_allows_officer_when_level_is_officer(self, cog, interaction, joueur):
+        cog.bot.payout_config_service.is_officer = AsyncMock(return_value=True)
+        cog.bot.transaction_repo.get_balance = AsyncMock(return_value=5000.0)
+        await cog.add.callback(cog, interaction, joueur=joueur, montant=1000.0, raison="Test")
+        cog.bot.transaction_repo.add_transaction.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_add_rejects_officer_when_level_is_leader(self, cog, interaction, joueur):
+        cog.bot.payout_config_repo.get_config = AsyncMock(
+            return_value=PayoutConfig(
+                tax_market=0.02, tax_guild=0.10, tax_transport=0.03,
+                officer_role_id=None, leader_role_id=None,
+                updated_at="2024-01-01", updated_by=None,
+                pay_add_permission_level="leader",
+            )
+        )
+        cog.bot.payout_config_service.is_officer = AsyncMock(return_value=True)
+        cog.bot.payout_config_service.is_leader = AsyncMock(return_value=False)
+        await cog.add.callback(cog, interaction, joueur=joueur, montant=1000.0, raison="Test")
+        cog.bot.transaction_repo.add_transaction.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_add_allows_leader_when_level_is_leader(self, cog, interaction, joueur):
+        cog.bot.payout_config_repo.get_config = AsyncMock(
+            return_value=PayoutConfig(
+                tax_market=0.02, tax_guild=0.10, tax_transport=0.03,
+                officer_role_id=None, leader_role_id=None,
+                updated_at="2024-01-01", updated_by=None,
+                pay_add_permission_level="leader",
+            )
+        )
+        cog.bot.payout_config_service.is_leader = AsyncMock(return_value=True)
+        cog.bot.transaction_repo.get_balance = AsyncMock(return_value=5000.0)
+        await cog.add.callback(cog, interaction, joueur=joueur, montant=1000.0, raison="Test")
+        cog.bot.transaction_repo.add_transaction.assert_awaited_once()

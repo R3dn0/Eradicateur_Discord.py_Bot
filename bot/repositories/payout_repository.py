@@ -4,20 +4,7 @@ from dataclasses import dataclass
 from bot.repositories.transaction_repository import TransactionRepository
 
 
-_PAYOUT_COLUMNS: dict[str, str] = {
-    "id": "INTEGER PRIMARY KEY AUTOINCREMENT",
-    "bag_silvers": "REAL NOT NULL",
-    "item_market_value": "REAL NOT NULL",
-    "activity_cost": "REAL NOT NULL",
-    "tax_market": "REAL NOT NULL",
-    "tax_guild": "REAL NOT NULL",
-    "tax_transport": "REAL NOT NULL",
-    "participant_count": "INTEGER NOT NULL",
-    "amount_per_player": "REAL NOT NULL",
-    "buyback_value": "REAL NOT NULL",
-    "created_by": "INTEGER NOT NULL",
-    "created_at": "TEXT NOT NULL DEFAULT (datetime('now'))",
-}
+_PAYOUT_COLUMNS: dict[str, str] = {}
 
 
 @dataclass
@@ -63,18 +50,7 @@ class PayoutRepository:
                     DEFAULT (datetime('now'))
             )
         """)
-        await self._db.execute("""
-            CREATE TABLE IF NOT EXISTS transactions (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                discord_id INTEGER NOT NULL,
-                amount REAL NOT NULL,
-                reason TEXT NOT NULL,
-                payout_id INTEGER,
-                created_by INTEGER NOT NULL,
-                created_at TEXT NOT NULL
-                    DEFAULT (datetime('now'))
-            )
-        """)
+        await self._transaction_repo._ensure_table()
         await self._migrate()
         await self._db.commit()
 

@@ -20,8 +20,11 @@ python -m bot.main
 **Payout / Ledger** (`payout/`):
 
 - `/payout create` — open a modal to create a new payout. On confirm, posts a public recap embed and notifies each participant by DM with their received amount and new balance. *(Requires: Officer role)*
+- `/payout pay` — manually withdraw an amount from a player's balance (rejects if insufficient funds). *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
+- `/payout add` — manually credit a player's balance with a reason. *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
 - `/payout config roles` — set the officer and leader roles for payout management. *(Requires: Administrator permission)*
 - `/payout config rates` — update tax rates used in payout calculations. *(Requires: Leader role)*
+- `/payout config permissions` — set the permission level required for `/payout pay` and `/payout add`. *(Requires: Leader role)*
 - `/payout config show` — display current payout configuration. *(No restriction)*
 
 **Configuration** (`config/`):

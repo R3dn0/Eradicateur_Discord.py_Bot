@@ -27,7 +27,6 @@ async def test_get_config_creates_defaults(repo):
     assert config.tax_transport == 0.03
     assert config.officer_role_id is None
     assert config.leader_role_id is None
-    assert config.no_dm_role_id is None
     assert config.updated_at is not None
     assert config.updated_by is None
 
@@ -48,7 +47,6 @@ async def test_update_roles_persists(repo):
     config = await repo.get_config()
     assert config.officer_role_id == 12345
     assert config.leader_role_id == 67890
-    assert config.no_dm_role_id is None
     assert config.updated_by == 99
 
 
@@ -59,7 +57,26 @@ async def test_update_roles_can_clear(repo):
     config = await repo.get_config()
     assert config.officer_role_id is None
     assert config.leader_role_id is None
-    assert config.no_dm_role_id is None
     assert config.updated_by == 2
+
+
+@pytest.mark.asyncio
+async def test_pay_add_permission_level_defaults_to_officer(repo):
+    config = await repo.get_config()
+    assert config.pay_add_permission_level == "officer"
+
+
+@pytest.mark.asyncio
+async def test_update_pay_add_permission_level_persists(repo):
+    await repo.update_pay_add_permission_level(level="leader", updated_by=42)
+    config = await repo.get_config()
+    assert config.pay_add_permission_level == "leader"
+    assert config.updated_by == 42
+
+
+@pytest.mark.asyncio
+async def test_update_pay_add_permission_level_rejects_invalid(repo):
+    with pytest.raises(ValueError, match="Invalid permission level"):
+        await repo.update_pay_add_permission_level(level="invalid", updated_by=1)
 
 
