@@ -1,22 +1,12 @@
-import asyncio
 import logging
 
-import aiosqlite
 import discord
 from discord import app_commands
-from discord.ext import commands
+from discord.ext import commands, tasks
 
 from bot.config import Config
+from bot.db_manager import GuildDatabaseManager
 from bot.i18n import JSONTranslator
-from bot.repositories.bot_config_repository import BotConfigRepository
-from bot.repositories.payout_config_repository import (
-    PayoutConfigRepository,
-)
-from bot.repositories.payout_repository import PayoutRepository
-from bot.repositories.transaction_repository import (
-    TransactionRepository,
-)
-from bot.services.payout_config_service import PayoutConfigService
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("eradicateur_bot")
@@ -29,32 +19,21 @@ class EradicateurBot(commands.Bot):
         intents.members = True
         super().__init__(command_prefix="/", intents=intents)
         self.config = config
-        self.db: aiosqlite.Connection | None = None
-        self.bot_config_repo: BotConfigRepository | None = None
-        self.payout_config_repo: PayoutConfigRepository | None = None
-        self.payout_repo: PayoutRepository | None = None
-        self.transaction_repo: TransactionRepository | None = None
-        self.payout_config_service: PayoutConfigService | None = None
+        self.db_manager: GuildDatabaseManager | None = None
 
     async def setup_hook(self) -> None:
         translator = JSONTranslator()
         await translator.load()
         await self.tree.set_translator(translator)
 
-        self.db = await aiosqlite.connect(self.config.database_path)
-        assert self.db is not None
-        self.db.row_factory = aiosqlite.Row
-        await self.db.execute("PRAGMA journal_mode=WAL")
+        self.db_manager = GuildDatabaseManager(self.config.data_dir)
 
-        self.bot_config_repo = BotConfigRepository(self.db)
-        self.payout_config_repo = PayoutConfigRepository(self.db)
-        self.transaction_repo = TransactionRepository(self.db)
-        self.payout_repo = PayoutRepository(self.db, self.transaction_repo)
-        self.payout_config_service = PayoutConfigService(self.payout_config_repo)
+        _evict_idle.start(self)
 
         await self.load_extension("bot.cogs.guild_commands")
         await self.load_extension("bot.cogs.payout")
         await self.load_extension("bot.cogs.config")
+        await self.load_extension("bot.cogs.balance")
 
         if self.config.guild_id:
             for gid in self.config.guild_id:
@@ -78,13 +57,25 @@ class EradicateurBot(commands.Bot):
         return result or key
 
     async def close(self) -> None:
-        if self.db is not None:
-            await self.db.close()
+        if self.db_manager is not None:
+            await self.db_manager.close_all()
+        _evict_idle.stop()
         await super().close()
 
     async def on_ready(self) -> None:
         assert self.user is not None
         logger.info("Logged in as %s (id: %s)", self.user, self.user.id)
+
+
+@tasks.loop(minutes=5)
+async def _evict_idle(bot: EradicateurBot) -> None:
+    assert bot.db_manager is not None
+    await bot.db_manager.evict_idle()
+
+
+@_evict_idle.before_loop
+async def _wait_ready(bot: EradicateurBot) -> None:
+    await bot.wait_until_ready()
 
 
 async def main() -> None:
@@ -95,4 +86,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
+    import asyncio
     asyncio.run(main())

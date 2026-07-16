@@ -10,7 +10,7 @@ load_dotenv()
 class Config:
     discord_token: str
     guild_id: list[int]
-    database_path: str
+    data_dir: str
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -23,5 +23,5 @@ class Config:
         return cls(
             discord_token=token,
             guild_id=guild_ids,
-            database_path=os.getenv("DATABASE_PATH", "data/eradicateur.db"),
+            data_dir=os.getenv("DATA_DIR", "data"),
         )

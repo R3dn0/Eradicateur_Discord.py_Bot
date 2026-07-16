@@ -61,6 +61,18 @@ class TransactionRepository:
         row = await cursor.fetchone()
         return row[0]
 
+    async def list_balances(self) -> list[tuple[int, float]]:
+        await self._ensure_table()
+        cursor = await self._db.execute("""
+            SELECT discord_id, SUM(amount) AS balance
+            FROM transactions
+            GROUP BY discord_id
+            HAVING SUM(amount) != 0
+            ORDER BY balance DESC
+        """)
+        rows = await cursor.fetchall()
+        return [(row["discord_id"], row["balance"]) for row in rows]
+
     async def list_transactions(self, discord_id: int) -> list[Transaction]:
         await self._ensure_table()
         cursor = await self._db.execute(

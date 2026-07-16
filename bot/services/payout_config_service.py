@@ -34,6 +34,12 @@ class PayoutConfigService:
             return True
         return False
 
+    async def check_pay_add_permission(self, member: discord.Member) -> bool:
+        config = await self._repo.get_config()
+        if config.pay_add_permission_level == "leader":
+            return await self.is_leader(member)
+        return await self.is_officer(member)
+
     async def is_leader(self, member: discord.Member) -> bool:
         config = await self._repo.get_config()
         if config.leader_role_id and member.get_role(config.leader_role_id):

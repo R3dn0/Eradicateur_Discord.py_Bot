@@ -3,6 +3,7 @@ from discord import app_commands
 from discord.ext import commands
 
 from bot.main import EradicateurBot
+from bot.repositories.bot_config_repository import BotConfigRepository
 
 
 class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", key="config_name")):  # type: ignore[call-arg]
@@ -36,8 +37,16 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
         interaction: discord.Interaction,
         role: discord.Role | None = None,
     ) -> None:
-        assert self.bot.bot_config_repo is not None
-        await self.bot.bot_config_repo.update_opt_out_role(
+        if interaction.guild is None:
+            msg = await self.bot.translate("payout_server_only", interaction.locale)
+            await interaction.response.send_message(msg, ephemeral=True)
+            return
+
+        assert self.bot.db_manager is not None
+        db = await self.bot.db_manager.get_connection(interaction.guild.id)
+        bot_config_repo = BotConfigRepository(db)
+
+        await bot_config_repo.update_opt_out_role(
             role_id=role.id if role else None,
             updated_by=interaction.user.id,
         )
@@ -61,8 +70,15 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
         ),
     )
     async def show(self, interaction: discord.Interaction) -> None:
-        assert self.bot.bot_config_repo is not None
-        config = await self.bot.bot_config_repo.get_config()
+        if interaction.guild is None:
+            msg = await self.bot.translate("payout_server_only", interaction.locale)
+            await interaction.response.send_message(msg, ephemeral=True)
+            return
+
+        assert self.bot.db_manager is not None
+        db = await self.bot.db_manager.get_connection(interaction.guild.id)
+        bot_config_repo = BotConfigRepository(db)
+        config = await bot_config_repo.get_config()
 
         guild = interaction.guild
         role = (

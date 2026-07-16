@@ -10,6 +10,24 @@ Discord Command → Cog (interface) → Service (logic) → Repository (data)
 - **Service** : contains business logic
 - **Repository** : data access (async SQLite)
 
+### Database
+
+Each Discord guild has its own SQLite database file at `data/guilds/<guild_id>.db`.
+Connections are opened lazily on the first command for a guild (`GuildDatabaseManager`)
+and cached with a last-used timestamp. Idle connections are evicted after 30 minutes.
+The manager is thread-safe per guild (uses `asyncio.Lock` per guild ID).
+
+To use a repository in a command, resolve the connection and construct the repo inline:
+
+```python
+db = await self.bot.db_manager.get_connection(interaction.guild.id)
+repo = MyRepository(db)
+await repo.do_something()
+```
+
+Do **not** store repository instances as bot-level attributes — connect and
+construct per command.
+
 ## Organizing cogs
 
 One cog = one file = a set of commands about the same topic. Group commands by **domain**, not by command.
@@ -486,7 +504,7 @@ pytest --cov=bot
 - [ ] `locale_str` used for name and description
 - [ ] Permissions set if admin command
 - [ ] Tests written and passing (`pytest`)
-- [ ] New repository wired in `bot/main.py` and exported from `bot/repositories/__init__.py`
+- [ ] New repository connected via `bot.db_manager.get_connection(guild_id)` and constructed inline in the command
 
 ## Modal patterns
 

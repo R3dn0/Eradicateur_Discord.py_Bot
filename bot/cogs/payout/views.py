@@ -1,6 +1,15 @@
 import discord
 
 from bot.main import EradicateurBot
+from bot.repositories.bot_config_repository import BotConfigRepository
+from bot.repositories.payout_config_repository import (
+    PayoutConfigRepository,
+)
+from bot.repositories.payout_repository import PayoutRepository
+from bot.repositories.transaction_repository import (
+    TransactionRepository,
+)
+from bot.services.payout_config_service import PayoutConfigService
 from bot.services.payout_service import PayoutSplitResult, compute_split
 from bot.utils.discord_dm import send_bulk_dm
 
@@ -158,8 +167,11 @@ class ParticipantSelectView(discord.ui.View):
             return
 
         bot: EradicateurBot = interaction.client  # type: ignore
-        assert bot.payout_config_service is not None
-        rates = await bot.payout_config_service.get_rates()
+        assert bot.db_manager is not None
+        db = await bot.db_manager.get_connection(interaction.guild.id)
+        payout_config_repo = PayoutConfigRepository(db)
+        payout_config_service = PayoutConfigService(payout_config_repo)
+        rates = await payout_config_service.get_rates()
 
         n = len(self.accumulated)
         split = compute_split(
@@ -351,13 +363,18 @@ class ConfirmCancelView(discord.ui.View):
         button: discord.ui.Button,
     ) -> None:
         bot: EradicateurBot = interaction.client  # type: ignore
-        assert bot.payout_repo is not None
         assert interaction.channel is not None
         assert interaction.guild is not None
+        assert bot.db_manager is not None
+        db = await bot.db_manager.get_connection(interaction.guild.id)
+
+        payout_repo = PayoutRepository(db, TransactionRepository(db))
+        bot_config_repo = BotConfigRepository(db)
+        transaction_repo = TransactionRepository(db)
 
         n = len(self.participant_ids)
         created_by = interaction.user.id
-        payout_id = await bot.payout_repo.create_payout(
+        payout_id = await payout_repo.create_payout(
             bag_silvers=self.bag_silvers,
             item_market_value=self.item_market_value,
             activity_cost=self.activity_cost,
@@ -370,18 +387,15 @@ class ConfirmCancelView(discord.ui.View):
             created_by=created_by,
         )
 
-        assert bot.bot_config_repo is not None
-        bot_config = await bot.bot_config_repo.get_config()
+        bot_config = await bot_config_repo.get_config()
         no_dm_role_id = bot_config.notification_opt_out_role_id
 
         dm_title = await bot.translate("payout_dm_title", interaction.locale)
         dm_received = await bot.translate("payout_dm_received", interaction.locale)
         dm_new_balance = await bot.translate("payout_dm_new_balance", interaction.locale)
 
-        assert bot.transaction_repo is not None
-
         async def _build_content(member: discord.Member) -> discord.Embed:
-            new_balance = await bot.transaction_repo.get_balance(member.id)
+            new_balance = await transaction_repo.get_balance(member.id)
             embed = discord.Embed(
                 title=dm_title,
                 color=discord.Color.gold(),

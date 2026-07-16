@@ -27,6 +27,11 @@ python -m bot.main
 - `/payout config permissions` — définit le niveau de permission requis pour `/payout payer` et `/payout ajouter`. *(Nécessite : rôle Leader)*
 - `/payout config afficher` — affiche la configuration actuelle des payouts. *(Aucune restriction)*
 
+**Solde** (`balance/`) :
+
+- `/solde afficher [member]` — voir votre propre solde (aucune restriction) ou le solde d'un autre membre si autorisé. *(Voir celui des autres nécessite le niveau de permission Pay/Add — Officier ou Leader, selon `/payout config permissions`)*
+- `/solde liste` — liste tous les membres avec un solde non nul. *(Nécessite le niveau de permission Pay/Add)*
+
 **Configuration** (`config/`) :
 
 - `/config nonotification role` — définit ou efface le rôle dont les membres sont exclus des MP de payout. *(Nécessite : permission Administrateur Discord)*
@@ -41,6 +46,22 @@ bot/
 ├── services/       # Logique métier
 ├── locales/        # Traductions i18n
 ├── config.py       # Configuration
+├── db_manager.py   # Gestionnaire de connexions par serveur
 ├── i18n.py         # Traducteur
 └── main.py         # Point d'entrée
+```
+
+### Base de données
+
+Chaque serveur Discord possède son propre fichier SQLite dans
+`data/guilds/<guild_id>.db`. Les connexions sont ouvertes à la première
+commande pour un serveur et fermées automatiquement après 30 minutes
+d'inactivité. Le gestionnaire (`GuildDatabaseManager`) est thread-safe
+par serveur.
+
+Pour ajouter une commande nécessitant un repository :
+```python
+db = await self.bot.db_manager.get_connection(interaction.guild.id)
+repo = MonRepository(db)
+await repo.faire_quelque_chose()
 ```

@@ -50,6 +50,26 @@ async def test_balance_is_per_user(repo):
 
 
 @pytest.mark.asyncio
+async def test_list_balances_excludes_zero(repo):
+    await repo.add_transaction(discord_id=100, amount=50.0, reason="credit", created_by=1)
+    await repo.add_transaction(discord_id=100, amount=-50.0, reason="debit", created_by=1)
+    await repo.add_transaction(discord_id=200, amount=100.0, reason="credit", created_by=1)
+    await repo.add_transaction(discord_id=300, amount=0.0, reason="zero", created_by=1)
+    balances = await repo.list_balances()
+    assert len(balances) == 1
+    assert balances[0] == (200, 100.0)
+
+
+@pytest.mark.asyncio
+async def test_list_balances_orders_desc(repo):
+    await repo.add_transaction(discord_id=1, amount=10.0, reason="a", created_by=0)
+    await repo.add_transaction(discord_id=2, amount=50.0, reason="b", created_by=0)
+    await repo.add_transaction(discord_id=3, amount=30.0, reason="c", created_by=0)
+    balances = await repo.list_balances()
+    assert balances == [(2, 50.0), (3, 30.0), (1, 10.0)]
+
+
+@pytest.mark.asyncio
 async def test_list_transactions_orders_desc(repo):
     await repo.add_transaction(discord_id=500, amount=10.0, reason="first", created_by=1)
     await repo.add_transaction(discord_id=500, amount=20.0, reason="second", created_by=1)
