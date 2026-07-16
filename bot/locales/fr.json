@@ -7,9 +7,11 @@
     "payout_config_description": "Configurer les paramètres de paiement",
     "payout_config_roles_name": "rôles",
     "payout_config_roles_description": "Définit les rôles officier et leader pour la gestion des payout",
-    "payout_config_roles_no_dm_description": "Rôle dont les membres ne reçoivent pas de MP pour les payout",
     "payout_config_rates_name": "taux",
     "payout_config_rates_description": "Modifie les taux d'imposition utilisés dans les calculs de paiement",
+    "payout_config_rates_market_description": "Taxe de marché en pourcentage, ex. 2 pour 2%",
+    "payout_config_rates_guild_description": "Taxe de guilde en pourcentage, ex. 10 pour 10%",
+    "payout_config_rates_transport_description": "Taxe de transport en pourcentage, ex. 3 pour 3%",
     "payout_config_show_name": "afficher",
     "payout_config_show_description": "Affiche la configuration actuelle des payout",
     "payout_create_name": "creer",
@@ -52,5 +54,14 @@
     "payout_dm_received": "Montant reçu",
     "payout_dm_new_balance": "Nouveau solde",
     "payout_dm_failure_note": "⚠️ Impossible de contacter en MP : {users}",
-    "payout_dm_optout_note": "ℹ️ {n} participant(s) ont désactivé les notifications payout"
+    "payout_dm_optout_note": "ℹ️ {n} participant(s) ont désactivé les notifications payout",
+    "config_name": "config",
+    "config_description": "Configuration globale du bot",
+    "config_nonotification_name": "nonotification",
+    "config_nonotification_description": "Gérer les paramètres d'exclusion des MP",
+    "config_nonotification_role_name": "role",
+    "config_nonotification_role_description": "Définit ou efface le rôle d'exclusion des MP de payout",
+    "config_nonotification_role_param_description": "Rôle dont les membres ne reçoivent pas de MP. Omettre pour effacer.",
+    "config_nonotification_show_name": "afficher",
+    "config_nonotification_show_description": "Affiche la configuration actuelle des notifications"
 }

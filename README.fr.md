@@ -17,12 +17,17 @@ python -m bot.main
 **Général** (`guild_commands.py`) :
 - `/ping` - vérifie que le bot répond *(Aucune restriction)*
 
-**Payout / Comptabilité** (`payout.py`) :
+**Payout / Comptabilité** (`payout/`) :
 
 - `/payout creer` — ouvre un modal pour créer un nouveau payout. Après confirmation, publie un récapitulatif public et notifie chaque participant par MP avec le montant reçu et son nouveau solde. *(Nécessite : rôle Officier)*
-- `/payout config roles` — définit les rôles officier et leader pour la gestion des payouts, plus un rôle optionnel `no_dm` dont les membres ne reçoivent pas de MP pour les payout. *(Nécessite : permission Administrateur Discord)*
+- `/payout config roles` — définit les rôles officier et leader pour la gestion des payouts. *(Nécessite : permission Administrateur Discord)*
 - `/payout config taux` — modifie les taux d'imposition utilisés dans les calculs de paiement. *(Nécessite : rôle Leader)*
-- `/payout config afficher` — affiche la configuration actuelle, y compris le rôle d'exclusion des MP si configuré. *(Aucune restriction)*
+- `/payout config afficher` — affiche la configuration actuelle des payouts. *(Aucune restriction)*
+
+**Configuration** (`config/`) :
+
+- `/config nonotification role` — définit ou efface le rôle dont les membres sont exclus des MP de payout. *(Nécessite : permission Administrateur Discord)*
+- `/config nonotification afficher` — affiche la configuration actuelle des notifications. *(Aucune restriction)*
 
 ## Structure du projet
 

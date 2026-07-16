@@ -11,6 +11,7 @@ class PayoutConfig:
     leader_role_id: int | None
     no_dm_role_id: int | None
     updated_at: str
+    updated_by: int | None
 
 
 _DEFAULT_MARKET = 0.02
@@ -19,6 +20,7 @@ _DEFAULT_TRANSPORT = 0.03
 
 _PAYOUT_CONFIG_COLUMNS: dict[str, str] = {
     "no_dm_role_id": "INTEGER",
+    "updated_by": "INTEGER",
 }
 
 
@@ -72,18 +74,20 @@ class PayoutConfigRepository:
             leader_role_id=row["leader_role_id"],
             no_dm_role_id=row["no_dm_role_id"],
             updated_at=row["updated_at"],
+            updated_by=row["updated_by"],
         )
 
-    async def update_rates(self, market: float, guild: float, transport: float) -> None:
+    async def update_rates(self, market: float, guild: float, transport: float, *, updated_by: int) -> None:
         await self._ensure_table()
         await self._db.execute(
             """
             UPDATE payout_config
             SET tax_market = ?, tax_guild = ?, tax_transport = ?,
-                updated_at = datetime('now')
+                updated_at = datetime('now'),
+                updated_by = ?
             WHERE id = 1
         """,
-            (market, guild, transport),
+            (market, guild, transport, updated_by),
         )
         await self._db.commit()
 
@@ -91,16 +95,18 @@ class PayoutConfigRepository:
         self,
         officer_role_id: int | None,
         leader_role_id: int | None,
-        no_dm_role_id: int | None = None,
+        *,
+        updated_by: int,
     ) -> None:
         await self._ensure_table()
         await self._db.execute(
             """
             UPDATE payout_config
-            SET officer_role_id = ?, leader_role_id = ?, no_dm_role_id = ?,
-                updated_at = datetime('now')
+            SET officer_role_id = ?, leader_role_id = ?,
+                updated_at = datetime('now'),
+                updated_by = ?
             WHERE id = 1
         """,
-            (officer_role_id, leader_role_id, no_dm_role_id),
+            (officer_role_id, leader_role_id, updated_by),
         )
         await self._db.commit()

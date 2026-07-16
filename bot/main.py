@@ -8,6 +8,7 @@ from discord.ext import commands
 
 from bot.config import Config
 from bot.i18n import JSONTranslator
+from bot.repositories.bot_config_repository import BotConfigRepository
 from bot.repositories.payout_config_repository import (
     PayoutConfigRepository,
 )
@@ -29,6 +30,7 @@ class EradicateurBot(commands.Bot):
         super().__init__(command_prefix="/", intents=intents)
         self.config = config
         self.db: aiosqlite.Connection | None = None
+        self.bot_config_repo: BotConfigRepository | None = None
         self.payout_config_repo: PayoutConfigRepository | None = None
         self.payout_repo: PayoutRepository | None = None
         self.transaction_repo: TransactionRepository | None = None
@@ -44,6 +46,7 @@ class EradicateurBot(commands.Bot):
         self.db.row_factory = aiosqlite.Row
         await self.db.execute("PRAGMA journal_mode=WAL")
 
+        self.bot_config_repo = BotConfigRepository(self.db)
         self.payout_config_repo = PayoutConfigRepository(self.db)
         self.transaction_repo = TransactionRepository(self.db)
         self.payout_repo = PayoutRepository(self.db, self.transaction_repo)
@@ -51,6 +54,7 @@ class EradicateurBot(commands.Bot):
 
         await self.load_extension("bot.cogs.guild_commands")
         await self.load_extension("bot.cogs.payout")
+        await self.load_extension("bot.cogs.config")
 
         if self.config.guild_id:
             for gid in self.config.guild_id:

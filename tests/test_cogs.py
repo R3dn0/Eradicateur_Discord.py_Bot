@@ -2,11 +2,13 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock
 import discord
 from bot.cogs.guild_commands import GuildCommands
-from bot.cogs.payout import (
+from bot.cogs.payout.cog import PayoutCog
+from bot.cogs.payout.views import (
     ConfirmCancelView,
     ParticipantSelectView,
     RemoveParticipantsView,
 )
+from bot.services.payout_service import PayoutSplitResult
 
 
 class TestPingCommand:
@@ -81,9 +83,16 @@ class TestConfirmCancelViewDMNotifications:
             tax_market=0.05,
             tax_guild=0.05,
             tax_transport=0.05,
-            amount_per_player=50000.0,
-            buyback_value=4000000.0,
-            total_pool=800000.0,
+            split=PayoutSplitResult(
+                guild_cut=0.0,
+                silver_pool=0.0,
+                silver_per_player=0,
+                item_net=0.0,
+                item_per_player=0,
+                amount_per_player=50000.0,
+                total_pool=800000.0,
+                buyback_value=4000000.0,
+            ),
             participant_ids=[111, 222, 333],
             participant_mentions="<@111> <@222> <@333>",
             confirm_label="Confirmer",
@@ -95,9 +104,9 @@ class TestConfirmCancelViewDMNotifications:
         bot = MagicMock()
         bot.payout_repo = MagicMock()
         bot.payout_repo.create_payout = AsyncMock(return_value=42)
-        bot.payout_config_repo = MagicMock()
-        bot.payout_config_repo.get_config = AsyncMock(
-            return_value=MagicMock(no_dm_role_id=no_dm_role_id)
+        bot.bot_config_repo = MagicMock()
+        bot.bot_config_repo.get_config = AsyncMock(
+            return_value=MagicMock(notification_opt_out_role_id=no_dm_role_id)
         )
         bot.transaction_repo = MagicMock()
         bot.transaction_repo.get_balance = AsyncMock(return_value=150000.0)
@@ -227,8 +236,10 @@ class TestConfirmCancelViewDMNotifications:
         bot = MagicMock()
         bot.payout_repo = MagicMock()
         bot.payout_repo.create_payout = AsyncMock(return_value=42)
-        bot.payout_config_repo = MagicMock()
-        bot.payout_config_repo.get_config = AsyncMock(return_value=MagicMock(no_dm_role_id=777))
+        bot.bot_config_repo = MagicMock()
+        bot.bot_config_repo.get_config = AsyncMock(
+            return_value=MagicMock(notification_opt_out_role_id=777)
+        )
         bot.transaction_repo = MagicMock()
         bot.transaction_repo.get_balance = AsyncMock(return_value=150000.0)
         bot.translate = AsyncMock(
@@ -279,8 +290,10 @@ class TestConfirmCancelViewDMNotifications:
         bot = MagicMock()
         bot.payout_repo = MagicMock()
         bot.payout_repo.create_payout = AsyncMock(return_value=42)
-        bot.payout_config_repo = MagicMock()
-        bot.payout_config_repo.get_config = AsyncMock(return_value=MagicMock(no_dm_role_id=None))
+        bot.bot_config_repo = MagicMock()
+        bot.bot_config_repo.get_config = AsyncMock(
+            return_value=MagicMock(notification_opt_out_role_id=None)
+        )
         bot.transaction_repo = MagicMock()
         bot.transaction_repo.get_balance = AsyncMock(return_value=150000.0)
         bot.translate = AsyncMock(
@@ -325,3 +338,50 @@ class TestConfirmCancelViewDMNotifications:
         content = call_args[1]["content"]
         assert "⚠️" not in content
         assert "ℹ️" not in content
+
+
+class TestPayoutConfigRates:
+    @pytest.fixture
+    def cog(self):
+        bot = MagicMock()
+        bot.payout_config_service = MagicMock()
+        bot.payout_config_service.is_leader = AsyncMock(return_value=True)
+        bot.payout_config_repo = MagicMock()
+        bot.payout_config_repo.update_rates = AsyncMock()
+        return PayoutCog(bot)
+
+    @pytest.fixture
+    def interaction(self):
+        interaction = AsyncMock(spec=discord.Interaction)
+        interaction.response = AsyncMock()
+        interaction.user = MagicMock(spec=discord.Member)
+        interaction.user.id = 12345
+        return interaction
+
+    @pytest.mark.asyncio
+    async def test_config_rates_converts_percentages_to_decimals(self, cog, interaction):
+        await cog.config_rates.callback(cog, interaction, market=10.0, guild=5.0, transport=2.5)
+        cog.bot.payout_config_repo.update_rates.assert_awaited_once_with(
+            market=0.10, guild=0.05, transport=0.025, updated_by=12345
+        )
+
+    @pytest.mark.asyncio
+    async def test_config_rates_rejects_value_above_100(self, cog, interaction):
+        await cog.config_rates.callback(cog, interaction, market=150.0, guild=10.0, transport=5.0)
+        cog.bot.payout_config_repo.update_rates.assert_not_called()
+        interaction.response.send_message.assert_awaited_once()
+        call_args = interaction.response.send_message.call_args
+        assert "between 0 and 100" in call_args[0][0]
+        assert call_args[1]["ephemeral"] is True
+
+    @pytest.mark.asyncio
+    async def test_config_rates_rejects_negative_value(self, cog, interaction):
+        await cog.config_rates.callback(cog, interaction, market=10.0, guild=-5.0, transport=5.0)
+        cog.bot.payout_config_repo.update_rates.assert_not_called()
+        interaction.response.send_message.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_config_rates_rejects_zero(self, cog, interaction):
+        await cog.config_rates.callback(cog, interaction, market=0.0, guild=10.0, transport=5.0)
+        cog.bot.payout_config_repo.update_rates.assert_not_called()
+        interaction.response.send_message.assert_awaited_once()
