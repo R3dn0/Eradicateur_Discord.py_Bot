@@ -77,7 +77,9 @@ class PayoutConfigRepository:
             pay_add_permission_level=row["pay_add_permission_level"],
         )
 
-    async def update_rates(self, market: float, guild: float, transport: float, *, updated_by: int) -> None:
+    async def update_rates(
+        self, market: float, guild: float, transport: float, *, updated_by: int
+    ) -> None:
         await self._ensure_table()
         await self._db.execute(
             """

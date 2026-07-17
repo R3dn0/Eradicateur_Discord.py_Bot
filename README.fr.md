@@ -36,6 +36,10 @@ python -m bot.main
 
 - `/config nonotification role` — définit ou efface le rôle dont les membres sont exclus des MP de payout. *(Nécessite : permission Administrateur Discord)*
 - `/config nonotification afficher` — affiche la configuration actuelle des notifications. *(Aucune restriction)*
+- `/config logs salon` — définit ou efface le salon de journalisation des commandes. *(Nécessite : permission Administrateur Discord)*
+- `/config logs afficher` — affiche la configuration actuelle du salon de journalisation. *(Aucune restriction)*
+
+**Journalisation** : si un salon de journalisation est configuré, chaque exécution réussie d'une commande slash y est automatiquement enregistrée avec la mention de l'utilisateur et le nom complet de la commande (ex. `payout creer`). Les commandes échouées ne sont pas journalisées.
 
 ## Structure du projet
 

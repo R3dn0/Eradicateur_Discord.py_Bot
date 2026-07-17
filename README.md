@@ -36,6 +36,10 @@ python -m bot.main
 
 - `/config nonotification role` — set or clear the role whose members are skipped in payout DMs. *(Requires: Administrator permission)*
 - `/config nonotification show` — display current notification opt-out configuration. *(No restriction)*
+- `/config logs channel` — set or clear the audit log channel for slash command usage. *(Requires: Administrator permission)*
+- `/config logs show` — display current audit log channel configuration. *(No restriction)*
+
+**Audit logging**: if a log channel is configured, every successful slash command execution is automatically logged there with the user mention and the fully-qualified command name (e.g. `payout create`). Failed commands are not logged.
 
 ## Project structure
 

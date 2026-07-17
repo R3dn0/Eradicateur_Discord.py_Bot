@@ -34,6 +34,11 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
             await interaction.response.send_message(msg, ephemeral=True)
             return
 
+        if interaction.guild is None:
+            msg = await self.bot.translate("payout_server_only", interaction.locale)
+            await interaction.response.send_message(msg, ephemeral=True)
+            return
+
         assert self.bot.db_manager is not None
         db = await self.bot.db_manager.get_connection(interaction.guild.id)
         payout_config_repo = PayoutConfigRepository(db)
@@ -106,8 +111,7 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
 
         template = await self.bot.translate("payout_config_roles_updated", interaction.locale)
         await interaction.response.send_message(
-            template.replace("{officer}", officer.mention)
-            .replace("{leader}", leader.mention),
+            template.replace("{officer}", officer.mention).replace("{leader}", leader.mention),
             ephemeral=True,
         )
 
@@ -175,7 +179,9 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
         transport_dec = transport / 100
 
         await payout_config_repo.update_rates(
-            market=market_dec, guild=guild_dec, transport=transport_dec,
+            market=market_dec,
+            guild=guild_dec,
+            transport=transport_dec,
             updated_by=interaction.user.id,
         )
 
@@ -203,16 +209,22 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
             key="payout_config_permissions_level_description",
         ),
     )
-    @app_commands.choices(level=[
-        app_commands.Choice(
-            name=app_commands.locale_str("Officier", key="payout_config_permissions_choice_officer"),
-            value="officer",
-        ),
-        app_commands.Choice(
-            name=app_commands.locale_str("Leader", key="payout_config_permissions_choice_leader"),
-            value="leader",
-        ),
-    ])
+    @app_commands.choices(
+        level=[
+            app_commands.Choice(
+                name=app_commands.locale_str(
+                    "Officier", key="payout_config_permissions_choice_officer"
+                ),
+                value="officer",
+            ),
+            app_commands.Choice(
+                name=app_commands.locale_str(
+                    "Leader", key="payout_config_permissions_choice_leader"
+                ),
+                value="leader",
+            ),
+        ]
+    )
     async def config_permissions(
         self,
         interaction: discord.Interaction,
@@ -246,9 +258,7 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
         )
 
         display = "Officier" if level == "officer" else "Leader"
-        template = await self.bot.translate(
-            "payout_config_permissions_updated", interaction.locale
-        )
+        template = await self.bot.translate("payout_config_permissions_updated", interaction.locale)
         await interaction.response.send_message(
             template.replace("{level}", display),
             ephemeral=True,
@@ -292,38 +302,43 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
 
         embed.add_field(
             name=await self.bot.translate("payout_embed_tax_market", interaction.locale),
-            value=f"{_fmt(config.tax_market)}", inline=True,
+            value=f"{_fmt(config.tax_market)}",
+            inline=True,
         )
         embed.add_field(
             name=await self.bot.translate("payout_embed_tax_guild", interaction.locale),
-            value=f"{_fmt(config.tax_guild)}", inline=True,
+            value=f"{_fmt(config.tax_guild)}",
+            inline=True,
         )
         embed.add_field(
             name=await self.bot.translate("payout_embed_tax_transport", interaction.locale),
-            value=f"{_fmt(config.tax_transport)}", inline=True,
+            value=f"{_fmt(config.tax_transport)}",
+            inline=True,
         )
         embed.add_field(
             name=await self.bot.translate("payout_config_show_leader_role", interaction.locale),
-            value=leader, inline=False,
+            value=leader,
+            inline=False,
         )
         embed.add_field(
             name=await self.bot.translate("payout_config_show_officer_role", interaction.locale),
-            value=officer, inline=False,
+            value=officer,
+            inline=False,
         )
         perm_display = "Officier" if config.pay_add_permission_level == "officer" else "Leader"
         embed.add_field(
             name=await self.bot.translate(
                 "payout_config_show_pay_add_permission", interaction.locale
             ),
-            value=perm_display, inline=False,
+            value=perm_display,
+            inline=False,
         )
         if config.updated_by:
-            footer = await self.bot.translate(
-                "payout_config_show_updated_by", interaction.locale
-            )
+            footer = await self.bot.translate("payout_config_show_updated_by", interaction.locale)
             embed.set_footer(
-                text=footer.replace("{user}", f"<@{config.updated_by}>")
-                .replace("{date}", config.updated_at)
+                text=footer.replace("{user}", f"<@{config.updated_by}>").replace(
+                    "{date}", config.updated_at
+                )
             )
         else:
             footer = await self.bot.translate("payout_config_show_updated", interaction.locale)

@@ -7,6 +7,7 @@ from discord.ext import commands, tasks
 from bot.config import Config
 from bot.db_manager import GuildDatabaseManager
 from bot.i18n import JSONTranslator
+from bot.repositories.bot_config_repository import BotConfigRepository
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("eradicateur_bot")
@@ -66,6 +67,57 @@ class EradicateurBot(commands.Bot):
         assert self.user is not None
         logger.info("Logged in as %s (id: %s)", self.user, self.user.id)
 
+    async def on_app_command_completion(
+        self,
+        interaction: discord.Interaction,
+        command: app_commands.Command | app_commands.ContextMenu,
+    ) -> None:
+        if interaction.guild is None or self.db_manager is None:
+            return
+
+        try:
+            db = await self.db_manager.get_connection(interaction.guild.id)
+            repo = BotConfigRepository(db)
+            config = await repo.get_config()
+        except Exception:
+            logger.warning(
+                "Failed to fetch bot_config for guild %s", interaction.guild.id, exc_info=True
+            )
+            return
+
+        if config.log_channel_id is None:
+            return
+
+        channel = interaction.guild.get_channel(config.log_channel_id)
+        if channel is None:
+            try:
+                channel = await interaction.guild.fetch_channel(config.log_channel_id)
+            except (discord.Forbidden, discord.HTTPException):
+                logger.warning(
+                    "Log channel %s not accessible in guild %s",
+                    config.log_channel_id,
+                    interaction.guild.id,
+                )
+                return
+
+        qualified = f"/{command.qualified_name}"
+        embed = discord.Embed(
+            description=(
+                f"<@{interaction.user.id}> a utilisé une commande dans {interaction.channel.mention} :\n"
+                f"`{qualified}`"
+            ),
+            color=discord.Color.blurple(),
+        )
+
+        try:
+            await channel.send(embed=embed)
+        except (discord.Forbidden, discord.HTTPException):
+            logger.warning(
+                "Failed to send log message to channel %s in guild %s",
+                config.log_channel_id,
+                interaction.guild.id,
+            )
+
 
 @tasks.loop(minutes=5)
 async def _evict_idle(bot: EradicateurBot) -> None:
@@ -87,4 +139,5 @@ async def main() -> None:
 
 if __name__ == "__main__":
     import asyncio
+
     asyncio.run(main())

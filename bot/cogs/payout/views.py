@@ -403,9 +403,7 @@ class ConfirmCancelView(discord.ui.View):
             embed.add_field(
                 name=dm_received, value=f"{self.split.amount_per_player:,.0f}", inline=True
             )
-            embed.add_field(
-                name=dm_new_balance, value=f"{new_balance:,.0f}", inline=True
-            )
+            embed.add_field(name=dm_new_balance, value=f"{new_balance:,.0f}", inline=True)
             return embed
 
         result = await send_bulk_dm(
