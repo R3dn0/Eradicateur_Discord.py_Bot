@@ -10,6 +10,24 @@ Discord Command → Cog (interface) → Service (logic) → Repository (data)
 - **Service** : contains business logic
 - **Repository** : data access (async SQLite)
 
+### Database
+
+Each Discord guild has its own SQLite database file at `data/guilds/<guild_id>.db`.
+Connections are opened lazily on the first command for a guild (`GuildDatabaseManager`)
+and cached with a last-used timestamp. Idle connections are evicted after 30 minutes.
+The manager is thread-safe per guild (uses `asyncio.Lock` per guild ID).
+
+To use a repository in a command, resolve the connection and construct the repo inline:
+
+```python
+db = await self.bot.db_manager.get_connection(interaction.guild.id)
+repo = MyRepository(db)
+await repo.do_something()
+```
+
+Do **not** store repository instances as bot-level attributes — connect and
+construct per command.
+
 ## Organizing cogs
 
 One cog = one file = a set of commands about the same topic. Group commands by **domain**, not by command.
@@ -101,6 +119,16 @@ Add to `bot/locales/fr.json`:
 {
     "my_command_name": "name",
     "my_command_description": "Description in French"
+}
+```
+
+For commands in a custom top-level group (e.g. `config/`), follow the nested key convention:
+```json
+{
+    "config_name": "config",
+    "config_nonotification_name": "nonotification",
+    "config_nonotification_role_name": "role",
+    ...
 }
 ```
 
@@ -214,6 +242,25 @@ async def cmd(self, interaction: discord.Interaction) -> None:
 async def cmd(self, interaction: discord.Interaction) -> None:
 ```
 
+### Role-based permissions
+
+```python
+if not isinstance(interaction.user, discord.Member):
+    await interaction.response.send_message(
+        "This command must be used in a server.", ephemeral=True
+    )
+    return
+
+bot: EradicateurBot = self.bot
+if not await bot.payout_config_service.is_leader(interaction.user):
+    await interaction.response.send_message(
+        "You need the leader role.", ephemeral=True
+    )
+    return
+```
+
+Use when roles are configured at runtime (`/payout config roles`) instead of hardcoded via `@app_commands.default_permissions(administrator=True)`.
+
 ## Responses
 
 ### Ephemeral response (visible only to user)
@@ -243,6 +290,25 @@ await interaction.followup.send("Result")
 ### Edit an existing response
 ```python
 await interaction.edit_original_response(content="New content")
+```
+
+## Nested command subgroups
+
+❌ Wrong — space in command name:
+
+```python
+@app_commands.command(name="config roles", description="...")
+```
+
+✅ Correct — `app_commands.Group` as class attribute + `@group.command`:
+
+```python
+class PayoutCog(commands.GroupCog, group_name="payout"):
+    config = app_commands.Group(name="config", description="Configure payout settings")
+
+    @config.command(name="roles", description="Set the officer and leader roles")
+    async def config_roles(self, interaction: discord.Interaction, ...) -> None:
+        ...
 ```
 
 ## Concrete examples
@@ -352,6 +418,21 @@ class TestMyCog:
         interaction.response.send_message.assert_awaited_once()
 ```
 
+## Global notification opt-out role
+
+A global opt-out role for payout DMs is configured via `/config nonotification opt-out-role` (separate from payout-specific settings). Members who hold this role will not receive a DM notification when a payout is confirmed. The skipped participants are reported in the ephemeral success message with a neutral note (not an error).
+
+**Behavior:**
+- To set the opt-out, an admin calls `/config nonotification role role:<Role>`.
+- To clear the opt-out, the admin calls `/config nonotification role` without providing a role.
+- Skipped DMs are not counted as failures and do not trigger the "Impossible de contacter en MP" warning.
+- The setting is stored in the `bot_config` table (single-row), independent of any payout-specific configuration.
+
+**Implementation:**
+- Repository: `BotConfigRepository` with `get_config()` and `update_opt_out_role(role_id)`.
+- Cog: `ConfigCog` with `/config nonotification role` and `/config nonotification show`.
+- DM flow: `ConfirmCancelView.confirm()` fetches `bot_config.notification_opt_out_role_id` and passes it to `send_bulk_dm(opt_out_role_id=...)`. The `send_bulk_dm` utility handles the role check per recipient.
+
 ### Testing patterns
 
 **Test command response:**
@@ -423,3 +504,174 @@ pytest --cov=bot
 - [ ] `locale_str` used for name and description
 - [ ] Permissions set if admin command
 - [ ] Tests written and passing (`pytest`)
+- [ ] New repository connected via `bot.db_manager.get_connection(guild_id)` and constructed inline in the command
+
+## Modal patterns
+
+Discord modals collect structured input before a command proceeds:
+
+```python
+class MyModal(discord.ui.Modal, title="Modal Title"):
+    field_name = discord.ui.TextInput(
+        label="Field label shown to the user",
+        placeholder="Placeholder text",
+        required=True,
+    )
+
+    async def on_submit(self, interaction: discord.Interaction) -> None:
+        value = self.field_name.value
+        await interaction.response.send_message(f"Got: {value}", ephemeral=True)
+
+# In the command:
+await interaction.response.send_modal(MyModal())
+```
+
+## Multi-step flows (Modal → Select → Confirm)
+
+Commands that need multiple user inputs before writing to the database follow this pattern:
+
+1. **Slash command** sends a modal (`interaction.response.send_modal(...)`)
+2. **Modal `on_submit`** sends an ephemeral message with a `View` (e.g. `UserSelect`)
+3. **View callback** computes results and edits the message to show a summary + confirm/cancel `View`
+4. **Confirm** writes to the database atomically, DMs each participant with their received amount and new balance, then edits the message to a final state
+5. **Cancel** edits the message to a cancelled state without writing anything
+
+## Pure calculation logic in services
+
+When a calculation involves only numbers (no Discord objects), extract it into a pure function in `bot/services/`:
+
+```python
+# bot/services/payout_service.py
+from dataclasses import dataclass
+
+from bot.services.payout_config_service import PayoutRates
+
+
+@dataclass(frozen=True)
+class PayoutSplitResult:
+    ...
+    amount_per_player: float
+    ...
+
+
+def compute_split(
+    bag_silvers: float,
+    item_market_value: float,
+    activity_cost: float,
+    rates: PayoutRates,
+    participant_count: int,
+) -> PayoutSplitResult:
+    # Pure math — no discord.py imports, no I/O
+    ...
+```
+
+Benefits:
+- Unit-testable without mocking Discord objects
+- Same function can be reused by multiple commands (payout create, payout pay, payout add)
+- Can be verified by hand with a calculator
+
+Usage in a view:
+```python
+from bot.services.payout_service import compute_split
+
+split = compute_split(
+    bag_silvers=bag_silvers,
+    item_market_value=item_market_value,
+    activity_cost=activity_cost,
+    rates=rates,
+    participant_count=n,
+)
+embed.add_field(name="Amount", value=f"{split.amount_per_player:,.0f}")
+```
+
+## Bulk DM utility
+
+When you need to DM multiple guild members with custom content per recipient, use `send_bulk_dm` instead of writing your own loop:
+
+```python
+from bot.utils.discord_dm import send_bulk_dm, BulkDMResult
+
+async def _build_content(member: discord.Member) -> discord.Embed:
+    balance = await bot.transaction_repo.get_balance(member.id)
+    return discord.Embed(title=f"Hello {member.display_name}",
+                         description=f"Your balance: {balance:,.0f}")
+
+result = await send_bulk_dm(
+    guild=interaction.guild,
+    member_ids=[111, 222, 333],
+    build_content=_build_content,
+    opt_out_role_id=777,  # role ID whose members are skipped
+)
+
+# result.sent / result.skipped / result.failed are list[int] of member IDs
+if result.failed:
+    await interaction.followup.send(
+        f"Could not reach: {', '.join(f'<@{uid}>' for uid in result.failed)}"
+    )
+```
+
+The utility handles:
+- `guild.get_member()` → `guild.fetch_member()` fallback
+- Opt-out role check (skip, not fail)
+- `discord.Forbidden` / `discord.HTTPException` per recipient (other recipients unaffected)
+
+The `build_content` callback receives each resolved `discord.Member` and returns a per-member embed.
+The caller decides the embed content — the utility only handles sending and bookkeeping.
+
+## Atomic transactions across repositories
+
+When a single operation must write to multiple tables atomically, manage the transaction at the repository level rather than modifying `TransactionRepository`:
+
+```python
+class CombinedRepository:
+    async def create_with_children(self, ...) -> int:
+        await self._ensure_tables()
+        try:
+            await self._db.execute("BEGIN")
+            cursor = await self._db.execute("INSERT INTO parent ...")
+            parent_id = cursor.lastrowid
+            for child in children:
+                await self._db.execute("INSERT INTO child ...", (..., parent_id))
+            await self._db.commit()
+            return parent_id
+        except BaseException:
+            await self._db.rollback()
+            raise
+```
+
+## Public recap embed after confirm
+
+When a command needs to send a public recap message after a confirm step:
+
+1. Keep all interactive steps ephemeral (modal, select, confirm buttons)
+2. On confirm, persist to DB then:
+    - DM each participant with their received amount and new total balance (wrap each in try/except, collect failures)
+    - `interaction.channel.send(embed=public_embed)` — public message
+    - `interaction.response.edit_message(content="Done", embed=None)` — ephemeral update (append a failure note if DMs failed)
+3. Compute buyback / informational values at confirm time so they reflect the rates used at that moment
+
+```python
+async def confirm(self, interaction, button):
+    bot = interaction.client
+    payout_id = await repo.create_payout(...)
+
+    failed_dms = []
+    for pid in participant_ids:
+        member = guild.get_member(pid) or await guild.fetch_member(pid)
+        balance = await bot.transaction_repo.get_balance(pid)
+        try:
+            await member.send(embed=...)
+        except (discord.Forbidden, discord.HTTPException):
+            failed_dms.append(pid)
+
+    public_embed = discord.Embed(title=f"Payout #{payout_id}", color=discord.Color.green())
+    public_embed.add_field(name="Amount", value=f"{amount:,.0f}")
+    await interaction.channel.send(embed=public_embed)
+
+    success = f"Payout #{payout_id} created."
+    if failed_dms:
+        success += "\n⚠️ Could not reach: " + ", ".join(f"<@{pid}>" for pid in failed_dms)
+    await interaction.response.edit_message(
+        content=success, embed=None, view=self,
+    )
+```

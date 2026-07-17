@@ -1,10 +1,11 @@
-import asyncio
 import logging
 
 import discord
-from discord.ext import commands
+from discord import app_commands
+from discord.ext import commands, tasks
 
 from bot.config import Config
+from bot.db_manager import GuildDatabaseManager
 from bot.i18n import JSONTranslator
 
 logging.basicConfig(level=logging.INFO)
@@ -16,15 +17,23 @@ class EradicateurBot(commands.Bot):
         intents = discord.Intents.default()
         intents.message_content = True
         intents.members = True
-        super().__init__(command_prefix="", intents=intents)
+        super().__init__(command_prefix="/", intents=intents)
         self.config = config
+        self.db_manager: GuildDatabaseManager | None = None
 
     async def setup_hook(self) -> None:
         translator = JSONTranslator()
         await translator.load()
         await self.tree.set_translator(translator)
 
+        self.db_manager = GuildDatabaseManager(self.config.data_dir)
+
+        _evict_idle.start(self)
+
         await self.load_extension("bot.cogs.guild_commands")
+        await self.load_extension("bot.cogs.payout")
+        await self.load_extension("bot.cogs.config")
+        await self.load_extension("bot.cogs.balance")
 
         if self.config.guild_id:
             for gid in self.config.guild_id:
@@ -37,13 +46,36 @@ class EradicateurBot(commands.Bot):
                     logger.warning("No access to guild %s, skipping", gid)
         else:
             await self.tree.sync()
-            logger.info(
-                "Slash commands synced globally (may take up to 1h)"
-            )
+            logger.info("Slash commands synced globally (may take up to 1h)")
+
+    async def translate(self, key: str, locale: discord.Locale) -> str:
+        translator = self.tree.translator
+        if translator is None:
+            return key
+        ls = app_commands.locale_str(key, key=key)
+        result = await translator.translate(ls, locale, None)
+        return result or key
+
+    async def close(self) -> None:
+        if self.db_manager is not None:
+            await self.db_manager.close_all()
+        _evict_idle.stop()
+        await super().close()
 
     async def on_ready(self) -> None:
         assert self.user is not None
         logger.info("Logged in as %s (id: %s)", self.user, self.user.id)
+
+
+@tasks.loop(minutes=5)
+async def _evict_idle(bot: EradicateurBot) -> None:
+    assert bot.db_manager is not None
+    await bot.db_manager.evict_idle()
+
+
+@_evict_idle.before_loop
+async def _wait_ready(bot: EradicateurBot) -> None:
+    await bot.wait_until_ready()
 
 
 async def main() -> None:
@@ -54,4 +86,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
+    import asyncio
     asyncio.run(main())

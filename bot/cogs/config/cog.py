@@ -1,0 +1,118 @@
+import discord
+from discord import app_commands
+from discord.ext import commands
+
+from bot.main import EradicateurBot
+from bot.repositories.bot_config_repository import BotConfigRepository
+
+
+class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", key="config_name")):  # type: ignore[call-arg]
+    nonotification = app_commands.Group(
+        name=app_commands.locale_str("nonotification", key="config_nonotification_name"),
+        description=app_commands.locale_str(
+            "Manage notification opt-out settings",
+            key="config_nonotification_description",
+        ),
+    )
+
+    def __init__(self, bot: EradicateurBot) -> None:
+        self.bot = bot
+
+    @nonotification.command(
+        name=app_commands.locale_str("role", key="config_nonotification_role_name"),
+        description=app_commands.locale_str(
+            "Set or clear the role whose members opt out of payout DMs",
+            key="config_nonotification_role_description",
+        ),
+    )
+    @app_commands.default_permissions(administrator=True)
+    @app_commands.describe(
+        role=app_commands.locale_str(
+            "Role to opt out of DMs. Omit to clear.",
+            key="config_nonotification_role_param_description",
+        ),
+    )
+    async def opt_out_role(
+        self,
+        interaction: discord.Interaction,
+        role: discord.Role | None = None,
+    ) -> None:
+        if interaction.guild is None:
+            msg = await self.bot.translate("payout_server_only", interaction.locale)
+            await interaction.response.send_message(msg, ephemeral=True)
+            return
+
+        assert self.bot.db_manager is not None
+        db = await self.bot.db_manager.get_connection(interaction.guild.id)
+        bot_config_repo = BotConfigRepository(db)
+
+        await bot_config_repo.update_opt_out_role(
+            role_id=role.id if role else None,
+            updated_by=interaction.user.id,
+        )
+
+        if role:
+            template = await self.bot.translate(
+                "config_nonotification_role_set", interaction.locale
+            )
+            msg = template.replace("{role}", role.mention)
+        else:
+            msg = await self.bot.translate(
+                "config_nonotification_role_cleared", interaction.locale
+            )
+        await interaction.response.send_message(msg, ephemeral=True)
+
+    @nonotification.command(
+        name=app_commands.locale_str("show", key="config_nonotification_show_name"),
+        description=app_commands.locale_str(
+            "Display current notification opt-out configuration",
+            key="config_nonotification_show_description",
+        ),
+    )
+    async def show(self, interaction: discord.Interaction) -> None:
+        if interaction.guild is None:
+            msg = await self.bot.translate("payout_server_only", interaction.locale)
+            await interaction.response.send_message(msg, ephemeral=True)
+            return
+
+        assert self.bot.db_manager is not None
+        db = await self.bot.db_manager.get_connection(interaction.guild.id)
+        bot_config_repo = BotConfigRepository(db)
+        config = await bot_config_repo.get_config()
+
+        guild = interaction.guild
+        role = (
+            guild.get_role(config.notification_opt_out_role_id)
+            if config.notification_opt_out_role_id and guild
+            else None
+        )
+        not_configured = await self.bot.translate("payout_not_configured", interaction.locale)
+        role_str = role.mention if role else not_configured
+
+        embed = discord.Embed(
+            title=await self.bot.translate(
+                "config_nonotification_show_embed_title", interaction.locale
+            ),
+            color=discord.Color.blue(),
+        )
+        embed.add_field(
+            name=await self.bot.translate(
+                "config_nonotification_show_opt_out_role", interaction.locale
+            ),
+            value=role_str, inline=False,
+        )
+        if config.updated_by:
+            footer = await self.bot.translate(
+                "config_nonotification_show_updated_by", interaction.locale
+            )
+            embed.set_footer(
+                text=footer.replace("{user}", f"<@{config.updated_by}>")
+                .replace("{date}", config.updated_at)
+            )
+        else:
+            footer = await self.bot.translate(
+                "config_nonotification_show_updated", interaction.locale
+            )
+            embed.set_footer(text=footer.replace("{date}", config.updated_at))
+
+        await interaction.response.send_message(embed=embed, ephemeral=True)

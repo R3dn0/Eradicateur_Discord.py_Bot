@@ -10,7 +10,7 @@ load_dotenv()
 class Config:
     discord_token: str
     guild_id: list[int]
-    database_path: str
+    data_dir: str
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -19,11 +19,9 @@ class Config:
             raise RuntimeError("DISCORD_TOKEN missing from .env")
 
         guild_id_raw = os.getenv("GUILD_ID", "")
-        guild_ids = [
-            int(gid.strip()) for gid in guild_id_raw.split(",") if gid.strip()
-        ]
+        guild_ids = [int(gid.strip()) for gid in guild_id_raw.split(",") if gid.strip()]
         return cls(
             discord_token=token,
             guild_id=guild_ids,
-            database_path=os.getenv("DATABASE_PATH", "data/eradicateur.db"),
+            data_dir=os.getenv("DATA_DIR", "data"),
         )
