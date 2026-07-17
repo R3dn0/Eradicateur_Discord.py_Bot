@@ -1,8 +1,11 @@
+import logging
 from collections.abc import Awaitable, Callable
 from dataclasses import dataclass
 from typing import Iterable
 
 import discord
+
+logger = logging.getLogger("eradicateur_bot.discord_dm")
 
 
 @dataclass
@@ -35,7 +38,12 @@ async def send_bulk_dm(
             skipped.append(member_id)
             continue
 
-        embed = await build_content(member)
+        try:
+            embed = await build_content(member)
+        except Exception:
+            logger.exception("build_content failed for member %s in guild %s", member_id, guild.id)
+            failed.append(member_id)
+            continue
 
         try:
             await member.send(embed=embed)

@@ -122,8 +122,11 @@ class EradicateurBot(commands.Bot):
 
 @tasks.loop(minutes=5)
 async def _evict_idle(bot: EradicateurBot) -> None:
-    assert bot.db_manager is not None
-    await bot.db_manager.evict_idle()
+    try:
+        assert bot.db_manager is not None
+        await bot.db_manager.evict_idle()
+    except Exception:
+        logger.exception("Idle eviction loop error — will retry in 5 minutes")
 
 
 @_evict_idle.before_loop

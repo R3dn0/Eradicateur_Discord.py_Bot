@@ -1,6 +1,8 @@
 import aiosqlite
 from dataclasses import dataclass
 
+from bot.repositories.base_repository import BaseRepository
+
 
 @dataclass
 class PayoutConfig:
@@ -18,15 +20,16 @@ _DEFAULT_MARKET = 0.02
 _DEFAULT_GUILD = 0.10
 _DEFAULT_TRANSPORT = 0.03
 
-_PAYOUT_CONFIG_COLUMNS: dict[str, str] = {
-    "updated_by": "INTEGER",
-    "pay_add_permission_level": "TEXT NOT NULL DEFAULT 'officer'",
-}
 
+class PayoutConfigRepository(BaseRepository):
+    _TABLE_NAME = "payout_config"
+    _COLUMNS: dict[str, str] = {
+        "updated_by": "INTEGER",
+        "pay_add_permission_level": "TEXT NOT NULL DEFAULT 'officer'",
+    }
 
-class PayoutConfigRepository:
     def __init__(self, db: aiosqlite.Connection) -> None:
-        self._db = db
+        super().__init__(db)
 
     async def _ensure_table(self) -> None:
         await self._db.execute("""
@@ -49,17 +52,8 @@ class PayoutConfigRepository:
         """,
             (_DEFAULT_MARKET, _DEFAULT_GUILD, _DEFAULT_TRANSPORT),
         )
-        await self._migrate()
+        await self._run_migrations()
         await self._db.commit()
-
-    async def _migrate(self) -> None:
-        cursor = await self._db.execute("PRAGMA table_info(payout_config)")
-        existing = {row["name"] for row in await cursor.fetchall()}
-        for col_name, col_type in _PAYOUT_CONFIG_COLUMNS.items():
-            if col_name not in existing:
-                await self._db.execute(
-                    f"ALTER TABLE payout_config ADD COLUMN {col_name} {col_type}"
-                )
 
     async def get_config(self) -> PayoutConfig:
         await self._ensure_table()
