@@ -418,6 +418,27 @@ class TestMyCog:
         interaction.response.send_message.assert_awaited_once()
 ```
 
+## Audit log channel
+
+A per-guild audit log channel can be configured to track all successful slash command executions. Every time a user runs a slash command successfully, a message is sent to the configured channel with the user's mention and the fully-qualified command name.
+
+**Behavior:**
+- To set the channel, an admin calls `/config logs channel salon:<TextChannel>`.
+- To clear it, the admin calls `/config logs channel` without providing a channel.
+- Only successful completions are logged (`on_app_command_completion` fires only on success).
+- Command parameters/arguments are never included in the log message.
+- If the channel cannot be found or the bot lacks send permission, the error is silently logged as a warning — the bot does not crash.
+
+**Implementation:**
+- Repository: `BotConfigRepository` with `get_config().log_channel_id` and `update_log_channel(channel_id)`.
+- Cog: `ConfigCog` with `/config logs channel` and `/config logs show`.
+- Listener: `EradicateurBot.on_app_command_completion()` in `bot/main.py` — resolves the guild's log channel from `bot_config`, builds the message `<@user> a utilisé la commande : /<qualified_name>`, and sends it. Errors are caught per channel.
+
+**Example log message:**
+```
+<@123456789> a utilisé la commande : /payout creer
+```
+
 ## Global notification opt-out role
 
 A global opt-out role for payout DMs is configured via `/config nonotification opt-out-role` (separate from payout-specific settings). Members who hold this role will not receive a DM notification when a payout is confirmed. The skipped participants are reported in the ephemeral success message with a neutral note (not an error).

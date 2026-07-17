@@ -68,9 +68,7 @@ class GuildDatabaseManager:
     async def evict_idle(self) -> None:
         now = time.monotonic()
         to_evict = [
-            gid
-            for gid, (_, ts) in self._connections.items()
-            if now - ts > self._idle_seconds
+            gid for gid, (_, ts) in self._connections.items() if now - ts > self._idle_seconds
         ]
         for guild_id in to_evict:
             conn, _ = self._connections.pop(guild_id)

@@ -363,7 +363,9 @@ class TestPayoutConfigRates:
         payout_config_repo = PayoutConfigRepository(db)
         await payout_config_repo.get_config()
         await payout_config_repo.update_roles(
-            officer_role_id=None, leader_role_id=_LEADER_ROLE_ID, updated_by=0,
+            officer_role_id=None,
+            leader_role_id=_LEADER_ROLE_ID,
+            updated_by=0,
         )
 
         bot = MagicMock()
@@ -449,6 +451,7 @@ class TestBalanceShow:
         bot.db_manager.get_connection = AsyncMock(return_value=db)
         bot.translate = AsyncMock(side_effect=lambda key, locale: key)
         from bot.cogs.balance.cog import BalanceCog
+
         return BalanceCog(bot)
 
     @pytest.fixture
@@ -469,7 +472,10 @@ class TestBalanceShow:
     async def test_show_own_balance_no_permission_check(self, cog, interaction, db):
         transaction_repo = TransactionRepository(db)
         await transaction_repo.add_transaction(
-            discord_id=999, amount=5000, reason="seed", created_by=0,
+            discord_id=999,
+            amount=5000,
+            reason="seed",
+            created_by=0,
         )
 
         await cog.show.callback(cog, interaction, member=None)
@@ -485,7 +491,10 @@ class TestBalanceShow:
     async def test_show_other_authorized(self, cog, interaction, db):
         transaction_repo = TransactionRepository(db)
         await transaction_repo.add_transaction(
-            discord_id=111, amount=3000, reason="seed", created_by=0,
+            discord_id=111,
+            amount=3000,
+            reason="seed",
+            created_by=0,
         )
 
         target = MagicMock(spec=discord.Member)
@@ -536,6 +545,7 @@ class TestBalanceList:
         bot.db_manager.get_connection = AsyncMock(return_value=db)
         bot.translate = AsyncMock(side_effect=lambda key, locale: key)
         from bot.cogs.balance.cog import BalanceCog
+
         return BalanceCog(bot)
 
     @pytest.fixture
@@ -576,10 +586,16 @@ class TestBalanceList:
     async def test_list_with_entries(self, cog, interaction, db):
         transaction_repo = TransactionRepository(db)
         await transaction_repo.add_transaction(
-            discord_id=111, amount=5000, reason="seed", created_by=0,
+            discord_id=111,
+            amount=5000,
+            reason="seed",
+            created_by=0,
         )
         await transaction_repo.add_transaction(
-            discord_id=222, amount=3000, reason="seed", created_by=0,
+            discord_id=222,
+            amount=3000,
+            reason="seed",
+            created_by=0,
         )
 
         await cog.list_.callback(cog, interaction)
@@ -611,6 +627,7 @@ class TestBalancePayer:
         bot.db_manager.get_connection = AsyncMock(return_value=db)
         bot.translate = AsyncMock(side_effect=lambda key, locale: key)
         from bot.cogs.balance.cog import BalanceCog
+
         return BalanceCog(bot)
 
     @pytest.fixture
@@ -637,7 +654,10 @@ class TestBalancePayer:
     async def test_payer_rejects_excessive_amount(self, cog, interaction, joueur, db):
         transaction_repo = TransactionRepository(db)
         await transaction_repo.add_transaction(
-            discord_id=111, amount=1000, reason="seed", created_by=0,
+            discord_id=111,
+            amount=1000,
+            reason="seed",
+            created_by=0,
         )
 
         await cog.payer.callback(cog, interaction, joueur=joueur, montant=2000.0)
@@ -654,7 +674,10 @@ class TestBalancePayer:
     async def test_payer_succeeds_when_sufficient(self, cog, interaction, joueur, db):
         transaction_repo = TransactionRepository(db)
         await transaction_repo.add_transaction(
-            discord_id=111, amount=5000, reason="seed", created_by=0,
+            discord_id=111,
+            amount=5000,
+            reason="seed",
+            created_by=0,
         )
 
         await cog.payer.callback(cog, interaction, joueur=joueur, montant=2000.0)
@@ -671,7 +694,10 @@ class TestBalancePayer:
     async def test_payer_rejects_non_positive(self, cog, interaction, joueur, db):
         transaction_repo = TransactionRepository(db)
         await transaction_repo.add_transaction(
-            discord_id=111, amount=1000, reason="seed", created_by=0,
+            discord_id=111,
+            amount=1000,
+            reason="seed",
+            created_by=0,
         )
 
         await cog.payer.callback(cog, interaction, joueur=joueur, montant=0.0)
@@ -683,11 +709,18 @@ class TestBalancePayer:
 
     @pytest.mark.asyncio
     async def test_payer_allows_officer_when_level_is_officer(
-        self, cog, interaction, joueur, db,
+        self,
+        cog,
+        interaction,
+        joueur,
+        db,
     ):
         transaction_repo = TransactionRepository(db)
         await transaction_repo.add_transaction(
-            discord_id=111, amount=5000, reason="seed", created_by=0,
+            discord_id=111,
+            amount=5000,
+            reason="seed",
+            created_by=0,
         )
 
         await cog.payer.callback(cog, interaction, joueur=joueur, montant=1000.0)
@@ -697,11 +730,16 @@ class TestBalancePayer:
 
     @pytest.mark.asyncio
     async def test_payer_rejects_officer_when_level_is_leader(
-        self, cog, interaction, joueur, db,
+        self,
+        cog,
+        interaction,
+        joueur,
+        db,
     ):
         payout_config_repo = PayoutConfigRepository(db)
         await payout_config_repo.update_pay_add_permission_level(
-            level="leader", updated_by=0,
+            level="leader",
+            updated_by=0,
         )
 
         await cog.payer.callback(cog, interaction, joueur=joueur, montant=1000.0)
@@ -714,7 +752,11 @@ class TestBalancePayer:
 
     @pytest.mark.asyncio
     async def test_payer_allows_leader_when_level_is_leader(
-        self, cog, interaction, joueur, db,
+        self,
+        cog,
+        interaction,
+        joueur,
+        db,
     ):
         interaction.user.get_role = MagicMock(
             side_effect=lambda rid: MagicMock() if rid == self._LEADER_ROLE_ID else None
@@ -722,12 +764,16 @@ class TestBalancePayer:
 
         payout_config_repo = PayoutConfigRepository(db)
         await payout_config_repo.update_pay_add_permission_level(
-            level="leader", updated_by=0,
+            level="leader",
+            updated_by=0,
         )
 
         transaction_repo = TransactionRepository(db)
         await transaction_repo.add_transaction(
-            discord_id=111, amount=5000, reason="seed", created_by=0,
+            discord_id=111,
+            amount=5000,
+            reason="seed",
+            created_by=0,
         )
 
         await cog.payer.callback(cog, interaction, joueur=joueur, montant=1000.0)
@@ -757,6 +803,7 @@ class TestBalanceAjouter:
         bot.db_manager.get_connection = AsyncMock(return_value=db)
         bot.translate = AsyncMock(side_effect=lambda key, locale: key)
         from bot.cogs.balance.cog import BalanceCog
+
         return BalanceCog(bot)
 
     @pytest.fixture
@@ -781,10 +828,18 @@ class TestBalanceAjouter:
 
     @pytest.mark.asyncio
     async def test_ajouter_persists_and_updates_balance(
-        self, cog, interaction, joueur, db,
+        self,
+        cog,
+        interaction,
+        joueur,
+        db,
     ):
         await cog.ajouter.callback(
-            cog, interaction, joueur=joueur, montant=3000.0, raison="Bonus",
+            cog,
+            interaction,
+            joueur=joueur,
+            montant=3000.0,
+            raison="Bonus",
         )
 
         transaction_repo = TransactionRepository(db)
@@ -799,7 +854,11 @@ class TestBalanceAjouter:
     @pytest.mark.asyncio
     async def test_ajouter_rejects_non_positive(self, cog, interaction, joueur, db):
         await cog.ajouter.callback(
-            cog, interaction, joueur=joueur, montant=-5.0, raison="Test",
+            cog,
+            interaction,
+            joueur=joueur,
+            montant=-5.0,
+            raison="Test",
         )
 
         transaction_repo = TransactionRepository(db)
@@ -810,10 +869,18 @@ class TestBalanceAjouter:
 
     @pytest.mark.asyncio
     async def test_ajouter_allows_officer_when_level_is_officer(
-        self, cog, interaction, joueur, db,
+        self,
+        cog,
+        interaction,
+        joueur,
+        db,
     ):
         await cog.ajouter.callback(
-            cog, interaction, joueur=joueur, montant=1000.0, raison="Test",
+            cog,
+            interaction,
+            joueur=joueur,
+            montant=1000.0,
+            raison="Test",
         )
 
         transaction_repo = TransactionRepository(db)
@@ -822,15 +889,24 @@ class TestBalanceAjouter:
 
     @pytest.mark.asyncio
     async def test_ajouter_rejects_officer_when_level_is_leader(
-        self, cog, interaction, joueur, db,
+        self,
+        cog,
+        interaction,
+        joueur,
+        db,
     ):
         payout_config_repo = PayoutConfigRepository(db)
         await payout_config_repo.update_pay_add_permission_level(
-            level="leader", updated_by=0,
+            level="leader",
+            updated_by=0,
         )
 
         await cog.ajouter.callback(
-            cog, interaction, joueur=joueur, montant=1000.0, raison="Test",
+            cog,
+            interaction,
+            joueur=joueur,
+            montant=1000.0,
+            raison="Test",
         )
 
         transaction_repo = TransactionRepository(db)
@@ -841,7 +917,11 @@ class TestBalanceAjouter:
 
     @pytest.mark.asyncio
     async def test_ajouter_allows_leader_when_level_is_leader(
-        self, cog, interaction, joueur, db,
+        self,
+        cog,
+        interaction,
+        joueur,
+        db,
     ):
         interaction.user.get_role = MagicMock(
             side_effect=lambda rid: MagicMock() if rid == self._LEADER_ROLE_ID else None
@@ -849,11 +929,16 @@ class TestBalanceAjouter:
 
         payout_config_repo = PayoutConfigRepository(db)
         await payout_config_repo.update_pay_add_permission_level(
-            level="leader", updated_by=0,
+            level="leader",
+            updated_by=0,
         )
 
         await cog.ajouter.callback(
-            cog, interaction, joueur=joueur, montant=1000.0, raison="Test",
+            cog,
+            interaction,
+            joueur=joueur,
+            montant=1000.0,
+            raison="Test",
         )
 
         transaction_repo = TransactionRepository(db)

@@ -78,5 +78,3 @@ async def test_update_pay_add_permission_level_persists(repo):
 async def test_update_pay_add_permission_level_rejects_invalid(repo):
     with pytest.raises(ValueError, match="Invalid permission level"):
         await repo.update_pay_add_permission_level(level="invalid", updated_by=1)
-
-

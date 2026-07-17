@@ -24,9 +24,7 @@ async def test_two_guilds_get_separate_databases(manager):
 
     assert conn1 is not conn2
 
-    await conn1.execute(
-        "CREATE TABLE IF NOT EXISTS test (guild_id INTEGER)"
-    )
+    await conn1.execute("CREATE TABLE IF NOT EXISTS test (guild_id INTEGER)")
     await conn1.execute("INSERT INTO test (guild_id) VALUES (1001)")
     await conn1.commit()
 
@@ -119,6 +117,7 @@ async def test_concurrent_get_connection_same_guild(tmp_path):
     data_dir = str(tmp_path)
     manager = GuildDatabaseManager(data_dir, idle_minutes=30)
     try:
+
         async def get():
             return await manager.get_connection(300)
 
