@@ -125,5 +125,16 @@
     "config_logs_show_name": "afficher",
     "config_logs_show_description": "Affiche la configuration actuelle du salon de journalisation",
     "config_logs_show_embed_title": "Configuration du salon de journalisation",
-    "config_logs_show_channel": "Salon de journalisation"
+    "config_logs_show_channel": "Salon de journalisation",
+    "help_name": "aide",
+    "help_description": "Affiche la liste des commandes disponibles",
+    "help_title": "Commandes disponibles",
+    "help_category_general": "Général",
+    "help_category_payout": "Payout",
+    "help_category_balance": "Solde",
+    "help_category_config": "Configuration",
+    "help_perm_officer": "Officier",
+    "help_perm_leader": "Leader",
+    "help_perm_administrator": "Administrateur",
+    "help_perm_pay_add": "Officier ou Leader"
 }

@@ -14,7 +14,8 @@ python -m bot.main
 
 ## Available commands
 
-**General** (`guild_commands.py`):
+**General** (`help/`, `guild_commands.py`):
+- `/help` — show the list of all available commands *(No restriction)*
 - `/ping` - check that the bot responds *(No restriction)*
 
 **Payout / Ledger** (`payout/`):
