@@ -4,6 +4,7 @@ from discord.ext import commands
 
 from bot.cogs.payout.views import PayoutCreateModal
 from bot.main import EradicateurBot
+from bot.utils.discord_time import to_discord_timestamp
 from bot.repositories.payout_config_repository import (
     PayoutConfigRepository,
 )
@@ -85,8 +86,10 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
     )
     @app_commands.default_permissions(administrator=True)
     @app_commands.describe(
-        officer="Officer role",
-        leader="Leader role",
+        officer=app_commands.locale_str(
+            "Officer role", key="payout_config_roles_officer_description"
+        ),
+        leader=app_commands.locale_str("Leader role", key="payout_config_roles_leader_description"),
     )
     async def config_roles(
         self,
@@ -257,7 +260,10 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
             updated_by=interaction.user.id,
         )
 
-        display = "Officier" if level == "officer" else "Leader"
+        display = await self.bot.translate(
+            "payout_level_officer" if level == "officer" else "payout_level_leader",
+            interaction.locale,
+        )
         template = await self.bot.translate("payout_config_permissions_updated", interaction.locale)
         await interaction.response.send_message(
             template.replace("{level}", display),
@@ -325,7 +331,12 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
             value=officer,
             inline=False,
         )
-        perm_display = "Officier" if config.pay_add_permission_level == "officer" else "Leader"
+        perm_display = await self.bot.translate(
+            "payout_level_officer"
+            if config.pay_add_permission_level == "officer"
+            else "payout_level_leader",
+            interaction.locale,
+        )
         embed.add_field(
             name=await self.bot.translate(
                 "payout_config_show_pay_add_permission", interaction.locale
@@ -334,14 +345,19 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
             inline=False,
         )
         if config.updated_by:
-            footer = await self.bot.translate("payout_config_show_updated_by", interaction.locale)
-            embed.set_footer(
-                text=footer.replace("{user}", f"<@{config.updated_by}>").replace(
-                    "{date}", config.updated_at
-                )
+            value = (
+                (await self.bot.translate("payout_config_show_updated_by", interaction.locale))
+                .replace("{user}", f"<@{config.updated_by}>")
+                .replace("{date}", to_discord_timestamp(config.updated_at))
             )
         else:
-            footer = await self.bot.translate("payout_config_show_updated", interaction.locale)
-            embed.set_footer(text=footer.replace("{date}", config.updated_at))
+            value = (
+                await self.bot.translate("payout_config_show_updated", interaction.locale)
+            ).replace("{date}", to_discord_timestamp(config.updated_at))
+        embed.add_field(
+            name=await self.bot.translate("payout_config_show_updated_label", interaction.locale),
+            value=value,
+            inline=False,
+        )
 
         await interaction.response.send_message(embed=embed, ephemeral=True)

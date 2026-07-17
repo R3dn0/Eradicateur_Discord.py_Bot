@@ -38,6 +38,7 @@ class TestPingCommand:
     def cog(self):
         bot = MagicMock()
         bot.latency = 0.05
+        bot.translate = AsyncMock(return_value="Pong ! ({latency}ms)")
         return GuildCommands(bot)
 
     @pytest.mark.asyncio

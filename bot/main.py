@@ -102,11 +102,11 @@ class EradicateurBot(commands.Bot):
                 return
 
         qualified = f"/{command.qualified_name}"
+        template = await self.translate("audit_log_command", interaction.locale)
         embed = discord.Embed(
-            description=(
-                f"<@{interaction.user.id}> a utilisé une commande dans {interaction.channel.mention} :\n"
-                f"`{qualified}`"
-            ),
+            description=template.replace("{user}", f"<@{interaction.user.id}>")
+            .replace("{channel}", interaction.channel.mention)
+            .replace("{command}", qualified),
             color=discord.Color.blurple(),
         )
 

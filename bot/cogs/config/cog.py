@@ -4,6 +4,7 @@ from discord.ext import commands
 
 from bot.main import EradicateurBot
 from bot.repositories.bot_config_repository import BotConfigRepository
+from bot.utils.discord_time import to_discord_timestamp
 
 
 class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", key="config_name")):  # type: ignore[call-arg]
@@ -109,19 +110,26 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
             inline=False,
         )
         if config.updated_by:
-            footer = await self.bot.translate(
-                "config_nonotification_show_updated_by", interaction.locale
-            )
-            embed.set_footer(
-                text=footer.replace("{user}", f"<@{config.updated_by}>").replace(
-                    "{date}", config.updated_at
+            value = (
+                (
+                    await self.bot.translate(
+                        "config_nonotification_show_updated_by", interaction.locale
+                    )
                 )
+                .replace("{user}", f"<@{config.updated_by}>")
+                .replace("{date}", to_discord_timestamp(config.updated_at))
             )
         else:
-            footer = await self.bot.translate(
-                "config_nonotification_show_updated", interaction.locale
-            )
-            embed.set_footer(text=footer.replace("{date}", config.updated_at))
+            value = (
+                await self.bot.translate("config_nonotification_show_updated", interaction.locale)
+            ).replace("{date}", to_discord_timestamp(config.updated_at))
+        embed.add_field(
+            name=await self.bot.translate(
+                "config_nonotification_show_updated_label", interaction.locale
+            ),
+            value=value,
+            inline=False,
+        )
 
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
@@ -200,18 +208,23 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
             inline=False,
         )
         if config.updated_by:
-            footer = await self.bot.translate(
-                "config_nonotification_show_updated_by", interaction.locale
-            )
-            embed.set_footer(
-                text=footer.replace("{user}", f"<@{config.updated_by}>").replace(
-                    "{date}", config.updated_at
+            value = (
+                (
+                    await self.bot.translate(
+                        "config_nonotification_show_updated_by", interaction.locale
+                    )
                 )
+                .replace("{user}", f"<@{config.updated_by}>")
+                .replace("{date}", to_discord_timestamp(config.updated_at))
             )
         else:
-            footer = await self.bot.translate(
-                "config_nonotification_show_updated", interaction.locale
-            )
-            embed.set_footer(text=footer.replace("{date}", config.updated_at))
+            value = (
+                await self.bot.translate("config_nonotification_show_updated", interaction.locale)
+            ).replace("{date}", to_discord_timestamp(config.updated_at))
+        embed.add_field(
+            name=await self.bot.translate("config_logs_show_updated_label", interaction.locale),
+            value=value,
+            inline=False,
+        )
 
         await interaction.response.send_message(embed=embed, ephemeral=True)

@@ -457,7 +457,7 @@
       "label": "Modal patterns",
       "file_type": "document",
       "source_file": "COMMANDS_GUIDE.md",
-      "source_location": "L531",
+      "source_location": "L532",
       "_origin": "ast",
       "id": "commands_guide_modal_patterns",
       "community": 6,
@@ -467,7 +467,7 @@
       "label": "Multi-step flows (Modal \u2192 Select \u2192 Confirm)",
       "file_type": "document",
       "source_file": "COMMANDS_GUIDE.md",
-      "source_location": "L551",
+      "source_location": "L552",
       "_origin": "ast",
       "id": "commands_guide_multi_step_flows_modal_select_confirm",
       "community": 6,
@@ -477,7 +477,7 @@
       "label": "Pure calculation logic in services",
       "file_type": "document",
       "source_file": "COMMANDS_GUIDE.md",
-      "source_location": "L561",
+      "source_location": "L562",
       "_origin": "ast",
       "id": "commands_guide_pure_calculation_logic_in_services",
       "community": 6,
@@ -487,7 +487,7 @@
       "label": "Bulk DM utility",
       "file_type": "document",
       "source_file": "COMMANDS_GUIDE.md",
-      "source_location": "L609",
+      "source_location": "L610",
       "_origin": "ast",
       "id": "commands_guide_bulk_dm_utility",
       "community": 6,
@@ -497,7 +497,7 @@
       "label": "Atomic transactions across repositories",
       "file_type": "document",
       "source_file": "COMMANDS_GUIDE.md",
-      "source_location": "L643",
+      "source_location": "L644",
       "_origin": "ast",
       "id": "commands_guide_atomic_transactions_across_repositories",
       "community": 6,
@@ -507,7 +507,7 @@
       "label": "Public recap embed after confirm",
       "file_type": "document",
       "source_file": "COMMANDS_GUIDE.md",
-      "source_location": "L664",
+      "source_location": "L665",
       "_origin": "ast",
       "id": "commands_guide_public_recap_embed_after_confirm",
       "community": 6,
@@ -634,64 +634,44 @@
       "norm_label": "database"
     },
     {
-      "label": "__init__.py",
-      "file_type": "code",
-      "source_file": "bot/cogs/help/__init__.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "help_init",
-      "community": 2,
-      "norm_label": "__init__.py"
-    },
-    {
-      "label": "setup()",
-      "file_type": "code",
-      "source_file": "bot/cogs/help/__init__.py",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "help_init_setup",
-      "community": 2,
-      "norm_label": "setup()"
-    },
-    {
       "label": "cog.py",
       "file_type": "code",
-      "source_file": "bot/cogs/help/cog.py",
+      "source_file": "bot/cogs/config/cog.py",
       "source_location": "L1",
       "_origin": "ast",
-      "id": "help_cog",
-      "community": 2,
+      "id": "config_cog",
+      "community": 0,
       "norm_label": "cog.py"
     },
     {
-      "label": "HelpCog",
+      "label": "ConfigCog",
       "file_type": "code",
-      "source_file": "bot/cogs/help/cog.py",
-      "source_location": "L53",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L10",
       "_origin": "ast",
-      "id": "help_cog_helpcog",
-      "community": 2,
-      "norm_label": "helpcog"
+      "id": "config_cog_configcog",
+      "community": 0,
+      "norm_label": "configcog"
     },
     {
       "label": ".__init__()",
       "file_type": "code",
-      "source_file": "bot/cogs/help/cog.py",
-      "source_location": "L54",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L27",
       "_origin": "ast",
-      "id": "help_cog_helpcog_init",
+      "id": "config_cog_configcog_init",
       "community": 2,
       "norm_label": ".__init__()"
     },
     {
-      "label": ".help()",
+      "label": ".opt_out_role()",
       "file_type": "code",
-      "source_file": "bot/cogs/help/cog.py",
-      "source_location": "L63",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L44",
       "_origin": "ast",
-      "id": "help_cog_helpcog_help",
-      "community": 2,
-      "norm_label": ".help()"
+      "id": "config_cog_configcog_opt_out_role",
+      "community": 0,
+      "norm_label": ".opt_out_role()"
     },
     {
       "label": "Interaction",
@@ -700,18 +680,198 @@
       "source_location": "",
       "_origin": "ast",
       "id": "interaction",
-      "community": 7,
+      "community": 14,
       "norm_label": "interaction"
+    },
+    {
+      "label": "Role",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "role",
+      "community": 0,
+      "norm_label": "role"
+    },
+    {
+      "label": ".show()",
+      "file_type": "code",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L79",
+      "_origin": "ast",
+      "id": "config_cog_configcog_show",
+      "community": 0,
+      "norm_label": ".show()"
+    },
+    {
+      "label": ".log_channel()",
+      "file_type": "code",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L150",
+      "_origin": "ast",
+      "id": "config_cog_configcog_log_channel",
+      "community": 0,
+      "norm_label": ".log_channel()"
+    },
+    {
+      "label": "TextChannel",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "textchannel",
+      "community": 0,
+      "norm_label": "textchannel"
+    },
+    {
+      "label": ".log_show()",
+      "file_type": "code",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L183",
+      "_origin": "ast",
+      "id": "config_cog_configcog_log_show",
+      "community": 0,
+      "norm_label": ".log_show()"
+    },
+    {
+      "label": "guild_commands.py",
+      "file_type": "code",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "cogs_guild_commands",
+      "community": 2,
+      "norm_label": "guild_commands.py"
+    },
+    {
+      "label": "GuildCommands",
+      "file_type": "code",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L8",
+      "_origin": "ast",
+      "id": "cogs_guild_commands_guildcommands",
+      "community": 2,
+      "norm_label": "guildcommands"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "cogs_guild_commands_guildcommands_init",
+      "community": 2,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "Bot",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "bot",
+      "community": 2,
+      "norm_label": "bot"
+    },
+    {
+      "label": ".ping()",
+      "file_type": "code",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L16",
+      "_origin": "ast",
+      "id": "cogs_guild_commands_guildcommands_ping",
+      "community": 2,
+      "norm_label": ".ping()"
     },
     {
       "label": "setup()",
       "file_type": "code",
-      "source_file": "bot/cogs/help/cog.py",
-      "source_location": "L84",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L24",
       "_origin": "ast",
-      "id": "help_cog_setup",
+      "id": "cogs_guild_commands_setup",
       "community": 2,
       "norm_label": "setup()"
+    },
+    {
+      "label": "cog.py",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "payout_cog",
+      "community": 7,
+      "norm_label": "cog.py"
+    },
+    {
+      "label": "PayoutCog",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L14",
+      "_origin": "ast",
+      "id": "payout_cog_payoutcog",
+      "community": 7,
+      "norm_label": "payoutcog"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L22",
+      "_origin": "ast",
+      "id": "payout_cog_payoutcog_init",
+      "community": 2,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": ".create()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L32",
+      "_origin": "ast",
+      "id": "payout_cog_payoutcog_create",
+      "community": 7,
+      "norm_label": ".create()"
+    },
+    {
+      "label": ".config_roles()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L94",
+      "_origin": "ast",
+      "id": "payout_cog_payoutcog_config_roles",
+      "community": 7,
+      "norm_label": ".config_roles()"
+    },
+    {
+      "label": ".config_rates()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L142",
+      "_origin": "ast",
+      "id": "payout_cog_payoutcog_config_rates",
+      "community": 7,
+      "norm_label": ".config_rates()"
+    },
+    {
+      "label": ".config_permissions()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L231",
+      "_origin": "ast",
+      "id": "payout_cog_payoutcog_config_permissions",
+      "community": 7,
+      "norm_label": ".config_permissions()"
+    },
+    {
+      "label": ".config_show()",
+      "file_type": "code",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L280",
+      "_origin": "ast",
+      "id": "payout_cog_payoutcog_config_show",
+      "community": 7,
+      "norm_label": ".config_show()"
     },
     {
       "label": "main.py",
@@ -810,7 +970,7 @@
       "source_location": "L71",
       "_origin": "ast",
       "id": "bot_main_eradicateurbot_on_app_command_completion",
-      "community": 0,
+      "community": 2,
       "norm_label": ".on_app_command_completion()"
     },
     {
@@ -820,7 +980,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "command",
-      "community": 0,
+      "community": 2,
       "norm_label": "command"
     },
     {
@@ -830,7 +990,7 @@
       "source_location": "",
       "_origin": "ast",
       "id": "contextmenu",
-      "community": 0,
+      "community": 2,
       "norm_label": "contextmenu"
     },
     {
@@ -864,13 +1024,143 @@
       "norm_label": "main()"
     },
     {
+      "label": "transaction_repository.py",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "repositories_transaction_repository",
+      "community": 17,
+      "norm_label": "transaction_repository.py"
+    },
+    {
+      "label": "Transaction",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "repositories_transaction_repository_transaction",
+      "community": 17,
+      "norm_label": "transaction"
+    },
+    {
+      "label": "TransactionRepository",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L19",
+      "_origin": "ast",
+      "id": "repositories_transaction_repository_transactionrepository",
+      "community": 17,
+      "norm_label": "transactionrepository"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L20",
+      "_origin": "ast",
+      "id": "repositories_transaction_repository_transactionrepository_init",
+      "community": 23,
+      "norm_label": ".__init__()"
+    },
+    {
+      "label": "Connection",
+      "file_type": "code",
+      "source_file": "",
+      "source_location": "",
+      "_origin": "ast",
+      "id": "connection",
+      "community": 23,
+      "norm_label": "connection"
+    },
+    {
+      "label": "._ensure_table()",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L23",
+      "_origin": "ast",
+      "id": "repositories_transaction_repository_transactionrepository_ensure_table",
+      "community": 17,
+      "norm_label": "._ensure_table()"
+    },
+    {
+      "label": "._migrate()",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L39",
+      "_origin": "ast",
+      "id": "repositories_transaction_repository_transactionrepository_migrate",
+      "community": 17,
+      "norm_label": "._migrate()"
+    },
+    {
+      "label": ".add_transaction()",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L46",
+      "_origin": "ast",
+      "id": "repositories_transaction_repository_transactionrepository_add_transaction",
+      "community": 17,
+      "norm_label": ".add_transaction()"
+    },
+    {
+      "label": ".get_balance()",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L66",
+      "_origin": "ast",
+      "id": "repositories_transaction_repository_transactionrepository_get_balance",
+      "community": 17,
+      "norm_label": ".get_balance()"
+    },
+    {
+      "label": ".list_balances()",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L75",
+      "_origin": "ast",
+      "id": "repositories_transaction_repository_transactionrepository_list_balances",
+      "community": 17,
+      "norm_label": ".list_balances()"
+    },
+    {
+      "label": ".list_transactions()",
+      "file_type": "code",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L87",
+      "_origin": "ast",
+      "id": "repositories_transaction_repository_transactionrepository_list_transactions",
+      "community": 17,
+      "norm_label": ".list_transactions()"
+    },
+    {
+      "label": "discord_time.py",
+      "file_type": "code",
+      "source_file": "bot/utils/discord_time.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "utils_discord_time",
+      "community": 0,
+      "norm_label": "discord_time.py"
+    },
+    {
+      "label": "to_discord_timestamp()",
+      "file_type": "code",
+      "source_file": "bot/utils/discord_time.py",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "utils_discord_time_to_discord_timestamp",
+      "community": 0,
+      "norm_label": "to_discord_timestamp()"
+    },
+    {
       "label": "test_cogs.py",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
       "source_location": "L1",
       "_origin": "ast",
       "id": "tests_test_cogs",
-      "community": 1,
+      "community": 14,
       "norm_label": "test_cogs.py"
     },
     {
@@ -880,7 +1170,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "tests_test_cogs_db",
-      "community": 1,
+      "community": 14,
       "norm_label": "db()"
     },
     {
@@ -890,7 +1180,7 @@
       "source_location": "L36",
       "_origin": "ast",
       "id": "tests_test_cogs_testpingcommand",
-      "community": 1,
+      "community": 2,
       "norm_label": "testpingcommand"
     },
     {
@@ -900,24 +1190,24 @@
       "source_location": "L38",
       "_origin": "ast",
       "id": "tests_test_cogs_testpingcommand_cog",
-      "community": 1,
+      "community": 2,
       "norm_label": ".cog()"
     },
     {
       "label": ".test_ping_responds()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L44",
+      "source_location": "L45",
       "_origin": "ast",
       "id": "tests_test_cogs_testpingcommand_test_ping_responds",
-      "community": 1,
+      "community": 2,
       "norm_label": ".test_ping_responds()"
     },
     {
       "label": "TestPayoutDeduplication",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L54",
+      "source_location": "L55",
       "_origin": "ast",
       "id": "tests_test_cogs_testpayoutdeduplication",
       "community": 14,
@@ -927,7 +1217,7 @@
       "label": ".test_deduplicates_across_batches()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L55",
+      "source_location": "L56",
       "_origin": "ast",
       "id": "tests_test_cogs_testpayoutdeduplication_test_deduplicates_across_batches",
       "community": 14,
@@ -937,7 +1227,7 @@
       "label": ".test_remove_flow_deduplicates_correctly()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L73",
+      "source_location": "L74",
       "_origin": "ast",
       "id": "tests_test_cogs_testpayoutdeduplication_test_remove_flow_deduplicates_correctly",
       "community": 14,
@@ -947,117 +1237,117 @@
       "label": "TestConfirmCancelViewDMNotifications",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L98",
+      "source_location": "L99",
       "_origin": "ast",
       "id": "tests_test_cogs_testconfirmcancelviewdmnotifications",
-      "community": 14,
+      "community": 1,
       "norm_label": "testconfirmcancelviewdmnotifications"
     },
     {
       "label": ".view()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L100",
+      "source_location": "L101",
       "_origin": "ast",
       "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_view",
-      "community": 14,
+      "community": 1,
       "norm_label": ".view()"
     },
     {
       "label": "._setup_bot()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L125",
+      "source_location": "L126",
       "_origin": "ast",
       "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_setup_bot",
-      "community": 14,
+      "community": 1,
       "norm_label": "._setup_bot()"
     },
     {
       "label": "._setup_interaction()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L150",
+      "source_location": "L151",
       "_origin": "ast",
       "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_setup_interaction",
-      "community": 14,
+      "community": 1,
       "norm_label": "._setup_interaction()"
     },
     {
       "label": ".no_dm_role_id()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L163",
+      "source_location": "L164",
       "_origin": "ast",
       "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_no_dm_role_id",
-      "community": 14,
+      "community": 1,
       "norm_label": ".no_dm_role_id()"
     },
     {
       "label": ".guild()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L167",
+      "source_location": "L168",
       "_origin": "ast",
       "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_guild",
-      "community": 14,
+      "community": 1,
       "norm_label": ".guild()"
     },
     {
       "label": ".test_dm_failure_does_not_block_others()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L198",
+      "source_location": "L199",
       "_origin": "ast",
       "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_test_dm_failure_does_not_block_others",
-      "community": 14,
+      "community": 1,
       "norm_label": ".test_dm_failure_does_not_block_others()"
     },
     {
       "label": ".no_dm_role_id_111()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L231",
+      "source_location": "L232",
       "_origin": "ast",
       "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_no_dm_role_id_111",
-      "community": 14,
+      "community": 1,
       "norm_label": ".no_dm_role_id_111()"
     },
     {
       "label": ".guild_with_optout()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L235",
+      "source_location": "L236",
       "_origin": "ast",
       "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_guild_with_optout",
-      "community": 14,
+      "community": 1,
       "norm_label": ".guild_with_optout()"
     },
     {
       "label": ".test_confirm_skips_dm_for_opt_out_role()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L260",
+      "source_location": "L261",
       "_origin": "ast",
       "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_test_confirm_skips_dm_for_opt_out_role",
-      "community": 14,
+      "community": 1,
       "norm_label": ".test_confirm_skips_dm_for_opt_out_role()"
     },
     {
       "label": ".test_confirm_sends_dm_without_opt_out_role()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L313",
+      "source_location": "L314",
       "_origin": "ast",
       "id": "tests_test_cogs_testconfirmcancelviewdmnotifications_test_confirm_sends_dm_without_opt_out_role",
-      "community": 14,
+      "community": 1,
       "norm_label": ".test_confirm_sends_dm_without_opt_out_role()"
     },
     {
       "label": "TestPayoutConfigRates",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L361",
+      "source_location": "L362",
       "_origin": "ast",
       "id": "tests_test_cogs_testpayoutconfigrates",
       "community": 7,
@@ -1067,7 +1357,7 @@
       "label": ".cog()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L363",
+      "source_location": "L364",
       "_origin": "ast",
       "id": "tests_test_cogs_testpayoutconfigrates_cog",
       "community": 7,
@@ -1077,7 +1367,7 @@
       "label": ".interaction()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L379",
+      "source_location": "L380",
       "_origin": "ast",
       "id": "tests_test_cogs_testpayoutconfigrates_interaction",
       "community": 7,
@@ -1087,7 +1377,7 @@
       "label": ".test_config_rates_converts_percentages_to_decimals()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L392",
+      "source_location": "L393",
       "_origin": "ast",
       "id": "tests_test_cogs_testpayoutconfigrates_test_config_rates_converts_percentages_to_decimals",
       "community": 7,
@@ -1097,7 +1387,7 @@
       "label": ".test_config_rates_rejects_value_above_100()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L403",
+      "source_location": "L404",
       "_origin": "ast",
       "id": "tests_test_cogs_testpayoutconfigrates_test_config_rates_rejects_value_above_100",
       "community": 7,
@@ -1107,7 +1397,7 @@
       "label": ".test_config_rates_rejects_negative_value()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L416",
+      "source_location": "L417",
       "_origin": "ast",
       "id": "tests_test_cogs_testpayoutconfigrates_test_config_rates_rejects_negative_value",
       "community": 7,
@@ -1117,7 +1407,7 @@
       "label": ".test_config_rates_rejects_zero()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L426",
+      "source_location": "L427",
       "_origin": "ast",
       "id": "tests_test_cogs_testpayoutconfigrates_test_config_rates_rejects_zero",
       "community": 7,
@@ -1127,127 +1417,127 @@
       "label": "TestBalanceShow",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L436",
+      "source_location": "L437",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceshow",
-      "community": 1,
+      "community": 17,
       "norm_label": "testbalanceshow"
     },
     {
       "label": ".cog()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L441",
+      "source_location": "L442",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceshow_cog",
-      "community": 1,
+      "community": 17,
       "norm_label": ".cog()"
     },
     {
       "label": ".interaction()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L459",
+      "source_location": "L460",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceshow_interaction",
-      "community": 1,
+      "community": 17,
       "norm_label": ".interaction()"
     },
     {
       "label": ".test_show_own_balance_no_permission_check()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L473",
+      "source_location": "L474",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceshow_test_show_own_balance_no_permission_check",
-      "community": 1,
+      "community": 17,
       "norm_label": ".test_show_own_balance_no_permission_check()"
     },
     {
       "label": ".test_show_other_authorized()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L492",
+      "source_location": "L493",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceshow_test_show_other_authorized",
-      "community": 1,
+      "community": 17,
       "norm_label": ".test_show_other_authorized()"
     },
     {
       "label": ".test_show_other_unauthorized()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L515",
+      "source_location": "L516",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceshow_test_show_other_unauthorized",
-      "community": 1,
+      "community": 17,
       "norm_label": ".test_show_other_unauthorized()"
     },
     {
       "label": "TestBalanceList",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L530",
+      "source_location": "L531",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancelist",
-      "community": 1,
+      "community": 14,
       "norm_label": "testbalancelist"
     },
     {
       "label": ".cog()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L535",
+      "source_location": "L536",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancelist_cog",
-      "community": 1,
+      "community": 14,
       "norm_label": ".cog()"
     },
     {
       "label": ".interaction()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L553",
+      "source_location": "L554",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancelist_interaction",
-      "community": 1,
+      "community": 14,
       "norm_label": ".interaction()"
     },
     {
       "label": ".test_list_permission_gated()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L567",
+      "source_location": "L568",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancelist_test_list_permission_gated",
-      "community": 1,
+      "community": 14,
       "norm_label": ".test_list_permission_gated()"
     },
     {
       "label": ".test_list_empty()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L578",
+      "source_location": "L579",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancelist_test_list_empty",
-      "community": 1,
+      "community": 14,
       "norm_label": ".test_list_empty()"
     },
     {
       "label": ".test_list_with_entries()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L587",
+      "source_location": "L588",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancelist_test_list_with_entries",
-      "community": 1,
+      "community": 14,
       "norm_label": ".test_list_with_entries()"
     },
     {
       "label": "TestBalancePayer",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L612",
+      "source_location": "L613",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancepayer",
       "community": 17,
@@ -1257,17 +1547,17 @@
       "label": ".cog()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L617",
+      "source_location": "L618",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancepayer_cog",
-      "community": 1,
+      "community": 17,
       "norm_label": ".cog()"
     },
     {
       "label": ".interaction()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L635",
+      "source_location": "L636",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancepayer_interaction",
       "community": 17,
@@ -1277,7 +1567,7 @@
       "label": ".joueur()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L648",
+      "source_location": "L649",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancepayer_joueur",
       "community": 17,
@@ -1287,7 +1577,7 @@
       "label": ".test_payer_rejects_excessive_amount()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L655",
+      "source_location": "L656",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancepayer_test_payer_rejects_excessive_amount",
       "community": 17,
@@ -1297,7 +1587,7 @@
       "label": ".test_payer_succeeds_when_sufficient()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L675",
+      "source_location": "L676",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancepayer_test_payer_succeeds_when_sufficient",
       "community": 17,
@@ -1307,7 +1597,7 @@
       "label": ".test_payer_rejects_non_positive()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L695",
+      "source_location": "L696",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancepayer_test_payer_rejects_non_positive",
       "community": 17,
@@ -1317,7 +1607,7 @@
       "label": ".test_payer_allows_officer_when_level_is_officer()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L712",
+      "source_location": "L713",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancepayer_test_payer_allows_officer_when_level_is_officer",
       "community": 17,
@@ -1327,7 +1617,7 @@
       "label": ".test_payer_rejects_officer_when_level_is_leader()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L733",
+      "source_location": "L734",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancepayer_test_payer_rejects_officer_when_level_is_leader",
       "community": 17,
@@ -1337,7 +1627,7 @@
       "label": ".test_payer_allows_leader_when_level_is_leader()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L755",
+      "source_location": "L756",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalancepayer_test_payer_allows_leader_when_level_is_leader",
       "community": 17,
@@ -1347,7 +1637,7 @@
       "label": "TestBalanceAjouter",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L788",
+      "source_location": "L789",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceajouter",
       "community": 17,
@@ -1357,7 +1647,7 @@
       "label": ".cog()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L793",
+      "source_location": "L794",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceajouter_cog",
       "community": 17,
@@ -1367,7 +1657,7 @@
       "label": ".interaction()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L811",
+      "source_location": "L812",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceajouter_interaction",
       "community": 17,
@@ -1377,7 +1667,7 @@
       "label": ".joueur()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L824",
+      "source_location": "L825",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceajouter_joueur",
       "community": 17,
@@ -1387,7 +1677,7 @@
       "label": ".test_ajouter_persists_and_updates_balance()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L831",
+      "source_location": "L832",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceajouter_test_ajouter_persists_and_updates_balance",
       "community": 17,
@@ -1397,7 +1687,7 @@
       "label": ".test_ajouter_rejects_non_positive()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L856",
+      "source_location": "L857",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceajouter_test_ajouter_rejects_non_positive",
       "community": 17,
@@ -1407,7 +1697,7 @@
       "label": ".test_ajouter_allows_officer_when_level_is_officer()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L872",
+      "source_location": "L873",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceajouter_test_ajouter_allows_officer_when_level_is_officer",
       "community": 17,
@@ -1417,7 +1707,7 @@
       "label": ".test_ajouter_rejects_officer_when_level_is_leader()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L892",
+      "source_location": "L893",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceajouter_test_ajouter_rejects_officer_when_level_is_leader",
       "community": 17,
@@ -1427,7 +1717,7 @@
       "label": ".test_ajouter_allows_leader_when_level_is_leader()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L920",
+      "source_location": "L921",
       "_origin": "ast",
       "id": "tests_test_cogs_testbalanceajouter_test_ajouter_allows_leader_when_level_is_leader",
       "community": 17,
@@ -1437,31 +1727,81 @@
       "label": "TestHelpCommand",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L952",
+      "source_location": "L953",
       "_origin": "ast",
       "id": "tests_test_cogs_testhelpcommand",
-      "community": 2,
+      "community": 14,
       "norm_label": "testhelpcommand"
     },
     {
       "label": ".cog()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L954",
+      "source_location": "L955",
       "_origin": "ast",
       "id": "tests_test_cogs_testhelpcommand_cog",
-      "community": 2,
+      "community": 14,
       "norm_label": ".cog()"
     },
     {
       "label": ".test_help_responds_with_embed()",
       "file_type": "code",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L960",
+      "source_location": "L961",
       "_origin": "ast",
       "id": "tests_test_cogs_testhelpcommand_test_help_responds_with_embed",
-      "community": 2,
+      "community": 14,
       "norm_label": ".test_help_responds_with_embed()"
+    },
+    {
+      "label": "test_discord_time.py",
+      "file_type": "code",
+      "source_file": "tests/utils/test_discord_time.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "id": "utils_test_discord_time",
+      "community": 0,
+      "norm_label": "test_discord_time.py"
+    },
+    {
+      "label": "TestToDiscordTimestamp",
+      "file_type": "code",
+      "source_file": "tests/utils/test_discord_time.py",
+      "source_location": "L4",
+      "_origin": "ast",
+      "id": "utils_test_discord_time_testtodiscordtimestamp",
+      "community": 0,
+      "norm_label": "testtodiscordtimestamp"
+    },
+    {
+      "label": ".test_known_input_produces_expected_timestamp()",
+      "file_type": "code",
+      "source_file": "tests/utils/test_discord_time.py",
+      "source_location": "L5",
+      "_origin": "ast",
+      "id": "utils_test_discord_time_testtodiscordtimestamp_test_known_input_produces_expected_timestamp",
+      "community": 0,
+      "norm_label": ".test_known_input_produces_expected_timestamp()"
+    },
+    {
+      "label": ".test_custom_style()",
+      "file_type": "code",
+      "source_file": "tests/utils/test_discord_time.py",
+      "source_location": "L9",
+      "_origin": "ast",
+      "id": "utils_test_discord_time_testtodiscordtimestamp_test_custom_style",
+      "community": 0,
+      "norm_label": ".test_custom_style()"
+    },
+    {
+      "label": ".test_epoch_zero()",
+      "file_type": "code",
+      "source_file": "tests/utils/test_discord_time.py",
+      "source_location": "L13",
+      "_origin": "ast",
+      "id": "utils_test_discord_time_testtodiscordtimestamp_test_epoch_zero",
+      "community": 0,
+      "norm_label": ".test_epoch_zero()"
     },
     {
       "label": "opencode.json",
@@ -1559,7 +1899,7 @@
       "source_file": "bot/cogs/__init__.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 7,
+      "community": 2,
       "norm_label": "__init__.py",
       "id": "cogs_init"
     },
@@ -1569,7 +1909,7 @@
       "source_file": "bot/cogs/balance/__init__.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 1,
+      "community": 7,
       "norm_label": "__init__.py",
       "id": "balance_init"
     },
@@ -1579,7 +1919,7 @@
       "source_file": "bot/cogs/balance/__init__.py",
       "source_location": "L4",
       "_origin": "ast",
-      "community": 1,
+      "community": 7,
       "norm_label": "setup()",
       "id": "balance_init_setup"
     },
@@ -1589,7 +1929,7 @@
       "source_file": "bot/cogs/balance/cog.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 1,
+      "community": 7,
       "norm_label": "cog.py",
       "id": "balance_cog"
     },
@@ -1599,7 +1939,7 @@
       "source_file": "bot/cogs/balance/cog.py",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 1,
+      "community": 7,
       "norm_label": "balancecog",
       "id": "balance_cog_balancecog"
     },
@@ -1609,7 +1949,7 @@
       "source_file": "bot/cogs/balance/cog.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 1,
+      "community": 2,
       "norm_label": ".__init__()",
       "id": "balance_cog_balancecog_init"
     },
@@ -1619,7 +1959,7 @@
       "source_file": "",
       "source_location": "",
       "_origin": "ast",
-      "community": 1,
+      "community": 2,
       "norm_label": "eradicateurbot",
       "id": "eradicateurbot"
     },
@@ -1694,154 +2034,74 @@
       "id": "config_init_setup"
     },
     {
-      "label": "cog.py",
+      "label": "__init__.py",
       "file_type": "code",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "cog.py",
-      "id": "config_cog"
-    },
-    {
-      "label": "ConfigCog",
-      "file_type": "code",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L9",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "configcog",
-      "id": "config_cog_configcog"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L26",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": ".__init__()",
-      "id": "config_cog_configcog_init"
-    },
-    {
-      "label": ".opt_out_role()",
-      "file_type": "code",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L43",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": ".opt_out_role()",
-      "id": "config_cog_configcog_opt_out_role"
-    },
-    {
-      "label": "Role",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "role",
-      "id": "role"
-    },
-    {
-      "label": ".show()",
-      "file_type": "code",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L78",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": ".show()",
-      "id": "config_cog_configcog_show"
-    },
-    {
-      "label": ".log_channel()",
-      "file_type": "code",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L142",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": ".log_channel()",
-      "id": "config_cog_configcog_log_channel"
-    },
-    {
-      "label": "TextChannel",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": "textchannel",
-      "id": "textchannel"
-    },
-    {
-      "label": ".log_show()",
-      "file_type": "code",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L175",
-      "_origin": "ast",
-      "community": 0,
-      "norm_label": ".log_show()",
-      "id": "config_cog_configcog_log_show"
-    },
-    {
-      "label": "guild_commands.py",
-      "file_type": "code",
-      "source_file": "bot/cogs/guild_commands.py",
+      "source_file": "bot/cogs/help/__init__.py",
       "source_location": "L1",
       "_origin": "ast",
       "community": 2,
-      "norm_label": "guild_commands.py",
-      "id": "cogs_guild_commands"
-    },
-    {
-      "label": "GuildCommands",
-      "file_type": "code",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L8",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "guildcommands",
-      "id": "cogs_guild_commands_guildcommands"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L9",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": ".__init__()",
-      "id": "cogs_guild_commands_guildcommands_init"
-    },
-    {
-      "label": "Bot",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": "bot",
-      "id": "bot"
-    },
-    {
-      "label": ".ping()",
-      "file_type": "code",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L16",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": ".ping()",
-      "id": "cogs_guild_commands_guildcommands_ping"
+      "norm_label": "__init__.py",
+      "id": "help_init"
     },
     {
       "label": "setup()",
       "file_type": "code",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L23",
+      "source_file": "bot/cogs/help/__init__.py",
+      "source_location": "L4",
       "_origin": "ast",
-      "community": 1,
+      "community": 2,
       "norm_label": "setup()",
-      "id": "cogs_guild_commands_setup"
+      "id": "help_init_setup"
+    },
+    {
+      "label": "cog.py",
+      "file_type": "code",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L1",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "cog.py",
+      "id": "help_cog"
+    },
+    {
+      "label": "HelpCog",
+      "file_type": "code",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L53",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "helpcog",
+      "id": "help_cog_helpcog"
+    },
+    {
+      "label": ".__init__()",
+      "file_type": "code",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L54",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": ".__init__()",
+      "id": "help_cog_helpcog_init"
+    },
+    {
+      "label": ".help()",
+      "file_type": "code",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L63",
+      "_origin": "ast",
+      "community": 14,
+      "norm_label": ".help()",
+      "id": "help_cog_helpcog_help"
+    },
+    {
+      "label": "setup()",
+      "file_type": "code",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L84",
+      "_origin": "ast",
+      "community": 2,
+      "norm_label": "setup()",
+      "id": "help_cog_setup"
     },
     {
       "label": "__init__.py",
@@ -1864,92 +2124,12 @@
       "id": "payout_init_setup"
     },
     {
-      "label": "cog.py",
-      "file_type": "code",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 7,
-      "norm_label": "cog.py",
-      "id": "payout_cog"
-    },
-    {
-      "label": "PayoutCog",
-      "file_type": "code",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L13",
-      "_origin": "ast",
-      "community": 7,
-      "norm_label": "payoutcog",
-      "id": "payout_cog_payoutcog"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L21",
-      "_origin": "ast",
-      "community": 1,
-      "norm_label": ".__init__()",
-      "id": "payout_cog_payoutcog_init"
-    },
-    {
-      "label": ".create()",
-      "file_type": "code",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L31",
-      "_origin": "ast",
-      "community": 7,
-      "norm_label": ".create()",
-      "id": "payout_cog_payoutcog_create"
-    },
-    {
-      "label": ".config_roles()",
-      "file_type": "code",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L91",
-      "_origin": "ast",
-      "community": 7,
-      "norm_label": ".config_roles()",
-      "id": "payout_cog_payoutcog_config_roles"
-    },
-    {
-      "label": ".config_rates()",
-      "file_type": "code",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L139",
-      "_origin": "ast",
-      "community": 7,
-      "norm_label": ".config_rates()",
-      "id": "payout_cog_payoutcog_config_rates"
-    },
-    {
-      "label": ".config_permissions()",
-      "file_type": "code",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L228",
-      "_origin": "ast",
-      "community": 7,
-      "norm_label": ".config_permissions()",
-      "id": "payout_cog_payoutcog_config_permissions"
-    },
-    {
-      "label": ".config_show()",
-      "file_type": "code",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L274",
-      "_origin": "ast",
-      "community": 7,
-      "norm_label": ".config_show()",
-      "id": "payout_cog_payoutcog_config_show"
-    },
-    {
       "label": "views.py",
       "file_type": "code",
       "source_file": "bot/cogs/payout/views.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 14,
+      "community": 1,
       "norm_label": "views.py",
       "id": "payout_views"
     },
@@ -1979,7 +2159,7 @@
       "source_file": "bot/cogs/payout/views.py",
       "source_location": "L54",
       "_origin": "ast",
-      "community": 7,
+      "community": 14,
       "norm_label": ".on_submit()",
       "id": "payout_views_payoutcreatemodal_on_submit"
     },
@@ -2049,7 +2229,7 @@
       "source_file": "bot/cogs/payout/views.py",
       "source_location": "L158",
       "_origin": "ast",
-      "community": 7,
+      "community": 14,
       "norm_label": ".terminer()",
       "id": "payout_views_participantselectview_terminer"
     },
@@ -2242,16 +2422,6 @@
       "community": 23,
       "norm_label": "._init_schema()",
       "id": "bot_db_manager_guilddatabasemanager_init_schema"
-    },
-    {
-      "label": "Connection",
-      "file_type": "code",
-      "source_file": "",
-      "source_location": "",
-      "_origin": "ast",
-      "community": 23,
-      "norm_label": "connection",
-      "id": "connection"
     },
     {
       "label": ".get_connection()",
@@ -2624,102 +2794,12 @@
       "id": "repositories_payout_repository_payoutrepository_create_payout"
     },
     {
-      "label": "transaction_repository.py",
-      "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L1",
-      "_origin": "ast",
-      "community": 17,
-      "norm_label": "transaction_repository.py",
-      "id": "repositories_transaction_repository"
-    },
-    {
-      "label": "Transaction",
-      "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L6",
-      "_origin": "ast",
-      "community": 17,
-      "norm_label": "transaction",
-      "id": "repositories_transaction_repository_transaction"
-    },
-    {
-      "label": "TransactionRepository",
-      "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L16",
-      "_origin": "ast",
-      "community": 17,
-      "norm_label": "transactionrepository",
-      "id": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "label": ".__init__()",
-      "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L17",
-      "_origin": "ast",
-      "community": 23,
-      "norm_label": ".__init__()",
-      "id": "repositories_transaction_repository_transactionrepository_init"
-    },
-    {
-      "label": "._ensure_table()",
-      "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L20",
-      "_origin": "ast",
-      "community": 17,
-      "norm_label": "._ensure_table()",
-      "id": "repositories_transaction_repository_transactionrepository_ensure_table"
-    },
-    {
-      "label": ".add_transaction()",
-      "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L35",
-      "_origin": "ast",
-      "community": 17,
-      "norm_label": ".add_transaction()",
-      "id": "repositories_transaction_repository_transactionrepository_add_transaction"
-    },
-    {
-      "label": ".get_balance()",
-      "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L55",
-      "_origin": "ast",
-      "community": 17,
-      "norm_label": ".get_balance()",
-      "id": "repositories_transaction_repository_transactionrepository_get_balance"
-    },
-    {
-      "label": ".list_balances()",
-      "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L64",
-      "_origin": "ast",
-      "community": 17,
-      "norm_label": ".list_balances()",
-      "id": "repositories_transaction_repository_transactionrepository_list_balances"
-    },
-    {
-      "label": ".list_transactions()",
-      "file_type": "code",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L76",
-      "_origin": "ast",
-      "community": 17,
-      "norm_label": ".list_transactions()",
-      "id": "repositories_transaction_repository_transactionrepository_list_transactions"
-    },
-    {
       "label": "__init__.py",
       "file_type": "code",
       "source_file": "bot/services/__init__.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 14,
+      "community": 1,
       "norm_label": "__init__.py",
       "id": "bot_services_init_py_services_init"
     },
@@ -2729,7 +2809,7 @@
       "source_file": "bot/services/payout_config_service.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 14,
+      "community": 1,
       "norm_label": "payout_config_service.py",
       "id": "services_payout_config_service"
     },
@@ -2739,7 +2819,7 @@
       "source_file": "bot/services/payout_config_service.py",
       "source_location": "L11",
       "_origin": "ast",
-      "community": 14,
+      "community": 1,
       "norm_label": "payoutrates",
       "id": "services_payout_config_service_payoutrates"
     },
@@ -2769,7 +2849,7 @@
       "source_file": "bot/services/payout_config_service.py",
       "source_location": "L21",
       "_origin": "ast",
-      "community": 14,
+      "community": 1,
       "norm_label": ".get_rates()",
       "id": "services_payout_config_service_payoutconfigservice_get_rates"
     },
@@ -2809,7 +2889,7 @@
       "source_file": "bot/services/payout_service.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 14,
+      "community": 1,
       "norm_label": "payout_service.py",
       "id": "services_payout_service"
     },
@@ -2819,7 +2899,7 @@
       "source_file": "bot/services/payout_service.py",
       "source_location": "L7",
       "_origin": "ast",
-      "community": 14,
+      "community": 1,
       "norm_label": "payoutsplitresult",
       "id": "services_payout_service_payoutsplitresult"
     },
@@ -2829,7 +2909,7 @@
       "source_file": "bot/services/payout_service.py",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 14,
+      "community": 1,
       "norm_label": "compute_split()",
       "id": "services_payout_service_compute_split"
     },
@@ -3182,7 +3262,7 @@
       "source_file": "tests/repositories/test_transaction_repository.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 17,
+      "community": 18,
       "norm_label": "test_transaction_repository.py",
       "id": "repositories_test_transaction_repository"
     },
@@ -3192,7 +3272,7 @@
       "source_file": "tests/repositories/test_transaction_repository.py",
       "source_location": "L10",
       "_origin": "ast",
-      "community": 17,
+      "community": 18,
       "norm_label": "db()",
       "id": "repositories_test_transaction_repository_db"
     },
@@ -3202,7 +3282,7 @@
       "source_file": "tests/repositories/test_transaction_repository.py",
       "source_location": "L18",
       "_origin": "ast",
-      "community": 17,
+      "community": 18,
       "norm_label": "repo()",
       "id": "repositories_test_transaction_repository_repo"
     },
@@ -3212,7 +3292,7 @@
       "source_file": "tests/repositories/test_transaction_repository.py",
       "source_location": "L23",
       "_origin": "ast",
-      "community": 17,
+      "community": 18,
       "norm_label": "test_get_balance_returns_zero_for_unknown()",
       "id": "repositories_test_transaction_repository_test_get_balance_returns_zero_for_unknown"
     },
@@ -3222,7 +3302,7 @@
       "source_file": "tests/repositories/test_transaction_repository.py",
       "source_location": "L29",
       "_origin": "ast",
-      "community": 17,
+      "community": 18,
       "norm_label": "test_add_and_balance_single()",
       "id": "repositories_test_transaction_repository_test_add_and_balance_single"
     },
@@ -3232,7 +3312,7 @@
       "source_file": "tests/repositories/test_transaction_repository.py",
       "source_location": "L36",
       "_origin": "ast",
-      "community": 17,
+      "community": 18,
       "norm_label": "test_balance_sums_multiple()",
       "id": "repositories_test_transaction_repository_test_balance_sums_multiple"
     },
@@ -3242,7 +3322,7 @@
       "source_file": "tests/repositories/test_transaction_repository.py",
       "source_location": "L45",
       "_origin": "ast",
-      "community": 17,
+      "community": 18,
       "norm_label": "test_balance_is_per_user()",
       "id": "repositories_test_transaction_repository_test_balance_is_per_user"
     },
@@ -3252,7 +3332,7 @@
       "source_file": "tests/repositories/test_transaction_repository.py",
       "source_location": "L53",
       "_origin": "ast",
-      "community": 17,
+      "community": 18,
       "norm_label": "test_list_balances_excludes_zero()",
       "id": "repositories_test_transaction_repository_test_list_balances_excludes_zero"
     },
@@ -3262,7 +3342,7 @@
       "source_file": "tests/repositories/test_transaction_repository.py",
       "source_location": "L64",
       "_origin": "ast",
-      "community": 17,
+      "community": 18,
       "norm_label": "test_list_balances_orders_desc()",
       "id": "repositories_test_transaction_repository_test_list_balances_orders_desc"
     },
@@ -3272,7 +3352,7 @@
       "source_file": "tests/repositories/test_transaction_repository.py",
       "source_location": "L73",
       "_origin": "ast",
-      "community": 17,
+      "community": 18,
       "norm_label": "test_list_transactions_orders_desc()",
       "id": "repositories_test_transaction_repository_test_list_transactions_orders_desc"
     },
@@ -3322,7 +3402,7 @@
       "source_file": "tests/services/test_payout_service.py",
       "source_location": "L1",
       "_origin": "ast",
-      "community": 14,
+      "community": 1,
       "norm_label": "test_payout_service.py",
       "id": "services_test_payout_service"
     },
@@ -3332,7 +3412,7 @@
       "source_file": "tests/services/test_payout_service.py",
       "source_location": "L5",
       "_origin": "ast",
-      "community": 14,
+      "community": 1,
       "norm_label": "testcomputesplit",
       "id": "services_test_payout_service_testcomputesplit"
     },
@@ -3342,7 +3422,7 @@
       "source_file": "tests/services/test_payout_service.py",
       "source_location": "L6",
       "_origin": "ast",
-      "community": 14,
+      "community": 1,
       "norm_label": ".test_known_example()",
       "id": "services_test_payout_service_testcomputesplit_test_known_example"
     },
@@ -4309,264 +4389,216 @@
       "target": "readme_database"
     },
     {
-      "relation": "re_exports",
-      "context": "export",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/__init__.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "help_init",
-      "target": "help_cog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/__init__.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "source": "help_init",
-      "target": "help_cog_helpcog",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/__init__.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "source": "help_init",
-      "target": "help_init_setup",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/__init__.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "source": "help_init_setup",
-      "target": "help_cog_helpcog",
-      "confidence_score": 1.0
-    },
-    {
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/cog.py",
+      "source_file": "bot/cogs/config/cog.py",
       "source_location": "L5",
       "weight": 1.0,
-      "source": "help_cog",
-      "target": "bot_main",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "config_cog",
+      "target": "bot_main"
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/cog.py",
+      "source_file": "bot/cogs/config/cog.py",
       "source_location": "L5",
       "weight": 1.0,
-      "source": "help_cog",
-      "target": "bot_main_eradicateurbot",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "config_cog",
+      "target": "bot_main_eradicateurbot"
     },
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/cog.py",
-      "source_location": "L53",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L9",
       "weight": 1.0,
-      "source": "help_cog",
-      "target": "help_cog_helpcog",
+      "confidence_score": 1.0,
+      "source": "config_cog",
+      "target": "config_cog_configcog"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "config_cog",
+      "target": "repositories_bot_config_repository_botconfigrepository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "config_cog",
+      "target": "utils_discord_time_to_discord_timestamp",
       "confidence_score": 1.0
     },
     {
-      "relation": "contains",
+      "relation": "re_exports",
+      "context": "export",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/cog.py",
-      "source_location": "L84",
+      "source_file": "bot/cogs/config/__init__.py",
+      "source_location": "L1",
       "weight": 1.0,
-      "source": "help_cog",
-      "target": "help_cog_setup",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "config_init",
+      "target": "config_cog"
     },
     {
       "relation": "uses",
       "confidence": "INFERRED",
-      "source_file": "bot/cogs/help/cog.py",
+      "source_file": "bot/cogs/config/cog.py",
       "source_location": "L5",
       "weight": 0.8,
-      "source": "help_cog_helpcog",
-      "target": "bot_main_eradicateurbot",
-      "confidence_score": 0.5
+      "confidence_score": 0.5,
+      "source": "config_cog_configcog",
+      "target": "bot_main_eradicateurbot"
     },
     {
       "relation": "method",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/cog.py",
-      "source_location": "L63",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L18",
       "weight": 1.0,
-      "source": "help_cog_helpcog",
-      "target": "help_cog_helpcog_help",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "config_cog_configcog",
+      "target": "config_cog_configcog_init"
     },
     {
       "relation": "method",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/cog.py",
-      "source_location": "L54",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L142",
       "weight": 1.0,
-      "source": "help_cog_helpcog",
-      "target": "help_cog_helpcog_init",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "config_cog_configcog",
+      "target": "config_cog_configcog_log_channel"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L175",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "config_cog_configcog",
+      "target": "config_cog_configcog_log_show"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "config_cog_configcog",
+      "target": "config_cog_configcog_opt_out_role"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L72",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "config_cog_configcog",
+      "target": "config_cog_configcog_show"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L6",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "config_cog_configcog",
+      "target": "repositories_bot_config_repository_botconfigrepository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/config/__init__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "config_init",
+      "target": "config_cog_configcog"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/cog.py",
-      "source_location": "L85",
+      "source_file": "bot/cogs/config/__init__.py",
+      "source_location": "L5",
       "weight": 1.0,
-      "source": "help_cog_setup",
-      "target": "help_cog_helpcog",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "config_init_setup",
+      "target": "config_cog_configcog"
     },
     {
-      "relation": "imports",
-      "context": "import",
+      "relation": "references",
+      "context": "parameter_type",
       "confidence": "EXTRACTED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L6",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L26",
       "weight": 1.0,
-      "source": "tests_test_cogs",
-      "target": "help_cog_helpcog",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "config_cog_configcog_init",
+      "target": "bot_main_eradicateurbot"
     },
     {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L6",
-      "weight": 0.8,
-      "source": "tests_test_cogs_testbalanceajouter",
-      "target": "help_cog_helpcog",
-      "confidence_score": 0.5
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "config_cog_configcog_init",
+      "target": "eradicateurbot"
     },
     {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L6",
-      "weight": 0.8,
-      "source": "tests_test_cogs_testbalancelist",
-      "target": "help_cog_helpcog",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L6",
-      "weight": 0.8,
-      "source": "tests_test_cogs_testbalancepayer",
-      "target": "help_cog_helpcog",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L6",
-      "weight": 0.8,
-      "source": "tests_test_cogs_testbalanceshow",
-      "target": "help_cog_helpcog",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L6",
-      "weight": 0.8,
-      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
-      "target": "help_cog_helpcog",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L6",
-      "weight": 0.8,
-      "source": "tests_test_cogs_testhelpcommand",
-      "target": "help_cog_helpcog",
-      "confidence_score": 0.5
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "config_cog_configcog_opt_out_role",
+      "target": "interaction"
     },
     {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L957",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L47",
       "weight": 1.0,
-      "source": "tests_test_cogs_testhelpcommand_cog",
-      "target": "help_cog_helpcog"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L6",
-      "weight": 0.8,
-      "source": "tests_test_cogs_testpayoutconfigrates",
-      "target": "help_cog_helpcog",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L6",
-      "weight": 0.8,
-      "source": "tests_test_cogs_testpayoutdeduplication",
-      "target": "help_cog_helpcog",
-      "confidence_score": 0.5
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L6",
-      "weight": 0.8,
-      "source": "tests_test_cogs_testpingcommand",
-      "target": "help_cog_helpcog",
-      "confidence_score": 0.5
+      "source": "config_cog_configcog_opt_out_role",
+      "target": "repositories_bot_config_repository_botconfigrepository"
     },
     {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/cog.py",
-      "source_location": "L54",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L35",
       "weight": 1.0,
-      "source": "help_cog_helpcog_init",
-      "target": "bot_main_eradicateurbot",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/cog.py",
-      "source_location": "L63",
-      "weight": 1.0,
-      "source": "help_cog_helpcog_help",
-      "target": "interaction",
-      "confidence_score": 1.0
+      "confidence_score": 1.0,
+      "source": "config_cog_configcog_opt_out_role",
+      "target": "role"
     },
     {
       "relation": "references",
@@ -4661,21 +4693,21 @@
       "context": "parameter_type",
       "confidence": "EXTRACTED",
       "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L35",
+      "source_location": "L72",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "config_cog_configcog_opt_out_role",
+      "source": "config_cog_configcog_show",
       "target": "interaction"
     },
     {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L72",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L63",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "config_cog_configcog_show",
+      "source": "help_cog_helpcog_help",
       "target": "interaction"
     },
     {
@@ -4836,12 +4868,713 @@
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/help/cog.py",
-      "source_location": "L84",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L86",
       "weight": 1.0,
-      "source": "help_cog_setup",
+      "confidence_score": 1.0,
+      "source": "payout_cog_payoutcog_config_roles",
+      "target": "role"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L80",
+      "weight": 1.0,
+      "source": "config_cog_configcog_show",
+      "target": "repositories_bot_config_repository_botconfigrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L120",
+      "weight": 1.0,
+      "source": "config_cog_configcog_show",
+      "target": "utils_discord_time_to_discord_timestamp"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "config_cog_configcog_log_channel",
+      "target": "repositories_bot_config_repository_botconfigrepository"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L142",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "config_cog_configcog_log_channel",
+      "target": "textchannel"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L183",
+      "weight": 1.0,
+      "source": "config_cog_configcog_log_show",
+      "target": "repositories_bot_config_repository_botconfigrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/config/cog.py",
+      "source_location": "L218",
+      "weight": 1.0,
+      "source": "config_cog_configcog_log_show",
+      "target": "utils_discord_time_to_discord_timestamp"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands",
+      "target": "bot_main"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands",
+      "target": "bot_main_eradicateurbot"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L8",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands",
+      "target": "cogs_guild_commands_setup"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/__init__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_init",
+      "target": "cogs_guild_commands"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "cogs_guild_commands_guildcommands",
+      "target": "bot_main_eradicateurbot"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands_guildcommands",
+      "target": "cogs_guild_commands_guildcommands_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands_guildcommands",
+      "target": "cogs_guild_commands_guildcommands_ping"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands_setup",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/__init__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_init",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testbalanceajouter",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testbalancelist",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testbalancepayer",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testbalanceshow",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testhelpcommand",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpayoutconfigrates",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpayoutdeduplication",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpingcommand",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testpingcommand_cog",
+      "target": "cogs_guild_commands_guildcommands"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands_guildcommands_init",
+      "target": "bot"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L24",
+      "weight": 1.0,
+      "source": "cogs_guild_commands_setup",
       "target": "bot_main_eradicateurbot",
       "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/guild_commands.py",
+      "source_location": "L23",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_guild_commands_setup",
+      "target": "eradicateurbot"
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/__init__.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_init",
+      "target": "payout_cog"
+    },
+    {
+      "relation": "imports_from",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_cog",
+      "target": "bot_main"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_cog",
+      "target": "bot_main_eradicateurbot"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_cog",
+      "target": "payout_cog_payoutcog"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_cog",
+      "target": "payout_views_payoutcreatemodal"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_cog",
+      "target": "repositories_payout_config_repository_payoutconfigrepository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_cog",
+      "target": "services_payout_config_service_payoutconfigservice"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L7",
+      "weight": 1.0,
+      "source": "payout_cog",
+      "target": "utils_discord_time_to_discord_timestamp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/__init__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_init",
+      "target": "payout_cog"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/__init__.py",
+      "source_location": "L2",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "cogs_init",
+      "target": "payout_cog_payoutcog"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L6",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "payout_cog_payoutcog",
+      "target": "bot_main_eradicateurbot"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L216",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_cog_payoutcog",
+      "target": "payout_cog_payoutcog_config_permissions"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L135",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_cog_payoutcog",
+      "target": "payout_cog_payoutcog_config_rates"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L86",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_cog_payoutcog",
+      "target": "payout_cog_payoutcog_config_roles"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L264",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_cog_payoutcog",
+      "target": "payout_cog_payoutcog_config_show"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L31",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_cog_payoutcog",
+      "target": "payout_cog_payoutcog_create"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_cog_payoutcog",
+      "target": "payout_cog_payoutcog_init"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L5",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "payout_cog_payoutcog",
+      "target": "payout_views_payoutcreatemodal"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L7",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "payout_cog_payoutcog",
+      "target": "repositories_payout_config_repository_payoutconfigrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "payout_cog_payoutcog",
+      "target": "services_payout_config_service_payoutconfigservice"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/__init__.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_init",
+      "target": "payout_cog_payoutcog"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/__init__.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_init_setup",
+      "target": "payout_cog_payoutcog"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs",
+      "target": "payout_cog_payoutcog"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L373",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testpayoutconfigrates_cog",
+      "target": "payout_cog_payoutcog"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L22",
+      "weight": 1.0,
+      "source": "payout_cog_payoutcog_init",
+      "target": "bot_main_eradicateurbot",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L21",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_cog_payoutcog_init",
+      "target": "eradicateurbot"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L62",
+      "weight": 1.0,
+      "source": "payout_cog_payoutcog_create",
+      "target": "payout_views_payoutcreatemodal"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "payout_cog_payoutcog_create",
+      "target": "repositories_payout_config_repository_payoutconfigrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "payout_cog_payoutcog_create",
+      "target": "services_payout_config_service_payoutconfigservice"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L99",
+      "weight": 1.0,
+      "source": "payout_cog_payoutcog_config_roles",
+      "target": "repositories_payout_config_repository_payoutconfigrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L154",
+      "weight": 1.0,
+      "source": "payout_cog_payoutcog_config_rates",
+      "target": "repositories_payout_config_repository_payoutconfigrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L155",
+      "weight": 1.0,
+      "source": "payout_cog_payoutcog_config_rates",
+      "target": "services_payout_config_service_payoutconfigservice"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L233",
+      "weight": 1.0,
+      "source": "payout_cog_payoutcog_config_permissions",
+      "target": "repositories_payout_config_repository_payoutconfigrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L234",
+      "weight": 1.0,
+      "source": "payout_cog_payoutcog_config_permissions",
+      "target": "services_payout_config_service_payoutconfigservice"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L272",
+      "weight": 1.0,
+      "source": "payout_cog_payoutcog_config_show",
+      "target": "repositories_payout_config_repository_payoutconfigrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/payout/cog.py",
+      "source_location": "L351",
+      "weight": 1.0,
+      "source": "payout_cog_payoutcog_config_show",
+      "target": "utils_discord_time_to_discord_timestamp"
     },
     {
       "relation": "imports_from",
@@ -4986,33 +5719,11 @@
       "relation": "imports_from",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
+      "source_file": "bot/cogs/help/cog.py",
       "source_location": "L5",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "cogs_guild_commands",
-      "target": "bot_main"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_cog",
-      "target": "bot_main"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_cog",
+      "source": "help_cog",
       "target": "bot_main"
     },
     {
@@ -5195,74 +5906,43 @@
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
+      "source_file": "bot/cogs/help/cog.py",
       "source_location": "L5",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "cogs_guild_commands",
+      "source": "help_cog",
       "target": "bot_main_eradicateurbot"
     },
     {
       "relation": "uses",
       "confidence": "INFERRED",
-      "source_file": "bot/cogs/guild_commands.py",
+      "source_file": "bot/cogs/help/cog.py",
       "source_location": "L5",
       "weight": 0.8,
       "confidence_score": 0.5,
-      "source": "cogs_guild_commands_guildcommands",
-      "target": "bot_main_eradicateurbot"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_cog",
-      "target": "bot_main_eradicateurbot"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L5",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "config_cog_configcog",
+      "source": "help_cog_helpcog",
       "target": "bot_main_eradicateurbot"
     },
     {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L26",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L54",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "config_cog_configcog_init",
+      "source": "help_cog_helpcog_init",
       "target": "bot_main_eradicateurbot"
     },
     {
-      "relation": "imports",
-      "context": "import",
+      "relation": "references",
+      "context": "parameter_type",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L6",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L84",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "payout_cog",
-      "target": "bot_main_eradicateurbot"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L6",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "payout_cog_payoutcog",
+      "source": "help_cog_setup",
       "target": "bot_main_eradicateurbot"
     },
     {
@@ -5361,6 +6041,17 @@
       "target": "bot_i18n_jsontranslator"
     },
     {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/main.py",
+      "source_location": "L105",
+      "weight": 1.0,
+      "source": "bot_main_eradicateurbot_on_app_command_completion",
+      "target": "bot_main_eradicateurbot_translate",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
@@ -5438,6 +6129,804 @@
       "target": "bot_config_config_from_env"
     },
     {
+      "relation": "re_exports",
+      "context": "export",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/__init__.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_init",
+      "target": "repositories_transaction_repository"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository",
+      "target": "repositories_transaction_repository_transaction"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L16",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "references",
+      "context": "generic_arg",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository_list_transactions",
+      "target": "repositories_transaction_repository_transaction"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/balance/cog.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "balance_cog",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/balance/cog.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "balance_cog_balancecog",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/balance/cog.py",
+      "source_location": "L299",
+      "weight": 1.0,
+      "source": "balance_cog_balancecog_ajouter",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/balance/cog.py",
+      "source_location": "L104",
+      "weight": 1.0,
+      "source": "balance_cog_balancecog_list",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/balance/cog.py",
+      "source_location": "L208",
+      "weight": 1.0,
+      "source": "balance_cog_balancecog_payer",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/balance/cog.py",
+      "source_location": "L47",
+      "weight": 1.0,
+      "source": "balance_cog_balancecog_show",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/db_manager.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_db_manager",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/db_manager.py",
+      "source_location": "L14",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "bot_db_manager_guilddatabasemanager",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/db_manager.py",
+      "source_location": "L40",
+      "weight": 1.0,
+      "source": "bot_db_manager_guilddatabasemanager_init_schema",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/payout/views.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "payout_views",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/payout/views.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "payout_views_confirmcancelview",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "bot/cogs/payout/views.py",
+      "source_location": "L371",
+      "weight": 1.0,
+      "source": "payout_views_confirmcancelview_confirm",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/payout/views.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "payout_views_participantselectview",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/payout/views.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "payout_views_payoutcreatemodal",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/cogs/payout/views.py",
+      "source_location": "L9",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "payout_views_removeparticipantsview",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/__init__.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_init",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L4",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "repositories_payout_repository_payout",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L4",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "repositories_payout_repository_payoutrepository",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository_payoutrepository_init",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_payout_repository",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/repositories/test_payout_repository.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "source": "repositories_test_payout_repository_repo",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/repositories/test_transaction_repository.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_test_transaction_repository",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/repositories/test_transaction_repository.py",
+      "source_location": "L19",
+      "weight": 1.0,
+      "source": "repositories_test_transaction_repository_repo",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L35",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository",
+      "target": "repositories_transaction_repository_transactionrepository_add_transaction"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L20",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository",
+      "target": "repositories_transaction_repository_transactionrepository_ensure_table"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L55",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository",
+      "target": "repositories_transaction_repository_transactionrepository_get_balance"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository",
+      "target": "repositories_transaction_repository_transactionrepository_init"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L64",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository",
+      "target": "repositories_transaction_repository_transactionrepository_list_balances"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L76",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository",
+      "target": "repositories_transaction_repository_transactionrepository_list_transactions"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L39",
+      "weight": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository",
+      "target": "repositories_transaction_repository_transactionrepository_migrate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "tests_test_cogs",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testbalanceajouter",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L859",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalanceajouter_test_ajouter_allows_leader_when_level_is_leader",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L819",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalanceajouter_test_ajouter_allows_officer_when_level_is_officer",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L790",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalanceajouter_test_ajouter_persists_and_updates_balance",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L805",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalanceajouter_test_ajouter_rejects_non_positive",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L836",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalanceajouter_test_ajouter_rejects_officer_when_level_is_leader",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testbalancelist",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L577",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalancelist_test_list_with_entries",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testbalancepayer",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L728",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalancepayer_test_payer_allows_leader_when_level_is_leader",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L688",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalancepayer_test_payer_allows_officer_when_level_is_officer",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L638",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalancepayer_test_payer_rejects_excessive_amount",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L672",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalancepayer_test_payer_rejects_non_positive",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L709",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalancepayer_test_payer_rejects_officer_when_level_is_leader",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L655",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalancepayer_test_payer_succeeds_when_sufficient",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testbalanceshow",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L486",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalanceshow_test_show_other_authorized",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L470",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testbalanceshow_test_show_own_balance_no_permission_check",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L11",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testhelpcommand",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpayoutconfigrates",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpayoutdeduplication",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L10",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testpingcommand",
+      "target": "repositories_transaction_repository_transactionrepository"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L17",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository_init",
+      "target": "connection"
+    },
+    {
+      "relation": "references",
+      "context": "return_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/db_manager.py",
+      "source_location": "L46",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_db_manager_guilddatabasemanager_get_connection",
+      "target": "connection"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/db_manager.py",
+      "source_location": "L33",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "bot_db_manager_guilddatabasemanager_init_schema",
+      "target": "connection"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/bot_config_repository.py",
+      "source_location": "L18",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_bot_config_repository_botconfigrepository_init",
+      "target": "connection"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_config_repository.py",
+      "source_location": "L28",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_config_repository_payoutconfigrepository_init",
+      "target": "connection"
+    },
+    {
+      "relation": "references",
+      "context": "parameter_type",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/payout_repository.py",
+      "source_location": "L27",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_payout_repository_payoutrepository_init",
+      "target": "connection"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L43",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository_add_transaction",
+      "target": "repositories_transaction_repository_transactionrepository_ensure_table"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L36",
+      "weight": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository_ensure_table",
+      "target": "repositories_transaction_repository_transactionrepository_migrate",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L56",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository_get_balance",
+      "target": "repositories_transaction_repository_transactionrepository_ensure_table"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L65",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository_list_balances",
+      "target": "repositories_transaction_repository_transactionrepository_ensure_table"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/repositories/transaction_repository.py",
+      "source_location": "L77",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "repositories_transaction_repository_transactionrepository_list_transactions",
+      "target": "repositories_transaction_repository_transactionrepository_ensure_table"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/utils/discord_time.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "utils_discord_time",
+      "target": "utils_discord_time_to_discord_timestamp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "imports",
+      "context": "import",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/utils/test_discord_time.py",
+      "source_location": "L1",
+      "weight": 1.0,
+      "source": "utils_test_discord_time",
+      "target": "utils_discord_time_to_discord_timestamp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/utils/test_discord_time.py",
+      "source_location": "L10",
+      "weight": 1.0,
+      "source": "utils_test_discord_time_testtodiscordtimestamp_test_custom_style",
+      "target": "utils_discord_time_to_discord_timestamp"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/utils/test_discord_time.py",
+      "source_location": "L14",
+      "weight": 1.0,
+      "source": "utils_test_discord_time_testtodiscordtimestamp_test_epoch_zero",
+      "target": "utils_discord_time_to_discord_timestamp"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/utils/test_discord_time.py",
+      "source_location": "L6",
+      "weight": 1.0,
+      "source": "utils_test_discord_time_testtodiscordtimestamp_test_known_input_produces_expected_timestamp",
+      "target": "utils_discord_time_to_discord_timestamp"
+    },
+    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -5453,22 +6942,11 @@
       "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_cogs",
-      "target": "cogs_guild_commands_guildcommands"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/test_cogs.py",
       "source_location": "L6",
       "weight": 1.0,
       "confidence_score": 1.0,
       "source": "tests_test_cogs",
-      "target": "payout_cog_payoutcog"
+      "target": "help_cog_helpcog"
     },
     {
       "relation": "imports",
@@ -5524,17 +7002,6 @@
       "confidence_score": 1.0,
       "source": "tests_test_cogs",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "tests_test_cogs",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "imports",
@@ -5613,9 +7080,9 @@
       "source_file": "tests/test_cogs.py",
       "source_location": "L952",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_cogs",
-      "target": "tests_test_cogs_testhelpcommand",
-      "confidence_score": 1.0
+      "target": "tests_test_cogs_testhelpcommand"
     },
     {
       "relation": "contains",
@@ -5661,11 +7128,11 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 0.8,
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testpingcommand",
-      "target": "cogs_guild_commands_guildcommands"
+      "target": "help_cog_helpcog"
     },
     {
       "relation": "uses",
@@ -5716,16 +7183,6 @@
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testpingcommand",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L10",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "tests_test_cogs_testpingcommand",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "uses",
@@ -5758,17 +7215,6 @@
       "target": "tests_test_cogs_testpingcommand_test_ping_responds"
     },
     {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L40",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testpingcommand_cog",
-      "target": "cogs_guild_commands_guildcommands"
-    },
-    {
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "tests/test_cogs.py",
@@ -5782,11 +7228,11 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 0.8,
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testpayoutdeduplication",
-      "target": "cogs_guild_commands_guildcommands"
+      "target": "help_cog_helpcog"
     },
     {
       "relation": "uses",
@@ -5837,16 +7283,6 @@
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testpayoutdeduplication",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L10",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "tests_test_cogs_testpayoutdeduplication",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "uses",
@@ -5925,11 +7361,11 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 0.8,
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
-      "target": "cogs_guild_commands_guildcommands"
+      "target": "help_cog_helpcog"
     },
     {
       "relation": "uses",
@@ -5980,16 +7416,6 @@
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L10",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "tests_test_cogs_testconfirmcancelviewdmnotifications",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "uses",
@@ -6148,11 +7574,11 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 0.8,
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testpayoutconfigrates",
-      "target": "cogs_guild_commands_guildcommands"
+      "target": "help_cog_helpcog"
     },
     {
       "relation": "uses",
@@ -6203,16 +7629,6 @@
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testpayoutconfigrates",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L10",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "tests_test_cogs_testpayoutconfigrates",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "uses",
@@ -6290,17 +7706,6 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_cogs.py",
-      "source_location": "L373",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testpayoutconfigrates_cog",
-      "target": "payout_cog_payoutcog"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
       "source_location": "L363",
       "weight": 1.0,
       "source": "tests_test_cogs_testpayoutconfigrates_cog",
@@ -6364,11 +7769,11 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 0.8,
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testbalanceshow",
-      "target": "cogs_guild_commands_guildcommands"
+      "target": "help_cog_helpcog"
     },
     {
       "relation": "uses",
@@ -6419,16 +7824,6 @@
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testbalanceshow",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L10",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "tests_test_cogs_testbalanceshow",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "uses",
@@ -6513,28 +7908,6 @@
       "target": "repositories_payout_config_repository_payoutconfigrepository"
     },
     {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L470",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalanceshow_test_show_own_balance_no_permission_check",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L486",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalanceshow_test_show_other_authorized",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "tests/test_cogs.py",
@@ -6548,11 +7921,11 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 0.8,
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testbalancelist",
-      "target": "cogs_guild_commands_guildcommands"
+      "target": "help_cog_helpcog"
     },
     {
       "relation": "uses",
@@ -6603,16 +7976,6 @@
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testbalancelist",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L10",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "tests_test_cogs_testbalancelist",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "uses",
@@ -6697,17 +8060,6 @@
       "target": "repositories_payout_config_repository_payoutconfigrepository"
     },
     {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L577",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalancelist_test_list_with_entries",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "tests/test_cogs.py",
@@ -6721,11 +8073,11 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 0.8,
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testbalancepayer",
-      "target": "cogs_guild_commands_guildcommands"
+      "target": "help_cog_helpcog"
     },
     {
       "relation": "uses",
@@ -6776,16 +8128,6 @@
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testbalancepayer",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L10",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "tests_test_cogs_testbalancepayer",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "uses",
@@ -6915,50 +8257,6 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_cogs.py",
-      "source_location": "L638",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalancepayer_test_payer_rejects_excessive_amount",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L655",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalancepayer_test_payer_succeeds_when_sufficient",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L672",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalancepayer_test_payer_rejects_non_positive",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L688",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalancepayer_test_payer_allows_officer_when_level_is_officer",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
       "source_location": "L702",
       "weight": 1.0,
       "source": "tests_test_cogs_testbalancepayer_test_payer_rejects_officer_when_level_is_leader",
@@ -6970,32 +8268,10 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_cogs.py",
-      "source_location": "L709",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalancepayer_test_payer_rejects_officer_when_level_is_leader",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
       "source_location": "L723",
       "weight": 1.0,
       "source": "tests_test_cogs_testbalancepayer_test_payer_allows_leader_when_level_is_leader",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L728",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalancepayer_test_payer_allows_leader_when_level_is_leader",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "uses",
@@ -7011,11 +8287,11 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L5",
+      "source_location": "L6",
       "weight": 0.8,
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testbalanceajouter",
-      "target": "cogs_guild_commands_guildcommands"
+      "target": "help_cog_helpcog"
     },
     {
       "relation": "uses",
@@ -7066,16 +8342,6 @@
       "confidence_score": 0.5,
       "source": "tests_test_cogs_testbalanceajouter",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L10",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "tests_test_cogs_testbalanceajouter",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "uses",
@@ -7195,54 +8461,10 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "tests/test_cogs.py",
-      "source_location": "L790",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalanceajouter_test_ajouter_persists_and_updates_balance",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L805",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalanceajouter_test_ajouter_rejects_non_positive",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L819",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalanceajouter_test_ajouter_allows_officer_when_level_is_officer",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
       "source_location": "L827",
       "weight": 1.0,
       "source": "tests_test_cogs_testbalanceajouter_test_ajouter_rejects_officer_when_level_is_leader",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/test_cogs.py",
-      "source_location": "L836",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalanceajouter_test_ajouter_rejects_officer_when_level_is_leader",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "calls",
@@ -7256,15 +8478,84 @@
       "target": "repositories_payout_config_repository_payoutconfigrepository"
     },
     {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
+      "relation": "uses",
+      "confidence": "INFERRED",
       "source_file": "tests/test_cogs.py",
-      "source_location": "L859",
-      "weight": 1.0,
-      "source": "tests_test_cogs_testbalanceajouter_test_ajouter_allows_leader_when_level_is_leader",
-      "target": "repositories_transaction_repository_transactionrepository"
+      "source_location": "L806",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testhelpcommand",
+      "target": "balance_cog_balancecog"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L6",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testhelpcommand",
+      "target": "help_cog_helpcog"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L14",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testhelpcommand",
+      "target": "payout_views_confirmcancelview"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L14",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testhelpcommand",
+      "target": "payout_views_participantselectview"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L14",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testhelpcommand",
+      "target": "payout_views_removeparticipantsview"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L261",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testhelpcommand",
+      "target": "repositories_bot_config_repository_botconfigrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L8",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testhelpcommand",
+      "target": "repositories_payout_config_repository_payoutconfigrepository"
+    },
+    {
+      "relation": "uses",
+      "confidence": "INFERRED",
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L19",
+      "weight": 0.8,
+      "confidence_score": 0.5,
+      "source": "tests_test_cogs_testhelpcommand",
+      "target": "services_payout_service_payoutsplitresult"
     },
     {
       "relation": "method",
@@ -7272,9 +8563,9 @@
       "source_file": "tests/test_cogs.py",
       "source_location": "L954",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_cogs_testhelpcommand",
-      "target": "tests_test_cogs_testhelpcommand_cog",
-      "confidence_score": 1.0
+      "target": "tests_test_cogs_testhelpcommand_cog"
     },
     {
       "relation": "method",
@@ -7282,8 +8573,59 @@
       "source_file": "tests/test_cogs.py",
       "source_location": "L960",
       "weight": 1.0,
+      "confidence_score": 1.0,
       "source": "tests_test_cogs_testhelpcommand",
-      "target": "tests_test_cogs_testhelpcommand_test_help_responds_with_embed",
+      "target": "tests_test_cogs_testhelpcommand_test_help_responds_with_embed"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "confidence_score": 1.0,
+      "source_file": "tests/test_cogs.py",
+      "source_location": "L957",
+      "weight": 1.0,
+      "source": "tests_test_cogs_testhelpcommand_cog",
+      "target": "help_cog_helpcog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/utils/test_discord_time.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "source": "utils_test_discord_time",
+      "target": "utils_test_discord_time_testtodiscordtimestamp",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/utils/test_discord_time.py",
+      "source_location": "L9",
+      "weight": 1.0,
+      "source": "utils_test_discord_time_testtodiscordtimestamp",
+      "target": "utils_test_discord_time_testtodiscordtimestamp_test_custom_style",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/utils/test_discord_time.py",
+      "source_location": "L13",
+      "weight": 1.0,
+      "source": "utils_test_discord_time_testtodiscordtimestamp",
+      "target": "utils_test_discord_time_testtodiscordtimestamp_test_epoch_zero",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "tests/utils/test_discord_time.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "source": "utils_test_discord_time_testtodiscordtimestamp",
+      "target": "utils_test_discord_time_testtodiscordtimestamp_test_known_input_produces_expected_timestamp",
       "confidence_score": 1.0
     },
     {
@@ -7384,50 +8726,6 @@
       "relation": "re_exports",
       "context": "export",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/__init__.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_init",
-      "target": "cogs_guild_commands"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/__init__.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_init",
-      "target": "cogs_guild_commands_guildcommands"
-    },
-    {
-      "relation": "re_exports",
-      "context": "export",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/__init__.py",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_init",
-      "target": "payout_cog"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/__init__.py",
-      "source_location": "L2",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_init",
-      "target": "payout_cog_payoutcog"
-    },
-    {
-      "relation": "re_exports",
-      "context": "export",
-      "confidence": "EXTRACTED",
       "source_file": "bot/cogs/balance/__init__.py",
       "source_location": "L1",
       "weight": 1.0,
@@ -7487,17 +8785,6 @@
       "confidence_score": 1.0,
       "source": "balance_cog",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/balance/cog.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "balance_cog",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "imports",
@@ -7574,16 +8861,6 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "bot/cogs/balance/cog.py",
-      "source_location": "L9",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "balance_cog_balancecog",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/cogs/balance/cog.py",
       "source_location": "L12",
       "weight": 0.8,
       "confidence_score": 0.5,
@@ -7605,33 +8882,22 @@
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L23",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L54",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "cogs_guild_commands_setup",
+      "source": "help_cog_helpcog_init",
       "target": "eradicateurbot"
     },
     {
       "relation": "references",
       "context": "parameter_type",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L18",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L84",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "config_cog_configcog_init",
-      "target": "eradicateurbot"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_cog_payoutcog_init",
+      "source": "help_cog_setup",
       "target": "eradicateurbot"
     },
     {
@@ -7655,17 +8921,6 @@
       "weight": 1.0,
       "source": "balance_cog_balancecog_show",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/balance/cog.py",
-      "source_location": "L47",
-      "weight": 1.0,
-      "source": "balance_cog_balancecog_show",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "calls",
@@ -7761,17 +9016,6 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "bot/cogs/balance/cog.py",
-      "source_location": "L104",
-      "weight": 1.0,
-      "source": "balance_cog_balancecog_list",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/balance/cog.py",
       "source_location": "L103",
       "weight": 1.0,
       "source": "balance_cog_balancecog_list",
@@ -7787,17 +9031,6 @@
       "weight": 1.0,
       "source": "balance_cog_balancecog_payer",
       "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/balance/cog.py",
-      "source_location": "L208",
-      "weight": 1.0,
-      "source": "balance_cog_balancecog_payer",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "calls",
@@ -7827,43 +9060,10 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "bot/cogs/balance/cog.py",
-      "source_location": "L299",
-      "weight": 1.0,
-      "source": "balance_cog_balancecog_ajouter",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/balance/cog.py",
       "source_location": "L298",
       "weight": 1.0,
       "source": "balance_cog_balancecog_ajouter",
       "target": "services_payout_config_service_payoutconfigservice"
-    },
-    {
-      "relation": "re_exports",
-      "context": "export",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/__init__.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_init",
-      "target": "config_cog"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/__init__.py",
-      "source_location": "L1",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_init",
-      "target": "config_cog_configcog"
     },
     {
       "relation": "contains",
@@ -7876,257 +9076,98 @@
       "target": "config_init_setup"
     },
     {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/__init__.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_init_setup",
-      "target": "config_cog_configcog"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_cog",
-      "target": "config_cog_configcog"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_cog",
-      "target": "repositories_bot_config_repository_botconfigrepository"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L18",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_cog_configcog",
-      "target": "config_cog_configcog_init"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L142",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_cog_configcog",
-      "target": "config_cog_configcog_log_channel"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L175",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_cog_configcog",
-      "target": "config_cog_configcog_log_show"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L35",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_cog_configcog",
-      "target": "config_cog_configcog_opt_out_role"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L72",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_cog_configcog",
-      "target": "config_cog_configcog_show"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L6",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "config_cog_configcog",
-      "target": "repositories_bot_config_repository_botconfigrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L47",
-      "weight": 1.0,
-      "source": "config_cog_configcog_opt_out_role",
-      "target": "repositories_bot_config_repository_botconfigrepository"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L35",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_cog_configcog_opt_out_role",
-      "target": "role"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L86",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_cog_payoutcog_config_roles",
-      "target": "role"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L80",
-      "weight": 1.0,
-      "source": "config_cog_configcog_show",
-      "target": "repositories_bot_config_repository_botconfigrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L154",
-      "weight": 1.0,
-      "source": "config_cog_configcog_log_channel",
-      "target": "repositories_bot_config_repository_botconfigrepository"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L142",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "config_cog_configcog_log_channel",
-      "target": "textchannel"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/config/cog.py",
-      "source_location": "L183",
-      "weight": 1.0,
-      "source": "config_cog_configcog_log_show",
-      "target": "repositories_bot_config_repository_botconfigrepository"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_guild_commands",
-      "target": "cogs_guild_commands_guildcommands"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L23",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_guild_commands",
-      "target": "cogs_guild_commands_setup"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_guild_commands_guildcommands",
-      "target": "cogs_guild_commands_guildcommands_init"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_guild_commands_guildcommands",
-      "target": "cogs_guild_commands_guildcommands_ping"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L24",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_guild_commands_setup",
-      "target": "cogs_guild_commands_guildcommands"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/guild_commands.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "cogs_guild_commands_guildcommands_init",
-      "target": "bot"
-    },
-    {
       "relation": "re_exports",
       "context": "export",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/__init__.py",
+      "source_file": "bot/cogs/help/__init__.py",
       "source_location": "L1",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "payout_init",
-      "target": "payout_cog"
+      "source": "help_init",
+      "target": "help_cog"
     },
     {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/__init__.py",
+      "source_file": "bot/cogs/help/__init__.py",
       "source_location": "L1",
       "weight": 1.0,
       "confidence_score": 1.0,
-      "source": "payout_init",
-      "target": "payout_cog_payoutcog"
+      "source": "help_init",
+      "target": "help_cog_helpcog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/help/__init__.py",
+      "source_location": "L4",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "help_init",
+      "target": "help_init_setup"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/help/__init__.py",
+      "source_location": "L5",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "help_init_setup",
+      "target": "help_cog_helpcog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L53",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "help_cog",
+      "target": "help_cog_helpcog"
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L84",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "help_cog",
+      "target": "help_cog_setup"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L63",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "help_cog_helpcog",
+      "target": "help_cog_helpcog_help"
+    },
+    {
+      "relation": "method",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L54",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "help_cog_helpcog",
+      "target": "help_cog_helpcog_init"
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "bot/cogs/help/cog.py",
+      "source_location": "L85",
+      "weight": 1.0,
+      "confidence_score": 1.0,
+      "source": "help_cog_setup",
+      "target": "help_cog_helpcog"
     },
     {
       "relation": "contains",
@@ -8137,249 +9178,6 @@
       "confidence_score": 1.0,
       "source": "payout_init",
       "target": "payout_init_setup"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/__init__.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_init_setup",
-      "target": "payout_cog_payoutcog"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L13",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_cog",
-      "target": "payout_cog_payoutcog"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_cog",
-      "target": "payout_views_payoutcreatemodal"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L7",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_cog",
-      "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L10",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_cog",
-      "target": "services_payout_config_service_payoutconfigservice"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L216",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_cog_payoutcog",
-      "target": "payout_cog_payoutcog_config_permissions"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L135",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_cog_payoutcog",
-      "target": "payout_cog_payoutcog_config_rates"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L86",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_cog_payoutcog",
-      "target": "payout_cog_payoutcog_config_roles"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L264",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_cog_payoutcog",
-      "target": "payout_cog_payoutcog_config_show"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L31",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_cog_payoutcog",
-      "target": "payout_cog_payoutcog_create"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L21",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_cog_payoutcog",
-      "target": "payout_cog_payoutcog_init"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L5",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "payout_cog_payoutcog",
-      "target": "payout_views_payoutcreatemodal"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L7",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "payout_cog_payoutcog",
-      "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L10",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "payout_cog_payoutcog",
-      "target": "services_payout_config_service_payoutconfigservice"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L62",
-      "weight": 1.0,
-      "source": "payout_cog_payoutcog_create",
-      "target": "payout_views_payoutcreatemodal"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L39",
-      "weight": 1.0,
-      "source": "payout_cog_payoutcog_create",
-      "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L40",
-      "weight": 1.0,
-      "source": "payout_cog_payoutcog_create",
-      "target": "services_payout_config_service_payoutconfigservice"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L99",
-      "weight": 1.0,
-      "source": "payout_cog_payoutcog_config_roles",
-      "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L154",
-      "weight": 1.0,
-      "source": "payout_cog_payoutcog_config_rates",
-      "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L155",
-      "weight": 1.0,
-      "source": "payout_cog_payoutcog_config_rates",
-      "target": "services_payout_config_service_payoutconfigservice"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L233",
-      "weight": 1.0,
-      "source": "payout_cog_payoutcog_config_permissions",
-      "target": "repositories_payout_config_repository_payoutconfigrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L234",
-      "weight": 1.0,
-      "source": "payout_cog_payoutcog_config_permissions",
-      "target": "services_payout_config_service_payoutconfigservice"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/payout/cog.py",
-      "source_location": "L272",
-      "weight": 1.0,
-      "source": "payout_cog_payoutcog_config_show",
-      "target": "repositories_payout_config_repository_payoutconfigrepository"
     },
     {
       "relation": "contains",
@@ -8453,17 +9251,6 @@
       "confidence_score": 1.0,
       "source": "payout_views",
       "target": "repositories_payout_repository_payoutrepository"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/cogs/payout/views.py",
-      "source_location": "L9",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "payout_views",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "imports",
@@ -8558,16 +9345,6 @@
       "confidence_score": 0.5,
       "source": "payout_views_payoutcreatemodal",
       "target": "repositories_payout_repository_payoutrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/cogs/payout/views.py",
-      "source_location": "L9",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "payout_views_payoutcreatemodal",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "uses",
@@ -8710,16 +9487,6 @@
       "confidence_score": 0.5,
       "source": "payout_views_participantselectview",
       "target": "repositories_payout_repository_payoutrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/cogs/payout/views.py",
-      "source_location": "L9",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "payout_views_participantselectview",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "uses",
@@ -9036,16 +9803,6 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "bot/cogs/payout/views.py",
-      "source_location": "L9",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "payout_views_removeparticipantsview",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/cogs/payout/views.py",
       "source_location": "L12",
       "weight": 0.8,
       "confidence_score": 0.5,
@@ -9137,16 +9894,6 @@
       "relation": "uses",
       "confidence": "INFERRED",
       "source_file": "bot/cogs/payout/views.py",
-      "source_location": "L9",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "payout_views_confirmcancelview",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/cogs/payout/views.py",
       "source_location": "L12",
       "weight": 0.8,
       "confidence_score": 0.5,
@@ -9195,17 +9942,6 @@
       "weight": 1.0,
       "source": "payout_views_confirmcancelview_confirm",
       "target": "repositories_payout_repository_payoutrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/cogs/payout/views.py",
-      "source_location": "L371",
-      "weight": 1.0,
-      "source": "payout_views_confirmcancelview_confirm",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "calls",
@@ -9280,17 +10016,6 @@
       "confidence_score": 1.0,
       "source": "bot_db_manager",
       "target": "repositories_payout_repository_payoutrepository"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/db_manager.py",
-      "source_location": "L14",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_db_manager",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "imports_from",
@@ -9394,16 +10119,6 @@
       "target": "repositories_payout_repository_payoutrepository"
     },
     {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/db_manager.py",
-      "source_location": "L14",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "bot_db_manager_guilddatabasemanager",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -9481,17 +10196,6 @@
       "target": "bot_db_manager_guilddatabasemanager_init_schema"
     },
     {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/db_manager.py",
-      "source_location": "L33",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_db_manager_guilddatabasemanager_init_schema",
-      "target": "connection"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -9523,72 +10227,6 @@
       "weight": 1.0,
       "source": "bot_db_manager_guilddatabasemanager_init_schema",
       "target": "repositories_payout_repository_payoutrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "bot/db_manager.py",
-      "source_location": "L40",
-      "weight": 1.0,
-      "source": "bot_db_manager_guilddatabasemanager_init_schema",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "references",
-      "context": "return_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/db_manager.py",
-      "source_location": "L46",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "bot_db_manager_guilddatabasemanager_get_connection",
-      "target": "connection"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/bot_config_repository.py",
-      "source_location": "L18",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_bot_config_repository_botconfigrepository_init",
-      "target": "connection"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/payout_config_repository.py",
-      "source_location": "L28",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_payout_config_repository_payoutconfigrepository_init",
-      "target": "connection"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/payout_repository.py",
-      "source_location": "L27",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_payout_repository_payoutrepository_init",
-      "target": "connection"
-    },
-    {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository_transactionrepository_init",
-      "target": "connection"
     },
     {
       "relation": "contains",
@@ -9717,28 +10355,6 @@
       "confidence_score": 1.0,
       "source": "repositories_init",
       "target": "repositories_payout_repository_payoutrepository"
-    },
-    {
-      "relation": "re_exports",
-      "context": "export",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/__init__.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_init",
-      "target": "repositories_transaction_repository"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/__init__.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_init",
-      "target": "repositories_transaction_repository_transactionrepository"
     },
     {
       "relation": "contains",
@@ -10170,27 +10786,6 @@
       "target": "repositories_payout_repository_payoutrepository"
     },
     {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/payout_repository.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_payout_repository",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/repositories/payout_repository.py",
-      "source_location": "L4",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "repositories_payout_repository_payout",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
       "relation": "method",
       "confidence": "EXTRACTED",
       "source_file": "bot/repositories/payout_repository.py",
@@ -10231,16 +10826,6 @@
       "target": "repositories_payout_repository_payoutrepository_migrate"
     },
     {
-      "relation": "uses",
-      "confidence": "INFERRED",
-      "source_file": "bot/repositories/payout_repository.py",
-      "source_location": "L4",
-      "weight": 0.8,
-      "confidence_score": 0.5,
-      "source": "repositories_payout_repository_payoutrepository",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
       "relation": "imports",
       "context": "import",
       "confidence": "EXTRACTED",
@@ -10263,17 +10848,6 @@
       "target": "repositories_payout_repository_payoutrepository"
     },
     {
-      "relation": "references",
-      "context": "parameter_type",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/payout_repository.py",
-      "source_location": "L27",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_payout_repository_payoutrepository_init",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
@@ -10294,185 +10868,6 @@
       "confidence_score": 1.0,
       "source": "repositories_payout_repository_payoutrepository_ensure_tables",
       "target": "repositories_payout_repository_payoutrepository_migrate"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L6",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository",
-      "target": "repositories_transaction_repository_transaction"
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L16",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "references",
-      "context": "generic_arg",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L76",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository_transactionrepository_list_transactions",
-      "target": "repositories_transaction_repository_transaction"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/repositories/test_payout_repository.py",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_test_payout_repository",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/repositories/test_payout_repository.py",
-      "source_location": "L20",
-      "weight": 1.0,
-      "source": "repositories_test_payout_repository_repo",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "imports",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "tests/repositories/test_transaction_repository.py",
-      "source_location": "L4",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_test_transaction_repository",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "confidence_score": 1.0,
-      "source_file": "tests/repositories/test_transaction_repository.py",
-      "source_location": "L19",
-      "weight": 1.0,
-      "source": "repositories_test_transaction_repository_repo",
-      "target": "repositories_transaction_repository_transactionrepository"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L35",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository_transactionrepository",
-      "target": "repositories_transaction_repository_transactionrepository_add_transaction"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L20",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository_transactionrepository",
-      "target": "repositories_transaction_repository_transactionrepository_ensure_table"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L55",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository_transactionrepository",
-      "target": "repositories_transaction_repository_transactionrepository_get_balance"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L17",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository_transactionrepository",
-      "target": "repositories_transaction_repository_transactionrepository_init"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L64",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository_transactionrepository",
-      "target": "repositories_transaction_repository_transactionrepository_list_balances"
-    },
-    {
-      "relation": "method",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L76",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository_transactionrepository",
-      "target": "repositories_transaction_repository_transactionrepository_list_transactions"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L43",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository_transactionrepository_add_transaction",
-      "target": "repositories_transaction_repository_transactionrepository_ensure_table"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L56",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository_transactionrepository_get_balance",
-      "target": "repositories_transaction_repository_transactionrepository_ensure_table"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L65",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository_transactionrepository_list_balances",
-      "target": "repositories_transaction_repository_transactionrepository_ensure_table"
-    },
-    {
-      "relation": "calls",
-      "context": "call",
-      "confidence": "EXTRACTED",
-      "source_file": "bot/repositories/transaction_repository.py",
-      "source_location": "L77",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "repositories_transaction_repository_transactionrepository_list_transactions",
-      "target": "repositories_transaction_repository_transactionrepository_ensure_table"
     },
     {
       "relation": "re_exports",
@@ -11501,5 +11896,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8b0d9c390e90a06e7b8f48425f49d224c5ebcde2"
+  "built_at_commit": "d943b38cd52a4e8320a1c1d20a731064bc1fca5b"
 }

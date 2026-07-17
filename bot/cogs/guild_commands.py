@@ -14,8 +14,9 @@ class GuildCommands(commands.Cog):
         description=app_commands.locale_str("Check that the bot responds", key="ping_description"),
     )
     async def ping(self, interaction: discord.Interaction) -> None:
+        template = await self.bot.translate("ping_response", interaction.locale)
         await interaction.response.send_message(
-            f"Pong ! ({round(self.bot.latency * 1000)}ms)",
+            template.replace("{latency}", str(round(self.bot.latency * 1000))),
             ephemeral=True,
         )
 

@@ -15,23 +15,23 @@ python -m bot.main
 ## Available commands
 
 **General** (`help/`, `guild_commands.py`):
-- `/help` — show the list of all available commands *(No restriction)*
+- `/aide` — show the list of all available commands *(No restriction)*
 - `/ping` - check that the bot responds *(No restriction)*
 
 **Payout / Ledger** (`payout/`):
 
 - `/payout create` — open a modal to create a new payout. On confirm, posts a public recap embed and notifies each participant by DM with their received amount and new balance. *(Requires: Officer role)*
-- `/payout pay` — manually withdraw an amount from a player's balance (rejects if insufficient funds). *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
-- `/payout add` — manually credit a player's balance with a reason. *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
 - `/payout config roles` — set the officer and leader roles for payout management. *(Requires: Administrator permission)*
 - `/payout config rates` — update tax rates used in payout calculations. *(Requires: Leader role)*
-- `/payout config permissions` — set the permission level required for `/payout pay` and `/payout add`. *(Requires: Leader role)*
+- `/payout config permissions` — set the permission level required for `/balance payer` and `/balance ajouter`. *(Requires: Leader role)*
 - `/payout config show` — display current payout configuration. *(No restriction)*
 
 **Balance** (`balance/`):
 
 - `/balance show [member]` — view your own balance (no restriction) or another member's balance if authorized. *(Viewing others requires the pay/add permission level — Officer or Leader, depending on `/payout config permissions`)*
 - `/balance list` — list all members with a non-zero balance. *(Requires the pay/add permission level)*
+- `/balance payer` — manually withdraw an amount from a player's balance (rejects if insufficient funds). *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
+- `/balance ajouter` — manually credit a player's balance with a reason. *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
 
 **Configuration** (`config/`):
 

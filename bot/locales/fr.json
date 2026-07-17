@@ -126,6 +126,9 @@
     "config_logs_show_description": "Affiche la configuration actuelle du salon de journalisation",
     "config_logs_show_embed_title": "Configuration du salon de journalisation",
     "config_logs_show_channel": "Salon de journalisation",
+    "config_logs_show_updated_label": "Dernière modification",
+    "config_nonotification_show_updated_label": "Dernière modification",
+    "payout_config_show_updated_label": "Dernière modification",
     "help_name": "aide",
     "help_description": "Affiche la liste des commandes disponibles",
     "help_title": "Commandes disponibles",
@@ -136,5 +139,11 @@
     "help_perm_officer": "Officier",
     "help_perm_leader": "Leader",
     "help_perm_administrator": "Administrateur",
-    "help_perm_pay_add": "Officier ou Leader"
+    "help_perm_pay_add": "Officier ou Leader",
+    "audit_log_command": "{user} a utilisé une commande dans {channel} :\n`{command}`",
+    "payout_config_roles_officer_description": "Rôle avec la permission Officier",
+    "payout_config_roles_leader_description": "Rôle avec la permission Leader",
+    "payout_level_officer": "Officier",
+    "payout_level_leader": "Leader",
+    "ping_response": "Pong ! ({latency}ms)"
 }

@@ -2,6 +2,9 @@ import aiosqlite
 from dataclasses import dataclass
 
 
+_TRANSACTION_COLUMNS: dict[str, str] = {}
+
+
 @dataclass
 class Transaction:
     id: int
@@ -30,7 +33,15 @@ class TransactionRepository:
                     DEFAULT (datetime('now'))
             )
         """)
+        await self._migrate()
         await self._db.commit()
+
+    async def _migrate(self) -> None:
+        cursor = await self._db.execute("PRAGMA table_info(transactions)")
+        existing = {row["name"] for row in await cursor.fetchall()}
+        for col_name, col_type in _TRANSACTION_COLUMNS.items():
+            if col_name not in existing:
+                await self._db.execute(f"ALTER TABLE transactions ADD COLUMN {col_name} {col_type}")
 
     async def add_transaction(
         self,

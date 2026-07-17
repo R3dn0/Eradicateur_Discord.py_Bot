@@ -523,6 +523,7 @@ pytest --cov=bot
 - [ ] Cog loaded in `bot/main.py` (`load_extension`)
 - [ ] Folder `__init__.py` updated if needed
 - [ ] `locale_str` used for name and description
+- [ ] `locale_str` used for parameter descriptions in `@app_commands.describe(...)` — not raw strings
 - [ ] Permissions set if admin command
 - [ ] Tests written and passing (`pytest`)
 - [ ] New repository connected via `bot.db_manager.get_connection(guild_id)` and constructed inline in the command
