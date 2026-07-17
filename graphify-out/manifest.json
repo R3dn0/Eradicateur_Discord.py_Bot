@@ -30,12 +30,12 @@
     "semantic_hash": ""
   },
   "bot/main.py": {
-    "mtime": 1784274452.1802564,
-    "ast_hash": "37677cdd93b167c1c5a727fd7c6a0736",
+    "mtime": 1784275257.617388,
+    "ast_hash": "3231eac6aff26f0f8933f7b048c5ee92",
     "semantic_hash": ""
   },
   "bot/repositories/__init__.py": {
-    "mtime": 1784274016.3946044,
+    "mtime": 1784274876.615888,
     "ast_hash": "9fff93c091fc05a2bac9c26bd9330a64",
     "semantic_hash": ""
   },
@@ -45,8 +45,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1784274000.7103193,
-    "ast_hash": "f267ad0d0b6d62a55778038a35c6f3e4",
+    "mtime": 1784275280.4493704,
+    "ast_hash": "da414e3e3f37073c59f7a8520fdc63c0",
     "semantic_hash": ""
   },
   "requirements.txt": {
@@ -60,13 +60,13 @@
     "semantic_hash": "2ab4418c359399b32ca632bea78343a4"
   },
   "bot/locales/fr.json": {
-    "mtime": 1784273987.0340693,
-    "ast_hash": "57107a5373dffe0d7e8601d90f1d5d5a",
+    "mtime": 1784275252.1733906,
+    "ast_hash": "9aef2f4548f6820e768a75509021e186",
     "semantic_hash": ""
   },
   "README.fr.md": {
-    "mtime": 1784274004.2903845,
-    "ast_hash": "079c5b47ee8b7a5c5c25e7fb7e6133c3",
+    "mtime": 1784275283.0653698,
+    "ast_hash": "40d45eddc80e7b9adb532fd4b6ef6550",
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
@@ -110,13 +110,13 @@
     "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
   },
   "tests/test_cogs.py": {
-    "mtime": 1784274016.3946044,
-    "ast_hash": "0c5e289ea2f64b353c3eeb1d7f89b81a",
+    "mtime": 1784275274.6253738,
+    "ast_hash": "0a0274b7e7b2bfdf868ca41403b784e6",
     "semantic_hash": ""
   },
   "COMMANDS_GUIDE.md": {
-    "mtime": 1784274009.1224725,
-    "ast_hash": "8c9ecc69a20b1abcd6afff2fc62f35ca",
+    "mtime": 1784275296.5613527,
+    "ast_hash": "f944f485b73fe0679931e26fc198543d",
     "semantic_hash": ""
   },
   ".opencode/package.json": {
@@ -125,7 +125,7 @@
     "semantic_hash": "ab7ab0400c6c7b4762981916377e48e5"
   },
   "bot/repositories/payout_config_repository.py": {
-    "mtime": 1784274016.3946044,
+    "mtime": 1784274876.6159687,
     "ast_hash": "5ac07da1fdeceb1e5b323fec743368f0",
     "semantic_hash": ""
   },
@@ -145,7 +145,7 @@
     "semantic_hash": "47478cb2bb08972f2edfb1f754d5ca82"
   },
   "tests/repositories/test_payout_config_repository.py": {
-    "mtime": 1784274016.3946044,
+    "mtime": 1784274876.6178474,
     "ast_hash": "96690945b699753d2fa876d367768d86",
     "semantic_hash": ""
   },
@@ -170,7 +170,7 @@
     "semantic_hash": ""
   },
   "bot/cogs/config/cog.py": {
-    "mtime": 1784274016.3946044,
+    "mtime": 1784274876.6153634,
     "ast_hash": "ed1bfbf788a854ac146841b2b51cea4a",
     "semantic_hash": ""
   },
@@ -180,17 +180,17 @@
     "semantic_hash": ""
   },
   "bot/cogs/payout/cog.py": {
-    "mtime": 1784273275.955348,
+    "mtime": 1784274876.6154876,
     "ast_hash": "d4dedef1e5ce66d9247a7aab38e1ad35",
     "semantic_hash": ""
   },
   "bot/cogs/payout/views.py": {
-    "mtime": 1784274016.3946044,
+    "mtime": 1784274876.6156049,
     "ast_hash": "345e6ffecef243853c7a8a44f4e4ec0c",
     "semantic_hash": ""
   },
   "bot/repositories/bot_config_repository.py": {
-    "mtime": 1784274016.3946044,
+    "mtime": 1784274876.6159687,
     "ast_hash": "98481ea8781263b21b90cfc81df588ee",
     "semantic_hash": ""
   },
@@ -210,7 +210,7 @@
     "semantic_hash": ""
   },
   "tests/repositories/test_bot_config_repository.py": {
-    "mtime": 1784273994.0701978,
+    "mtime": 1784274876.617771,
     "ast_hash": "d0800a2e182e4c11abcf3c8bddfc0eb1",
     "semantic_hash": ""
   },
@@ -235,7 +235,7 @@
     "semantic_hash": ""
   },
   "tests/services/test_payout_config_service.py": {
-    "mtime": 1784274016.3946044,
+    "mtime": 1784274876.6179085,
     "ast_hash": "b42a9de332d9601f4c5f18d454885894",
     "semantic_hash": ""
   },
@@ -245,18 +245,28 @@
     "semantic_hash": ""
   },
   "bot/cogs/balance/cog.py": {
-    "mtime": 1784273275.9513478,
+    "mtime": 1784274876.6152625,
     "ast_hash": "481a2bbaa06ed7090d2fe825834ae067",
     "semantic_hash": ""
   },
   "bot/db_manager.py": {
-    "mtime": 1784274016.3946044,
+    "mtime": 1784274876.6156974,
     "ast_hash": "5f54b0096898de6d68d483edeeffa610",
     "semantic_hash": ""
   },
   "tests/test_db_manager.py": {
-    "mtime": 1784274016.3946044,
+    "mtime": 1784274876.618023,
     "ast_hash": "9b3556ae01b08c43696da53897151ffc",
+    "semantic_hash": ""
+  },
+  "bot/cogs/help/__init__.py": {
+    "mtime": 1784275246.169389,
+    "ast_hash": "03b2fd2c2e0e61a223186874472334e0",
+    "semantic_hash": ""
+  },
+  "bot/cogs/help/cog.py": {
+    "mtime": 1784275303.773349,
+    "ast_hash": "f5218b9b58290df5919e27bfcbd0dc10",
     "semantic_hash": ""
   }
 }

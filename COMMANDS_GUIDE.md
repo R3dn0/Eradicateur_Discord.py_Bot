@@ -526,6 +526,7 @@ pytest --cov=bot
 - [ ] Permissions set if admin command
 - [ ] Tests written and passing (`pytest`)
 - [ ] New repository connected via `bot.db_manager.get_connection(guild_id)` and constructed inline in the command
+- [ ] `/help` static list updated in `bot/cogs/help/cog.py` (`_CATEGORIES`) — it won't auto-discover new commands
 
 ## Modal patterns
 

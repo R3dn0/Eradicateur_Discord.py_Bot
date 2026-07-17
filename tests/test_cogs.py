@@ -3,6 +3,7 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock
 import discord
 from bot.cogs.guild_commands import GuildCommands
+from bot.cogs.help.cog import HelpCog
 from bot.cogs.payout.cog import PayoutCog
 from bot.repositories.payout_config_repository import (
     PayoutConfigRepository,
@@ -946,3 +947,23 @@ class TestBalanceAjouter:
         assert balance == 1000
 
         interaction.response.send_message.assert_awaited_once()
+
+
+class TestHelpCommand:
+    @pytest.fixture
+    def cog(self):
+        bot = MagicMock()
+        bot.translate = AsyncMock(side_effect=lambda key, locale: key)
+        return HelpCog(bot)
+
+    @pytest.mark.asyncio
+    async def test_help_responds_with_embed(self, cog):
+        interaction = AsyncMock(spec=discord.Interaction)
+        interaction.response = AsyncMock()
+        await cog.help.callback(cog, interaction)
+        interaction.response.send_message.assert_awaited_once()
+        call_args = interaction.response.send_message.call_args
+        embed = call_args[1]["embed"]
+        assert isinstance(embed, discord.Embed)
+        assert embed.title is not None
+        assert call_args[1]["ephemeral"] is True

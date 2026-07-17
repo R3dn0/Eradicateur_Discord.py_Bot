@@ -35,6 +35,7 @@ class EradicateurBot(commands.Bot):
         await self.load_extension("bot.cogs.payout")
         await self.load_extension("bot.cogs.config")
         await self.load_extension("bot.cogs.balance")
+        await self.load_extension("bot.cogs.help")
 
         if self.config.guild_id:
             for gid in self.config.guild_id:
