@@ -70,9 +70,9 @@
     "semantic_hash": ""
   },
   ".github/workflows/ci.yml": {
-    "mtime": 1784069780.4922001,
-    "ast_hash": "924e0f968e79183ffce27708287da65e",
-    "semantic_hash": "924e0f968e79183ffce27708287da65e"
+    "mtime": 1784246479.0757165,
+    "ast_hash": "cf982c9e35819855ae8543b5b6c2f696",
+    "semantic_hash": ""
   },
   ".pre-commit-config.yaml": {
     "mtime": 1784067010.7696626,
