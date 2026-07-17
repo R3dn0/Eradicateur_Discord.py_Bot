@@ -1,3 +1,5 @@
+import logging
+
 import discord
 
 from bot.main import EradicateurBot
@@ -12,6 +14,8 @@ from bot.repositories.transaction_repository import (
 from bot.services.payout_config_service import PayoutConfigService
 from bot.services.payout_service import PayoutSplitResult, compute_split
 from bot.utils.discord_dm import send_bulk_dm
+
+logger = logging.getLogger("eradicateur_bot.payout")
 
 
 class PayoutCreateModal(discord.ui.Modal):
@@ -53,10 +57,14 @@ class PayoutCreateModal(discord.ui.Modal):
 
     async def on_submit(self, interaction: discord.Interaction) -> None:
         try:
-            bag_silvers = float(self.bag_silvers.value)
-            item_market_value = float(self.item_market_value.value)
-            activity_cost = float(self.activity_cost.value)
+            bag_silvers = int(self.bag_silvers.value)
+            item_market_value = int(self.item_market_value.value)
+            activity_cost = int(self.activity_cost.value)
         except ValueError:
+            await interaction.response.send_message(self._invalid_msg, ephemeral=True)
+            return
+
+        if bag_silvers <= 0 or item_market_value <= 0 or activity_cost < 0:
             await interaction.response.send_message(self._invalid_msg, ephemeral=True)
             return
 
@@ -91,9 +99,9 @@ class PayoutCreateModal(discord.ui.Modal):
 class ParticipantSelectView(discord.ui.View):
     def __init__(
         self,
-        bag_silvers: float,
-        item_market_value: float,
-        activity_cost: float,
+        bag_silvers: int,
+        item_market_value: int,
+        activity_cost: int,
         select_placeholder: str,
         finish_label: str,
         cancel_label: str,
@@ -327,9 +335,9 @@ class RemoveParticipantsView(discord.ui.View):
 class ConfirmCancelView(discord.ui.View):
     def __init__(
         self,
-        bag_silvers: float,
-        item_market_value: float,
-        activity_cost: float,
+        bag_silvers: int,
+        item_market_value: int,
+        activity_cost: int,
         tax_market: float,
         tax_guild: float,
         tax_transport: float,
@@ -362,6 +370,7 @@ class ConfirmCancelView(discord.ui.View):
         interaction: discord.Interaction,
         button: discord.ui.Button,
     ) -> None:
+        await interaction.response.defer(ephemeral=True)
         bot: EradicateurBot = interaction.client  # type: ignore
         assert interaction.channel is not None
         assert interaction.guild is not None
@@ -374,18 +383,36 @@ class ConfirmCancelView(discord.ui.View):
 
         n = len(self.participant_ids)
         created_by = interaction.user.id
-        payout_id = await payout_repo.create_payout(
-            bag_silvers=self.bag_silvers,
-            item_market_value=self.item_market_value,
-            activity_cost=self.activity_cost,
-            tax_market=self.tax_market,
-            tax_guild=self.tax_guild,
-            tax_transport=self.tax_transport,
-            amount_per_player=self.split.amount_per_player,
-            buyback_value=self.split.buyback_value,
-            participant_ids=self.participant_ids,
-            created_by=created_by,
-        )
+
+        try:
+            payout_id = await payout_repo.create_payout(
+                bag_silvers=self.bag_silvers,
+                item_market_value=self.item_market_value,
+                activity_cost=self.activity_cost,
+                tax_market=self.tax_market,
+                tax_guild=self.tax_guild,
+                tax_transport=self.tax_transport,
+                amount_per_player=self.split.amount_per_player,
+                buyback_value=self.split.buyback_value,
+                participant_ids=self.participant_ids,
+                created_by=created_by,
+            )
+        except Exception:
+            logger.exception(
+                "Failed to create payout — guild=%s participants=%d",
+                interaction.guild.id,
+                n,
+            )
+            failed_msg = await bot.translate("payout_create_failed", interaction.locale)
+            try:
+                await interaction.edit_original_response(
+                    content=failed_msg,
+                    embed=None,
+                    view=self,
+                )
+            except Exception:
+                logger.exception("Failed to send payout creation error response")
+            return
 
         bot_config = await bot_config_repo.get_config()
         no_dm_role_id = bot_config.notification_opt_out_role_id
@@ -447,27 +474,47 @@ class ConfirmCancelView(discord.ui.View):
         )
         public_embed.add_field(name=list_label, value=self.participant_mentions, inline=False)
 
-        await interaction.channel.send(embed=public_embed)  # type: ignore
+        announce_failed = False
+        try:
+            await interaction.channel.send(embed=public_embed)  # type: ignore
+        except Exception:
+            logger.exception(
+                "Payout %s created but public announcement failed — guild=%s",
+                payout_id,
+                interaction.guild.id,
+            )
+            announce_failed = True
 
-        success = await bot.translate("payout_success", interaction.locale)
-        success = success.replace("{id}", str(payout_id)).replace("{n}", str(n))
+        if announce_failed:
+            template = await bot.translate("payout_announce_failed", interaction.locale)
+            success = template.replace("{id}", str(payout_id))
+        else:
+            success = await bot.translate("payout_success", interaction.locale)
+            success = success.replace("{id}", str(payout_id)).replace("{n}", str(n))
 
-        if result.skipped:
-            optout_note = await bot.translate("payout_dm_optout_note", interaction.locale)
-            success += "\n" + optout_note.replace("{n}", str(len(result.skipped)))
+            if result.skipped:
+                optout_note = await bot.translate("payout_dm_optout_note", interaction.locale)
+                success += "\n" + optout_note.replace("{n}", str(len(result.skipped)))
 
-        if result.failed:
-            failure_note = await bot.translate("payout_dm_failure_note", interaction.locale)
-            failed_mentions = ", ".join(f"<@{uid}>" for uid in result.failed)
-            success += "\n" + failure_note.replace("{users}", failed_mentions)
+            if result.failed:
+                failure_note = await bot.translate("payout_dm_failure_note", interaction.locale)
+                failed_mentions = ", ".join(f"<@{uid}>" for uid in result.failed)
+                success += "\n" + failure_note.replace("{users}", failed_mentions)
 
         for child in self.children:
             child.disabled = True  # type: ignore
-        await interaction.response.edit_message(
-            content=success,
-            embed=None,
-            view=self,
-        )
+        try:
+            await interaction.edit_original_response(
+                content=success,
+                embed=None,
+                view=self,
+            )
+        except Exception:
+            logger.exception(
+                "Failed to edit original response after payout %s — guild=%s",
+                payout_id,
+                interaction.guild.id,
+            )
 
     @discord.ui.button(label="cancel", style=discord.ButtonStyle.red)
     async def cancel(

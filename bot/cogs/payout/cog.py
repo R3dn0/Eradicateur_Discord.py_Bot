@@ -4,7 +4,12 @@ from discord.ext import commands
 
 from bot.cogs.payout.views import PayoutCreateModal
 from bot.main import EradicateurBot
+from bot.repositories.bot_config_repository import BotConfigRepository
+from bot.repositories.payout_repository import PayoutRepository
+from bot.repositories.transaction_repository import TransactionRepository
+from bot.utils.discord_guards import require_guild_member
 from bot.utils.discord_time import to_discord_timestamp
+from bot.utils.discord_dm import send_bulk_dm
 from bot.repositories.payout_config_repository import (
     PayoutConfigRepository,
 )
@@ -29,17 +34,8 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
             key="payout_create_description",
         ),
     )
+    @require_guild_member
     async def create(self, interaction: discord.Interaction) -> None:
-        if not isinstance(interaction.user, discord.Member):
-            msg = await self.bot.translate("payout_server_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
-            return
-
-        if interaction.guild is None:
-            msg = await self.bot.translate("payout_server_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
-            return
-
         assert self.bot.db_manager is not None
         db = await self.bot.db_manager.get_connection(interaction.guild.id)
         payout_config_repo = PayoutConfigRepository(db)
@@ -77,6 +73,148 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
         )
         await interaction.response.send_modal(modal)
 
+    @app_commands.command(
+        name=app_commands.locale_str("void", key="payout_void_name"),
+        description=app_commands.locale_str(
+            "Void a payout and refund all participants",
+            key="payout_void_description",
+        ),
+    )
+    @app_commands.describe(
+        payout_id=app_commands.locale_str(
+            "ID of the payout to void",
+            key="payout_void_id_description",
+        ),
+    )
+    @require_guild_member
+    async def void(
+        self,
+        interaction: discord.Interaction,
+        payout_id: int,
+    ) -> None:
+        assert self.bot.db_manager is not None
+        db = await self.bot.db_manager.get_connection(interaction.guild.id)
+        payout_config_repo = PayoutConfigRepository(db)
+        payout_config_service = PayoutConfigService(payout_config_repo)
+
+        if not await payout_config_service.is_officer(interaction.user):
+            msg = await self.bot.translate("payout_officer_only", interaction.locale)
+            await interaction.response.send_message(msg, ephemeral=True)
+            return
+
+        payout_repo = PayoutRepository(db, TransactionRepository(db))
+        payout = await payout_repo.get_payout(payout_id)
+        if payout is None:
+            template = await self.bot.translate("payout_void_not_found", interaction.locale)
+            await interaction.response.send_message(
+                template.replace("{id}", str(payout_id)),
+                ephemeral=True,
+            )
+            return
+
+        if payout.voided:
+            template = await self.bot.translate("payout_void_already_voided", interaction.locale)
+            await interaction.response.send_message(
+                template.replace("{id}", str(payout_id)),
+                ephemeral=True,
+            )
+            return
+
+        await payout_repo.void_payout(payout_id, voided_by=interaction.user.id)
+
+        bot_config_repo = BotConfigRepository(db)
+        bot_config = await bot_config_repo.get_config()
+        no_dm_role_id = bot_config.notification_opt_out_role_id
+
+        void_dm_title = await self.bot.translate("payout_void_dm_title", interaction.locale)
+        void_dm_balance = await self.bot.translate("payout_void_dm_new_balance", interaction.locale)
+        void_dm_adjusted = await self.bot.translate("payout_void_dm_adjusted", interaction.locale)
+
+        transaction_repo = TransactionRepository(db)
+
+        async def _build_void_content(member: discord.Member) -> discord.Embed:
+            new_balance = await transaction_repo.get_balance(member.id)
+            embed = discord.Embed(
+                title=void_dm_title,
+                color=discord.Color.orange(),
+            )
+            embed.add_field(
+                name=void_dm_adjusted,
+                value=f"{payout.amount_per_player:,.0f}",
+                inline=True,
+            )
+            embed.add_field(
+                name=void_dm_balance,
+                value=f"{new_balance:,.0f}",
+                inline=True,
+            )
+            return embed
+
+        txns = await transaction_repo.list_transactions_for_payout(payout_id)
+        participant_ids = list({t.discord_id for t in txns})
+
+        result = await send_bulk_dm(
+            guild=interaction.guild,
+            member_ids=participant_ids,
+            build_content=_build_void_content,
+            opt_out_role_id=no_dm_role_id,
+        )
+
+        n = payout.participant_count
+        success = await self.bot.translate("payout_void_success", interaction.locale)
+        success = success.replace("{id}", str(payout_id)).replace("{n}", str(n))
+
+        if result.skipped:
+            optout_note = await self.bot.translate("payout_dm_optout_note", interaction.locale)
+            success += "\n" + optout_note.replace("{n}", str(len(result.skipped)))
+
+        if result.failed:
+            failure_note = await self.bot.translate("payout_dm_failure_note", interaction.locale)
+            failed_mentions = ", ".join(f"<@{uid}>" for uid in result.failed)
+            success += "\n" + failure_note.replace("{users}", failed_mentions)
+
+        embed = discord.Embed(
+            title=(await self.bot.translate("payout_void_embed_title", interaction.locale)).replace(
+                "{id}", str(payout_id)
+            ),
+            color=discord.Color.orange(),
+        )
+        embed.add_field(
+            name=await self.bot.translate("payout_embed_gain", interaction.locale),
+            value=f"{payout.bag_silvers:,.0f}",
+            inline=True,
+        )
+        embed.add_field(
+            name=await self.bot.translate("payout_embed_item", interaction.locale),
+            value=f"{payout.item_market_value:,.0f}",
+            inline=True,
+        )
+        embed.add_field(
+            name=await self.bot.translate("payout_embed_cost", interaction.locale),
+            value=f"{payout.activity_cost:,.0f}",
+            inline=True,
+        )
+        embed.add_field(
+            name=await self.bot.translate("payout_embed_participants", interaction.locale),
+            value=str(n),
+            inline=True,
+        )
+        embed.add_field(
+            name=await self.bot.translate("payout_embed_amount", interaction.locale),
+            value=f"{payout.amount_per_player:,.0f}",
+            inline=True,
+        )
+        template = await self.bot.translate("payout_void_reversed_by", interaction.locale)
+        embed.add_field(
+            name=await self.bot.translate("payout_embed_buyback", interaction.locale),
+            value=template.replace("{user}", interaction.user.mention).replace(
+                "{date}", to_discord_timestamp(payout.created_at)
+            ),
+            inline=False,
+        )
+
+        await interaction.response.send_message(content=success, embed=embed, ephemeral=True)
+
     @config.command(
         name=app_commands.locale_str("roles", key="payout_config_roles_name"),
         description=app_commands.locale_str(
@@ -91,17 +229,13 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
         ),
         leader=app_commands.locale_str("Leader role", key="payout_config_roles_leader_description"),
     )
+    @require_guild_member
     async def config_roles(
         self,
         interaction: discord.Interaction,
         leader: discord.Role,
         officer: discord.Role,
     ) -> None:
-        if interaction.guild is None:
-            msg = await self.bot.translate("payout_server_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
-            return
-
         assert self.bot.db_manager is not None
         db = await self.bot.db_manager.get_connection(interaction.guild.id)
         payout_config_repo = PayoutConfigRepository(db)
@@ -139,6 +273,7 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
             key="payout_config_rates_transport_description",
         ),
     )
+    @require_guild_member
     async def config_rates(
         self,
         interaction: discord.Interaction,
@@ -146,16 +281,6 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
         guild: float,
         transport: float,
     ) -> None:
-        if not isinstance(interaction.user, discord.Member):
-            msg = await self.bot.translate("payout_server_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
-            return
-
-        if interaction.guild is None:
-            msg = await self.bot.translate("payout_server_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
-            return
-
         assert self.bot.db_manager is not None
         db = await self.bot.db_manager.get_connection(interaction.guild.id)
         payout_config_repo = PayoutConfigRepository(db)
@@ -228,21 +353,12 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
             ),
         ]
     )
+    @require_guild_member
     async def config_permissions(
         self,
         interaction: discord.Interaction,
         level: str,
     ) -> None:
-        if not isinstance(interaction.user, discord.Member):
-            msg = await self.bot.translate("payout_server_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
-            return
-
-        if interaction.guild is None:
-            msg = await self.bot.translate("payout_server_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
-            return
-
         assert self.bot.db_manager is not None
         db = await self.bot.db_manager.get_connection(interaction.guild.id)
         payout_config_repo = PayoutConfigRepository(db)
@@ -277,12 +393,8 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
             key="payout_config_show_description",
         ),
     )
+    @require_guild_member
     async def config_show(self, interaction: discord.Interaction) -> None:
-        if interaction.guild is None:
-            msg = await self.bot.translate("payout_server_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
-            return
-
         assert self.bot.db_manager is not None
         db = await self.bot.db_manager.get_connection(interaction.guild.id)
         payout_config_repo = PayoutConfigRepository(db)
