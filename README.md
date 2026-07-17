@@ -21,6 +21,7 @@ python -m bot.main
 **Payout / Ledger** (`payout/`):
 
 - `/payout create` — open a modal to create a new payout. On confirm, posts a public recap embed and notifies each participant by DM with their received amount and new balance. *(Requires: Officer role)*
+- `/payout void <payout_id>` — reverse a completed payout: marks it voided, inserts compensating transactions for each participant (net zero), and sends DMs with adjusted balances. Rejects already-voided or unknown payouts. *(Requires: Officer role)*
 - `/payout config roles` — set the officer and leader roles for payout management. *(Requires: Administrator permission)*
 - `/payout config rates` — update tax rates used in payout calculations. *(Requires: Leader role)*
 - `/payout config permissions` — set the permission level required for `/balance payer` and `/balance ajouter`. *(Requires: Leader role)*
@@ -29,6 +30,7 @@ python -m bot.main
 **Balance** (`balance/`):
 
 - `/balance show [member]` — view your own balance (no restriction) or another member's balance if authorized. *(Viewing others requires the pay/add permission level — Officer or Leader, depending on `/payout config permissions`)*
+- `/balance history [member]` — view a member's transaction history with pagination (Prev/Next). Viewing your own is unrestricted; viewing others requires the pay/add permission level. *(No restriction for own history)*
 - `/balance list` — list all members with a non-zero balance. *(Requires the pay/add permission level)*
 - `/balance payer` — manually withdraw an amount from a player's balance (rejects if insufficient funds). *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
 - `/balance ajouter` — manually credit a player's balance with a reason. *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
