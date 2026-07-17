@@ -1,6 +1,6 @@
 import aiosqlite
 import pytest
-from unittest.mock import AsyncMock, MagicMock
+from unittest.mock import AsyncMock, MagicMock, patch
 import discord
 from bot.cogs.guild_commands import GuildCommands
 from bot.cogs.help.cog import HelpCog
@@ -8,6 +8,7 @@ from bot.cogs.payout.cog import PayoutCog
 from bot.repositories.payout_config_repository import (
     PayoutConfigRepository,
 )
+from bot.repositories.payout_repository import PayoutRepository
 from bot.repositories.transaction_repository import (
     TransactionRepository,
 )
@@ -55,9 +56,9 @@ class TestPingCommand:
 class TestPayoutDeduplication:
     def test_deduplicates_across_batches(self):
         view = ParticipantSelectView(
-            bag_silvers=1000000.0,
-            item_market_value=5000000.0,
-            activity_cost=500000.0,
+            bag_silvers=1000000,
+            item_market_value=5000000,
+            activity_cost=500000,
             select_placeholder="test",
             finish_label="Terminer",
             cancel_label="Annuler",
@@ -73,9 +74,9 @@ class TestPayoutDeduplication:
 
     def test_remove_flow_deduplicates_correctly(self):
         view = ParticipantSelectView(
-            bag_silvers=1000000.0,
-            item_market_value=5000000.0,
-            activity_cost=500000.0,
+            bag_silvers=1000000,
+            item_market_value=5000000,
+            activity_cost=500000,
             select_placeholder="test",
             finish_label="Terminer",
             cancel_label="Annuler",
@@ -100,9 +101,9 @@ class TestConfirmCancelViewDMNotifications:
     @pytest.fixture
     def view(self):
         return ConfirmCancelView(
-            bag_silvers=1000000.0,
-            item_market_value=5000000.0,
-            activity_cost=500000.0,
+            bag_silvers=1000000,
+            item_market_value=5000000,
+            activity_cost=500000,
             tax_market=0.05,
             tax_guild=0.05,
             tax_transport=0.05,
@@ -112,9 +113,9 @@ class TestConfirmCancelViewDMNotifications:
                 silver_per_player=0,
                 item_net=0.0,
                 item_per_player=0,
-                amount_per_player=50000.0,
+                amount_per_player=50000,
                 total_pool=800000.0,
-                buyback_value=4000000.0,
+                buyback_value=4000000,
             ),
             participant_ids=[111, 222, 333],
             participant_mentions="<@111> <@222> <@333>",
@@ -219,9 +220,9 @@ class TestConfirmCancelViewDMNotifications:
 
         interaction.channel.send.assert_awaited_once()
 
-        interaction.response.edit_message.assert_awaited_once()
+        interaction.edit_original_response.assert_awaited_once()
 
-        call_args = interaction.response.edit_message.call_args
+        call_args = interaction.edit_original_response.call_args
         content = call_args[1]["content"]
         assert "⚠️" in content
         assert "<@333>" in content
@@ -305,7 +306,7 @@ class TestConfirmCancelViewDMNotifications:
         member_222.send.assert_awaited_once()
         member_333.send.assert_awaited_once()
 
-        call_args = interaction.response.edit_message.call_args
+        call_args = interaction.edit_original_response.call_args
         content = call_args[1]["content"]
         assert "⚠️" not in content
         assert "ℹ️" in content or "désactivé" in content
@@ -353,10 +354,31 @@ class TestConfirmCancelViewDMNotifications:
         member_222.send.assert_awaited_once()
         member_333.send.assert_awaited_once()
 
-        call_args = interaction.response.edit_message.call_args
+        call_args = interaction.edit_original_response.call_args
         content = call_args[1]["content"]
         assert "⚠️" not in content
         assert "ℹ️" not in content
+
+    @pytest.mark.asyncio
+    async def test_confirm_create_payout_failure_does_not_send_dm(self, view, _setup_interaction):
+        interaction = _setup_interaction
+
+        with patch(
+            "bot.repositories.payout_repository.PayoutRepository.create_payout",
+            side_effect=RuntimeError("DB connection lost"),
+        ):
+            await view.confirm.callback(interaction)
+
+        interaction.channel.send.assert_not_called()
+
+        member_ok = interaction.guild.get_member(111)
+        member_fail = interaction.guild.get_member(333)
+        member_ok.send.assert_not_called()
+        member_fail.send.assert_not_called()
+
+        interaction.edit_original_response.assert_awaited_once()
+        call_args = interaction.edit_original_response.call_args
+        assert "payout_create_failed" in call_args[1]["content"]
 
 
 class TestPayoutConfigRates:
@@ -432,6 +454,372 @@ class TestPayoutConfigRates:
         assert config.tax_market == 0.02  # unchanged
 
         interaction.response.send_message.assert_awaited_once()
+
+
+class TestPayoutConfigRoles:
+    _OFFICER_ROLE_ID = 6001
+    _LEADER_ROLE_ID = 6002
+
+    @pytest.fixture
+    async def cog(self, db):
+        payout_config_repo = PayoutConfigRepository(db)
+        await payout_config_repo.get_config()
+
+        bot = MagicMock()
+        bot.db_manager = AsyncMock()
+        bot.db_manager.get_connection = AsyncMock(return_value=db)
+        bot.translate = AsyncMock(side_effect=lambda key, locale: key)
+        return PayoutCog(bot)
+
+    @pytest.fixture
+    def interaction(self):
+        interaction = AsyncMock(spec=discord.Interaction)
+        interaction.response = AsyncMock()
+        interaction.user = MagicMock(spec=discord.Member)
+        interaction.user.id = 5001
+        interaction.guild = MagicMock()
+        interaction.guild.id = 12345
+        return interaction
+
+    @pytest.mark.asyncio
+    async def test_config_roles_updates(self, cog, interaction, db):
+        officer = MagicMock(spec=discord.Role, id=self._OFFICER_ROLE_ID, mention="<@&6001>")
+        leader = MagicMock(spec=discord.Role, id=self._LEADER_ROLE_ID, mention="<@&6002>")
+
+        await cog.config_roles.callback(cog, interaction, officer=officer, leader=leader)
+
+        payout_config_repo = PayoutConfigRepository(db)
+        config = await payout_config_repo.get_config()
+        assert config.officer_role_id == self._OFFICER_ROLE_ID
+        assert config.leader_role_id == self._LEADER_ROLE_ID
+        interaction.response.send_message.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_config_permissions_officer_level(self, cog, interaction, db):
+        payout_config_repo = PayoutConfigRepository(db)
+        await payout_config_repo.update_roles(
+            officer_role_id=self._OFFICER_ROLE_ID,
+            leader_role_id=self._LEADER_ROLE_ID,
+            updated_by=0,
+        )
+        interaction.user.get_role = MagicMock(
+            side_effect=lambda rid: MagicMock() if rid == self._LEADER_ROLE_ID else None
+        )
+
+        await cog.config_permissions.callback(cog, interaction, level="officer")
+
+        config = await payout_config_repo.get_config()
+        assert config.pay_add_permission_level == "officer"
+        interaction.response.send_message.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_config_permissions_leader_only(self, cog, interaction, db):
+        payout_config_repo = PayoutConfigRepository(db)
+        await payout_config_repo.update_roles(
+            officer_role_id=self._OFFICER_ROLE_ID,
+            leader_role_id=self._LEADER_ROLE_ID,
+            updated_by=0,
+        )
+        interaction.user.get_role = MagicMock(
+            side_effect=lambda rid: MagicMock() if rid == self._OFFICER_ROLE_ID else None
+        )
+
+        await cog.config_permissions.callback(cog, interaction, level="leader")
+
+        config = await payout_config_repo.get_config()
+        assert config.pay_add_permission_level == "officer"  # unchanged
+        interaction.response.send_message.assert_awaited_once()
+        assert (
+            "payout_config_permissions_leader_only"
+            in interaction.response.send_message.call_args[0][0]
+        )
+
+    @pytest.mark.asyncio
+    async def test_config_show_returns_embed(self, cog, interaction, db):
+        payout_config_repo = PayoutConfigRepository(db)
+        await payout_config_repo.update_rates(
+            market=0.10, guild=0.05, transport=0.025, updated_by=0
+        )
+        await payout_config_repo.update_roles(
+            officer_role_id=6001, leader_role_id=6002, updated_by=0
+        )
+
+        await cog.config_show.callback(cog, interaction)
+
+        interaction.response.send_message.assert_awaited_once()
+        call_args = interaction.response.send_message.call_args
+        assert "embed" in call_args[1]
+        assert call_args[1]["ephemeral"] is True
+
+
+class TestPayoutVoid:
+    _OFFICER_ROLE_ID = 7001
+
+    @pytest.fixture
+    async def cog(self, db):
+        payout_config_repo = PayoutConfigRepository(db)
+        await payout_config_repo.get_config()
+        await payout_config_repo.update_roles(
+            officer_role_id=self._OFFICER_ROLE_ID,
+            leader_role_id=None,
+            updated_by=0,
+        )
+
+        bot = MagicMock()
+        bot.db_manager = AsyncMock()
+        bot.db_manager.get_connection = AsyncMock(return_value=db)
+        bot.translate = AsyncMock(side_effect=lambda key, locale: key)
+        return PayoutCog(bot)
+
+    @pytest.fixture
+    def interaction(self):
+        interaction = AsyncMock(spec=discord.Interaction)
+        interaction.response = AsyncMock()
+        interaction.user = MagicMock(spec=discord.Member)
+        interaction.user.id = 7000
+        interaction.user.mention = "<@7000>"
+        interaction.user.get_role = MagicMock(
+            side_effect=lambda rid: MagicMock() if rid == self._OFFICER_ROLE_ID else None
+        )
+        interaction.guild = MagicMock()
+        interaction.guild.id = 12345
+        return interaction
+
+    @pytest.mark.asyncio
+    async def test_void_requires_officer(self, cog, interaction, db):
+        interaction.user.get_role = MagicMock(return_value=None)
+
+        await cog.void.callback(cog, interaction, payout_id=1)
+
+        interaction.response.send_message.assert_awaited_once()
+        assert "payout_officer_only" in interaction.response.send_message.call_args[0][0]
+
+    @pytest.mark.asyncio
+    async def test_void_rejects_missing_payout(self, cog, interaction, db):
+        await cog.void.callback(cog, interaction, payout_id=99999)
+
+        interaction.response.send_message.assert_awaited_once()
+        assert "payout_void_not_found" in interaction.response.send_message.call_args[0][0]
+
+    @pytest.mark.asyncio
+    async def test_void_rejects_already_voided(self, cog, interaction, db):
+        payout_repo = PayoutRepository(db, TransactionRepository(db))
+        payout_id = await payout_repo.create_payout(
+            bag_silvers=1_000_000,
+            item_market_value=500_000,
+            activity_cost=50_000,
+            tax_market=0.02,
+            tax_guild=0.10,
+            tax_transport=0.03,
+            amount_per_player=100_000,
+            buyback_value=475_000,
+            participant_ids=[111],
+            created_by=7000,
+        )
+        await payout_repo.void_payout(payout_id, voided_by=7000)
+
+        await cog.void.callback(cog, interaction, payout_id=payout_id)
+
+        interaction.response.send_message.assert_awaited_once()
+        assert "payout_void_already_voided" in interaction.response.send_message.call_args[0][0]
+
+    @pytest.mark.asyncio
+    async def test_void_succeeds(self, cog, interaction, db):
+        transaction_repo = TransactionRepository(db)
+        payout_repo = PayoutRepository(db, transaction_repo)
+        payout_id = await payout_repo.create_payout(
+            bag_silvers=1_000_000,
+            item_market_value=500_000,
+            activity_cost=50_000,
+            tax_market=0.02,
+            tax_guild=0.10,
+            tax_transport=0.03,
+            amount_per_player=100_000,
+            buyback_value=475_000,
+            participant_ids=[111],
+            created_by=7000,
+        )
+
+        with patch("bot.cogs.payout.cog.send_bulk_dm", new_callable=AsyncMock) as mock_dm:
+            mock_dm.return_value = MagicMock(skipped=[], failed=[])
+            await cog.void.callback(cog, interaction, payout_id=payout_id)
+
+        payout = await payout_repo.get_payout(payout_id)
+        assert payout is not None and payout.voided is True
+        interaction.response.send_message.assert_awaited_once()
+        call_args = interaction.response.send_message.call_args
+        assert "payout_void_success" in call_args[1]["content"]
+        assert "embed" in call_args[1]
+
+
+class TestConfigCog:
+    @pytest.fixture
+    def cog(self, db):
+        bot = MagicMock()
+        bot.db_manager = AsyncMock()
+        bot.db_manager.get_connection = AsyncMock(return_value=db)
+        bot.translate = AsyncMock(side_effect=lambda key, locale: key)
+        from bot.cogs.config.cog import ConfigCog
+
+        return ConfigCog(bot)
+
+    @pytest.fixture
+    def interaction(self):
+        interaction = AsyncMock(spec=discord.Interaction)
+        interaction.response = AsyncMock()
+        interaction.user = MagicMock(spec=discord.Member)
+        interaction.user.id = 8000
+        interaction.user.get_role = MagicMock(return_value=None)
+        interaction.guild = MagicMock()
+        interaction.guild.id = 12345
+        return interaction
+
+    @pytest.mark.asyncio
+    async def test_opt_out_role_set(self, cog, interaction, db):
+        role = MagicMock(spec=discord.Role, id=5555, mention="<@&5555>")
+
+        await cog.opt_out_role.callback(cog, interaction, role=role)
+
+        from bot.repositories.bot_config_repository import BotConfigRepository
+
+        bot_config_repo = BotConfigRepository(db)
+        config = await bot_config_repo.get_config()
+        assert config.notification_opt_out_role_id == 5555
+        interaction.response.send_message.assert_awaited_once()
+        assert "config_nonotification_role_set" in interaction.response.send_message.call_args[0][0]
+
+    @pytest.mark.asyncio
+    async def test_opt_out_role_clear(self, cog, interaction, db):
+        await cog.opt_out_role.callback(cog, interaction, role=None)
+
+        interaction.response.send_message.assert_awaited_once()
+        assert (
+            "config_nonotification_role_cleared"
+            in interaction.response.send_message.call_args[0][0]
+        )
+
+    @pytest.mark.asyncio
+    async def test_show_returns_embed(self, cog, interaction, db):
+        await cog.show.callback(cog, interaction)
+
+        interaction.response.send_message.assert_awaited_once()
+        call_args = interaction.response.send_message.call_args
+        assert "embed" in call_args[1]
+        assert call_args[1]["ephemeral"] is True
+
+    @pytest.mark.asyncio
+    async def test_log_channel_set(self, cog, interaction, db):
+        channel = MagicMock(spec=discord.TextChannel, id=6666, mention="<#6666>")
+
+        await cog.log_channel.callback(cog, interaction, salon=channel)
+
+        from bot.repositories.bot_config_repository import BotConfigRepository
+
+        bot_config_repo = BotConfigRepository(db)
+        config = await bot_config_repo.get_config()
+        assert config.log_channel_id == 6666
+        interaction.response.send_message.assert_awaited_once()
+        assert "config_logs_channel_set" in interaction.response.send_message.call_args[0][0]
+
+    @pytest.mark.asyncio
+    async def test_log_channel_clear(self, cog, interaction, db):
+        await cog.log_channel.callback(cog, interaction, salon=None)
+
+        interaction.response.send_message.assert_awaited_once()
+        assert "config_logs_channel_cleared" in interaction.response.send_message.call_args[0][0]
+
+    @pytest.mark.asyncio
+    async def test_log_show_returns_embed(self, cog, interaction, db):
+        await cog.log_show.callback(cog, interaction)
+
+        interaction.response.send_message.assert_awaited_once()
+        call_args = interaction.response.send_message.call_args
+        assert "embed" in call_args[1]
+        assert call_args[1]["ephemeral"] is True
+
+
+class TestBalanceHistory:
+    _OFFICER_ROLE_ID = 7501
+    _LEADER_ROLE_ID = 7502
+
+    @pytest.fixture
+    async def cog(self, db):
+        payout_config_repo = PayoutConfigRepository(db)
+        await payout_config_repo.get_config()
+        await payout_config_repo.update_roles(
+            officer_role_id=self._OFFICER_ROLE_ID,
+            leader_role_id=self._LEADER_ROLE_ID,
+            updated_by=0,
+        )
+
+        bot = MagicMock()
+        bot.db_manager = AsyncMock()
+        bot.db_manager.get_connection = AsyncMock(return_value=db)
+        bot.translate = AsyncMock(side_effect=lambda key, locale: key)
+        from bot.cogs.balance.cog import BalanceCog
+
+        return BalanceCog(bot)
+
+    @pytest.fixture
+    def interaction(self):
+        interaction = AsyncMock(spec=discord.Interaction)
+        interaction.response = AsyncMock()
+        interaction.followup = AsyncMock()
+        interaction.user = MagicMock(spec=discord.Member)
+        interaction.user.id = 7500
+        interaction.user.get_role = MagicMock(
+            side_effect=lambda rid: MagicMock() if rid == self._OFFICER_ROLE_ID else None
+        )
+        interaction.guild = MagicMock()
+        interaction.guild.id = 12345
+        interaction.locale = "fr"
+        return interaction
+
+    @pytest.mark.asyncio
+    async def test_history_own_empty(self, cog, interaction, db):
+        await cog.history.callback(cog, interaction, member=None)
+
+        interaction.response.send_message.assert_awaited_once()
+        assert "balance_history_empty" in interaction.response.send_message.call_args[0][0]
+
+    @pytest.mark.asyncio
+    async def test_history_own_with_transactions(self, cog, interaction, db):
+        transaction_repo = TransactionRepository(db)
+        await transaction_repo.add_transaction(
+            discord_id=7500, amount=1000, reason="seed", created_by=0
+        )
+
+        await cog.history.callback(cog, interaction, member=None)
+
+        interaction.response.send_message.assert_awaited_once()
+        call_args = interaction.response.send_message.call_args
+        assert "embed" in call_args[1]
+
+    @pytest.mark.asyncio
+    async def test_history_other_authorized(self, cog, interaction, db):
+        transaction_repo = TransactionRepository(db)
+        await transaction_repo.add_transaction(
+            discord_id=111, amount=3000, reason="seed", created_by=0
+        )
+        target = MagicMock(spec=discord.Member)
+        target.id = 111
+
+        await cog.history.callback(cog, interaction, member=target)
+
+        interaction.response.send_message.assert_awaited_once()
+        call_args = interaction.response.send_message.call_args
+        assert "embed" in call_args[1]
+
+    @pytest.mark.asyncio
+    async def test_history_other_unauthorized(self, cog, interaction, db):
+        interaction.user.get_role = MagicMock(return_value=None)
+        target = MagicMock(spec=discord.Member)
+        target.id = 111
+
+        await cog.history.callback(cog, interaction, member=target)
+
+        interaction.response.send_message.assert_awaited_once()
+        assert "balance_history_officer_only" in interaction.response.send_message.call_args[0][0]
 
 
 class TestBalanceShow:
@@ -662,7 +1050,7 @@ class TestBalancePayer:
             created_by=0,
         )
 
-        await cog.payer.callback(cog, interaction, joueur=joueur, montant=2000.0)
+        await cog.payer.callback(cog, interaction, joueur=joueur, montant=2000)
 
         balance = await transaction_repo.get_balance(111)
         assert balance == 1000
@@ -682,7 +1070,7 @@ class TestBalancePayer:
             created_by=0,
         )
 
-        await cog.payer.callback(cog, interaction, joueur=joueur, montant=2000.0)
+        await cog.payer.callback(cog, interaction, joueur=joueur, montant=2000)
 
         new_balance = await transaction_repo.get_balance(111)
         assert new_balance == 3000
@@ -702,7 +1090,7 @@ class TestBalancePayer:
             created_by=0,
         )
 
-        await cog.payer.callback(cog, interaction, joueur=joueur, montant=0.0)
+        await cog.payer.callback(cog, interaction, joueur=joueur, montant=0)
 
         balance = await transaction_repo.get_balance(111)
         assert balance == 1000
@@ -725,7 +1113,7 @@ class TestBalancePayer:
             created_by=0,
         )
 
-        await cog.payer.callback(cog, interaction, joueur=joueur, montant=1000.0)
+        await cog.payer.callback(cog, interaction, joueur=joueur, montant=1000)
 
         new_balance = await transaction_repo.get_balance(111)
         assert new_balance == 4000
@@ -744,7 +1132,7 @@ class TestBalancePayer:
             updated_by=0,
         )
 
-        await cog.payer.callback(cog, interaction, joueur=joueur, montant=1000.0)
+        await cog.payer.callback(cog, interaction, joueur=joueur, montant=1000)
 
         transaction_repo = TransactionRepository(db)
         balance = await transaction_repo.get_balance(111)
@@ -778,7 +1166,7 @@ class TestBalancePayer:
             created_by=0,
         )
 
-        await cog.payer.callback(cog, interaction, joueur=joueur, montant=1000.0)
+        await cog.payer.callback(cog, interaction, joueur=joueur, montant=1000)
 
         new_balance = await transaction_repo.get_balance(111)
         assert new_balance == 4000
@@ -840,7 +1228,7 @@ class TestBalanceAjouter:
             cog,
             interaction,
             joueur=joueur,
-            montant=3000.0,
+            montant=3000,
             raison="Bonus",
         )
 
@@ -859,7 +1247,7 @@ class TestBalanceAjouter:
             cog,
             interaction,
             joueur=joueur,
-            montant=-5.0,
+            montant=-5,
             raison="Test",
         )
 
@@ -881,7 +1269,7 @@ class TestBalanceAjouter:
             cog,
             interaction,
             joueur=joueur,
-            montant=1000.0,
+            montant=1000,
             raison="Test",
         )
 
@@ -907,7 +1295,7 @@ class TestBalanceAjouter:
             cog,
             interaction,
             joueur=joueur,
-            montant=1000.0,
+            montant=1000,
             raison="Test",
         )
 
@@ -939,7 +1327,7 @@ class TestBalanceAjouter:
             cog,
             interaction,
             joueur=joueur,
-            montant=1000.0,
+            montant=1000,
             raison="Test",
         )
 
