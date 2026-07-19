@@ -201,6 +201,7 @@ class TestConfirmCancelViewDMNotifications:
         interaction.user = MagicMock()
         interaction.user.id = 999
         interaction.user.mention = "<@999>"
+        interaction.user.display_name = "Officer"
         interaction.locale = "fr"
         interaction.response = AsyncMock()
         return interaction
@@ -346,6 +347,7 @@ class TestConfirmCancelViewDMNotifications:
         interaction.user = MagicMock()
         interaction.user.id = 999
         interaction.user.mention = "<@999>"
+        interaction.user.display_name = "Officer"
         interaction.locale = "fr"
         interaction.response = AsyncMock()
 
@@ -397,6 +399,7 @@ class TestConfirmCancelViewDMNotifications:
         interaction.user = MagicMock()
         interaction.user.id = 999
         interaction.user.mention = "<@999>"
+        interaction.user.display_name = "Officer"
         interaction.locale = "fr"
         interaction.response = AsyncMock()
 
@@ -634,6 +637,7 @@ class TestPayoutVoid:
         interaction.user = MagicMock(spec=discord.Member)
         interaction.user.id = 7000
         interaction.user.mention = "<@7000>"
+        interaction.user.display_name = "Officer"
         interaction.user.get_role = MagicMock(
             side_effect=lambda rid: MagicMock() if rid == self._OFFICER_ROLE_ID else None
         )
@@ -1084,6 +1088,7 @@ class TestBalancePayer:
         interaction.user = MagicMock(spec=discord.Member)
         interaction.user.id = 999
         interaction.user.mention = "<@999>"
+        interaction.user.display_name = "Officer"
         interaction.user.get_role = MagicMock(
             side_effect=lambda rid: MagicMock() if rid == self._OFFICER_ROLE_ID else None
         )
@@ -1321,6 +1326,7 @@ class TestBalanceAjouter:
         interaction.user = MagicMock(spec=discord.Member)
         interaction.user.id = 999
         interaction.user.mention = "<@999>"
+        interaction.user.display_name = "Officer"
         interaction.user.get_role = MagicMock(
             side_effect=lambda rid: MagicMock() if rid == self._OFFICER_ROLE_ID else None
         )

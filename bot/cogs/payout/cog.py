@@ -155,7 +155,7 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
 
         context_template = await self.bot.translate("dm_context", interaction.locale)
         action = f"Payout #{payout_id}"
-        context = context_template.replace("{user}", interaction.user.mention).replace(
+        context = context_template.replace("{user}", interaction.user.display_name).replace(
             "{action}", action
         )
         result = await send_bulk_dm(

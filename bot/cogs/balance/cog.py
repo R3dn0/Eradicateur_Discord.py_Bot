@@ -294,7 +294,7 @@ class BalanceCog(
 
         dm_context_template = await self.bot.translate("dm_context", interaction.locale)
         action = await self.bot.translate("balance_pay_dm_action", interaction.locale)
-        context = dm_context_template.replace("{user}", interaction.user.mention).replace(
+        context = dm_context_template.replace("{user}", interaction.user.display_name).replace(
             "{action}", action
         )
 
@@ -402,7 +402,7 @@ class BalanceCog(
 
         dm_context_template = await self.bot.translate("dm_context", interaction.locale)
         action = await self.bot.translate("balance_add_dm_action", interaction.locale)
-        context = dm_context_template.replace("{user}", interaction.user.mention).replace(
+        context = dm_context_template.replace("{user}", interaction.user.display_name).replace(
             "{action}", action
         )
 
