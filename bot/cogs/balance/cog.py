@@ -210,7 +210,7 @@ class BalanceCog(
         ),
     )
     @require_guild_member
-    async def payer(
+    async def pay(
         self,
         interaction: discord.Interaction,
         joueur: discord.Member,
@@ -302,7 +302,7 @@ class BalanceCog(
         ),
     )
     @require_guild_member
-    async def ajouter(
+    async def add(
         self,
         interaction: discord.Interaction,
         joueur: discord.Member,

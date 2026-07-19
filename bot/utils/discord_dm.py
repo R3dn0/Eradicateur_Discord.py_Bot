@@ -34,6 +34,10 @@ async def send_bulk_dm(
                 failed.append(member_id)
                 continue
 
+        if member.bot:
+            logger.debug("Skipping bot member %s in guild %s", member_id, guild.id)
+            continue
+
         if opt_out_role_id is not None and member.get_role(opt_out_role_id):
             skipped.append(member_id)
             continue

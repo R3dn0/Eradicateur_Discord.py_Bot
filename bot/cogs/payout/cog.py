@@ -5,15 +5,15 @@ from discord.ext import commands
 from bot.cogs.payout.views import PayoutCreateModal
 from bot.main import EradicateurBot
 from bot.repositories.bot_config_repository import BotConfigRepository
-from bot.repositories.payout_repository import PayoutRepository
-from bot.repositories.transaction_repository import TransactionRepository
-from bot.utils.discord_guards import require_guild_member
-from bot.utils.discord_time import to_discord_timestamp
-from bot.utils.discord_dm import send_bulk_dm
 from bot.repositories.payout_config_repository import (
     PayoutConfigRepository,
 )
+from bot.repositories.payout_repository import PayoutRepository
+from bot.repositories.transaction_repository import TransactionRepository
 from bot.services.payout_config_service import PayoutConfigService
+from bot.utils.discord_dm import send_bulk_dm
+from bot.utils.discord_guards import require_guild_member
+from bot.utils.discord_time import to_discord_timestamp
 
 
 class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", key="payout_name")):  # type: ignore[call-arg]
@@ -327,7 +327,7 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
     @config.command(
         name=app_commands.locale_str("permissions", key="payout_config_permissions_name"),
         description=app_commands.locale_str(
-            "Set the permission level for /payout pay and /payout add",
+            "Set the permission level for pay, add, show [user] and list",
             key="payout_config_permissions_description",
         ),
     )

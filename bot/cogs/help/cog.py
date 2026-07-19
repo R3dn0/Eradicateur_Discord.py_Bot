@@ -57,7 +57,7 @@ class HelpCog(commands.Cog):
         self.bot = bot
 
     @app_commands.command(
-        name=app_commands.locale_str("aide", key="help_name"),
+        name=app_commands.locale_str("help", key="help_name"),
         description=app_commands.locale_str(
             "Show the list of available commands", key="help_description"
         ),

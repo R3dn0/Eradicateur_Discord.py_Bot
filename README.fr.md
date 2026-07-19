@@ -15,7 +15,7 @@ python -m bot.main
 ## Commandes disponibles
 
 **Général** (`help/`, `guild_commands.py`) :
-- `/aide` — affiche la liste de toutes les commandes disponibles *(Aucune restriction)*
+- `/help` — affiche la liste de toutes les commandes disponibles *(Aucune restriction)*
 - `/ping` - vérifie que le bot répond *(Aucune restriction)*
 
 **Payout / Comptabilité** (`payout/`) :
@@ -23,7 +23,7 @@ python -m bot.main
 - `/payout creer` — ouvre un modal pour créer un nouveau payout. Après confirmation, publie un récapitulatif public et notifie chaque participant par MP avec le montant reçu et son nouveau solde. *(Nécessite : rôle Officier)*
 - `/payout annuler <id>` — annule un payout et rembourse tous les participants. Marque le payout comme annulé, insère des écritures compensatoires (solde net nul) et envoie des MP avec les soldes ajustés. Refuse les payouts déjà annulés ou inconnus. *(Nécessite : rôle Officier)*
 - `/payout config roles` — définit les rôles officier et leader pour la gestion des payouts. *(Nécessite : permission Administrateur Discord)*
-- `/payout config taux` — modifie les taux d'imposition utilisés dans les calculs de paiement. *(Nécessite : rôle Leader)*
+- `/payout config taux` — modifie les taux d'imposition utilisés dans les calculs de payout. *(Nécessite : rôle Leader)*
 - `/payout config permissions` — définit le niveau de permission requis pour `/solde payer` et `/solde ajouter`. *(Nécessite : rôle Leader)*
 - `/payout config afficher` — affiche la configuration actuelle des payouts. *(Aucune restriction)*
 

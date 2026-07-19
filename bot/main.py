@@ -102,11 +102,25 @@ class EradicateurBot(commands.Bot):
                 return
 
         qualified = f"/{command.qualified_name}"
+        params_parts = []
+        try:
+            ns = interaction.namespace
+        except Exception:
+            ns = None
+        if ns is not None:
+            for name, value in vars(ns).items():
+                if isinstance(value, (discord.Member, discord.User, discord.Role)):
+                    formatted = value.mention
+                else:
+                    formatted = str(value)
+                params_parts.append(f"{name}: {formatted}")
+        params_str = ", ".join(params_parts)
         template = await self.translate("audit_log_command", interaction.locale)
         embed = discord.Embed(
             description=template.replace("{user}", f"<@{interaction.user.id}>")
             .replace("{channel}", interaction.channel.mention)
-            .replace("{command}", qualified),
+            .replace("{command}", qualified)
+            .replace("{params}", params_str),
             color=discord.Color.blurple(),
         )
 

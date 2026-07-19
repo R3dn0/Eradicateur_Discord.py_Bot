@@ -97,6 +97,47 @@ class TestPayoutDeduplication:
         assert view.accumulated == {1, 3}
 
 
+class TestParticipantSelectBotFilter:
+    @pytest.mark.asyncio
+    async def test_skips_bot_members(self):
+        view = ParticipantSelectView(
+            bag_silvers=1000000,
+            item_market_value=5000000,
+            activity_cost=500000,
+            select_placeholder="test",
+            finish_label="Terminer",
+            cancel_label="Annuler",
+            retirer_label="Retirer",
+            retour_label="Retour",
+            remove_prompt="Sélectionnez les participants à retirer :",
+            remove_placeholder="Choisissez les participants à retirer",
+        )
+
+        bot_member = MagicMock(spec=discord.Member)
+        bot_member.id = 999
+        bot_member.bot = True
+
+        human_member = MagicMock(spec=discord.Member)
+        human_member.id = 111
+        human_member.bot = False
+
+        interaction = AsyncMock(spec=discord.Interaction)
+        interaction.response = AsyncMock()
+        interaction.client = MagicMock()
+        interaction.client.translate = AsyncMock(return_value="note")
+        interaction.locale = "fr"
+
+        view.on_participants_selected._values = [bot_member, human_member]
+        await view.on_participants_selected.callback(interaction)
+
+        assert view.accumulated == {111}
+        interaction.response.edit_message.assert_awaited_once()
+        call_kwargs = interaction.response.edit_message.call_args[1]
+        assert "note" in call_kwargs["content"]
+        assert "<@999>" not in call_kwargs["content"]
+        assert "<@111>" in call_kwargs["content"]
+
+
 class TestConfirmCancelViewDMNotifications:
     @pytest.fixture
     def view(self):
@@ -174,16 +215,19 @@ class TestConfirmCancelViewDMNotifications:
 
         member_ok = MagicMock(spec=discord.Member)
         member_ok.id = 111
+        member_ok.bot = False
         member_ok.send = AsyncMock()
         member_ok.get_role = MagicMock(return_value=None)
 
         member_fail = MagicMock(spec=discord.Member)
         member_fail.id = 333
+        member_fail.bot = False
         member_fail.send = AsyncMock(side_effect=discord.Forbidden(MagicMock(), ""))
         member_fail.get_role = MagicMock(return_value=None)
 
         member_no_cache = MagicMock(spec=discord.Member)
         member_no_cache.id = 222
+        member_no_cache.bot = False
         member_no_cache.send = AsyncMock()
         member_no_cache.get_role = MagicMock(return_value=None)
 
@@ -242,16 +286,19 @@ class TestConfirmCancelViewDMNotifications:
 
         member_111 = MagicMock(spec=discord.Member)
         member_111.id = 111
+        member_111.bot = False
         member_111.send = AsyncMock()
         member_111.get_role = MagicMock(return_value=discord.Role)
 
         member_222 = MagicMock(spec=discord.Member)
         member_222.id = 222
+        member_222.bot = False
         member_222.send = AsyncMock()
         member_222.get_role = MagicMock(return_value=None)
 
         member_333 = MagicMock(spec=discord.Member)
         member_333.id = 333
+        member_333.bot = False
         member_333.send = AsyncMock()
         member_333.get_role = MagicMock(return_value=None)
 
@@ -1046,6 +1093,7 @@ class TestBalancePayer:
     def joueur(self):
         member = MagicMock(spec=discord.Member)
         member.id = 111
+        member.bot = False
         member.mention = "<@111>"
         return member
 
@@ -1059,7 +1107,7 @@ class TestBalancePayer:
             created_by=0,
         )
 
-        await cog.payer.callback(cog, interaction, joueur=joueur, montant=2000)
+        await cog.pay.callback(cog, interaction, joueur=joueur, montant=2000)
 
         balance = await transaction_repo.get_balance(111)
         assert balance == 1000
@@ -1079,7 +1127,7 @@ class TestBalancePayer:
             created_by=0,
         )
 
-        await cog.payer.callback(cog, interaction, joueur=joueur, montant=2000)
+        await cog.pay.callback(cog, interaction, joueur=joueur, montant=2000)
 
         new_balance = await transaction_repo.get_balance(111)
         assert new_balance == 3000
@@ -1099,7 +1147,7 @@ class TestBalancePayer:
             created_by=0,
         )
 
-        await cog.payer.callback(cog, interaction, joueur=joueur, montant=0)
+        await cog.pay.callback(cog, interaction, joueur=joueur, montant=0)
 
         balance = await transaction_repo.get_balance(111)
         assert balance == 1000
@@ -1122,7 +1170,7 @@ class TestBalancePayer:
             created_by=0,
         )
 
-        await cog.payer.callback(cog, interaction, joueur=joueur, montant=1000)
+        await cog.pay.callback(cog, interaction, joueur=joueur, montant=1000)
 
         new_balance = await transaction_repo.get_balance(111)
         assert new_balance == 4000
@@ -1141,7 +1189,7 @@ class TestBalancePayer:
             updated_by=0,
         )
 
-        await cog.payer.callback(cog, interaction, joueur=joueur, montant=1000)
+        await cog.pay.callback(cog, interaction, joueur=joueur, montant=1000)
 
         transaction_repo = TransactionRepository(db)
         balance = await transaction_repo.get_balance(111)
@@ -1175,7 +1223,7 @@ class TestBalancePayer:
             created_by=0,
         )
 
-        await cog.payer.callback(cog, interaction, joueur=joueur, montant=1000)
+        await cog.pay.callback(cog, interaction, joueur=joueur, montant=1000)
 
         new_balance = await transaction_repo.get_balance(111)
         assert new_balance == 4000
@@ -1222,6 +1270,7 @@ class TestBalanceAjouter:
     def joueur(self):
         member = MagicMock(spec=discord.Member)
         member.id = 111
+        member.bot = False
         member.mention = "<@111>"
         return member
 
@@ -1233,7 +1282,7 @@ class TestBalanceAjouter:
         joueur,
         db,
     ):
-        await cog.ajouter.callback(
+        await cog.add.callback(
             cog,
             interaction,
             joueur=joueur,
@@ -1252,7 +1301,7 @@ class TestBalanceAjouter:
 
     @pytest.mark.asyncio
     async def test_ajouter_rejects_non_positive(self, cog, interaction, joueur, db):
-        await cog.ajouter.callback(
+        await cog.add.callback(
             cog,
             interaction,
             joueur=joueur,
@@ -1274,7 +1323,7 @@ class TestBalanceAjouter:
         joueur,
         db,
     ):
-        await cog.ajouter.callback(
+        await cog.add.callback(
             cog,
             interaction,
             joueur=joueur,
@@ -1300,7 +1349,7 @@ class TestBalanceAjouter:
             updated_by=0,
         )
 
-        await cog.ajouter.callback(
+        await cog.add.callback(
             cog,
             interaction,
             joueur=joueur,
@@ -1332,7 +1381,7 @@ class TestBalanceAjouter:
             updated_by=0,
         )
 
-        await cog.ajouter.callback(
+        await cog.add.callback(
             cog,
             interaction,
             joueur=joueur,
@@ -1365,3 +1414,106 @@ class TestHelpCommand:
         assert isinstance(embed, discord.Embed)
         assert embed.title is not None
         assert call_args[1]["ephemeral"] is True
+
+
+class TestAuditLog:
+    @pytest.fixture
+    async def audit_bot(self, db):
+        from bot.repositories.bot_config_repository import BotConfigRepository
+
+        repo = BotConfigRepository(db)
+        await repo.get_config()
+        await repo.update_log_channel(channel_id=9999, updated_by=0)
+
+        bot = AsyncMock()
+        bot.db_manager = AsyncMock()
+        bot.db_manager.get_connection = AsyncMock(return_value=db)
+        bot.translate = AsyncMock(
+            side_effect=lambda key, locale: {
+                "audit_log_command": "{user} used a command in {channel}:\n`{command}`\n{params}",
+            }.get(key, key)
+        )
+        return bot
+
+    @pytest.fixture
+    def log_channel(self):
+        ch = AsyncMock(spec=discord.TextChannel)
+        ch.mention = "<#9999>"
+        ch.send = AsyncMock()
+        return ch
+
+    @pytest.fixture
+    def guild(self, log_channel):
+        g = MagicMock(spec=discord.Guild)
+        g.get_channel = MagicMock(return_value=log_channel)
+        g.id = 12345
+        g.fetch_channel = AsyncMock(side_effect=discord.NotFound(MagicMock(), ""))
+        return g
+
+    @pytest.mark.asyncio
+    async def test_logs_command_with_params(self, audit_bot, guild, log_channel):
+        bot = audit_bot
+
+        member = MagicMock(spec=discord.Member)
+        member.id = 111
+        member.mention = "<@111>"
+
+        class FakeNamespace:
+            def __init__(self, **kwargs):
+                self.__dict__ = kwargs
+
+        interaction = AsyncMock(spec=discord.Interaction)
+        interaction.guild = guild
+        interaction.channel = MagicMock()
+        interaction.channel.mention = "<#6666>"
+        interaction.user.id = 999
+        interaction.locale = "fr"
+        interaction.response = AsyncMock()
+        interaction.namespace = FakeNamespace(
+            joueur=member, montant=150000, raison="Compensation erreur payout"
+        )
+
+        command = MagicMock()
+        command.qualified_name = "balance ajouter"
+
+        from bot.main import EradicateurBot
+
+        await EradicateurBot.on_app_command_completion(bot, interaction, command)
+
+        log_channel.send.assert_awaited_once()
+        embed = log_channel.send.call_args[1]["embed"]
+        desc = embed.description
+        assert "/balance ajouter" in desc
+        assert "joueur: <@111>" in desc
+        assert "montant: 150000" in desc
+        assert "raison: Compensation erreur payout" in desc
+
+    @pytest.mark.asyncio
+    async def test_logs_command_without_params(self, audit_bot, guild, log_channel):
+        bot = audit_bot
+
+        class FakeNamespace:
+            def __init__(self, **kwargs):
+                self.__dict__ = kwargs
+
+        interaction = AsyncMock(spec=discord.Interaction)
+        interaction.guild = guild
+        interaction.channel = MagicMock()
+        interaction.channel.mention = "<#6666>"
+        interaction.user.id = 999
+        interaction.locale = "en"
+        interaction.response = AsyncMock()
+        interaction.namespace = FakeNamespace()
+
+        command = MagicMock()
+        command.qualified_name = "ping"
+
+        from bot.main import EradicateurBot
+
+        await EradicateurBot.on_app_command_completion(bot, interaction, command)
+
+        log_channel.send.assert_awaited_once()
+        embed = log_channel.send.call_args[1]["embed"]
+        desc = embed.description
+        assert "/ping" in desc
+        assert "joueur:" not in desc

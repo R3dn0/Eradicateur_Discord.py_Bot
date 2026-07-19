@@ -157,10 +157,20 @@ class ParticipantSelectView(discord.ui.View):
         interaction: discord.Interaction,
         select: discord.ui.UserSelect,
     ) -> None:
-        self.accumulated.update(m.id for m in select.values)
+        bots_skipped = 0
+        for member in select.values:
+            if member.bot:
+                bots_skipped += 1
+            else:
+                self.accumulated.add(member.id)
         self._update_button_states()
+        content = self._build_recap()
+        if bots_skipped:
+            bot: EradicateurBot = interaction.client  # type: ignore
+            note = await bot.translate("payout_bot_skipped", interaction.locale)
+            content += f"\n{note}"
         await interaction.response.edit_message(
-            content=self._build_recap(),
+            content=content,
             view=self,
         )
 
@@ -217,27 +227,27 @@ class ParticipantSelectView(discord.ui.View):
         )
         embed.add_field(name=embed_keys["cost"], value=f"{self.activity_cost:,.0f}", inline=True)
         embed.add_field(
+            name=embed_keys["split"],
+            value=f"{split.total_pool:,.0f}",
+            inline=False,
+        )
+        embed.add_field(
             name=embed_keys["buyback"],
             value=f"{split.buyback_value:,.0f}",
             inline=True,
         )
+        participants_value = f"{mentions}\n{embed_keys['per_player'].replace('{amount}', f'{split.amount_per_player:,.0f}')}"
         embed.add_field(
-            name=embed_keys["split"],
-            value=f"{split.total_pool:,.0f}",
-            inline=True,
-        )
-        participants_value = (
-            f"{mentions}\n{embed_keys['per_player'].replace('{amount}', f'{split.amount_per_player:,.0f}')}"
-        )
-        embed.add_field(
-            name=f"{embed_keys['participants']} ({n})",
+            name=f"{embed_keys['participants']}",
             value=participants_value,
             inline=False,
         )
         now_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
-        created_value = embed_keys["created_by"].replace(
-            "{user}", interaction.user.mention
-        ).replace("{date}", to_discord_timestamp(now_str))
+        created_value = (
+            embed_keys["created_by"]
+            .replace("{user}", interaction.user.mention)
+            .replace("{date}", to_discord_timestamp(now_str))
+        )
         embed.add_field(name="\u200b", value=created_value, inline=False)
 
         view = ConfirmCancelView(
@@ -465,27 +475,26 @@ class ConfirmCancelView(discord.ui.View):
         public_embed.add_field(name=gain_label, value=f"{self.bag_silvers:,.0f}", inline=True)
         public_embed.add_field(name=cost_label, value=f"{self.activity_cost:,.0f}", inline=True)
         public_embed.add_field(
-            name=buyback_label,
-            value=f"{self.split.buyback_value:,.0f}",
-            inline=False,
-        )
-        public_embed.add_field(
             name=split_label,
             value=f"{self.split.total_pool:,.0f}",
             inline=True,
         )
-        participants_value = (
-            f"{self.participant_mentions}\n{per_player_label.replace('{amount}', f'{self.split.amount_per_player:,.0f}')}"
+        public_embed.add_field(
+            name=buyback_label,
+            value=f"{self.split.buyback_value:,.0f}",
+            inline=False,
         )
+        participants_value = f"{self.participant_mentions}\n{per_player_label.replace('{amount}', f'{self.split.amount_per_player:,.0f}')}"
         public_embed.add_field(
             name=f"{part_label} ({n})",
             value=participants_value,
             inline=False,
         )
         payout_obj = await payout_repo.get_payout(payout_id)
-        created_value = created_by_label.replace(
-            "{user}", interaction.user.mention
-        ).replace("{date}", to_discord_timestamp(payout_obj.created_at))
+        created_value = created_by_label.replace("{user}", interaction.user.mention).replace(
+            "{date}",
+            to_discord_timestamp(payout_obj.created_at),  # type: ignore
+        )
         public_embed.add_field(name="\u200b", value=created_value, inline=False)
 
         announce_failed = False

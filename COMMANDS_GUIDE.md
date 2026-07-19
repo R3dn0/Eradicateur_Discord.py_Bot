@@ -426,7 +426,7 @@ A per-guild audit log channel can be configured to track all successful slash co
 - To set the channel, an admin calls `/config logs channel salon:<TextChannel>`.
 - To clear it, the admin calls `/config logs channel` without providing a channel.
 - Only successful completions are logged (`on_app_command_completion` fires only on success).
-- Command parameters/arguments are never included in the log message.
+- Command parameters/arguments are included in the log message, formatted as comma-separated `name: value` pairs (mentions for users/roles).
 - If the channel cannot be found or the bot lacks send permission, the error is silently logged as a warning — the bot does not crash.
 
 **Implementation:**
@@ -434,9 +434,11 @@ A per-guild audit log channel can be configured to track all successful slash co
 - Cog: `ConfigCog` with `/config logs channel` and `/config logs show`.
 - Listener: `EradicateurBot.on_app_command_completion()` in `bot/main.py` — resolves the guild's log channel from `bot_config`, builds the message `<@user> a utilisé la commande : /<qualified_name>`, and sends it. Errors are caught per channel.
 
-**Example log message:**
+**Example log message (English):**
 ```
-<@123456789> a utilisé la commande : /payout creer
+<@123456789> used a command in <#channel_id>:
+`/balance add`
+joueur: <@111>, montant: 150000, raison: Compensation erreur payout
 ```
 
 ## Global notification opt-out role
