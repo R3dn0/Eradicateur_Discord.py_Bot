@@ -46,6 +46,7 @@ class TestSendBulkDm:
             member_ids=[111, 222, 333],
             build_content=build_content,
             opt_out_role_id=777,
+            context="by <@999> via Payout #42",
         )
 
         assert result.sent == [111]
@@ -53,6 +54,9 @@ class TestSendBulkDm:
         assert result.failed == [333]
 
         member_normal.send.assert_awaited_once()
+        args = member_normal.send.call_args
+        sent_embed = args[1]["embed"]
+        assert sent_embed.footer.text == "by <@999> via Payout #42"
         member_optout.send.assert_not_called()
         member_forbidden.send.assert_awaited_once()
 

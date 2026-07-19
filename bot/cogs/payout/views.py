@@ -451,11 +451,17 @@ class ConfirmCancelView(discord.ui.View):
             embed.add_field(name=dm_new_balance, value=f"{new_balance:,.0f}", inline=True)
             return embed
 
+        context_template = await bot.translate("dm_context", interaction.locale)
+        action = f"Payout #{payout_id}"
+        context = context_template.replace("{user}", interaction.user.mention).replace(
+            "{action}", action
+        )
         result = await send_bulk_dm(
             guild=interaction.guild,
             member_ids=self.participant_ids,
             build_content=_build_content,
             opt_out_role_id=no_dm_role_id,
+            context=context,
         )
 
         item_label = await bot.translate("payout_embed_item", interaction.locale)

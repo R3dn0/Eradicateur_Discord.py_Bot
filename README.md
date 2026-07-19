@@ -39,8 +39,8 @@ python3 run.py
 - `/balance show [member]` — view your own balance (no restriction) or another member's balance if authorized. *(Viewing others requires the pay/add permission level — Officer or Leader, depending on `/payout config permissions`)*
 - `/balance history [member]` — view a member's transaction history with pagination (Prev/Next). Viewing your own is unrestricted; viewing others requires the pay/add permission level. *(No restriction for own history)*
 - `/balance list` — list all members with a non-zero balance. *(Requires the pay/add permission level)*
-- `/balance pay` — manually withdraw an amount from a player's balance (rejects if insufficient funds). *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
-- `/balance add` — manually credit a player's balance with a reason. *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
+- `/balance pay` — manually withdraw an amount from a player's balance (rejects if insufficient funds). On success, sends a DM to the affected player with the debited amount and new balance. *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
+- `/balance add` — manually credit a player's balance with a reason. On success, sends a DM to the affected player with the credited amount, reason, and new balance. *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
 
 **Configuration** (`config/`):
 
