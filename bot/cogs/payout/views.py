@@ -1,4 +1,5 @@
 import logging
+from datetime import datetime, timezone
 
 import discord
 
@@ -14,6 +15,7 @@ from bot.repositories.transaction_repository import (
 from bot.services.payout_config_service import PayoutConfigService
 from bot.services.payout_service import PayoutSplitResult, compute_split
 from bot.utils.discord_dm import send_bulk_dm
+from bot.utils.discord_time import to_discord_timestamp
 
 logger = logging.getLogger("eradicateur_bot.payout")
 
@@ -197,9 +199,9 @@ class ParticipantSelectView(discord.ui.View):
             "cost": await bot.translate("payout_embed_cost", interaction.locale),
             "participants": await bot.translate("payout_embed_participants", interaction.locale),
             "split": await bot.translate("payout_embed_split", interaction.locale),
-            "amount": await bot.translate("payout_embed_amount", interaction.locale),
             "buyback": await bot.translate("payout_embed_buyback", interaction.locale),
-            "list": await bot.translate("payout_embed_list", interaction.locale),
+            "per_player": await bot.translate("payout_embed_per_player", interaction.locale),
+            "created_by": await bot.translate("payout_embed_created_by", interaction.locale),
             "confirm": await bot.translate("payout_confirm", interaction.locale),
             "cancel": await bot.translate("payout_cancel", interaction.locale),
         }
@@ -219,18 +221,24 @@ class ParticipantSelectView(discord.ui.View):
             value=f"{split.buyback_value:,.0f}",
             inline=True,
         )
-        embed.add_field(name=embed_keys["participants"], value=str(n), inline=True)
         embed.add_field(
             name=embed_keys["split"],
             value=f"{split.total_pool:,.0f}",
             inline=True,
         )
+        participants_value = (
+            f"{mentions}\n{embed_keys['per_player'].replace('{amount}', f'{split.amount_per_player:,.0f}')}"
+        )
         embed.add_field(
-            name=embed_keys["amount"],
-            value=f"{split.amount_per_player:,.0f}",
+            name=f"{embed_keys['participants']} ({n})",
+            value=participants_value,
             inline=False,
         )
-        embed.add_field(name=embed_keys["list"], value=mentions, inline=False)
+        now_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+        created_value = embed_keys["created_by"].replace(
+            "{user}", interaction.user.mention
+        ).replace("{date}", to_discord_timestamp(now_str))
+        embed.add_field(name="\u200b", value=created_value, inline=False)
 
         view = ConfirmCancelView(
             bag_silvers=self.bag_silvers,
@@ -446,8 +454,8 @@ class ConfirmCancelView(discord.ui.View):
         part_label = await bot.translate("payout_embed_participants", interaction.locale)
         split_label = await bot.translate("payout_embed_split", interaction.locale)
         buyback_label = await bot.translate("payout_embed_buyback", interaction.locale)
-        amount_label = await bot.translate("payout_embed_amount", interaction.locale)
-        list_label = await bot.translate("payout_embed_list", interaction.locale)
+        per_player_label = await bot.translate("payout_embed_per_player", interaction.locale)
+        created_by_label = await bot.translate("payout_embed_created_by", interaction.locale)
 
         public_embed = discord.Embed(
             title=f"Payout #{payout_id}",
@@ -461,18 +469,24 @@ class ConfirmCancelView(discord.ui.View):
             value=f"{self.split.buyback_value:,.0f}",
             inline=False,
         )
-        public_embed.add_field(name=part_label, value=str(n), inline=True)
         public_embed.add_field(
             name=split_label,
             value=f"{self.split.total_pool:,.0f}",
             inline=True,
         )
+        participants_value = (
+            f"{self.participant_mentions}\n{per_player_label.replace('{amount}', f'{self.split.amount_per_player:,.0f}')}"
+        )
         public_embed.add_field(
-            name=amount_label,
-            value=f"{self.split.amount_per_player:,.0f}",
+            name=f"{part_label} ({n})",
+            value=participants_value,
             inline=False,
         )
-        public_embed.add_field(name=list_label, value=self.participant_mentions, inline=False)
+        payout_obj = await payout_repo.get_payout(payout_id)
+        created_value = created_by_label.replace(
+            "{user}", interaction.user.mention
+        ).replace("{date}", to_discord_timestamp(payout_obj.created_at))
+        public_embed.add_field(name="\u200b", value=created_value, inline=False)
 
         announce_failed = False
         try:

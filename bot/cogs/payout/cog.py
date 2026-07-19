@@ -92,6 +92,8 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
         interaction: discord.Interaction,
         payout_id: int,
     ) -> None:
+        await interaction.response.defer(ephemeral=True)
+
         assert self.bot.db_manager is not None
         db = await self.bot.db_manager.get_connection(interaction.guild.id)
         payout_config_repo = PayoutConfigRepository(db)
@@ -99,24 +101,22 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
 
         if not await payout_config_service.is_officer(interaction.user):
             msg = await self.bot.translate("payout_officer_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
+            await interaction.edit_original_response(content=msg)
             return
 
         payout_repo = PayoutRepository(db, TransactionRepository(db))
         payout = await payout_repo.get_payout(payout_id)
         if payout is None:
             template = await self.bot.translate("payout_void_not_found", interaction.locale)
-            await interaction.response.send_message(
-                template.replace("{id}", str(payout_id)),
-                ephemeral=True,
+            await interaction.edit_original_response(
+                content=template.replace("{id}", str(payout_id)),
             )
             return
 
         if payout.voided:
             template = await self.bot.translate("payout_void_already_voided", interaction.locale)
-            await interaction.response.send_message(
-                template.replace("{id}", str(payout_id)),
-                ephemeral=True,
+            await interaction.edit_original_response(
+                content=template.replace("{id}", str(payout_id)),
             )
             return
 
@@ -213,7 +213,7 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
             inline=False,
         )
 
-        await interaction.response.send_message(content=success, embed=embed, ephemeral=True)
+        await interaction.edit_original_response(content=success, embed=embed)
 
     @config.command(
         name=app_commands.locale_str("roles", key="payout_config_roles_name"),

@@ -143,6 +143,8 @@ class TestConfirmCancelViewDMNotifications:
                 "payout_embed_buyback": "Rachat",
                 "payout_embed_amount": "Montant",
                 "payout_embed_list": "Liste",
+                "payout_embed_per_player": "─── {amount} par joueur",
+                "payout_embed_created_by": "Créé par {user} le {date}",
                 "payout_success": "Payout #{id} distribué à {n} joueurs.",
             }.get(key, key)
         )
@@ -157,6 +159,7 @@ class TestConfirmCancelViewDMNotifications:
         interaction.channel = AsyncMock()
         interaction.user = MagicMock()
         interaction.user.id = 999
+        interaction.user.mention = "<@999>"
         interaction.locale = "fr"
         interaction.response = AsyncMock()
         return interaction
@@ -283,6 +286,8 @@ class TestConfirmCancelViewDMNotifications:
                 "payout_embed_buyback": "Rachat",
                 "payout_embed_amount": "Montant",
                 "payout_embed_list": "Liste",
+                "payout_embed_per_player": "─── {amount} par joueur",
+                "payout_embed_created_by": "Créé par {user} le {date}",
                 "payout_success": "Payout #{id} distribué à {n} joueurs.",
             }.get(key, key)
         )
@@ -293,6 +298,7 @@ class TestConfirmCancelViewDMNotifications:
         interaction.channel = AsyncMock()
         interaction.user = MagicMock()
         interaction.user.id = 999
+        interaction.user.mention = "<@999>"
         interaction.locale = "fr"
         interaction.response = AsyncMock()
 
@@ -331,6 +337,8 @@ class TestConfirmCancelViewDMNotifications:
                 "payout_embed_buyback": "Rachat",
                 "payout_embed_amount": "Montant",
                 "payout_embed_list": "Liste",
+                "payout_embed_per_player": "─── {amount} par joueur",
+                "payout_embed_created_by": "Créé par {user} le {date}",
                 "payout_success": "Payout #{id} distribué à {n} joueurs.",
             }.get(key, key)
         )
@@ -341,6 +349,7 @@ class TestConfirmCancelViewDMNotifications:
         interaction.channel = AsyncMock()
         interaction.user = MagicMock()
         interaction.user.id = 999
+        interaction.user.mention = "<@999>"
         interaction.locale = "fr"
         interaction.response = AsyncMock()
 
@@ -591,15 +600,15 @@ class TestPayoutVoid:
 
         await cog.void.callback(cog, interaction, payout_id=1)
 
-        interaction.response.send_message.assert_awaited_once()
-        assert "payout_officer_only" in interaction.response.send_message.call_args[0][0]
+        interaction.edit_original_response.assert_awaited_once()
+        assert "payout_officer_only" in interaction.edit_original_response.call_args[1]["content"]
 
     @pytest.mark.asyncio
     async def test_void_rejects_missing_payout(self, cog, interaction, db):
         await cog.void.callback(cog, interaction, payout_id=99999)
 
-        interaction.response.send_message.assert_awaited_once()
-        assert "payout_void_not_found" in interaction.response.send_message.call_args[0][0]
+        interaction.edit_original_response.assert_awaited_once()
+        assert "payout_void_not_found" in interaction.edit_original_response.call_args[1]["content"]
 
     @pytest.mark.asyncio
     async def test_void_rejects_already_voided(self, cog, interaction, db):
@@ -620,8 +629,8 @@ class TestPayoutVoid:
 
         await cog.void.callback(cog, interaction, payout_id=payout_id)
 
-        interaction.response.send_message.assert_awaited_once()
-        assert "payout_void_already_voided" in interaction.response.send_message.call_args[0][0]
+        interaction.edit_original_response.assert_awaited_once()
+        assert "payout_void_already_voided" in interaction.edit_original_response.call_args[1]["content"]
 
     @pytest.mark.asyncio
     async def test_void_succeeds(self, cog, interaction, db):
@@ -646,8 +655,8 @@ class TestPayoutVoid:
 
         payout = await payout_repo.get_payout(payout_id)
         assert payout is not None and payout.voided is True
-        interaction.response.send_message.assert_awaited_once()
-        call_args = interaction.response.send_message.call_args
+        interaction.edit_original_response.assert_awaited_once()
+        call_args = interaction.edit_original_response.call_args
         assert "payout_void_success" in call_args[1]["content"]
         assert "embed" in call_args[1]
 
