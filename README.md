@@ -12,6 +12,13 @@ cp .env.example .env  # then fill in DISCORD_TOKEN and GUILD_ID
 python -m bot.main
 ```
 
+**Hosting**: Platforms that require a single startup file should point at
+`run.py` at the repository root (not `bot/main.py` directly):
+
+```bash
+python3 run.py
+```
+
 ## Available commands
 
 **General** (`help/`, `guild_commands.py`):
