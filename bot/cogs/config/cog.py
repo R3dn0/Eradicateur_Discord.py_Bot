@@ -4,6 +4,8 @@ from discord.ext import commands
 
 from bot.main import EradicateurBot
 from bot.repositories.bot_config_repository import BotConfigRepository
+from bot.utils.discord_guards import require_guild_member
+from bot.utils.discord_time import to_discord_timestamp
 
 
 class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", key="config_name")):  # type: ignore[call-arg]
@@ -40,16 +42,12 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
             key="config_nonotification_role_param_description",
         ),
     )
+    @require_guild_member
     async def opt_out_role(
         self,
         interaction: discord.Interaction,
         role: discord.Role | None = None,
     ) -> None:
-        if interaction.guild is None:
-            msg = await self.bot.translate("payout_server_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
-            return
-
         assert self.bot.db_manager is not None
         db = await self.bot.db_manager.get_connection(interaction.guild.id)
         bot_config_repo = BotConfigRepository(db)
@@ -75,12 +73,8 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
             key="config_nonotification_show_description",
         ),
     )
+    @require_guild_member
     async def show(self, interaction: discord.Interaction) -> None:
-        if interaction.guild is None:
-            msg = await self.bot.translate("payout_server_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
-            return
-
         assert self.bot.db_manager is not None
         db = await self.bot.db_manager.get_connection(interaction.guild.id)
         bot_config_repo = BotConfigRepository(db)
@@ -109,19 +103,26 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
             inline=False,
         )
         if config.updated_by:
-            footer = await self.bot.translate(
-                "config_nonotification_show_updated_by", interaction.locale
-            )
-            embed.set_footer(
-                text=footer.replace("{user}", f"<@{config.updated_by}>").replace(
-                    "{date}", config.updated_at
+            value = (
+                (
+                    await self.bot.translate(
+                        "config_nonotification_show_updated_by", interaction.locale
+                    )
                 )
+                .replace("{user}", f"<@{config.updated_by}>")
+                .replace("{date}", to_discord_timestamp(config.updated_at))
             )
         else:
-            footer = await self.bot.translate(
-                "config_nonotification_show_updated", interaction.locale
-            )
-            embed.set_footer(text=footer.replace("{date}", config.updated_at))
+            value = (
+                await self.bot.translate("config_nonotification_show_updated", interaction.locale)
+            ).replace("{date}", to_discord_timestamp(config.updated_at))
+        embed.add_field(
+            name=await self.bot.translate(
+                "config_nonotification_show_updated_label", interaction.locale
+            ),
+            value=value,
+            inline=False,
+        )
 
         await interaction.response.send_message(embed=embed, ephemeral=True)
 
@@ -139,16 +140,12 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
             key="config_logs_channel_param_description",
         ),
     )
+    @require_guild_member
     async def log_channel(
         self,
         interaction: discord.Interaction,
         salon: discord.TextChannel | None = None,
     ) -> None:
-        if interaction.guild is None:
-            msg = await self.bot.translate("payout_server_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
-            return
-
         assert self.bot.db_manager is not None
         db = await self.bot.db_manager.get_connection(interaction.guild.id)
         bot_config_repo = BotConfigRepository(db)
@@ -172,12 +169,8 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
             key="config_logs_show_description",
         ),
     )
+    @require_guild_member
     async def log_show(self, interaction: discord.Interaction) -> None:
-        if interaction.guild is None:
-            msg = await self.bot.translate("payout_server_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
-            return
-
         assert self.bot.db_manager is not None
         db = await self.bot.db_manager.get_connection(interaction.guild.id)
         bot_config_repo = BotConfigRepository(db)
@@ -200,18 +193,23 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
             inline=False,
         )
         if config.updated_by:
-            footer = await self.bot.translate(
-                "config_nonotification_show_updated_by", interaction.locale
-            )
-            embed.set_footer(
-                text=footer.replace("{user}", f"<@{config.updated_by}>").replace(
-                    "{date}", config.updated_at
+            value = (
+                (
+                    await self.bot.translate(
+                        "config_nonotification_show_updated_by", interaction.locale
+                    )
                 )
+                .replace("{user}", f"<@{config.updated_by}>")
+                .replace("{date}", to_discord_timestamp(config.updated_at))
             )
         else:
-            footer = await self.bot.translate(
-                "config_nonotification_show_updated", interaction.locale
-            )
-            embed.set_footer(text=footer.replace("{date}", config.updated_at))
+            value = (
+                await self.bot.translate("config_nonotification_show_updated", interaction.locale)
+            ).replace("{date}", to_discord_timestamp(config.updated_at))
+        embed.add_field(
+            name=await self.bot.translate("config_logs_show_updated_label", interaction.locale),
+            value=value,
+            inline=False,
+        )
 
         await interaction.response.send_message(embed=embed, ephemeral=True)

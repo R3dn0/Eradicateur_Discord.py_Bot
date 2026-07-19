@@ -21,17 +21,19 @@ python -m bot.main
 **Payout / Comptabilité** (`payout/`) :
 
 - `/payout creer` — ouvre un modal pour créer un nouveau payout. Après confirmation, publie un récapitulatif public et notifie chaque participant par MP avec le montant reçu et son nouveau solde. *(Nécessite : rôle Officier)*
-- `/payout payer` — retire manuellement un montant du solde d'un joueur (refusé si solde insuffisant). *(Nécessite : rôle Officier ou Leader, selon `/payout config permissions`)*
-- `/payout ajouter` — crédite manuellement le solde d'un joueur avec une raison. *(Nécessite : rôle Officier ou Leader, selon `/payout config permissions`)*
+- `/payout annuler <id>` — annule un payout et rembourse tous les participants. Marque le payout comme annulé, insère des écritures compensatoires (solde net nul) et envoie des MP avec les soldes ajustés. Refuse les payouts déjà annulés ou inconnus. *(Nécessite : rôle Officier)*
 - `/payout config roles` — définit les rôles officier et leader pour la gestion des payouts. *(Nécessite : permission Administrateur Discord)*
 - `/payout config taux` — modifie les taux d'imposition utilisés dans les calculs de paiement. *(Nécessite : rôle Leader)*
-- `/payout config permissions` — définit le niveau de permission requis pour `/payout payer` et `/payout ajouter`. *(Nécessite : rôle Leader)*
+- `/payout config permissions` — définit le niveau de permission requis pour `/solde payer` et `/solde ajouter`. *(Nécessite : rôle Leader)*
 - `/payout config afficher` — affiche la configuration actuelle des payouts. *(Aucune restriction)*
 
 **Solde** (`balance/`) :
 
 - `/solde afficher [member]` — voir votre propre solde (aucune restriction) ou le solde d'un autre membre si autorisé. *(Voir celui des autres nécessite le niveau de permission Pay/Add — Officier ou Leader, selon `/payout config permissions`)*
+- `/solde historique [membre]` — voir l'historique des transactions d'un membre avec pagination (Précédent/Suivant). Voir le vôtre est sans restriction ; voir celui des autres nécessite le niveau de permission Pay/Add. *(Aucune restriction pour son propre historique)*
 - `/solde liste` — liste tous les membres avec un solde non nul. *(Nécessite le niveau de permission Pay/Add)*
+- `/solde payer` — retire manuellement un montant du solde d'un joueur (refusé si solde insuffisant). *(Nécessite : rôle Officier ou Leader, selon `/payout config permissions`)*
+- `/solde ajouter` — crédite manuellement le solde d'un joueur avec une raison. *(Nécessite : rôle Officier ou Leader, selon `/payout config permissions`)*
 
 **Configuration** (`config/`) :
 

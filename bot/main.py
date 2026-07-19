@@ -18,7 +18,7 @@ class EradicateurBot(commands.Bot):
         intents = discord.Intents.default()
         intents.message_content = True
         intents.members = True
-        super().__init__(command_prefix="/", intents=intents)
+        super().__init__(command_prefix="/", intents=intents, chunk_guilds_at_startup=True)
         self.config = config
         self.db_manager: GuildDatabaseManager | None = None
 
@@ -102,11 +102,11 @@ class EradicateurBot(commands.Bot):
                 return
 
         qualified = f"/{command.qualified_name}"
+        template = await self.translate("audit_log_command", interaction.locale)
         embed = discord.Embed(
-            description=(
-                f"<@{interaction.user.id}> a utilisé une commande dans {interaction.channel.mention} :\n"
-                f"`{qualified}`"
-            ),
+            description=template.replace("{user}", f"<@{interaction.user.id}>")
+            .replace("{channel}", interaction.channel.mention)
+            .replace("{command}", qualified),
             color=discord.Color.blurple(),
         )
 
@@ -122,8 +122,11 @@ class EradicateurBot(commands.Bot):
 
 @tasks.loop(minutes=5)
 async def _evict_idle(bot: EradicateurBot) -> None:
-    assert bot.db_manager is not None
-    await bot.db_manager.evict_idle()
+    try:
+        assert bot.db_manager is not None
+        await bot.db_manager.evict_idle()
+    except Exception:
+        logger.exception("Idle eviction loop error — will retry in 5 minutes")
 
 
 @_evict_idle.before_loop

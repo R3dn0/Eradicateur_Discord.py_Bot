@@ -15,6 +15,7 @@ _CATEGORIES: list[tuple[str, list[tuple[str, str, str | None]]]] = [
         "help_category_payout",
         [
             ("/payout creer", "payout_create_description", "help_perm_officer"),
+            ("/payout annuler", "payout_void_description", "help_perm_officer"),
             ("/payout config roles", "payout_config_roles_description", "help_perm_administrator"),
             ("/payout config taux", "payout_config_rates_description", "help_perm_leader"),
             (
@@ -31,6 +32,7 @@ _CATEGORIES: list[tuple[str, list[tuple[str, str, str | None]]]] = [
         "help_category_balance",
         [
             ("/solde afficher", "balance_show_description", None),
+            ("/solde historique", "balance_history_description", None),
             ("/solde liste", "balance_list_description", "help_perm_pay_add"),
         ],
     ),

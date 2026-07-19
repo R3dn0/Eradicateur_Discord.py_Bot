@@ -52,3 +52,32 @@ class TestSendBulkDm:
         member_normal.send.assert_awaited_once()
         member_optout.send.assert_not_called()
         member_forbidden.send.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_build_content_exception_isolated(self, guild):
+        guild_obj, member_normal, member_optout, member_forbidden = guild
+
+        call_count = 0
+
+        async def build_content(member):
+            nonlocal call_count
+            call_count += 1
+            if member.id == 111:
+                raise RuntimeError("DB error for member 111")
+            return discord.Embed(title="Test", description=f"Hello {member.id}")
+
+        result = await send_bulk_dm(
+            guild=guild_obj,
+            member_ids=[111, 222, 333],
+            build_content=build_content,
+            opt_out_role_id=777,
+        )
+
+        assert result.sent == []
+        assert result.skipped == [222]
+        assert result.failed == [111, 333]
+
+        member_normal.send.assert_not_called()
+        member_optout.send.assert_not_called()
+        member_forbidden.send.assert_awaited_once()
+        assert call_count == 2

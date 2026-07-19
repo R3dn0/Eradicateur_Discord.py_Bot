@@ -523,10 +523,146 @@ pytest --cov=bot
 - [ ] Cog loaded in `bot/main.py` (`load_extension`)
 - [ ] Folder `__init__.py` updated if needed
 - [ ] `locale_str` used for name and description
+- [ ] `locale_str` used for parameter descriptions in `@app_commands.describe(...)` — not raw strings
 - [ ] Permissions set if admin command
 - [ ] Tests written and passing (`pytest`)
 - [ ] New repository connected via `bot.db_manager.get_connection(guild_id)` and constructed inline in the command
 - [ ] `/help` static list updated in `bot/cogs/help/cog.py` (`_CATEGORIES`) — it won't auto-discover new commands
+
+## Veto / reversal command (`/payout void`)
+
+When a payout must be reversed (e.g. split was wrong, the activity did not happen), use the existing
+`PayoutRepository.void_payout()` and the `/payout void` cog command:
+
+```python
+# Repository — atomic reversal
+async def void_payout(self, payout_id: int, voided_by: int) -> None:
+    payout = await self.get_payout(payout_id)
+    if payout is None:
+        raise ValueError("Payout not found")
+    if payout.voided:
+        raise ValueError("Payout already voided")
+    try:
+        await self._db.execute("BEGIN IMMEDIATE")
+        await self._db.execute(
+            "UPDATE payouts SET voided = 1, voided_by = ?, voided_at = ? WHERE id = ?",
+            (voided_by, datetime.utcnow().isoformat(), payout_id),
+        )
+        # Reverse each transaction
+        txns = await self._transaction_repo.list_transactions_for_payout(payout_id)
+        for t in txns:
+            await self._transaction_repo.add_transaction(
+                discord_id=t.discord_id,
+                amount=-t.amount,
+                reason=f"Void payout #{payout_id}",
+                created_by=voided_by,
+            )
+        await self._db.commit()
+    except BaseException:
+        await self._db.rollback()
+        raise
+```
+
+The command flow:
+1. Permission check: `is_officer()` (same as `/payout create`)
+2. Fetch payout — reject if not found or already voided (ephemeral error)
+3. `void_payout()` — atomic `BEGIN IMMEDIATE` + commit/rollback
+4. DM each participant with the adjusted amount and new balance (uses `send_bulk_dm`, respects global opt-out role)
+5. Public embed recap in the interaction response (ephemeral to the caller)
+
+## Transaction history (`/balance history`)
+
+View a member's transaction history with pagination:
+
+```python
+@app_commands.command(name="history", ...)
+async def history(self, interaction: discord.Interaction, member: discord.Member | None = None) -> None:
+    if member is None:
+        discord_id = interaction.user.id
+    else:
+        # Permission check: check_pay_add_permission()
+        if not await payout_config_service.check_pay_add_permission(interaction.user):
+            ...
+            return
+        discord_id = member.id
+
+    txs = await transaction_repo.list_transactions(discord_id)
+    if not txs:
+        await interaction.response.send_message("No transactions found.", ephemeral=True)
+        return
+
+    lines = [
+        f"{to_discord_timestamp(tx.created_at)} | {'+' if tx.amount >= 0 else ''}{tx.amount:,.0f} | {tx.reason}"
+        for tx in txs
+    ]
+    embed_title = f"Transaction history for <@{discord_id}>"
+    view = paginate_lines(lines, title=embed_title)
+    await interaction.response.send_message(embed=view._build_embed(), view=view, ephemeral=True)
+```
+
+## Paginator utility
+
+For displaying long lists that exceed Discord's embed limits, use `PaginatorView` from `bot/utils/paginator.py`:
+
+```python
+from bot.utils.paginator import paginate_lines, PaginatorView
+
+lines: list[str] = [...]               # up to 1024 chars per line
+view = paginate_lines(lines, title="My Title", page_size=10)
+await interaction.response.send_message(embed=view._build_embed(), view=view)
+```
+
+The utility:
+- Splits lines into pages of `page_size` (default 10)
+- Renders each page as a single embed field
+- Prev/Next buttons with page counter
+- Disables buttons at boundaries
+- Timeout after 180 seconds
+
+## Shared guard decorator (`@require_guild_member`)
+
+All commands that interact with guild databases should ensure the interaction comes from a guild context.
+Instead of inlining the check in every command, use the `@require_guild_member` decorator from `bot/utils/discord_guards.py`:
+
+```python
+from bot.utils.discord_guards import require_guild_member
+
+@app_commands.command(...)
+@require_guild_member
+async def my_command(self, interaction: discord.Interaction) -> None:
+    ...
+```
+
+The guard returns early with an ephemeral "This command must be used in a server." message if
+`interaction.guild` is `None`. No other changes to the command function needed.
+
+## Base repository class
+
+All repositories inherit from `BaseRepository` (`bot/repositories/base_repository.py`) which provides
+shared `_run_migrations()` logic:
+
+```python
+from bot.repositories.base_repository import BaseRepository
+
+
+class MyRepository(BaseRepository):
+    _COLUMNS: dict[str, str] = {
+        "my_table": "CREATE TABLE IF NOT EXISTS my_table (id INTEGER PRIMARY KEY, name TEXT NOT NULL)",
+    }
+
+    _MIGRATIONS: dict[str, str] = {
+        "name_not_null": "ALTER TABLE my_table ADD COLUMN name TEXT NOT NULL DEFAULT ''",
+    }
+```
+
+The base class constructor runs `_run_migrations()` which:
+1. Calls `_ensure_table("_schema_version")` (shared across all repos)
+2. Calls `_ensure_table()` for each entry in `_COLUMNS` (with the DDL exactly as given)
+3. Applies each migration in `_MIGRATIONS` that hasn't been recorded yet
+4. Inserts a row in `_schema_version` for each applied migration
+5. Uses `BEGIN IMMEDIATE` to prevent concurrent schema races
+
+Do not call `_ensure_tables()` explicitly in subclass constructors — the base class handles it.
 
 ## Modal patterns
 

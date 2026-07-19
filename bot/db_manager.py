@@ -67,10 +67,14 @@ class GuildDatabaseManager:
 
     async def evict_idle(self) -> None:
         now = time.monotonic()
-        to_evict = [
-            gid for gid, (_, ts) in self._connections.items() if now - ts > self._idle_seconds
-        ]
-        for guild_id in to_evict:
+        for guild_id in list(self._connections.keys()):
+            _, ts = self._connections[guild_id]
+            if now - ts <= self._idle_seconds:
+                continue
+            lock = self._locks.get(guild_id)
+            if lock is not None and lock.locked():
+                logger.debug("Skipping eviction for guild %s — connection in use", guild_id)
+                continue
             conn, _ = self._connections.pop(guild_id)
             await conn.close()
             self._locks.pop(guild_id, None)
@@ -78,7 +82,10 @@ class GuildDatabaseManager:
 
     async def close_all(self) -> None:
         for guild_id, (conn, _) in list(self._connections.items()):
-            await conn.close()
+            try:
+                await conn.close()
+            except Exception:
+                logger.exception("Failed to close database for guild %s", guild_id)
             del self._connections[guild_id]
             logger.info("Closed database for guild %s", guild_id)
         self._locks.clear()
