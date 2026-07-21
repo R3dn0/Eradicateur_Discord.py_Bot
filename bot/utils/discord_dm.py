@@ -20,6 +20,7 @@ async def send_bulk_dm(
     member_ids: Iterable[int],
     build_content: Callable[[discord.Member], Awaitable[discord.Embed]],
     opt_out_role_id: int | None = None,
+    context: str = "",
 ) -> BulkDMResult:
     sent: list[int] = []
     skipped: list[int] = []
@@ -48,6 +49,9 @@ async def send_bulk_dm(
             logger.exception("build_content failed for member %s in guild %s", member_id, guild.id)
             failed.append(member_id)
             continue
+
+        if context:
+            embed.set_footer(text=context)
 
         try:
             await member.send(embed=embed)

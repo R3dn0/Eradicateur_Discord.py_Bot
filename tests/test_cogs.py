@@ -201,6 +201,7 @@ class TestConfirmCancelViewDMNotifications:
         interaction.user = MagicMock()
         interaction.user.id = 999
         interaction.user.mention = "<@999>"
+        interaction.user.display_name = "Officer"
         interaction.locale = "fr"
         interaction.response = AsyncMock()
         return interaction
@@ -346,6 +347,7 @@ class TestConfirmCancelViewDMNotifications:
         interaction.user = MagicMock()
         interaction.user.id = 999
         interaction.user.mention = "<@999>"
+        interaction.user.display_name = "Officer"
         interaction.locale = "fr"
         interaction.response = AsyncMock()
 
@@ -397,6 +399,7 @@ class TestConfirmCancelViewDMNotifications:
         interaction.user = MagicMock()
         interaction.user.id = 999
         interaction.user.mention = "<@999>"
+        interaction.user.display_name = "Officer"
         interaction.locale = "fr"
         interaction.response = AsyncMock()
 
@@ -634,6 +637,7 @@ class TestPayoutVoid:
         interaction.user = MagicMock(spec=discord.Member)
         interaction.user.id = 7000
         interaction.user.mention = "<@7000>"
+        interaction.user.display_name = "Officer"
         interaction.user.get_role = MagicMock(
             side_effect=lambda rid: MagicMock() if rid == self._OFFICER_ROLE_ID else None
         )
@@ -1080,13 +1084,17 @@ class TestBalancePayer:
     def interaction(self):
         interaction = AsyncMock(spec=discord.Interaction)
         interaction.response = AsyncMock()
+        interaction.edit_original_response = AsyncMock()
         interaction.user = MagicMock(spec=discord.Member)
         interaction.user.id = 999
+        interaction.user.mention = "<@999>"
+        interaction.user.display_name = "Officer"
         interaction.user.get_role = MagicMock(
             side_effect=lambda rid: MagicMock() if rid == self._OFFICER_ROLE_ID else None
         )
         interaction.guild = MagicMock()
         interaction.guild.id = 12345
+        interaction.locale = "fr"
         return interaction
 
     @pytest.fixture
@@ -1112,10 +1120,9 @@ class TestBalancePayer:
         balance = await transaction_repo.get_balance(111)
         assert balance == 1000
 
-        interaction.response.send_message.assert_awaited_once()
-        call_args = interaction.response.send_message.call_args
-        assert "balance_payer_insufficient_balance" in call_args[0][0]
-        assert call_args[1]["ephemeral"] is True
+        interaction.edit_original_response.assert_awaited_once()
+        call_args = interaction.edit_original_response.call_args
+        assert "balance_payer_insufficient_balance" in call_args[1]["content"]
 
     @pytest.mark.asyncio
     async def test_payer_succeeds_when_sufficient(self, cog, interaction, joueur, db):
@@ -1127,15 +1134,16 @@ class TestBalancePayer:
             created_by=0,
         )
 
-        await cog.pay.callback(cog, interaction, joueur=joueur, montant=2000)
+        with patch("bot.cogs.balance.cog.send_bulk_dm", new_callable=AsyncMock) as mock_dm:
+            mock_dm.return_value = MagicMock(skipped=[], failed=[])
+            await cog.pay.callback(cog, interaction, joueur=joueur, montant=2000)
 
         new_balance = await transaction_repo.get_balance(111)
         assert new_balance == 3000
 
-        interaction.response.send_message.assert_awaited_once()
-        call_args = interaction.response.send_message.call_args
-        assert "balance_payer_paid" in call_args[0][0]
-        assert call_args[1]["ephemeral"] is True
+        interaction.edit_original_response.assert_awaited_once()
+        call_args = interaction.edit_original_response.call_args
+        assert "balance_payer_paid" in call_args[1]["content"]
 
     @pytest.mark.asyncio
     async def test_payer_rejects_non_positive(self, cog, interaction, joueur, db):
@@ -1152,7 +1160,7 @@ class TestBalancePayer:
         balance = await transaction_repo.get_balance(111)
         assert balance == 1000
 
-        interaction.response.send_message.assert_awaited_once()
+        interaction.edit_original_response.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_payer_allows_officer_when_level_is_officer(
@@ -1170,7 +1178,9 @@ class TestBalancePayer:
             created_by=0,
         )
 
-        await cog.pay.callback(cog, interaction, joueur=joueur, montant=1000)
+        with patch("bot.cogs.balance.cog.send_bulk_dm", new_callable=AsyncMock) as mock_dm:
+            mock_dm.return_value = MagicMock(skipped=[], failed=[])
+            await cog.pay.callback(cog, interaction, joueur=joueur, montant=1000)
 
         new_balance = await transaction_repo.get_balance(111)
         assert new_balance == 4000
@@ -1195,7 +1205,7 @@ class TestBalancePayer:
         balance = await transaction_repo.get_balance(111)
         assert balance == 0
 
-        interaction.response.send_message.assert_awaited_once()
+        interaction.edit_original_response.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_payer_allows_leader_when_level_is_leader(
@@ -1223,12 +1233,67 @@ class TestBalancePayer:
             created_by=0,
         )
 
-        await cog.pay.callback(cog, interaction, joueur=joueur, montant=1000)
+        with patch("bot.cogs.balance.cog.send_bulk_dm", new_callable=AsyncMock) as mock_dm:
+            mock_dm.return_value = MagicMock(skipped=[], failed=[])
+            await cog.pay.callback(cog, interaction, joueur=joueur, montant=1000)
 
         new_balance = await transaction_repo.get_balance(111)
         assert new_balance == 4000
 
-        interaction.response.send_message.assert_awaited_once()
+        interaction.edit_original_response.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_payer_sends_dm(self, cog, interaction, joueur, db):
+        transaction_repo = TransactionRepository(db)
+        await transaction_repo.add_transaction(
+            discord_id=111,
+            amount=5000,
+            reason="seed",
+            created_by=0,
+        )
+
+        with patch("bot.cogs.balance.cog.send_bulk_dm", new_callable=AsyncMock) as mock_dm:
+            mock_dm.return_value = MagicMock(skipped=[], failed=[])
+            await cog.pay.callback(cog, interaction, joueur=joueur, montant=2000)
+
+        mock_dm.assert_awaited_once()
+        call_kwargs = mock_dm.call_args[1]
+        assert call_kwargs["member_ids"] == [111]
+        assert "dm_context" in call_kwargs["context"]
+
+    @pytest.mark.asyncio
+    async def test_payer_appends_optout_note(self, cog, interaction, joueur, db):
+        transaction_repo = TransactionRepository(db)
+        await transaction_repo.add_transaction(
+            discord_id=111,
+            amount=5000,
+            reason="seed",
+            created_by=0,
+        )
+
+        with patch("bot.cogs.balance.cog.send_bulk_dm", new_callable=AsyncMock) as mock_dm:
+            mock_dm.return_value = MagicMock(skipped=[111], failed=[])
+            await cog.pay.callback(cog, interaction, joueur=joueur, montant=2000)
+
+        call_args = interaction.edit_original_response.call_args
+        assert "payout_dm_optout_note" in call_args[1]["content"]
+
+    @pytest.mark.asyncio
+    async def test_payer_appends_failure_note(self, cog, interaction, joueur, db):
+        transaction_repo = TransactionRepository(db)
+        await transaction_repo.add_transaction(
+            discord_id=111,
+            amount=5000,
+            reason="seed",
+            created_by=0,
+        )
+
+        with patch("bot.cogs.balance.cog.send_bulk_dm", new_callable=AsyncMock) as mock_dm:
+            mock_dm.return_value = MagicMock(skipped=[], failed=[111])
+            await cog.pay.callback(cog, interaction, joueur=joueur, montant=2000)
+
+        call_args = interaction.edit_original_response.call_args
+        assert "payout_dm_failure_note" in call_args[1]["content"]
 
 
 class TestBalanceAjouter:
@@ -1257,13 +1322,17 @@ class TestBalanceAjouter:
     def interaction(self):
         interaction = AsyncMock(spec=discord.Interaction)
         interaction.response = AsyncMock()
+        interaction.edit_original_response = AsyncMock()
         interaction.user = MagicMock(spec=discord.Member)
         interaction.user.id = 999
+        interaction.user.mention = "<@999>"
+        interaction.user.display_name = "Officer"
         interaction.user.get_role = MagicMock(
             side_effect=lambda rid: MagicMock() if rid == self._OFFICER_ROLE_ID else None
         )
         interaction.guild = MagicMock()
         interaction.guild.id = 12345
+        interaction.locale = "fr"
         return interaction
 
     @pytest.fixture
@@ -1282,22 +1351,23 @@ class TestBalanceAjouter:
         joueur,
         db,
     ):
-        await cog.add.callback(
-            cog,
-            interaction,
-            joueur=joueur,
-            montant=3000,
-            raison="Bonus",
-        )
+        with patch("bot.cogs.balance.cog.send_bulk_dm", new_callable=AsyncMock) as mock_dm:
+            mock_dm.return_value = MagicMock(skipped=[], failed=[])
+            await cog.add.callback(
+                cog,
+                interaction,
+                joueur=joueur,
+                montant=3000,
+                raison="Bonus",
+            )
 
         transaction_repo = TransactionRepository(db)
         balance = await transaction_repo.get_balance(111)
         assert balance == 3000
 
-        interaction.response.send_message.assert_awaited_once()
-        call_args = interaction.response.send_message.call_args
-        assert "balance_ajouter_credited" in call_args[0][0]
-        assert call_args[1]["ephemeral"] is True
+        interaction.edit_original_response.assert_awaited_once()
+        call_args = interaction.edit_original_response.call_args
+        assert "balance_ajouter_credited" in call_args[1]["content"]
 
     @pytest.mark.asyncio
     async def test_ajouter_rejects_non_positive(self, cog, interaction, joueur, db):
@@ -1313,7 +1383,7 @@ class TestBalanceAjouter:
         balance = await transaction_repo.get_balance(111)
         assert balance == 0
 
-        interaction.response.send_message.assert_awaited_once()
+        interaction.edit_original_response.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_ajouter_allows_officer_when_level_is_officer(
@@ -1323,13 +1393,15 @@ class TestBalanceAjouter:
         joueur,
         db,
     ):
-        await cog.add.callback(
-            cog,
-            interaction,
-            joueur=joueur,
-            montant=1000,
-            raison="Test",
-        )
+        with patch("bot.cogs.balance.cog.send_bulk_dm", new_callable=AsyncMock) as mock_dm:
+            mock_dm.return_value = MagicMock(skipped=[], failed=[])
+            await cog.add.callback(
+                cog,
+                interaction,
+                joueur=joueur,
+                montant=1000,
+                raison="Test",
+            )
 
         transaction_repo = TransactionRepository(db)
         balance = await transaction_repo.get_balance(111)
@@ -1361,7 +1433,7 @@ class TestBalanceAjouter:
         balance = await transaction_repo.get_balance(111)
         assert balance == 0
 
-        interaction.response.send_message.assert_awaited_once()
+        interaction.edit_original_response.assert_awaited_once()
 
     @pytest.mark.asyncio
     async def test_ajouter_allows_leader_when_level_is_leader(
@@ -1381,19 +1453,68 @@ class TestBalanceAjouter:
             updated_by=0,
         )
 
-        await cog.add.callback(
-            cog,
-            interaction,
-            joueur=joueur,
-            montant=1000,
-            raison="Test",
-        )
+        with patch("bot.cogs.balance.cog.send_bulk_dm", new_callable=AsyncMock) as mock_dm:
+            mock_dm.return_value = MagicMock(skipped=[], failed=[])
+            await cog.add.callback(
+                cog,
+                interaction,
+                joueur=joueur,
+                montant=1000,
+                raison="Test",
+            )
 
         transaction_repo = TransactionRepository(db)
         balance = await transaction_repo.get_balance(111)
         assert balance == 1000
 
-        interaction.response.send_message.assert_awaited_once()
+        interaction.edit_original_response.assert_awaited_once()
+
+    @pytest.mark.asyncio
+    async def test_ajouter_sends_dm(self, cog, interaction, joueur, db):
+        with patch("bot.cogs.balance.cog.send_bulk_dm", new_callable=AsyncMock) as mock_dm:
+            mock_dm.return_value = MagicMock(skipped=[], failed=[])
+            await cog.add.callback(
+                cog,
+                interaction,
+                joueur=joueur,
+                montant=3000,
+                raison="Bonus",
+            )
+
+        mock_dm.assert_awaited_once()
+        call_kwargs = mock_dm.call_args[1]
+        assert call_kwargs["member_ids"] == [111]
+        assert "dm_context" in call_kwargs["context"]
+
+    @pytest.mark.asyncio
+    async def test_ajouter_appends_optout_note(self, cog, interaction, joueur, db):
+        with patch("bot.cogs.balance.cog.send_bulk_dm", new_callable=AsyncMock) as mock_dm:
+            mock_dm.return_value = MagicMock(skipped=[111], failed=[])
+            await cog.add.callback(
+                cog,
+                interaction,
+                joueur=joueur,
+                montant=3000,
+                raison="Bonus",
+            )
+
+        call_args = interaction.edit_original_response.call_args
+        assert "payout_dm_optout_note" in call_args[1]["content"]
+
+    @pytest.mark.asyncio
+    async def test_ajouter_appends_failure_note(self, cog, interaction, joueur, db):
+        with patch("bot.cogs.balance.cog.send_bulk_dm", new_callable=AsyncMock) as mock_dm:
+            mock_dm.return_value = MagicMock(skipped=[], failed=[111])
+            await cog.add.callback(
+                cog,
+                interaction,
+                joueur=joueur,
+                montant=3000,
+                raison="Bonus",
+            )
+
+        call_args = interaction.edit_original_response.call_args
+        assert "payout_dm_failure_note" in call_args[1]["content"]
 
 
 class TestHelpCommand:

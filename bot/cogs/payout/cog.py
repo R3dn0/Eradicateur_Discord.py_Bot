@@ -153,11 +153,17 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
         txns = await transaction_repo.list_transactions_for_payout(payout_id)
         participant_ids = list({t.discord_id for t in txns})
 
+        context_template = await self.bot.translate("dm_context", interaction.locale)
+        action = f"Payout #{payout_id}"
+        context = context_template.replace("{user}", interaction.user.display_name).replace(
+            "{action}", action
+        )
         result = await send_bulk_dm(
             guild=interaction.guild,
             member_ids=participant_ids,
             build_content=_build_void_content,
             opt_out_role_id=no_dm_role_id,
+            context=context,
         )
 
         n = payout.participant_count

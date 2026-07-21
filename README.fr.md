@@ -32,8 +32,8 @@ python -m bot.main
 - `/solde afficher [member]` — voir votre propre solde (aucune restriction) ou le solde d'un autre membre si autorisé. *(Voir celui des autres nécessite le niveau de permission Pay/Add — Officier ou Leader, selon `/payout config permissions`)*
 - `/solde historique [membre]` — voir l'historique des transactions d'un membre avec pagination (Précédent/Suivant). Voir le vôtre est sans restriction ; voir celui des autres nécessite le niveau de permission Pay/Add. *(Aucune restriction pour son propre historique)*
 - `/solde liste` — liste tous les membres avec un solde non nul. *(Nécessite le niveau de permission Pay/Add)*
-- `/solde payer` — retire manuellement un montant du solde d'un joueur (refusé si solde insuffisant). *(Nécessite : rôle Officier ou Leader, selon `/payout config permissions`)*
-- `/solde ajouter` — crédite manuellement le solde d'un joueur avec une raison. *(Nécessite : rôle Officier ou Leader, selon `/payout config permissions`)*
+- `/solde payer` — retire manuellement un montant du solde d'un joueur (refusé si solde insuffisant). En cas de succès, envoie un MP au joueur concerné avec le montant débité et le nouveau solde. *(Nécessite : rôle Officier ou Leader, selon `/payout config permissions`)*
+- `/solde ajouter` — crédite manuellement le solde d'un joueur avec une raison. En cas de succès, envoie un MP au joueur concerné avec le montant crédité, la raison et le nouveau solde. *(Nécessite : rôle Officier ou Leader, selon `/payout config permissions`)*
 
 **Configuration** (`config/`) :
 
