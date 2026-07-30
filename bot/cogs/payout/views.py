@@ -229,7 +229,7 @@ class ParticipantSelectView(discord.ui.View):
         embed.add_field(
             name=embed_keys["split"],
             value=f"{split.total_pool:,.0f}",
-            inline=False,
+            inline=True,
         )
         embed.add_field(
             name=embed_keys["buyback"],
@@ -488,7 +488,7 @@ class ConfirmCancelView(discord.ui.View):
         public_embed.add_field(
             name=buyback_label,
             value=f"{self.split.buyback_value:,.0f}",
-            inline=False,
+            inline=True,
         )
         participants_value = f"{self.participant_mentions}\n{per_player_label.replace('{amount}', f'{self.split.amount_per_player:,.0f}')}"
         public_embed.add_field(
