@@ -11,8 +11,12 @@ logger = logging.getLogger("eradicateur_bot.i18n")
 class JSONTranslator(app_commands.Translator):
     def __init__(self) -> None:
         self._catalog: dict[str, dict[str, str]] = {}
+        self._loaded = False
 
     async def load(self) -> None:
+        if self._loaded:
+            return
+        self._loaded = True
         locales_dir = Path(__file__).parent / "locales"
         for path in locales_dir.glob("*.json"):
             locale_tag = path.stem
