@@ -1,3 +1,5 @@
+import logging
+
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -17,6 +19,8 @@ from bot.utils.discord_dm import send_bulk_dm
 from bot.utils.discord_guards import require_guild_member
 from bot.utils.discord_time import to_discord_timestamp
 from bot.utils.paginator import paginate_lines
+
+logger = logging.getLogger("eradicateur_bot.balance")
 
 
 class BalanceCog(
@@ -380,6 +384,17 @@ class BalanceCog(
             amount=montant,
             reason=raison,
             created_by=interaction.user.id,
+        )
+
+        logger.debug(
+            'Credited %s silver to %s "%s" in guild %s "%s" by %s "%s"',
+            montant,
+            joueur.id,
+            joueur.display_name,
+            interaction.guild.id,
+            interaction.guild.name,
+            interaction.user.id,
+            interaction.user.display_name,
         )
 
         new_balance = await transaction_repo.get_balance(joueur.id)

@@ -417,8 +417,9 @@ class ConfirmCancelView(discord.ui.View):
             )
         except Exception:
             logger.exception(
-                "Failed to create payout — guild=%s participants=%d",
+                'Failed to create payout — guild=%s "%s" participants=%d',
                 interaction.guild.id,
+                interaction.guild.name,
                 n,
             )
             failed_msg = await bot.translate("payout_create_failed", interaction.locale)
@@ -508,9 +509,10 @@ class ConfirmCancelView(discord.ui.View):
             await interaction.channel.send(embed=public_embed)  # type: ignore
         except Exception:
             logger.exception(
-                "Payout %s created but public announcement failed — guild=%s",
+                'Payout %s created but public announcement failed — guild=%s "%s"',
                 payout_id,
                 interaction.guild.id,
+                interaction.guild.name,
             )
             announce_failed = True
 
@@ -540,9 +542,10 @@ class ConfirmCancelView(discord.ui.View):
             )
         except Exception:
             logger.exception(
-                "Failed to edit original response after payout %s — guild=%s",
+                'Failed to edit original response after payout %s — guild=%s "%s"',
                 payout_id,
                 interaction.guild.id,
+                interaction.guild.name,
             )
 
     @discord.ui.button(label="cancel", style=discord.ButtonStyle.red)

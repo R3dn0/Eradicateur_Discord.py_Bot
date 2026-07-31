@@ -51,6 +51,8 @@ python3 run.py
 
 **Audit logging**: if a log channel is configured, every successful slash command execution is automatically logged there with the user mention and the fully-qualified command name (e.g. `payout create`). Failed commands are not logged.
 
+**Dev logging**: runtime logs are written to per-guild files under `<data_dir>/logs/` (`guild_<id>.log`, plus a global `bot.log` for non-guild activity), with automatic rotation (1 MB per file, 10 backups) and **newest entries at the top** of each file. A global `errors.log` aggregates all `ERROR`+ records from every guild — giving you a single list of every problem to investigate. Every line mentions the guild and user names inline when available, e.g. `executed by 1354... "R3dn0" in guild 1526... "Eradicateur-Bot TEST"`. Each guild's activity is routed to its own file via the slash command execution context. The verbosity is controlled by `LOG_LEVEL` in `.env` (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`, default `DEBUG`). The console prints `INFO`+ (startup/lifecycle logs and the full stack trace on errors) so you can visually confirm the bot started, while the per-command `DEBUG` detail stays in the files. Command failures are logged with their full traceback — handy for servers you cannot access. User-side rejections (`CheckFailure`, `CommandNotFound`, `CommandOnCooldown`) are logged at `DEBUG` in the files only, not as errors.
+
 ## Project structure
 
 ```
@@ -61,6 +63,7 @@ bot/
 ├── locales/        # i18n translations
 ├── config.py       # Configuration
 ├── db_manager.py   # Per-guild database connection manager
+├── dev_logs.py     # Per-guild file logging for developers
 ├── i18n.py         # Translator
 └── main.py         # Entry point
 ```

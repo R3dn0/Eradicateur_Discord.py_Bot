@@ -2,10 +2,12 @@ import logging
 
 import discord
 from discord import app_commands
+from discord.app_commands import AppCommandError
 from discord.ext import commands, tasks
 
 from bot.config import Config
 from bot.db_manager import GuildDatabaseManager
+from bot.dev_logs import guild_log_context, set_console_level, setup_dev_logging
 from bot.i18n import JSONTranslator
 from bot.repositories.bot_config_repository import BotConfigRepository
 
@@ -13,12 +15,66 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("eradicateur_bot")
 
 
+class GuildAwareCommandTree(app_commands.CommandTree):
+    _EXPECTED_ERRORS: tuple[type[AppCommandError], ...] = (
+        app_commands.CommandNotFound,
+        app_commands.CommandOnCooldown,
+        app_commands.CheckFailure,
+    )
+
+    def _from_interaction(self, interaction: discord.Interaction) -> None:
+        async def wrapper() -> None:
+            guild_id = interaction.guild.id if interaction.guild else None
+            with guild_log_context(guild_id):
+                try:
+                    await self._call(interaction)
+                except AppCommandError as e:
+                    await self._dispatch_error(interaction, e)
+
+        self.client.loop.create_task(wrapper(), name="CommandTree-invoker")
+
+    async def on_error(
+        self,
+        interaction: discord.Interaction,
+        error: AppCommandError,
+    ) -> None:
+        command_name = (
+            interaction.command.qualified_name if interaction.command is not None else "<unknown>"
+        )
+        user = interaction.user
+        guild = interaction.guild
+        user_ref = f'{user.id} "{user.display_name}"' if user is not None else "<unknown>"
+        guild_ref = f'{guild.id} "{guild.name}"' if guild is not None else "<none>"
+        if isinstance(error, self._EXPECTED_ERRORS):
+            logger.debug(
+                "Command '%s' skipped by %s in guild %s (%s): %s",
+                command_name,
+                user_ref,
+                guild_ref,
+                type(error).__name__,
+                error,
+            )
+            return
+        logger.error(
+            "Command '%s' failed for %s in guild %s",
+            command_name,
+            user_ref,
+            guild_ref,
+            exc_info=error,
+        )
+
+
 class EradicateurBot(commands.Bot):
     def __init__(self, config: Config) -> None:
         intents = discord.Intents.default()
         intents.message_content = True
         intents.members = True
-        super().__init__(command_prefix="/", intents=intents, chunk_guilds_at_startup=True)
+        super().__init__(
+            command_prefix="/",
+            intents=intents,
+            chunk_guilds_at_startup=True,
+            tree_cls=GuildAwareCommandTree,
+        )
         self.config = config
         self.db_manager: GuildDatabaseManager | None = None
 
@@ -75,6 +131,17 @@ class EradicateurBot(commands.Bot):
     ) -> None:
         if interaction.guild is None or self.db_manager is None:
             return
+
+        user = interaction.user
+        guild = interaction.guild
+        user_ref = f'{user.id} "{user.display_name}"' if user is not None else "<unknown>"
+        logger.debug(
+            "Command '%s' executed by %s in guild %s \"%s\"",
+            f"/{command.qualified_name}",
+            user_ref,
+            guild.id,
+            guild.name,
+        )
 
         try:
             db = await self.db_manager.get_connection(interaction.guild.id)
@@ -150,6 +217,10 @@ async def _wait_ready(bot: EradicateurBot) -> None:
 
 async def main() -> None:
     config = Config.from_env()
+    setup_dev_logging(config.data_dir, config.log_level)
+    set_console_level(logging.INFO)
+    logging.getLogger().setLevel(config.log_level)
+    logger.setLevel(config.log_level)
     bot = EradicateurBot(config)
     async with bot:
         await bot.start(config.discord_token)
