@@ -2,6 +2,8 @@ import os
 from dataclasses import dataclass
 from dotenv import load_dotenv
 
+from bot.dev_logs import parse_log_level
+
 
 load_dotenv()
 
@@ -11,6 +13,7 @@ class Config:
     discord_token: str
     guild_id: list[int]
     data_dir: str
+    log_level: int
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -24,4 +27,5 @@ class Config:
             discord_token=token,
             guild_id=guild_ids,
             data_dir=os.getenv("DATA_DIR", "data"),
+            log_level=parse_log_level(os.getenv("LOG_LEVEL")),
         )

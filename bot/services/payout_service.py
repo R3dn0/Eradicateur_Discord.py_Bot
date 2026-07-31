@@ -1,6 +1,9 @@
+import logging
 from dataclasses import dataclass
 
 from bot.services.payout_config_service import PayoutRates
+
+logger = logging.getLogger("eradicateur_bot.payout_service")
 
 
 @dataclass(frozen=True)
@@ -33,6 +36,15 @@ def compute_split(
     total_per_player = silver_per_player + item_per_player
     total_pool = silver_pool + item_net
     buyback_value = max(0, item_market_value * (1 - rates.market - rates.transport))
+
+    logger.debug(
+        "Payout split computed: bag=%s item=%s activity=%s participants=%s -> %s silver/player",
+        bag_silvers,
+        item_market_value,
+        activity_cost,
+        participant_count,
+        silver_per_player,
+    )
 
     return PayoutSplitResult(
         guild_cut=guild_cut,

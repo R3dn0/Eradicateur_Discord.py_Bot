@@ -44,6 +44,8 @@ python -m bot.main
 
 **Journalisation** : si un salon de journalisation est configuré, chaque exécution réussie d'une commande slash y est automatiquement enregistrée avec la mention de l'utilisateur et le nom complet de la commande (ex. `payout creer`). Les commandes échouées ne sont pas journalisées.
 
+**Journalisation dev** : les logs d'exécution sont écrits dans des fichiers par serveur sous `<data_dir>/logs/` (`guild_<id>.log`, plus un `bot.log` global pour l'activité hors serveur), avec rotation automatique (1 Mo par fichier, 10 backups) et **les entrées les plus récentes en haut** de chaque fichier. Un `errors.log` global agrège tous les enregistrements `ERROR`+ de tous les serveurs — une liste unique de tous les problèmes à investiguer. Chaque ligne mentionne les noms de la guilde et de l'utilisateur quand ils sont connus, ex. `executed by 1354... "R3dn0" in guild 1526... "Eradicateur-Bot TEST"`. L'activité de chaque serveur est routée vers son propre fichier via le contexte d'exécution des commandes slash. Le niveau est contrôlé par `LOG_LEVEL` dans `.env` (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`, défaut `DEBUG`). La console affiche les `INFO`+ (logs de lancement/cycle de vie et la stack trace complète en cas d'erreur) pour confirmer visuellement le démarrage du bot, tandis que le détail `DEBUG` par commande reste dans les fichiers. Les échecs de commande y sont journalisés avec leur traceback complet — pratique pour les serveurs auxquels tu n'as pas accès. Les rejets côté utilisateur (`CheckFailure`, `CommandNotFound`, `CommandOnCooldown`) sont journalisés en `DEBUG` dans les fichiers uniquement, pas comme des erreurs.
+
 ## Structure du projet
 
 ```
@@ -54,6 +56,7 @@ bot/
 ├── locales/        # Traductions i18n
 ├── config.py       # Configuration
 ├── db_manager.py   # Gestionnaire de connexions par serveur
+├── dev_logs.py     # Logs fichier par serveur pour les développeurs
 ├── i18n.py         # Traducteur
 └── main.py         # Point d'entrée
 ```
