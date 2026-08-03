@@ -35,6 +35,11 @@ python -m bot.main
 - `/solde payer` — retire manuellement un montant du solde d'un joueur (refusé si solde insuffisant). En cas de succès, envoie un MP au joueur concerné avec le montant débité et le nouveau solde. *(Nécessite : rôle Officier ou Leader, selon `/payout config permissions`)*
 - `/solde ajouter` — crédite manuellement le solde d'un joueur avec une raison. En cas de succès, envoie un MP au joueur concerné avec le montant crédité, la raison et le nouveau solde. *(Nécessite : rôle Officier ou Leader, selon `/payout config permissions`)*
 
+**Inscriptions d'activités** (`activite/`) :
+
+- `/activite creer` — ouvre un formulaire unique (titre, lieu de départ, heure de RDV, stuff optionnel, et la structure des slots : `CATEGORIE - description`, `@mention` pré-remplit un slot). Une date/heure reconnaissable (ex : `03/08 20:00` ou `20h00`) est rendue en timestamp Discord, donc chacun la voit dans son fuseau local. L'embed d'inscription est ensuite posté avec un menu déroulant pour modifier chaque champ, une fil de discussion, et des slots par rôle. Un slot `FILL` est ajouté automatiquement à la fin. *(Aucune restriction)*
+- Slots — n'importe qui peut réclamer un slot depuis le menu déroulant de l'embed, ou dans la fil avec `/activite rejoindre <slot>`. Un joueur ne peut tenir qu'un seul slot par activité ; plusieurs joueurs peuvent partager un slot. `/activite quitter` libère ton slot, et le bouton **Fermer** fige l'embed. L'embed est la source de vérité, donc les commandes de fil continuent de fonctionner après un redémarrage du bot (aucune base de données, rien n'est traqué).
+
 **Configuration** (`config/`) :
 
 - `/config nonotification role` — définit ou efface le rôle dont les membres sont exclus des MP de payout. *(Nécessite : permission Administrateur Discord)*

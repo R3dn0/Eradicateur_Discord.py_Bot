@@ -42,6 +42,11 @@ python3 run.py
 - `/balance pay` — manually withdraw an amount from a player's balance (rejects if insufficient funds). On success, sends a DM to the affected player with the debited amount and new balance. *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
 - `/balance add` — manually credit a player's balance with a reason. On success, sends a DM to the affected player with the credited amount, reason, and new balance. *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
 
+**Activity signups** (`activite/`):
+
+- `/activite creer` — opens a single form (title, departure point, meet-up time, optional stuff, and the slot structure: `CATEGORIE - description`, `@mention` pre-fills a slot). A recognizable date/time (e.g. `03/08 20:00` or `20h00`) is rendered as a Discord timestamp, so everyone sees it in their local timezone. The signup embed is then posted with a dropdown to edit each field, a thread for discussion, and per-role slots. A `FILL` slot is added automatically at the end. *(No restriction)*
+- Slots — anyone can claim a slot from the embed dropdown, or in the activity thread with `/activite rejoindre <slot>`. A player can hold only one slot per activity; several players can share a slot. `/activite quitter` releases your slot, and the **Fermer** button freezes the embed. The embed is the source of truth, so thread commands keep working after a bot restart (no database, nothing is tracked).
+
 **Configuration** (`config/`):
 
 - `/config nonotification role` — set or clear the role whose members are skipped in payout DMs. *(Requires: Administrator permission)*
