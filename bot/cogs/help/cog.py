@@ -32,6 +32,7 @@ _CATEGORIES: list[tuple[str, list[tuple[str, str, str | None]]]] = [
         "help_category_balance",
         [
             ("/solde afficher", "balance_show_description", None),
+            ("/solde guilde", "balance_guild_description", None),
             ("/solde historique", "balance_history_description", None),
             ("/solde liste", "balance_list_description", "help_perm_pay_add"),
         ],

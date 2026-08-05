@@ -79,6 +79,19 @@ class TransactionRepository(BaseRepository):
         rows = await cursor.fetchall()
         return [(row["discord_id"], int(row["balance"])) for row in rows]
 
+    async def get_total_owed(self) -> int:
+        await self._ensure_table()
+        cursor = await self._db.execute("""
+            SELECT COALESCE(SUM(balance), 0) FROM (
+                SELECT SUM(amount) AS balance
+                FROM transactions
+                GROUP BY discord_id
+                HAVING SUM(amount) > 0
+            )
+        """)
+        row = await cursor.fetchone()
+        return int(row[0])
+
     async def list_transactions_for_payout(self, payout_id: int) -> list[Transaction]:
         await self._ensure_table()
         cursor = await self._db.execute(
