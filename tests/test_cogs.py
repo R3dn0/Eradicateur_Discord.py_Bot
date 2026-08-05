@@ -935,7 +935,7 @@ class TestBalanceShow:
         embed = call_args[1].get("embed")
         assert embed is not None
         assert "balance_show_self" in embed.description
-        assert call_args[1]["ephemeral"] is True
+        assert call_args[1]["ephemeral"] is False
 
     @pytest.mark.asyncio
     async def test_show_other_authorized(self, cog, interaction, db):
@@ -958,22 +958,63 @@ class TestBalanceShow:
         embed = call_args[1].get("embed")
         assert embed is not None
         assert "balance_show_other" in embed.description
-        assert call_args[1]["ephemeral"] is True
+        assert call_args[1]["ephemeral"] is False
+
+
+class TestBalanceGuild:
+    @pytest.fixture
+    async def cog(self, db):
+        bot = MagicMock()
+        bot.db_manager = AsyncMock()
+        bot.db_manager.get_connection = AsyncMock(return_value=db)
+        bot.translate = AsyncMock(side_effect=lambda key, locale: key)
+        from bot.cogs.balance.cog import BalanceCog
+
+        return BalanceCog(bot)
+
+    @pytest.fixture
+    def interaction(self):
+        interaction = AsyncMock(spec=discord.Interaction)
+        interaction.response = AsyncMock()
+        interaction.user = MagicMock(spec=discord.Member)
+        interaction.user.id = 999
+        interaction.guild = MagicMock()
+        interaction.guild.id = 12345
+        interaction.locale = "fr"
+        return interaction
 
     @pytest.mark.asyncio
-    async def test_show_other_unauthorized(self, cog, interaction, db):
-        interaction.user.get_role = MagicMock(return_value=None)
-
-        target = MagicMock(spec=discord.Member)
-        target.id = 111
-        target.mention = "<@111>"
-
-        await cog.show.callback(cog, interaction, member=target)
+    async def test_guild_empty(self, cog, interaction, db):
+        await cog.guild.callback(cog, interaction)
 
         interaction.response.send_message.assert_awaited_once()
         call_args = interaction.response.send_message.call_args
-        assert "balance_officer_only" in call_args[0][0]
-        assert call_args[1]["ephemeral"] is True
+        embed = call_args[1].get("embed")
+        assert embed is not None
+        assert "balance_guild_total" in embed.description
+        assert call_args[1]["ephemeral"] is False
+
+    @pytest.mark.asyncio
+    async def test_guild_sums_positive_balances_only(self, cog, interaction, db):
+        transaction_repo = TransactionRepository(db)
+        await transaction_repo.add_transaction(
+            discord_id=111, amount=100000, reason="seed", created_by=0
+        )
+        await transaction_repo.add_transaction(
+            discord_id=222, amount=50000, reason="seed", created_by=0
+        )
+        await transaction_repo.add_transaction(
+            discord_id=333, amount=-20000, reason="debt", created_by=0
+        )
+
+        await cog.guild.callback(cog, interaction)
+
+        interaction.response.send_message.assert_awaited_once()
+        call_args = interaction.response.send_message.call_args
+        embed = call_args[1].get("embed")
+        assert embed is not None
+        assert "balance_guild_total" in embed.description
+        assert call_args[1]["ephemeral"] is False
 
 
 class TestBalanceList:

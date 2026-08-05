@@ -59,20 +59,7 @@ class BalanceCog(
                 description=template.replace("{balance}", f"{balance:,.0f}"),
                 color=discord.Color.green(),
             )
-            await interaction.response.send_message(embed=embed, ephemeral=True)
-            return
-
-        payout_config_repo = PayoutConfigRepository(db)
-        payout_config_service = PayoutConfigService(payout_config_repo)
-
-        if not await payout_config_service.check_pay_add_permission(interaction.user):
-            level = await payout_config_service._repo.get_config()
-            level = level.pay_add_permission_level
-            if level == "leader":
-                msg = await self.bot.translate("balance_leader_only", interaction.locale)
-            else:
-                msg = await self.bot.translate("balance_officer_only", interaction.locale)
-            await interaction.response.send_message(msg, ephemeral=True)
+            await interaction.response.send_message(embed=embed, ephemeral=False)
             return
 
         balance = await transaction_repo.get_balance(member.id)
@@ -83,7 +70,28 @@ class BalanceCog(
             ),
             color=discord.Color.green(),
         )
-        await interaction.response.send_message(embed=embed, ephemeral=True)
+        await interaction.response.send_message(embed=embed, ephemeral=False)
+
+    @app_commands.command(
+        name=app_commands.locale_str("guild", key="balance_guild_name"),
+        description=app_commands.locale_str(
+            "Show the total of payouts the guild owes to its members",
+            key="balance_guild_description",
+        ),
+    )
+    @require_guild_member
+    async def guild(self, interaction: discord.Interaction) -> None:
+        assert self.bot.db_manager is not None
+        db = await self.bot.db_manager.get_connection(interaction.guild.id)
+        transaction_repo = TransactionRepository(db)
+
+        total = await transaction_repo.get_total_owed()
+        template = await self.bot.translate("balance_guild_total", interaction.locale)
+        embed = discord.Embed(
+            description=template.replace("{total}", f"{total:,.0f}"),
+            color=discord.Color.green(),
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=False)
 
     @app_commands.command(
         name=app_commands.locale_str("history", key="balance_history_name"),

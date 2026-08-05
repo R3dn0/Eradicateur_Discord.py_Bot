@@ -70,6 +70,20 @@ async def test_list_balances_orders_desc(repo):
 
 
 @pytest.mark.asyncio
+async def test_get_total_owed_returns_zero_when_empty(repo):
+    assert await repo.get_total_owed() == 0
+
+
+@pytest.mark.asyncio
+async def test_get_total_owed_sums_positive_balances_only(repo):
+    await repo.add_transaction(discord_id=100, amount=100, reason="credit", created_by=1)
+    await repo.add_transaction(discord_id=200, amount=50, reason="credit", created_by=1)
+    await repo.add_transaction(discord_id=300, amount=-30, reason="debt", created_by=1)
+    await repo.add_transaction(discord_id=100, amount=-100, reason="net zero", created_by=1)
+    assert await repo.get_total_owed() == 50
+
+
+@pytest.mark.asyncio
 async def test_list_transactions_orders_desc(repo):
     await repo.add_transaction(discord_id=500, amount=10, reason="first", created_by=1)
     await repo.add_transaction(discord_id=500, amount=20, reason="second", created_by=1)
