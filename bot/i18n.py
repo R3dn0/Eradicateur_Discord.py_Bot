@@ -7,6 +7,8 @@ from discord import app_commands
 
 logger = logging.getLogger("eradicateur_bot.i18n")
 
+DEFAULT_LOCALE = "en"
+
 
 class JSONTranslator(app_commands.Translator):
     def __init__(self) -> None:
@@ -34,9 +36,17 @@ class JSONTranslator(app_commands.Translator):
         if not key:
             return None
 
-        locale_tag = locale.value
-        catalog = self._catalog.get(locale_tag)
-        if catalog is None:
-            return None
-
-        return catalog.get(key)
+        locale_tag = str(getattr(locale, "value", locale)).lower()
+        candidates = (locale_tag, locale_tag.split("-")[0], DEFAULT_LOCALE)
+        for tag in candidates:
+            catalog = self._catalog.get(tag)
+            if catalog is None:
+                continue
+            value = catalog.get(key)
+            if value is not None:
+                return value
+        for catalog in self._catalog.values():
+            value = catalog.get(key)
+            if value is not None:
+                return value
+        return None
