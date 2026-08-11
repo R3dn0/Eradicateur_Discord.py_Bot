@@ -42,6 +42,12 @@ python3 run.py
 - `/balance pay` — manually withdraw an amount from a player's balance (rejects if insufficient funds). On success, sends a DM to the affected player with the debited amount and new balance. *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
 - `/balance add` — manually credit a player's balance with a reason. On success, sends a DM to the affected player with the credited amount, reason, and new balance. *(Requires: Officer or Leader role, depending on `/payout config permissions`)*
 
+**Activity signups** (`activite/`):
+
+- `/activite creer` — opens a form (title, departure point, optional stuff), then a slot builder: a dropdown fed by the server's **role pool** (same role can be added multiple times, paginated beyond 23 roles) plus a **Manual add** button (`CATEGORY - description`) for exotic compositions. Then a date/time picker. The whole creation happens in an **ephemeral message** (visible only to the creator); the signup embed is only published to the channel once confirmed, with a dropdown to claim a slot, a thread for discussion, and a roster of all slots with the registered players next to them. A `❓ Fill` slot is added automatically at the end. *(No restriction)*
+- `/activite pool afficher` — shows the role pool; `/activite pool ajouter <label>` adds a role (e.g. `🛡️ Tank incub`); `/activite pool supprimer <position>` deletes one (with confirmation); `/activite pool réordonner` reorders the pool through a visual picker (pick the role to move, then the target position, then Save); `/activite pool vider` empties the pool (with confirmation). *(Requires: Discord Administrator permission)*
+- Slots — anyone can claim a slot from the embed dropdown, or in the activity thread with `/activite rejoindre <slot>`. A player can hold only one slot per activity; several players can share a slot. Picking another slot while already registered automatically moves the registration. `/activite quitter` releases your slot, and the **Close** button freezes the embed. The **Edit** and **Close** menus are only visible to the organizer and admins — **Edit** also lets you rewrite the slot list (existing registrations are kept for identical slots). The embed is the source of truth, so thread commands keep working after a bot restart (no activity database, nothing is tracked).
+
 **Configuration** (`config/`):
 
 - `/config nonotification role` — set or clear the role whose members are skipped in payout DMs. *(Requires: Administrator permission)*

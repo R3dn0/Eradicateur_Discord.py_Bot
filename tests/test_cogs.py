@@ -681,7 +681,10 @@ class TestPayoutVoid:
         await cog.void.callback(cog, interaction, payout_id=payout_id)
 
         interaction.edit_original_response.assert_awaited_once()
-        assert "payout_void_already_voided" in interaction.edit_original_response.call_args[1]["content"]
+        assert (
+            "payout_void_already_voided"
+            in interaction.edit_original_response.call_args[1]["content"]
+        )
 
     @pytest.mark.asyncio
     async def test_void_succeeds(self, cog, interaction, db):
