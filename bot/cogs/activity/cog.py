@@ -3,40 +3,16 @@ from discord import app_commands
 from discord.ext import commands
 
 from bot.cogs.activity.render import is_activity_embed, parse_embed, render_embed
-from bot.cogs.activity.views import ActivityCreateModal, ActivityView
+from bot.cogs.activity.views import (
+    ActivityCreateModal,
+    PoolConfirmView,
+    PoolReorderView,
+    build_labels,
+    build_view,
+)
 from bot.main import EradicateurBot
+from bot.repositories.activity_pool_repository import ActivityPoolRepository
 from bot.utils.discord_guards import require_guild_member
-
-_LABEL_KEYS = {
-    "date": "activity_date_label",
-    "location": "activity_location_label",
-    "stuff": "activity_stuff_label",
-    "edit_placeholder": "activity_edit_placeholder",
-    "field_title": "activity_edit_field_title",
-    "field_description": "activity_edit_field_description",
-    "field_date": "activity_edit_field_date",
-    "field_location": "activity_edit_field_location",
-    "field_stuff": "activity_edit_field_stuff",
-    "join_placeholder": "activity_join_placeholder",
-    "quit": "activity_quit_label",
-    "close": "activity_close_label",
-    "create_modal_title": "activity_create_modal_title",
-    "create_titre": "activity_create_modal_titre_label",
-    "create_lieu": "activity_create_modal_lieu_label",
-    "create_stuff": "activity_create_modal_stuff_label",
-    "create_slots": "activity_create_modal_slots_label",
-    "create_slots_placeholder": "activity_create_modal_slots_placeholder",
-    "datetime_title": "activity_datetime_title",
-    "datetime_day": "activity_datetime_day",
-    "datetime_hour": "activity_datetime_hour",
-    "datetime_minute": "activity_datetime_minute",
-    "datetime_today": "activity_datetime_today",
-    "datetime_tomorrow": "activity_datetime_tomorrow",
-    "datetime_confirm": "activity_datetime_confirm",
-    "datetime_cancel": "activity_datetime_cancel",
-    "datetime_cancelled": "activity_datetime_cancelled",
-    "datetime_past": "activity_datetime_past",
-}
 
 
 class ActivityCog(
@@ -46,10 +22,7 @@ class ActivityCog(
         self.bot = bot
 
     async def _labels(self, interaction: discord.Interaction) -> dict[str, str]:
-        labels = {}
-        for label_key, locale_key in _LABEL_KEYS.items():
-            labels[label_key] = await self.bot.translate(locale_key, interaction.locale)
-        return labels
+        return await build_labels(self.bot, interaction.locale)
 
     @app_commands.command(
         name=app_commands.locale_str("create", key="activity_create_name"),
@@ -63,6 +36,166 @@ class ActivityCog(
         labels = await self._labels(interaction)
         modal = ActivityCreateModal(labels, self.bot, interaction.locale)
         await interaction.response.send_modal(modal)
+
+    async def _pool(self, interaction: discord.Interaction) -> ActivityPoolRepository:
+        assert self.bot.db_manager is not None
+        db = await self.bot.db_manager.get_connection(interaction.guild.id)
+        return ActivityPoolRepository(db)
+
+    pool = app_commands.Group(
+        name=app_commands.locale_str("pool", key="activity_pool_name"),
+        description=app_commands.locale_str(
+            "Manage the activity role pool", key="activity_pool_description"
+        ),
+    )
+
+    @pool.command(
+        name=app_commands.locale_str("show", key="activity_pool_show_name"),
+        description=app_commands.locale_str(
+            "Show the role pool", key="activity_pool_show_description"
+        ),
+    )
+    @app_commands.checks.has_permissions(administrator=True)
+    async def pool_show(self, interaction: discord.Interaction) -> None:
+        repo = await self._pool(interaction)
+        pool_labels = await repo.get_labels(interaction.guild.id)
+        embed = discord.Embed(
+            title=await self.bot.translate("activity_pool_list_title", interaction.locale),
+            color=0xF1C40F,
+        )
+        if not pool_labels:
+            embed.description = await self.bot.translate(
+                "activity_pool_empty", interaction.locale
+            )
+        else:
+            embed.description = "\n".join(
+                f"{i}. {label}" for i, label in enumerate(pool_labels, start=1)
+            )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
+
+    @pool.command(
+        name=app_commands.locale_str("add", key="activity_pool_add_name"),
+        description=app_commands.locale_str(
+            "Add a role label to the pool", key="activity_pool_add_description"
+        ),
+    )
+    @app_commands.describe(
+        label=app_commands.locale_str(
+            "Label shown in the slot (e.g. 🛡️ Tank incub)",
+            key="activity_pool_add_label_description",
+        ),
+    )
+    @app_commands.checks.has_permissions(administrator=True)
+    async def pool_add(self, interaction: discord.Interaction, label: str) -> None:
+        label = label.strip()
+        if not label:
+            await interaction.response.send_message(
+                await self.bot.translate("activity_pool_invalid_label", interaction.locale),
+                ephemeral=True,
+            )
+            return
+        repo = await self._pool(interaction)
+        await repo.add_label(interaction.guild.id, label[:100])
+        text = await self.bot.translate("activity_pool_added", interaction.locale)
+        await interaction.response.send_message(
+            text.replace("{label}", label[:100]), ephemeral=True
+        )
+
+    @pool.command(
+        name=app_commands.locale_str("remove", key="activity_pool_remove_name"),
+        description=app_commands.locale_str(
+            "Remove a role from the pool by position", key="activity_pool_remove_description"
+        ),
+    )
+    @app_commands.describe(
+        position=app_commands.locale_str(
+            "Position shown by /activity pool show", key="activity_pool_remove_position_description"
+        ),
+    )
+    @app_commands.checks.has_permissions(administrator=True)
+    async def pool_remove(self, interaction: discord.Interaction, position: int) -> None:
+        if position < 1:
+            await interaction.response.send_message(
+                await self.bot.translate("activity_pool_invalid_position", interaction.locale),
+                ephemeral=True,
+            )
+            return
+        repo = await self._pool(interaction)
+        pool_labels = await repo.get_labels(interaction.guild.id)
+        if position > len(pool_labels):
+            await interaction.response.send_message(
+                await self.bot.translate("activity_pool_invalid_position", interaction.locale),
+                ephemeral=True,
+            )
+            return
+        label = pool_labels[position - 1]
+        view = PoolConfirmView(
+            await self.bot.translate("activity_pool_confirm", interaction.locale),
+            await self.bot.translate("activity_pool_cancel", interaction.locale),
+            on_confirm=lambda inter: self._pool_do_remove(inter, position),
+        )
+        text = await self.bot.translate("activity_pool_remove_confirm", interaction.locale)
+        await interaction.response.send_message(
+            text.replace("{position}", str(position)).replace("{label}", label),
+            view=view,
+            ephemeral=True,
+        )
+
+    async def _pool_do_remove(
+        self, interaction: discord.Interaction, position: int
+    ) -> None:
+        repo = await self._pool(interaction)
+        removed = await repo.remove_position(interaction.guild.id, position)
+        if not removed:
+            text = await self.bot.translate(
+                "activity_pool_invalid_position", interaction.locale
+            )
+        else:
+            text = await self.bot.translate("activity_pool_removed", interaction.locale)
+            text = text.replace("{position}", str(position))
+        await interaction.response.edit_message(content=text, view=None)
+
+    @pool.command(
+        name=app_commands.locale_str("clear", key="activity_pool_clear_name"),
+        description=app_commands.locale_str(
+            "Clear the whole pool", key="activity_pool_clear_description"
+        ),
+    )
+    @app_commands.checks.has_permissions(administrator=True)
+    async def pool_clear(self, interaction: discord.Interaction) -> None:
+        view = PoolConfirmView(
+            await self.bot.translate("activity_pool_confirm", interaction.locale),
+            await self.bot.translate("activity_pool_cancel", interaction.locale),
+            on_confirm=self._pool_do_clear,
+        )
+        text = await self.bot.translate("activity_pool_clear_confirm", interaction.locale)
+        await interaction.response.send_message(text, view=view, ephemeral=True)
+
+    async def _pool_do_clear(self, interaction: discord.Interaction) -> None:
+        repo = await self._pool(interaction)
+        await repo.clear(interaction.guild.id)
+        text = await self.bot.translate("activity_pool_cleared", interaction.locale)
+        await interaction.response.edit_message(content=text, view=None)
+
+    @pool.command(
+        name=app_commands.locale_str("reorder", key="activity_pool_reorder_name"),
+        description=app_commands.locale_str(
+            "Reorder the role pool", key="activity_pool_reorder_description"
+        ),
+    )
+    @app_commands.checks.has_permissions(administrator=True)
+    async def pool_reorder(self, interaction: discord.Interaction) -> None:
+        repo = await self._pool(interaction)
+        pool_labels = await repo.get_labels(interaction.guild.id)
+        if len(pool_labels) < 2:
+            await interaction.response.send_message(
+                await self.bot.translate("activity_pool_reorder_need_more", interaction.locale),
+                ephemeral=True,
+            )
+            return
+        labels = await self._labels(interaction)
+        view = PoolReorderView(labels, self.bot, interaction.locale, pool_labels)
+        await interaction.response.send_message(embed=view.embed(), view=view, ephemeral=True)
 
     @app_commands.command(
         name=app_commands.locale_str("join", key="activity_join_name"),
@@ -99,21 +232,39 @@ class ActivityCog(
             return
 
         uid = interaction.user.id
+        previous = None
+        previous_slot = None
         for i, current_slot in enumerate(activity.slots, start=1):
             if uid in current_slot.players:
+                previous = i
+                previous_slot = current_slot
+                break
+        if previous is not None:
+            if previous == slot:
                 text = await self.bot.translate("activity_already_registered", interaction.locale)
+                name = previous_slot.category
+                if previous_slot.description:
+                    name = f"{name} - {previous_slot.description}"
                 await interaction.response.send_message(
-                    text.replace("{slot}", str(i)), ephemeral=True
+                    text.replace("{slot}", name), ephemeral=True
                 )
                 return
+            activity.slots[previous - 1].players.remove(uid)
 
         activity.slots[slot - 1].players.append(uid)
         labels = await self._labels(interaction)
         embed = render_embed(activity, labels)
-        view = ActivityView(activity, labels, self.bot, interaction.locale)
+        view = build_view(activity, labels, self.bot, interaction.locale, interaction)
         await message.edit(embed=embed, view=view)
-        text = await self.bot.translate("activity_joined", interaction.locale)
-        await interaction.response.send_message(text.replace("{slot}", str(slot)), ephemeral=True)
+        target = activity.slots[slot - 1]
+        name = target.category
+        if target.description:
+            name = f"{name} - {target.description}"
+        if previous is not None:
+            text = await self.bot.translate("activity_moved", interaction.locale)
+        else:
+            text = await self.bot.translate("activity_joined", interaction.locale)
+        await interaction.response.send_message(text.replace("{slot}", name), ephemeral=True)
 
     @app_commands.command(
         name=app_commands.locale_str("leave", key="activity_leave_name"),
@@ -136,13 +287,13 @@ class ActivityCog(
 
         activity = parse_embed(message.embeds[0])
         uid = interaction.user.id
-        slot_number = None
-        for i, current_slot in enumerate(activity.slots, start=1):
+        slot_obj = None
+        for current_slot in activity.slots:
             if uid in current_slot.players:
                 current_slot.players.remove(uid)
-                slot_number = i
+                slot_obj = current_slot
                 break
-        if slot_number is None:
+        if slot_obj is None:
             await interaction.response.send_message(
                 await self.bot.translate("activity_not_registered", interaction.locale),
                 ephemeral=True,
@@ -151,11 +302,14 @@ class ActivityCog(
 
         labels = await self._labels(interaction)
         embed = render_embed(activity, labels)
-        view = ActivityView(activity, labels, self.bot, interaction.locale)
+        view = build_view(activity, labels, self.bot, interaction.locale, interaction)
         await message.edit(embed=embed, view=view)
+        name = slot_obj.category
+        if slot_obj.description:
+            name = f"{name} - {slot_obj.description}"
         text = await self.bot.translate("activity_left", interaction.locale)
         await interaction.response.send_message(
-            text.replace("{slot}", str(slot_number)), ephemeral=True
+            text.replace("{slot}", name), ephemeral=True
         )
 
     async def _activity_message(self, interaction: discord.Interaction) -> discord.Message | None:
@@ -169,7 +323,3 @@ class ActivityCog(
             return await parent.fetch_message(channel.id)
         except (discord.Forbidden, discord.HTTPException):
             return None
-
-
-async def setup(bot: EradicateurBot) -> None:
-    await bot.add_cog(ActivityCog(bot))

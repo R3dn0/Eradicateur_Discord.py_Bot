@@ -16,3 +16,4 @@ class Activity:
     location: str = ""
     stuff: str = ""
     slots: list[Slot] = field(default_factory=list)
+    creator_id: int = 0

@@ -2,8 +2,8 @@ import re
 from datetime import datetime, timedelta, timezone
 
 _TIMESTAMP_RE = re.compile(r"<t:(\d+)[^>]*>")
-_FULL_PATTERNS = ("%d/%m/%Y %H:%M", "%Y-%m-%d %H:%M", "%d/%m %H:%M", "%d/%m/%y %H:%M")
-_DATE_PATTERNS = ("%d/%m/%Y", "%Y-%m-%d", "%d/%m")
+_FULL_PATTERNS = ("%d/%m/%Y %H:%M", "%Y-%m-%d %H:%M", "%d/%m/%y %H:%M")
+_DATE_PATTERNS = ("%d/%m/%Y", "%Y-%m-%d", "%d/%m/%y")
 
 
 def to_discord_timestamp(sqlite_datetime_str: str, style: str = "f") -> str:
@@ -31,28 +31,54 @@ def parse_user_time(text: str) -> str:
     normalized = re.sub(r"h", ":", normalized, flags=re.IGNORECASE)
 
     now = datetime.now()
-    parsed = _parse_with(*_FULL_PATTERNS, value=normalized)
+    parsed = _parse_date_time(normalized, now)
     if parsed is None:
-        parsed = _parse_with(*_DATE_PATTERNS, value=normalized)
-    if parsed is not None:
-        if parsed.year == 1900:
-            parsed = parsed.replace(year=now.year)
-        return f"<t:{int(parsed.timestamp())}:F>"
-
-    try:
-        parsed = datetime.strptime(normalized, "%H:%M")
-    except ValueError:
+        parsed = _parse_bare_time(normalized, now)
+    if parsed is None:
         return text
-    parsed = parsed.replace(year=now.year, month=now.month, day=now.day)
-    if parsed <= now:
-        parsed += timedelta(days=1)
     return f"<t:{int(parsed.timestamp())}:F>"
 
 
-def _parse_with(*formats: str, value: str) -> datetime | None:
-    for fmt in formats:
+def _parse_date_time(value: str, now: datetime) -> datetime | None:
+    for fmt in _FULL_PATTERNS:
         try:
             return datetime.strptime(value, fmt)
         except ValueError:
             continue
-    return None
+    for fmt in _DATE_PATTERNS:
+        try:
+            return datetime.strptime(value, fmt)
+        except ValueError:
+            continue
+    # Yearless formats ("03/08 20:00", "03/08"): parse with the current year
+    # appended so Python never falls back to ambiguous no-year parsing, and
+    # roll forward by one year when the result already lies in the past.
+    if " " in value:
+        date_part, sep, time_part = value.partition(" ")
+        if not sep or not time_part:
+            return None
+        try:
+            parsed = datetime.strptime(date_part + f"/{now.year}", "%d/%m/%Y")
+            parsed_time = datetime.strptime(time_part, "%H:%M")
+        except ValueError:
+            return None
+        parsed = parsed.replace(hour=parsed_time.hour, minute=parsed_time.minute)
+    else:
+        try:
+            parsed = datetime.strptime(value + f"/{now.year}", "%d/%m/%Y")
+        except ValueError:
+            return None
+    if parsed <= now:
+        parsed = parsed.replace(year=parsed.year + 1)
+    return parsed
+
+
+def _parse_bare_time(value: str, now: datetime) -> datetime | None:
+    try:
+        parsed = datetime.strptime(value, "%H:%M")
+    except ValueError:
+        return None
+    parsed = parsed.replace(year=now.year, month=now.month, day=now.day)
+    if parsed <= now:
+        parsed += timedelta(days=1)
+    return parsed
