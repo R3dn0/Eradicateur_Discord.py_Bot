@@ -1,0 +1,3 @@
+graphify-out/graph.json merge=graphify
+graphify-out/graph.html merge=graphify
+graphify-out/manifest.json merge=graphify
