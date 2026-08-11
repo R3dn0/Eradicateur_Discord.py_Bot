@@ -25,6 +25,7 @@ from bot.cogs.activity.views import (
     PoolReorderDoneButton,
     PoolReorderView,
     PoolSearchModal,
+    PoolSlotSelect,
     SlotBuilderView,
     build_view,
 )
@@ -94,6 +95,7 @@ VIEW_LABELS = {
     "search_modal_placeholder": "e.g. incub",
     "pool_search_placeholder": "Results for \"{query}\"",
     "pool_no_results": "No match found in the pool.",
+    "activity_pool_empty": "The role pool is empty.",
     "builder_done": "Done",
 }
 
@@ -603,6 +605,36 @@ class TestActivityCog:
         assert "__prev__" in values2
         assert "__next__" not in values2
         assert len(values2) == 8
+
+    def test_pool_select_empty_pool_has_disabled_option(self):
+        bot = _bot()
+        view = SlotBuilderView(
+            Activity(title="t"),
+            VIEW_LABELS,
+            bot,
+            discord.Locale.american_english,
+            [],
+        )
+        select = view.children[0]
+        assert isinstance(select, PoolSlotSelect)
+        assert select.disabled is True
+        assert len(select.options) == 1
+        assert select.options[0].value == "__empty__"
+        assert select.options[0].label == VIEW_LABELS["activity_pool_empty"]
+
+    def test_pool_select_non_empty_pool_unchanged(self):
+        bot = _bot()
+        view = SlotBuilderView(
+            Activity(title="t"),
+            VIEW_LABELS,
+            bot,
+            discord.Locale.american_english,
+            ["Tank", "Heal"],
+        )
+        select = view.children[0]
+        assert isinstance(select, PoolSlotSelect)
+        assert select.disabled is False
+        assert [o.value for o in select.options] == ["0", "1"]
 
     @pytest.mark.asyncio
     async def test_manual_slot_modal_appends_slot(self):
