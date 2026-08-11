@@ -6,6 +6,7 @@ from pathlib import Path
 
 import aiosqlite
 
+from bot.repositories.activity_pool_repository import ActivityPoolRepository
 from bot.repositories.bot_config_repository import BotConfigRepository
 from bot.repositories.payout_config_repository import (
     PayoutConfigRepository,
@@ -42,6 +43,9 @@ class GuildDatabaseManager:
 
         payout_repo = PayoutRepository(conn, transaction_repo)
         await payout_repo._ensure_tables()
+
+        activity_pool_repo = ActivityPoolRepository(conn)
+        await activity_pool_repo._ensure_table()
 
     async def get_connection(self, guild_id: int) -> aiosqlite.Connection:
         if guild_id not in self._locks:

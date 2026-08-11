@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 cd "$(dirname "$0")/.."
-exec python3.12 -m run "$@"
+if [ -x ".venv/bin/python" ]; then
+    exec .venv/bin/python -m run "$@"
+fi
+exec python3 -m run "$@"
