@@ -1,0 +1,233 @@
+{% extends "base.html" %}
+
+{% block title %}Configuration - {{ current_guild.name }}{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-black text-white flex items-center gap-2">
+                ⚙️ Guild Configuration
+            </h1>
+            <p class="text-xs text-slate-400 mt-1">
+                Adjust taxes, administrative roles, and bot options directly in the SQLite database
+            </p>
+        </div>
+    </div>
+
+    {% if success_msg %}
+    <div class="bg-emerald-950/80 border border-emerald-800 text-emerald-300 px-4 py-3 rounded-xl text-sm flex items-center space-x-2 shadow">
+        <span>✅</span>
+        <span>Settings successfully saved in the database!</span>
+    </div>
+    {% endif %}
+
+    <div class="grid grid-cols-1 gap-6">
+        <!-- 1. Taxes Payouts -->
+        <div class="bg-darkcard border border-darkborder rounded-2xl p-6 shadow-xl space-y-4">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2 border-b border-darkborder pb-3">
+                <span>📊</span> Payout Tax Rates
+            </h2>
+            <p class="text-xs text-slate-400">
+                These rates are automatically applied when creating a loot split (`/payout create`).
+            </p>
+
+            <form method="POST" action="/guild/{{ current_guild.id }}/config/rates" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Market Tax (%)</label>
+                        <div class="relative">
+                            <input 
+                                type="number" 
+                                step="0.1" 
+                                min="0" 
+                                max="100" 
+                                name="tax_market" 
+                                value="{{ (payout_cfg.tax_market * 100) | round(2) }}" 
+                                required
+                                class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            >
+                            <span class="absolute right-3 top-2.5 text-slate-500 text-sm">%</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Guild Tax (%)</label>
+                        <div class="relative">
+                            <input 
+                                type="number" 
+                                step="0.1" 
+                                min="0" 
+                                max="100" 
+                                name="tax_guild" 
+                                value="{{ (payout_cfg.tax_guild * 100) | round(2) }}" 
+                                required
+                                class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            >
+                            <span class="absolute right-3 top-2.5 text-slate-500 text-sm">%</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Transport Tax (%)</label>
+                        <div class="relative">
+                            <input 
+                                type="number" 
+                                step="0.1" 
+                                min="0" 
+                                max="100" 
+                                name="tax_transport" 
+                                value="{{ (payout_cfg.tax_transport * 100) | round(2) }}" 
+                                required
+                                class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            >
+                            <span class="absolute right-3 top-2.5 text-slate-500 text-sm">%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition">
+                        Save Tax Rates
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 2. Payout Roles & Permissions -->
+        <div class="bg-darkcard border border-darkborder rounded-2xl p-6 shadow-xl space-y-4">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2 border-b border-darkborder pb-3">
+                <span>🛡️</span> Payout Management Roles & Permissions
+            </h2>
+            <p class="text-xs text-slate-400">
+                Define the Discord roles allowed to create payouts and manage player balances.
+            </p>
+
+            <form method="POST" action="/guild/{{ current_guild.id }}/config/roles" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Officer Role (Discord ID)</label>
+                        {% if roles %}
+                        <select name="officer_role_id" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">-- None configured --</option>
+                            {% for r in roles %}
+                            <option value="{{ r.id }}" {% if payout_cfg.officer_role_id == r.id %}selected{% endif %}>
+                                {{ r.name }} ({{ r.id }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% else %}
+                        <input 
+                            type="text" 
+                            name="officer_role_id" 
+                            value="{{ payout_cfg.officer_role_id or '' }}" 
+                            placeholder="e.g. 123456789012345678"
+                            class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        >
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Leader Role (Discord ID)</label>
+                        {% if roles %}
+                        <select name="leader_role_id" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">-- None configured --</option>
+                            {% for r in roles %}
+                            <option value="{{ r.id }}" {% if payout_cfg.leader_role_id == r.id %}selected{% endif %}>
+                                {{ r.name }} ({{ r.id }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% else %}
+                        <input 
+                            type="text" 
+                            name="leader_role_id" 
+                            value="{{ payout_cfg.leader_role_id or '' }}" 
+                            placeholder="e.g. 123456789012345678"
+                            class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        >
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Permission Level for /balance pay & add</label>
+                    <select name="pay_add_permission_level" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="officer" {% if payout_cfg.pay_add_permission_level == 'officer' %}selected{% endif %}>Officer (Both Officers and Leaders allowed)</option>
+                        <option value="leader" {% if payout_cfg.pay_add_permission_level == 'leader' %}selected{% endif %}>Leader only</option>
+                    </select>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition">
+                        Save Roles
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- 3. Logs & Opt-Out notifications -->
+        <div class="bg-darkcard border border-darkborder rounded-2xl p-6 shadow-xl space-y-4">
+            <h2 class="text-lg font-bold text-white flex items-center gap-2 border-b border-darkborder pb-3">
+                <span>🤖</span> General Bot Settings
+            </h2>
+
+            <form method="POST" action="/guild/{{ current_guild.id }}/config/bot" class="space-y-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Audit Log Channel (Channel ID)</label>
+                        {% if channels %}
+                        <select name="log_channel_id" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">-- Disabled --</option>
+                            {% for c in channels %}
+                            <option value="{{ c.id }}" {% if bot_cfg.log_channel_id == c.id %}selected{% endif %}>
+                                #{{ c.name }} ({{ c.id }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% else %}
+                        <input 
+                            type="text" 
+                            name="log_channel_id" 
+                            value="{{ bot_cfg.log_channel_id or '' }}" 
+                            placeholder="e.g. 123456789012345678"
+                            class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        >
+                        {% endif %}
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Payout DMs Opt-Out Role</label>
+                        {% if roles %}
+                        <select name="notification_opt_out_role_id" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <option value="">-- No opt-out role --</option>
+                            {% for r in roles %}
+                            <option value="{{ r.id }}" {% if bot_cfg.notification_opt_out_role_id == r.id %}selected{% endif %}>
+                                {{ r.name }} ({{ r.id }})
+                            </option>
+                            {% endfor %}
+                        </select>
+                        {% else %}
+                        <input 
+                            type="text" 
+                            name="notification_opt_out_role_id" 
+                            value="{{ bot_cfg.notification_opt_out_role_id or '' }}" 
+                            placeholder="e.g. 123456789012345678"
+                            class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        >
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="flex justify-end">
+                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition">
+                        Save Bot Settings
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

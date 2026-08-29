@@ -22,6 +22,7 @@ python3 run.py
 ## Available commands
 
 **General** (`help/`, `guild_commands.py`):
+
 - `/help` — show the list of all available commands *(No restriction)*
 - `/ping` - check that the bot responds *(No restriction)*
 
@@ -61,7 +62,7 @@ python3 run.py
 
 ## Project structure
 
-```
+```bash
 bot/
 ├── cogs/           # Discord commands (grouped by feature)
 ├── repositories/   # Data access layer
@@ -89,3 +90,10 @@ db = await self.bot.db_manager.get_connection(interaction.guild.id)
 repo = MyRepository(db)
 await repo.do_something()
 ```
+
+## Web Dashboard (FastAPI)
+
+The bot includes an optional integrated web dashboard running on the same process:
+- **Port**: Configurable via `DASHBOARD_PORT` (default `38291`).
+- **Auth**: Protected by session token (`DASHBOARD_TOKEN`).
+- **Features**: Manage player balances (manual credit/debit), audit payout transactions, edit guild taxes & roles, manage activity pool compositions, and inspect logs live.

@@ -1,0 +1,63 @@
+<div class="overflow-x-auto">
+    <table class="w-full text-left text-sm text-slate-300">
+        <thead class="bg-slate-900/80 text-xs uppercase text-slate-400 font-semibold border-b border-darkborder">
+            <tr>
+                <th class="px-6 py-4">Member</th>
+                <th class="px-6 py-4">Discord ID</th>
+                <th class="px-6 py-4 text-right">Current Balance</th>
+                <th class="px-6 py-4 text-center">Actions</th>
+            </tr>
+        </thead>
+        <tbody class="divide-y divide-darkborder">
+            {% for b in balances %}
+            <tr class="hover:bg-slate-800/50 transition">
+                <td class="px-6 py-4 font-medium text-white flex items-center space-x-3">
+                    <span class="w-8 h-8 rounded-full bg-slate-800 border border-darkborder flex items-center justify-center text-xs font-bold text-indigo-400">
+                        {{ b.name[0] | upper }}
+                    </span>
+                    <span class="truncate max-w-xs">{{ b.name }}</span>
+                </td>
+                <td class="px-6 py-4 font-mono text-xs text-slate-400">{{ b.discord_id }}</td>
+                <td class="px-6 py-4 text-right">
+                    <span class="font-mono font-bold {% if b.balance > 0 %}text-emerald-400{% elif b.balance < 0 %}text-red-400{% else %}text-slate-400{% endif %} text-base">
+                        {{ b.balance | format_number }}
+                    </span>
+                    <span class="text-xs text-slate-500 ml-1">silvers</span>
+                </td>
+                <td class="px-6 py-4 text-center">
+                    <div class="flex items-center justify-center space-x-2">
+                        <a href="/guild/{{ current_guild.id }}/balances/{{ b.discord_id }}/history" class="text-xs bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-darkborder px-3 py-1.5 rounded-lg transition">
+                            📜 History
+                        </a>
+                        <button 
+                            onclick="openTransactionModal('{{ b.discord_id }}', '{{ b.name | escape }}', 'credit')" 
+                            class="text-xs bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 px-2.5 py-1.5 rounded-lg transition"
+                            title="Credit player balance"
+                        >
+                            + Credit
+                        </button>
+                        <button 
+                            onclick="openTransactionModal('{{ b.discord_id }}', '{{ b.name | escape }}', 'debit')" 
+                            class="text-xs bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 px-2.5 py-1.5 rounded-lg transition"
+                            title="Debit player balance"
+                        >
+                            - Debit
+                        </button>
+                    </div>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="4" class="px-6 py-8 text-center text-slate-500">
+                    {% if query %}
+                    No members matching search "{{ query }}".
+                    {% else %}
+                    No balances recorded in database.
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
