@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Select Server - Eradicateur Dashboard{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-8">
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-extrabold text-white">Connected Discord Servers</h1>
+        <p class="text-slate-400 mt-2">Select a server to manage its database and settings</p>
+    </div>
+
+    {% if guilds %}
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {% for g in guilds %}
+        <a href="/guild/{{ g.id }}" class="bg-darkcard border border-darkborder hover:border-indigo-500/80 p-6 rounded-2xl transition duration-200 shadow-lg hover:shadow-indigo-950/40 flex items-center space-x-4 group">
+            <div class="w-16 h-16 rounded-2xl bg-indigo-950 border border-indigo-700 flex items-center justify-center text-2xl font-bold text-indigo-300 overflow-hidden shadow-inner shrink-0">
+                {% if g.icon %}
+                <img src="{{ g.icon }}" alt="{{ g.name }}" class="w-full h-full object-cover">
+                {% else %}
+                🏰
+                {% endif %}
+            </div>
+            <div class="flex-1 min-w-0">
+                <div class="flex items-center space-x-2">
+                    <h2 class="text-lg font-bold text-white group-hover:text-indigo-400 truncate transition">
+                        {{ g.name }}
+                    </h2>
+                    {% if g.online %}
+                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm" title="Bot is online in this server"></span>
+                    {% endif %}
+                </div>
+                <p class="text-xs text-slate-400 font-mono mt-0.5">ID: {{ g.id }}</p>
+                {% if g.member_count %}
+                <p class="text-xs text-slate-500 mt-1">👥 {{ g.member_count }} members</p>
+                {% endif %}
+            </div>
+            <div class="text-indigo-400 group-hover:translate-x-1 transition text-xl font-bold">
+                ➔
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="bg-darkcard border border-darkborder p-8 rounded-2xl text-center">
+        <p class="text-slate-400">No servers found in configuration or data directory.</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+

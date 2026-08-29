@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Activity Pool - {{ current_guild.name }}{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-black text-white flex items-center gap-2">
+                🛡️ Party Role Pool for Activities
+            </h1>
+            <p class="text-xs text-slate-400 mt-1">
+                Ordered list of preset roles for activity event creation (`/activite creer`)
+            </p>
+        </div>
+        {% if pool_items %}
+        <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/clear" onsubmit="return confirm('⚠️ Are you sure you want to CLEAR the entire role pool?');">
+            <button type="submit" class="bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 text-xs font-semibold px-3 py-2 rounded-xl transition">
+                🗑️ Clear Pool
+            </button>
+        </form>
+        {% endif %}
+    </div>
+
+    <!-- Add Role Form -->
+    <div class="bg-darkcard border border-darkborder rounded-2xl p-5 shadow">
+        <h2 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+            <span>+</span> Add Role to Pool
+        </h2>
+        <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/add" class="flex gap-3">
+            <input 
+                type="text" 
+                name="label" 
+                required 
+                placeholder="e.g. 🛡️ Incubus Tank, 💚 Holy Healer, 💥 DPS Shadowcaller..." 
+                class="flex-1 bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            >
+            <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition shadow shrink-0">
+                Add Role
+            </button>
+        </form>
+    </div>
+
+    <!-- Roles List -->
+    <div class="bg-darkcard border border-darkborder rounded-2xl shadow overflow-hidden">
+        <div class="p-4 border-b border-darkborder bg-slate-900/40 flex items-center justify-between">
+            <h2 class="text-sm font-bold text-white">
+                Configured Roles ({{ pool_items|length }})
+            </h2>
+            <span class="text-xs text-slate-500">Order shown in Discord signup dropdowns</span>
+        </div>
+
+        <div class="divide-y divide-darkborder">
+            {% for item in pool_items %}
+            <div class="p-4 flex items-center justify-between hover:bg-slate-800/40 transition">
+                <div class="flex items-center space-x-4">
+                    <span class="w-7 h-7 rounded-lg bg-slate-900 border border-darkborder flex items-center justify-center font-mono text-xs font-bold text-slate-400">
+                        {{ item.position }}
+                    </span>
+                    <span class="text-sm font-semibold text-white">
+                        {{ item.label }}
+                    </span>
+                </div>
+
+                <div class="flex items-center space-x-2">
+                    <!-- Move Up -->
+                    <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/move" class="inline">
+                        <input type="hidden" name="position" value="{{ item.position }}">
+                        <input type="hidden" name="direction" value="up">
+                        <button type="submit" {% if loop.first %}disabled class="opacity-20 cursor-not-allowed"{% endif %} class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs border border-darkborder" title="Move Up">
+                            ▲
+                        </button>
+                    </form>
+
+                    <!-- Move Down -->
+                    <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/move" class="inline">
+                        <input type="hidden" name="position" value="{{ item.position }}">
+                        <input type="hidden" name="direction" value="down">
+                        <button type="submit" {% if loop.last %}disabled class="opacity-20 cursor-not-allowed"{% endif %} class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs border border-darkborder" title="Move Down">
+                            ▼
+                        </button>
+                    </form>
+
+                    <!-- Delete -->
+                    <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/remove/{{ item.position }}" onsubmit="return confirm('Remove this role?');" class="inline">
+                        <button type="submit" class="p-1.5 rounded-lg bg-red-950/60 hover:bg-red-900 text-red-400 text-xs border border-red-800" title="Delete">
+                            ✕
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            <div class="p-8 text-center text-slate-500 text-sm">
+                No roles configured in the pool yet. Use the form above to add some.
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}Payouts - {{ current_guild.name }}{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-2xl font-black text-white flex items-center gap-2">
+                📜 Activity Payouts History
+            </h1>
+            <p class="text-xs text-slate-400 mt-1">
+                List of loot splits recorded in this guild's SQLite database
+            </p>
+        </div>
+    </div>
+
+    <!-- Payouts Table -->
+    <div class="bg-darkcard border border-darkborder rounded-2xl shadow overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-slate-300">
+                <thead class="bg-slate-900/80 text-xs uppercase text-slate-400 font-semibold border-b border-darkborder">
+                    <tr>
+                        <th class="px-6 py-4">ID</th>
+                        <th class="px-6 py-4">Date</th>
+                        <th class="px-6 py-4">Created by</th>
+                        <th class="px-6 py-4 text-center">Players</th>
+                        <th class="px-6 py-4 text-right">Bag Silvers / Items</th>
+                        <th class="px-6 py-4 text-right">Per Player</th>
+                        <th class="px-6 py-4 text-center">Status</th>
+                        <th class="px-6 py-4 text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-darkborder">
+                    {% for p in payouts %}
+                    <tr class="hover:bg-slate-800/50 transition">
+                        <td class="px-6 py-4 font-mono font-bold text-white">#{{ p.id }}</td>
+                        <td class="px-6 py-4 text-xs text-slate-400">{{ p.created_at }}</td>
+                        <td class="px-6 py-4 text-xs text-slate-300">{{ p.creator_name }}</td>
+                        <td class="px-6 py-4 text-center font-bold text-slate-200">
+                            👥 {{ p.participant_count }}
+                        </td>
+                        <td class="px-6 py-4 text-right text-xs">
+                            <div><span class="text-amber-400 font-mono font-bold">{{ p.bag_silvers | format_number }}</span> <span class="text-slate-500">bag</span></div>
+                            {% if p.item_market_value %}
+                            <div><span class="text-slate-300 font-mono">{{ p.item_market_value | format_number }}</span> <span class="text-slate-500">items</span></div>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-right font-mono font-bold text-emerald-400">
+                            {{ p.amount_per_player | format_number }} <span class="text-xs text-slate-500 font-normal">silvers</span>
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            {% if p.voided %}
+                            <span class="bg-red-950/80 text-red-300 border border-red-800 text-xs px-2.5 py-1 rounded-full font-semibold">
+                                🚫 Voided
+                            </span>
+                            {% else %}
+                            <span class="bg-emerald-950/80 text-emerald-300 border border-emerald-800 text-xs px-2.5 py-1 rounded-full font-semibold">
+                                ✅ Active
+                            </span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-center">
+                            <a href="/guild/{{ current_guild.id }}/payouts/{{ p.id }}" class="text-xs bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-darkborder px-3 py-1.5 rounded-lg transition">
+                                🔍 Details
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="px-6 py-8 text-center text-slate-500">
+                            No payouts recorded in the database.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

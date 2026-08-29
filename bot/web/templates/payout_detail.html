@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Payout #{{ payout.id }} Details - {{ current_guild.name }}{% endblock %}
+
+{% block content %}
+<div class="space-y-6 max-w-4xl mx-auto">
+    <!-- Breadcrumb -->
+    <div>
+        <a href="/guild/{{ current_guild.id }}/payouts" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center space-x-1">
+            <span>← Back to Payouts List</span>
+        </a>
+    </div>
+
+    <!-- Main Card -->
+    <div class="bg-darkcard border border-darkborder rounded-2xl p-6 shadow-xl space-y-6">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-darkborder pb-6">
+            <div>
+                <div class="flex items-center space-x-3">
+                    <h1 class="text-2xl font-black text-white">Payout #{{ payout.id }}</h1>
+                    {% if payout.voided %}
+                    <span class="bg-red-950/80 text-red-300 border border-red-800 text-xs px-3 py-1 rounded-full font-bold">
+                        🚫 Voided
+                    </span>
+                    {% else %}
+                    <span class="bg-emerald-950/80 text-emerald-300 border border-emerald-800 text-xs px-3 py-1 rounded-full font-bold">
+                        ✅ Valid Payout
+                    </span>
+                    {% endif %}
+                </div>
+                <p class="text-xs text-slate-400 mt-1">
+                    Created on {{ payout.created_at }} by <span class="text-slate-200 font-medium">{{ creator_name }}</span> (ID: {{ payout.created_by }})
+                </p>
+                {% if payout.voided and payout.voided_at %}
+                <p class="text-xs text-red-400 mt-1">
+                    Voided on {{ payout.voided_at }} (by ID {{ payout.voided_by or 'Admin' }})
+                </p>
+                {% endif %}
+            </div>
+
+            <!-- Void Action Button -->
+            {% if not payout.voided %}
+            <form method="POST" action="/guild/{{ current_guild.id }}/payouts/{{ payout.id }}/void" onsubmit="return confirm('⚠️ Are you sure you want to VOID this payout? This will automatically debit each participant of their received share!');">
+                <button type="submit" class="bg-red-950/80 hover:bg-red-900 text-red-200 border border-red-700 text-sm font-bold px-4 py-2.5 rounded-xl transition shadow flex items-center space-x-2">
+                    <span>🚫 Void Payout</span>
+                </button>
+            </form>
+            {% endif %}
+        </div>
+
+        <!-- Breakdown Grid -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div class="bg-slate-900/60 p-4 rounded-xl border border-darkborder">
+                <span class="text-xs text-slate-400 font-medium uppercase">Bag Silvers</span>
+                <p class="text-lg font-black text-amber-400 font-mono mt-1">{{ payout.bag_silvers | format_number }}</p>
+            </div>
+            <div class="bg-slate-900/60 p-4 rounded-xl border border-darkborder">
+                <span class="text-xs text-slate-400 font-medium uppercase">Item Value</span>
+                <p class="text-lg font-black text-slate-200 font-mono mt-1">{{ payout.item_market_value | format_number }}</p>
+            </div>
+            <div class="bg-slate-900/60 p-4 rounded-xl border border-darkborder">
+                <span class="text-xs text-slate-400 font-medium uppercase">Activity Cost</span>
+                <p class="text-lg font-black text-red-400 font-mono mt-1">-{{ payout.activity_cost | format_number }}</p>
+            </div>
+            <div class="bg-slate-900/60 p-4 rounded-xl border border-darkborder">
+                <span class="text-xs text-slate-400 font-medium uppercase">Net Per Player</span>
+                <p class="text-lg font-black text-emerald-400 font-mono mt-1">{{ payout.amount_per_player | format_number }}</p>
+            </div>
+        </div>
+
+        <!-- Taxes applied -->
+        <div class="bg-slate-900/40 p-4 rounded-xl border border-darkborder">
+            <h3 class="text-xs font-bold text-slate-300 uppercase mb-2">Taxes Applied on this Split</h3>
+            <div class="grid grid-cols-3 gap-4 text-xs">
+                <div><span class="text-slate-400">Market Tax:</span> <span class="font-bold text-slate-200">{{ payout.tax_market | format_percent }}</span></div>
+                <div><span class="text-slate-400">Guild Tax:</span> <span class="font-bold text-slate-200">{{ payout.tax_guild | format_percent }}</span></div>
+                <div><span class="text-slate-400">Transport Tax:</span> <span class="font-bold text-slate-200">{{ payout.tax_transport | format_percent }}</span></div>
+            </div>
+        </div>
+
+        <!-- Participants Table -->
+        <div>
+            <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
+                <span>👥</span> Participants & Distributed Credits ({{ participants|length }})
+            </h3>
+            <div class="bg-slate-900/60 rounded-xl border border-darkborder overflow-hidden">
+                <table class="w-full text-left text-sm text-slate-300">
+                    <thead class="bg-slate-900 text-xs uppercase text-slate-400 font-semibold border-b border-darkborder">
+                        <tr>
+                            <th class="px-5 py-3">Player</th>
+                            <th class="px-5 py-3 font-mono text-xs">Discord ID</th>
+                            <th class="px-5 py-3 text-right">Amount Credited</th>
+                            <th class="px-5 py-3 text-center">Profile</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-darkborder">
+                        {% for pt in participants %}
+                        <tr class="hover:bg-slate-800/50 transition">
+                            <td class="px-5 py-3 font-medium text-white">{{ pt.name }}</td>
+                            <td class="px-5 py-3 font-mono text-xs text-slate-400">{{ pt.discord_id }}</td>
+                            <td class="px-5 py-3 text-right font-mono font-bold text-emerald-400">
+                                +{{ pt.amount | format_number }}
+                            </td>
+                            <td class="px-5 py-3 text-center">
+                                <a href="/guild/{{ current_guild.id }}/balances/{{ pt.discord_id }}/history" class="text-xs text-indigo-400 hover:text-indigo-300">
+                                    View balance ➔
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

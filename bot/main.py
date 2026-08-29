@@ -1,3 +1,4 @@
+import asyncio
 import logging
 
 import discord
@@ -184,13 +185,25 @@ class EradicateurBot(commands.Bot):
                 params_parts.append(f"{name}: {formatted}")
         params_str = ", ".join(params_parts)
         template = await self.translate("audit_log_command", interaction.locale)
+        if interaction.channel is not None:
+            channel_ref = getattr(interaction.channel, "mention", str(interaction.channel))
+        else:
+            channel_ref = "Unknown channel"
         embed = discord.Embed(
             description=template.replace("{user}", f"<@{interaction.user.id}>")
-            .replace("{channel}", interaction.channel.mention)
+            .replace("{channel}", channel_ref)
             .replace("{command}", qualified)
             .replace("{params}", params_str),
             color=discord.Color.blurple(),
         )
+
+        if not isinstance(channel, (discord.TextChannel, discord.VoiceChannel, discord.Thread)):
+            logger.warning(
+                "Log channel %s in guild %s is not a sendable channel",
+                config.log_channel_id,
+                interaction.guild.id,
+            )
+            return
 
         try:
             await channel.send(embed=embed)
@@ -223,11 +236,61 @@ async def main() -> None:
     logging.getLogger().setLevel(config.log_level)
     logger.setLevel(config.log_level)
     bot = EradicateurBot(config)
+
+    server = None
+    tasks_to_run = []
+
+    if config.dashboard_enabled:
+        try:
+            import uvicorn
+
+            from bot.web.app import create_app
+
+            web_app = create_app(bot)
+            uvi_config = uvicorn.Config(
+                app=web_app,
+                host=config.dashboard_host,
+                port=config.dashboard_port,
+                log_level="warning",
+                access_log=False,
+            )
+            server = uvicorn.Server(config=uvi_config)
+            logger.info(
+                "Starting Web Dashboard on http://%s:%s",
+                config.dashboard_host,
+                config.dashboard_port,
+            )
+            tasks_to_run.append(asyncio.create_task(server.serve(), name="Web-Dashboard"))
+        except ImportError as e:
+            logger.error("Failed to start dashboard: missing dependencies (%s)", e)
+
     async with bot:
-        await bot.start(config.discord_token)
+        bot_task = asyncio.create_task(bot.start(config.discord_token), name="Discord-Bot")
+        tasks_to_run.append(bot_task)
+
+        done: set = set()
+        pending: set = set()
+        try:
+            done, pending = await asyncio.wait(
+                tasks_to_run,
+                return_when=asyncio.FIRST_COMPLETED,
+            )
+            for t in done:
+                # If a task ended with exception, propagate
+                if not t.cancelled() and t.exception():
+                    raise t.exception()
+        finally:
+            if server is not None:
+                server.should_exit = True
+            for t in pending:
+                t.cancel()
+                try:
+                    await t
+                except asyncio.CancelledError:
+                    pass
+                except Exception:
+                    logger.exception("Error while cancelling pending task %s", t.get_name())
 
 
 if __name__ == "__main__":
-    import asyncio
-
     asyncio.run(main())
