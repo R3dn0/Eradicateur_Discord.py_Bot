@@ -79,6 +79,7 @@ LABEL_KEYS = {
     "search_modal_placeholder": "activity_search_modal_placeholder",
     "pool_search_placeholder": "activity_pool_search_placeholder",
     "pool_no_results": "activity_pool_no_results",
+    "activity_pool_empty": "activity_pool_empty",
 }
 
 _FALLBACK_LABELS = {key: key for key in LABEL_KEYS}
@@ -433,8 +434,15 @@ class PoolSlotSelect(discord.ui.Select):
             options.append(discord.SelectOption(label=labels["pool_prev"], value="__prev__"))
         if start + _POOL_PAGE_SIZE < len(pool_labels):
             options.append(discord.SelectOption(label=labels["pool_next"], value="__next__"))
+        empty = not options
+        if empty:
+            options.append(
+                discord.SelectOption(label=labels["activity_pool_empty"], value="__empty__")
+            )
         super().__init__(
-            placeholder=placeholder or labels["pool_placeholder"], options=options
+            placeholder=placeholder or labels["pool_placeholder"],
+            options=options,
+            disabled=empty,
         )
 
     async def callback(self, interaction: discord.Interaction) -> None:
@@ -444,6 +452,8 @@ class PoolSlotSelect(discord.ui.Select):
             view.page -= 1
         elif value == "__next__":
             view.page += 1
+        elif value == "__empty__":
+            return
         else:
             view.activity.slots.append(Slot(category=self._pool_labels[int(value)]))
             view.search_query = None

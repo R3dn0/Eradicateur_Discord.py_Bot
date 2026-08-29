@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Logs - {{ current_guild.name }}{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-black text-white flex items-center gap-2">
+                📑 Logs Viewer
+            </h1>
+            <p class="text-xs text-slate-400 mt-1">
+                Live inspection of recent bot logs (rotating log files)
+            </p>
+        </div>
+
+        <!-- Log Type Switcher -->
+        <div class="flex flex-wrap items-center gap-2">
+            <a href="/guild/{{ current_guild.id }}/logs?log_type=guild&level_filter={{ level_filter }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {% if log_type == 'guild' %}bg-indigo-600 text-white{% else %}bg-slate-800 text-slate-300 hover:bg-slate-700{% endif %}">
+                🏰 Guild Logs (#{{ current_guild.id }})
+            </a>
+            <a href="/guild/{{ current_guild.id }}/logs?log_type=global&level_filter={{ level_filter }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {% if log_type == 'global' %}bg-indigo-600 text-white{% else %}bg-slate-800 text-slate-300 hover:bg-slate-700{% endif %}">
+                🌐 Global Logs (bot.log)
+            </a>
+            <a href="/guild/{{ current_guild.id }}/logs?log_type=errors&level_filter={{ level_filter }}" class="px-3 py-1.5 rounded-lg text-xs font-semibold transition {% if log_type == 'errors' %}bg-red-900 text-red-100 border border-red-700{% else %}bg-slate-800 text-slate-300 hover:bg-slate-700{% endif %}">
+                ⚠️ Errors (errors.log)
+            </a>
+        </div>
+    </div>
+
+    <!-- Filter toolbar -->
+    <div class="bg-darkcard border border-darkborder rounded-2xl p-4 shadow flex items-center justify-between">
+        <div class="flex items-center space-x-2">
+            <span class="text-xs font-semibold text-slate-400 uppercase">Level:</span>
+            {% for lvl in ['ALL', 'INFO', 'WARNING', 'ERROR', 'DEBUG'] %}
+            <a href="/guild/{{ current_guild.id }}/logs?log_type={{ log_type }}&level_filter={{ lvl }}" class="px-2.5 py-1 rounded-md text-xs font-mono font-semibold transition {% if level_filter == lvl %}bg-indigo-600 text-white{% else %}bg-slate-900 text-slate-400 hover:text-white{% endif %}">
+                {{ lvl }}
+            </a>
+            {% endfor %}
+        </div>
+        <button onclick="window.location.reload();" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-3 py-1.5 rounded-lg border border-darkborder transition flex items-center space-x-1">
+            <span>🔄 Refresh</span>
+        </button>
+    </div>
+
+    <!-- Log Console Box -->
+    <div class="bg-slate-950 border border-darkborder rounded-2xl p-5 shadow-2xl font-mono text-xs text-slate-300 overflow-x-auto max-h-[600px] overflow-y-auto space-y-1">
+        {% for line in log_lines %}
+        <div class="whitespace-pre-wrap leading-relaxed hover:bg-slate-900/60 px-2 py-0.5 rounded {% if 'ERROR' in line or 'CRITICAL' in line %}text-red-400 bg-red-950/20{% elif 'WARNING' in line %}text-amber-300{% elif 'DEBUG' in line %}text-slate-500{% else %}text-slate-200{% endif %}">{{ line }}</div>
+        {% else %}
+        <div class="text-slate-500 py-8 text-center">No log lines found.</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Eradicateur Bot - Admin{% endblock %}</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- HTMX CDN -->
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                            950: '#1e1b4b',
+                        },
+                        darkbg: '#0f172a',
+                        darkcard: '#1e293b',
+                        darkborder: '#334155',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
+</head>
+<body class="bg-darkbg text-slate-100 min-h-screen flex flex-col font-sans antialiased">
+    <!-- Navbar -->
+    <header class="bg-darkcard border-b border-darkborder sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <a href="/" class="flex items-center space-x-2 text-indigo-400 font-bold text-lg hover:text-indigo-300 transition">
+                    <span class="text-2xl">⚔️</span>
+                    <span>ERADICATEUR BOT</span>
+                </a>
+                <span class="bg-indigo-950 text-indigo-300 text-xs px-2.5 py-1 rounded-full font-medium border border-indigo-800">
+                    Admin Dashboard
+                </span>
+            </div>
+
+            <!-- Guild Switcher / Quick Nav -->
+            {% if guilds %}
+            <div class="flex items-center space-x-4">
+                {% if guilds|length > 1 %}
+                <div class="relative">
+                    <select onchange="if(this.value) window.location.href='/guild/' + this.value" class="bg-slate-800 border border-darkborder text-slate-200 text-sm rounded-lg px-3 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        <option value="">Select a server...</option>
+                        {% for g in guilds %}
+                        <option value="{{ g.id }}" {% if current_guild and current_guild.id == g.id %}selected{% endif %}>
+                            {{ g.name }} ({{ g.id }})
+                        </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endif %}
+
+                <a href="/logout" class="text-sm bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/80 px-3 py-1.5 rounded-lg transition flex items-center space-x-1">
+                    <span>Logout</span>
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-1 w-full flex flex-col">
+        {% if current_guild %}
+        <!-- Guild Sub-Navigation Menu -->
+        <div class="mb-6 bg-darkcard rounded-xl p-2 border border-darkborder flex flex-wrap items-center gap-2">
+            <a href="/guild/{{ current_guild.id }}" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if request.url.path == '/guild/' ~ current_guild.id %}bg-indigo-600 text-white shadow{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
+                📊 Overview
+            </a>
+            <a href="/guild/{{ current_guild.id }}/balances" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/balances' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
+                💰 Balances & Players
+            </a>
+            <a href="/guild/{{ current_guild.id }}/payouts" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/payouts' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
+                📜 Payouts
+            </a>
+            <a href="/guild/{{ current_guild.id }}/activity-pool" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/activity-pool' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
+                🛡️ Activity Pool
+            </a>
+            <a href="/guild/{{ current_guild.id }}/config" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/config' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
+                ⚙️ Configuration
+            </a>
+            <a href="/guild/{{ current_guild.id }}/logs" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/logs' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
+                📑 Logs
+            </a>
+        </div>
+        {% endif %}
+
+        <!-- Content Block -->
+        <main class="flex-1">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-darkcard border-t border-darkborder py-4 text-center text-xs text-slate-500">
+        Eradicateur Bot &bull; Albion Online Guild Manager &bull; SQLite WAL Mode
+    </footer>
+</body>
+</html>
+

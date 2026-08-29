@@ -81,3 +81,10 @@ db = await self.bot.db_manager.get_connection(interaction.guild.id)
 repo = MonRepository(db)
 await repo.faire_quelque_chose()
 ```
+
+## Dashboard Web (FastAPI)
+
+Le bot intègre un tableau de bord web optionnel tournant sur le même processus :
+- **Port** : Configurable via `DASHBOARD_PORT` (par défaut `38291`).
+- **Sécurité** : Protégé par mot de passe / token de session (`DASHBOARD_TOKEN`).
+- **Fonctionnalités** : Gestion interactive des soldes joueurs (crédit/débit manuel), historique des payouts et annulations, modification des taxes et rôles, gestion du pool de rôles pour les activités et visionneuse de logs en direct.

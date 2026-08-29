@@ -1,0 +1,161 @@
+{% extends "base.html" %}
+
+{% block title %}History - {{ member_name }}{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header banner -->
+    <div class="bg-darkcard border border-darkborder rounded-2xl p-6 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+            <div class="flex items-center space-x-3">
+                <a href="/guild/{{ current_guild.id }}/balances" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center space-x-1">
+                    <span>← Back to Balances</span>
+                </a>
+            </div>
+            <h1 class="text-2xl font-black text-white mt-2 flex items-center gap-3">
+                <span>👤</span>
+                <span>{{ member_name }}</span>
+            </h1>
+            <p class="text-xs text-slate-400 font-mono mt-0.5">Discord ID: {{ discord_id }}</p>
+        </div>
+        <div class="text-right">
+            <span class="text-xs uppercase text-slate-400 font-medium tracking-wider">Current Balance</span>
+            <div class="text-3xl font-black font-mono {% if current_balance > 0 %}text-emerald-400{% elif current_balance < 0 %}text-red-400{% else %}text-slate-300{% endif %}">
+                {{ current_balance | format_number }} <span class="text-sm font-bold text-slate-400">Silvers</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick action buttons -->
+    <div class="flex items-center space-x-3">
+        <button 
+            onclick="openQuickAction('credit')" 
+            class="bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 text-sm font-semibold px-4 py-2 rounded-xl transition"
+        >
+            + Credit this player
+        </button>
+        <button 
+            onclick="openQuickAction('debit')" 
+            class="bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 text-sm font-semibold px-4 py-2 rounded-xl transition"
+        >
+            - Debit this player
+        </button>
+    </div>
+
+    <!-- Transactions Table -->
+    <div class="bg-darkcard border border-darkborder rounded-2xl shadow overflow-hidden">
+        <div class="p-4 border-b border-darkborder flex items-center justify-between bg-slate-900/40">
+            <h2 class="text-base font-bold text-white flex items-center gap-2">
+                <span>📜</span> Transaction History ({{ transactions|length }})
+            </h2>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-slate-300">
+                <thead class="bg-slate-900/80 text-xs uppercase text-slate-400 font-semibold border-b border-darkborder">
+                    <tr>
+                        <th class="px-6 py-4">ID</th>
+                        <th class="px-6 py-4">Date</th>
+                        <th class="px-6 py-4">Reason / Origin</th>
+                        <th class="px-6 py-4">Created by</th>
+                        <th class="px-6 py-4 text-right">Change</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-darkborder">
+                    {% for tx in transactions %}
+                    <tr class="hover:bg-slate-800/50 transition">
+                        <td class="px-6 py-4 font-mono text-xs text-slate-400">#{{ tx.id }}</td>
+                        <td class="px-6 py-4 text-xs text-slate-400">{{ tx.created_at }}</td>
+                        <td class="px-6 py-4">
+                            {% if tx.payout_id %}
+                            <a href="/guild/{{ current_guild.id }}/payouts/{{ tx.payout_id }}" class="text-indigo-400 hover:text-indigo-300 font-medium">
+                                Payout #{{ tx.payout_id }}
+                            </a>
+                            {% else %}
+                            <span class="text-white">{{ tx.reason }}</span>
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-xs text-slate-400">
+                            {% if tx.created_by == 0 %}
+                            <span class="text-indigo-400 font-semibold">Web Dashboard Admin</span>
+                            {% else %}
+                            {{ tx.creator_name }}
+                            {% endif %}
+                        </td>
+                        <td class="px-6 py-4 text-right font-mono font-bold text-base {% if tx.amount > 0 %}text-emerald-400{% else %}text-red-400{% endif %}">
+                            {% if tx.amount > 0 %}+{% endif %}{{ tx.amount | format_number }}
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="5" class="px-6 py-8 text-center text-slate-500">
+                            No transactions found for this member.
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="txModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-darkborder rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5">
+        <div class="flex items-center justify-between">
+            <h3 id="modalTitle" class="text-lg font-bold text-white">Balance Operation</h3>
+            <button onclick="closeModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
+        </div>
+
+        <form method="POST" action="/guild/{{ current_guild.id }}/balances/transaction" class="space-y-4">
+            <input type="hidden" name="discord_id" value="{{ discord_id }}">
+            <input type="hidden" id="opInput" name="operation" value="credit">
+
+            <div>
+                <label for="modalAmount" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Amount (Silvers)</label>
+                <input 
+                    type="number" 
+                    id="modalAmount" 
+                    name="amount" 
+                    min="1" 
+                    required 
+                    placeholder="e.g. 500000"
+                    class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+            </div>
+
+            <div>
+                <label for="modalReason" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Reason</label>
+                <input 
+                    type="text" 
+                    id="modalReason" 
+                    name="reason" 
+                    required 
+                    placeholder="e.g. Adjustment / Bonus / Compensation"
+                    class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+            </div>
+
+            <div class="flex items-center justify-end space-x-3 pt-2">
+                <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl text-sm text-slate-400 hover:text-white">
+                    Cancel
+                </button>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition">
+                    Confirm
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openQuickAction(op) {
+        document.getElementById('opInput').value = op;
+        document.getElementById('modalTitle').innerText = (op === 'debit') ? 'Debit {{ member_name | escape }}' : 'Credit {{ member_name | escape }}';
+        document.getElementById('txModal').classList.remove('hidden');
+    }
+    function closeModal() {
+        document.getElementById('txModal').classList.add('hidden');
+    }
+</script>
+{% endblock %}
+
