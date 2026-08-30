@@ -15,29 +15,64 @@
             </p>
         </div>
         <button 
-            onclick="openTransactionModal('', '', 'credit')" 
-            class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition shadow flex items-center space-x-2"
+            data-discord-id=""
+            data-member-name=""
+            data-operation="credit"
+            class="js-tx-btn bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition shadow flex items-center space-x-2"
         >
             <span>+ New Manual Transaction</span>
         </button>
     </div>
 
-    <!-- Search & Filters -->
-    <div class="bg-darkcard border border-darkborder rounded-2xl p-4 shadow flex items-center gap-4">
-        <div class="relative flex-1">
-            <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
-                🔍
-            </span>
-            <input 
-                type="text" 
-                name="q" 
-                value="{{ query }}"
-                placeholder="Search by username or Discord ID..." 
-                hx-get="/guild/{{ current_guild.id }}/balances"
-                hx-trigger="keyup changed delay:300ms"
-                hx-target="#balances-table-container"
-                class="w-full bg-slate-900 border border-darkborder rounded-xl pl-10 pr-4 py-2 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-            >
+    <!-- Search & Filters Toolbar -->
+    <div class="bg-darkcard border border-darkborder rounded-2xl p-4 shadow space-y-3">
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+            <!-- Search bar -->
+            <div class="relative flex-1">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                    🔍
+                </span>
+                <input 
+                    type="text" 
+                    id="searchInput"
+                    name="q" 
+                    value="{{ query }}"
+                    placeholder="Search by username, nickname, or Discord ID (including 0 balances)..." 
+                    hx-get="/guild/{{ current_guild.id }}/balances"
+                    hx-include="[name='filter_type']"
+                    hx-trigger="keyup changed delay:300ms"
+                    hx-target="#balances-table-container"
+                    class="w-full bg-slate-900 border border-darkborder rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+            </div>
+
+            <!-- Hidden filter_type input for HTMX search inclusion -->
+            <input type="hidden" id="filterTypeInput" name="filter_type" value="{{ filter_type or 'all' }}">
+
+            <!-- Filter Pills -->
+            <div class="flex flex-wrap items-center gap-1.5 bg-slate-900/80 p-1.5 rounded-xl border border-darkborder">
+                <button 
+                    type="button"
+                    onclick="setBalanceFilter('all')"
+                    class="filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if (filter_type or 'all') == 'all' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
+                >
+                    Tous ({{ stats.all if stats else (balances|length) }})
+                </button>
+                <button 
+                    type="button"
+                    onclick="setBalanceFilter('nonzero')"
+                    class="filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if filter_type == 'nonzero' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
+                >
+                    Soldes actifs ({{ stats.nonzero if stats else (balances|length) }})
+                </button>
+                <button 
+                    type="button"
+                    onclick="setBalanceFilter('zero')"
+                    class="filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if filter_type == 'zero' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
+                >
+                    Soldes à 0 ({{ stats.zero if stats else 0 }})
+                </button>
+            </div>
         </div>
     </div>
 
@@ -47,96 +82,310 @@
     </div>
 </div>
 
-<!-- Manual Transaction Modal -->
-<div id="txModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-darkcard border border-darkborder rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5">
-        <div class="flex items-center justify-between">
-            <h3 id="modalTitle" class="text-lg font-bold text-white">Balance Operation</h3>
+<!-- Manual Transaction Modal with Confirmation Step -->
+<div id="txModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-darkborder rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-darkborder pb-3">
+            <h3 id="modalTitle" class="text-lg font-bold text-white flex items-center gap-2">
+                <span>💰</span> Balance Operation
+            </h3>
             <button onclick="closeTransactionModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
         </div>
 
-        <form method="POST" action="/guild/{{ current_guild.id }}/balances/transaction" class="space-y-4">
-            <div>
-                <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Operation Type</label>
-                <div class="grid grid-cols-2 gap-3">
-                    <label class="flex items-center space-x-2 bg-slate-900 border border-darkborder p-3 rounded-xl cursor-pointer">
-                        <input type="radio" name="operation" value="credit" id="opCredit" checked class="text-indigo-600 focus:ring-indigo-500">
-                        <span class="text-sm font-medium text-emerald-400">+ Credit</span>
-                    </label>
-                    <label class="flex items-center space-x-2 bg-slate-900 border border-darkborder p-3 rounded-xl cursor-pointer">
-                        <input type="radio" name="operation" value="debit" id="opDebit" class="text-indigo-600 focus:ring-indigo-500">
-                        <span class="text-sm font-medium text-red-400">- Debit</span>
-                    </label>
+        <form id="txForm" method="POST" action="/guild/{{ current_guild.id }}/balances/transaction" class="space-y-4">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+
+            <!-- STEP 1: Input form -->
+            <div id="txStepInput" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Operation Type</label>
+                    <div class="grid grid-cols-2 gap-3">
+                        <label class="flex items-center space-x-2 bg-slate-900 border border-darkborder p-3 rounded-xl cursor-pointer hover:border-emerald-500/50 transition">
+                            <input type="radio" name="operation" value="credit" id="opCredit" checked class="text-indigo-600 focus:ring-indigo-500">
+                            <span class="text-sm font-bold text-emerald-400">+ Crédit (Ajout)</span>
+                        </label>
+                        <label class="flex items-center space-x-2 bg-slate-900 border border-darkborder p-3 rounded-xl cursor-pointer hover:border-red-500/50 transition">
+                            <input type="radio" name="operation" value="debit" id="opDebit" class="text-indigo-600 focus:ring-indigo-500">
+                            <span class="text-sm font-bold text-red-400">- Débit (Retrait)</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="modalDiscordId" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Player Discord ID</label>
+                    <input 
+                        type="number" 
+                        id="modalDiscordId" 
+                        name="discord_id" 
+                        required 
+                        placeholder="e.g. 123456789012345678"
+                        oninput="onDiscordIdInput()"
+                        class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                    <p id="modalPlayerName" class="text-xs text-indigo-400 mt-1 font-medium"></p>
+                </div>
+
+                <div>
+                    <label for="modalAmount" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Amount (Silvers)</label>
+                    <input 
+                        type="number" 
+                        id="modalAmount" 
+                        name="amount" 
+                        min="1" 
+                        max="100000000000"
+                        required 
+                        placeholder="e.g. 500000"
+                        class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                </div>
+
+                <div>
+                    <label for="modalReason" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Transaction Reason</label>
+                    <input 
+                        type="text" 
+                        id="modalReason" 
+                        name="reason" 
+                        maxlength="255"
+                        required 
+                        placeholder="e.g. Ajustement loot / Remboursement / Prime"
+                        class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                </div>
+
+                <div class="flex items-center justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeTransactionModal()" class="px-4 py-2 rounded-xl text-sm text-slate-400 hover:text-white">
+                        Annuler
+                    </button>
+                    <button type="button" onclick="goToConfirmationStep()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition flex items-center space-x-1">
+                        <span>Vérifier & Récapituler</span>
+                        <span>➔</span>
+                    </button>
                 </div>
             </div>
 
-            <div>
-                <label for="modalDiscordId" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Player Discord ID</label>
-                <input 
-                    type="number" 
-                    id="modalDiscordId" 
-                    name="discord_id" 
-                    required 
-                    placeholder="e.g. 123456789012345678"
-                    class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-                <p id="modalPlayerName" class="text-xs text-indigo-400 mt-1 font-medium"></p>
-            </div>
+            <!-- STEP 2: Confirmation Recap -->
+            <div id="txStepConfirm" class="hidden space-y-4">
+                <div class="bg-amber-950/40 border border-amber-800/80 rounded-xl p-4 text-xs text-amber-200">
+                    <p class="font-bold flex items-center gap-1.5 text-amber-300 text-sm mb-1">
+                        <span>⚠️</span> Confirmation requise avant écriture en base
+                    </p>
+                    <span>Veuillez vérifier attentivement le récapitulatif des modifications ci-dessous.</span>
+                </div>
 
-            <div>
-                <label for="modalAmount" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Amount (Silvers)</label>
-                <input 
-                    type="number" 
-                    id="modalAmount" 
-                    name="amount" 
-                    min="1" 
-                    required 
-                    placeholder="e.g. 500000"
-                    class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-            </div>
+                <div class="bg-slate-900/80 border border-darkborder rounded-xl p-4 space-y-3 font-sans text-sm">
+                    <div class="flex justify-between items-center border-b border-darkborder pb-2">
+                        <span class="text-slate-400 text-xs uppercase font-medium">Joueur</span>
+                        <div class="text-right">
+                            <span id="recapPlayerName" class="font-bold text-white block"></span>
+                            <span id="recapDiscordId" class="text-xs text-slate-400 font-mono"></span>
+                        </div>
+                    </div>
 
-            <div>
-                <label for="modalReason" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Transaction Reason</label>
-                <input 
-                    type="text" 
-                    id="modalReason" 
-                    name="reason" 
-                    required 
-                    placeholder="e.g. Loot adjustment / Refund / Bonus"
-                    class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-            </div>
+                    <div class="flex justify-between items-center border-b border-darkborder pb-2">
+                        <span class="text-slate-400 text-xs uppercase font-medium">Type d'opération</span>
+                        <span id="recapOpBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold font-mono"></span>
+                    </div>
 
-            <div class="flex items-center justify-end space-x-3 pt-2">
-                <button type="button" onclick="closeTransactionModal()" class="px-4 py-2 rounded-xl text-sm text-slate-400 hover:text-white">
-                    Cancel
-                </button>
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition">
-                    Confirm Operation
-                </button>
+                    <div class="flex justify-between items-center border-b border-darkborder pb-2">
+                        <span class="text-slate-400 text-xs uppercase font-medium">Montant</span>
+                        <span id="recapAmount" class="font-mono font-bold text-base"></span>
+                    </div>
+
+                    <div class="bg-slate-950/60 p-3 rounded-lg border border-darkborder space-y-1.5">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-400">Ancien solde :</span>
+                            <span id="recapOldBalance" class="font-mono font-bold text-slate-300"></span>
+                        </div>
+                        <div class="flex justify-between text-xs border-t border-darkborder pt-1">
+                            <span class="text-slate-400">Nouveau solde estimé :</span>
+                            <span id="recapNewBalance" class="font-mono font-bold text-base"></span>
+                        </div>
+                    </div>
+
+                    <div id="recapWarningOverdraft" class="hidden bg-red-950/60 border border-red-800 text-red-300 px-3 py-2 rounded-lg text-xs">
+                        ⚠️ Attention : Cette opération placera le solde du joueur en négatif.
+                    </div>
+
+                    <div class="flex justify-between items-start pt-1 text-xs">
+                        <span class="text-slate-400 uppercase font-medium">Motif</span>
+                        <span id="recapReason" class="text-slate-200 font-medium text-right max-w-xs break-words"></span>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                    <button type="button" onclick="goToInputStep()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
+                        ← Modifier la saisie
+                    </button>
+                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/50 transition flex items-center space-x-2">
+                        <span>✅ Confirmer et Appliquer</span>
+                    </button>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
 <script>
-    function openTransactionModal(discordId, name, operation) {
+    const knownBalances = {
+        {% for b in balances %}
+        "{{ b.discord_id }}": { name: {{ b.name | tojson }}, balance: {{ b.balance }} },
+        {% endfor %}
+    };
+
+    let currentSelectedBalance = null;
+
+    function formatNumber(num) {
+        if (num === null || isNaN(num)) return "0";
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
+    function onDiscordIdInput() {
+        const id = document.getElementById('modalDiscordId').value.trim();
+        const info = knownBalances[id];
+        if (info) {
+            document.getElementById('modalPlayerName').textContent = 'Membre : ' + info.name + ' (' + formatNumber(info.balance) + ' silvers)';
+            currentSelectedBalance = info.balance;
+        } else {
+            document.getElementById('modalPlayerName').textContent = '';
+            currentSelectedBalance = null;
+        }
+    }
+
+    function resetTransactionForm() {
+        const form = document.getElementById('txForm');
+        if (form) form.reset();
+        document.getElementById('modalDiscordId').value = '';
+        document.getElementById('modalAmount').value = '';
+        document.getElementById('modalReason').value = '';
+        document.getElementById('modalPlayerName').textContent = '';
+        currentSelectedBalance = null;
+        goToInputStep();
+    }
+
+    function openTransactionModal(discordId, name, balance, operation) {
+        resetTransactionForm();
         document.getElementById('modalDiscordId').value = discordId || '';
-        document.getElementById('modalPlayerName').innerText = name ? 'Member: ' + name : '';
+        if (balance !== undefined && balance !== null && balance !== '') {
+            currentSelectedBalance = parseInt(balance, 10);
+            document.getElementById('modalPlayerName').textContent = name ? 'Membre : ' + name + ' (' + formatNumber(currentSelectedBalance) + ' silvers)' : '';
+        } else {
+            onDiscordIdInput();
+        }
+
         if (operation === 'debit') {
             document.getElementById('opDebit').checked = true;
-            document.getElementById('modalTitle').innerText = 'Debit Player';
+            document.getElementById('modalTitle').innerHTML = '<span>🔴</span> Débiter un joueur';
         } else {
             document.getElementById('opCredit').checked = true;
-            document.getElementById('modalTitle').innerText = 'Credit Player';
+            document.getElementById('modalTitle').innerHTML = '<span>🟢</span> Créditer un joueur';
         }
+
+        goToInputStep();
         document.getElementById('txModal').classList.remove('hidden');
     }
 
     function closeTransactionModal() {
         document.getElementById('txModal').classList.add('hidden');
+        resetTransactionForm();
     }
+
+    function goToInputStep() {
+        document.getElementById('txStepInput').classList.remove('hidden');
+        document.getElementById('txStepConfirm').classList.add('hidden');
+    }
+
+    function goToConfirmationStep() {
+        const discordId = document.getElementById('modalDiscordId').value.trim();
+        const amount = parseInt(document.getElementById('modalAmount').value, 10);
+        const reason = document.getElementById('modalReason').value.trim();
+        const isCredit = document.getElementById('opCredit').checked;
+
+        if (!discordId || isNaN(parseInt(discordId, 10)) || parseInt(discordId, 10) <= 0) {
+            alert('Veuillez renseigner un ID Discord valide.');
+            return;
+        }
+        if (isNaN(amount) || amount <= 0) {
+            alert('Veuillez renseigner un montant strictement positif.');
+            return;
+        }
+        if (!reason) {
+            alert('Veuillez spécifier un motif pour la transaction.');
+            return;
+        }
+
+        const info = knownBalances[discordId];
+        const playerName = info ? info.name : ('Joueur #' + discordId);
+        const oldBal = (currentSelectedBalance !== null && !isNaN(currentSelectedBalance)) 
+            ? currentSelectedBalance 
+            : (info ? info.balance : 0);
+
+        const delta = isCredit ? amount : -amount;
+        const newBal = oldBal + delta;
+
+        document.getElementById('recapPlayerName').textContent = playerName;
+        document.getElementById('recapDiscordId').textContent = 'ID: ' + discordId;
+
+        const opBadge = document.getElementById('recapOpBadge');
+        const recapAmount = document.getElementById('recapAmount');
+        if (isCredit) {
+            opBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-emerald-950 text-emerald-300 border border-emerald-800';
+            opBadge.textContent = '+ CRÉDIT';
+            recapAmount.className = 'font-mono font-bold text-base text-emerald-400';
+            recapAmount.textContent = '+ ' + formatNumber(amount) + ' Silvers';
+        } else {
+            opBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-red-950 text-red-300 border border-red-800';
+            opBadge.textContent = '- DÉBIT';
+            recapAmount.className = 'font-mono font-bold text-base text-red-400';
+            recapAmount.textContent = '- ' + formatNumber(amount) + ' Silvers';
+        }
+
+        document.getElementById('recapOldBalance').textContent = formatNumber(oldBal) + ' Silvers';
+        const newBalEl = document.getElementById('recapNewBalance');
+        newBalEl.textContent = formatNumber(newBal) + ' Silvers';
+        newBalEl.className = 'font-mono font-bold text-base ' + (newBal < 0 ? 'text-red-400' : (newBal > 0 ? 'text-emerald-400' : 'text-slate-300'));
+
+        const warningEl = document.getElementById('recapWarningOverdraft');
+        if (newBal < 0) {
+            warningEl.classList.remove('hidden');
+        } else {
+            warningEl.classList.add('hidden');
+        }
+
+        document.getElementById('recapReason').textContent = reason;
+
+        document.getElementById('txStepInput').classList.add('hidden');
+        document.getElementById('txStepConfirm').classList.remove('hidden');
+    }
+
+    function setBalanceFilter(filterType) {
+        document.getElementById('filterTypeInput').value = filterType;
+        const q = document.getElementById('searchInput').value;
+        const url = `/guild/{{ current_guild.id }}/balances?q=${encodeURIComponent(q)}&filter_type=${encodeURIComponent(filterType)}`;
+        htmx.ajax('GET', url, { target: '#balances-table-container' });
+
+        document.querySelectorAll('.filter-pill').forEach(btn => {
+            btn.classList.remove('bg-indigo-600', 'text-white', 'shadow');
+            btn.classList.add('text-slate-400');
+        });
+        const activeBtn = event?.currentTarget;
+        if (activeBtn) {
+            activeBtn.classList.remove('text-slate-400');
+            activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow');
+        }
+    }
+
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.js-tx-btn');
+        if (btn) {
+            const discordId = btn.getAttribute('data-discord-id') || '';
+            const name = btn.getAttribute('data-member-name') || '';
+            const balance = btn.getAttribute('data-balance') || '';
+            const op = btn.getAttribute('data-operation') || 'credit';
+            openTransactionModal(discordId, name, balance, op);
+        }
+    });
 </script>
 {% endblock %}
+
+
 

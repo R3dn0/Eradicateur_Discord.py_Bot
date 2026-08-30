@@ -13,9 +13,9 @@
             <tr class="hover:bg-slate-800/50 transition">
                 <td class="px-6 py-4 font-medium text-white flex items-center space-x-3">
                     <span class="w-8 h-8 rounded-full bg-slate-800 border border-darkborder flex items-center justify-center text-xs font-bold text-indigo-400">
-                        {{ b.name[0] | upper }}
+                        {{ (b.name[0] if (b.name and b.name|length > 0) else '?') | upper }}
                     </span>
-                    <span class="truncate max-w-xs">{{ b.name }}</span>
+                    <span class="truncate max-w-xs">{{ b.name or 'User ' ~ b.discord_id }}</span>
                 </td>
                 <td class="px-6 py-4 font-mono text-xs text-slate-400">{{ b.discord_id }}</td>
                 <td class="px-6 py-4 text-right">
@@ -30,15 +30,21 @@
                             📜 History
                         </a>
                         <button 
-                            onclick="openTransactionModal('{{ b.discord_id }}', '{{ b.name | escape }}', 'credit')" 
-                            class="text-xs bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 px-2.5 py-1.5 rounded-lg transition"
+                            data-discord-id="{{ b.discord_id }}"
+                            data-member-name="{{ b.name }}"
+                            data-balance="{{ b.balance }}"
+                            data-operation="credit"
+                            class="js-tx-btn text-xs bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 px-2.5 py-1.5 rounded-lg transition"
                             title="Credit player balance"
                         >
                             + Credit
                         </button>
                         <button 
-                            onclick="openTransactionModal('{{ b.discord_id }}', '{{ b.name | escape }}', 'debit')" 
-                            class="text-xs bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 px-2.5 py-1.5 rounded-lg transition"
+                            data-discord-id="{{ b.discord_id }}"
+                            data-member-name="{{ b.name }}"
+                            data-balance="{{ b.balance }}"
+                            data-operation="debit"
+                            class="js-tx-btn text-xs bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 px-2.5 py-1.5 rounded-lg transition"
                             title="Debit player balance"
                         >
                             - Debit
@@ -50,9 +56,13 @@
             <tr>
                 <td colspan="4" class="px-6 py-8 text-center text-slate-500">
                     {% if query %}
-                    No members matching search "{{ query }}".
+                    Aucun membre trouvé correspondant à la recherche "{{ query }}".
+                    {% elif filter_type == 'zero' %}
+                    Aucun joueur avec un solde à 0 silvers trouvé.
+                    {% elif filter_type == 'nonzero' %}
+                    Aucun solde actif (> 0) enregistré.
                     {% else %}
-                    No balances recorded in database.
+                    Aucun joueur ou solde enregistré dans la base de données.
                     {% endif %}
                 </td>
             </tr>

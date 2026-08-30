@@ -33,7 +33,8 @@
                 These rates are automatically applied when creating a loot split (`/payout create`).
             </p>
 
-            <form method="POST" action="/guild/{{ current_guild.id }}/config/rates" class="space-y-4">
+            <form id="ratesForm" method="POST" action="/guild/{{ current_guild.id }}/config/rates" class="space-y-4">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Market Tax (%)</label>
@@ -43,6 +44,7 @@
                                 step="0.1" 
                                 min="0" 
                                 max="100" 
+                                id="inputTaxMarket"
                                 name="tax_market" 
                                 value="{{ (payout_cfg.tax_market * 100) | round(2) }}" 
                                 required
@@ -60,6 +62,7 @@
                                 step="0.1" 
                                 min="0" 
                                 max="100" 
+                                id="inputTaxGuild"
                                 name="tax_guild" 
                                 value="{{ (payout_cfg.tax_guild * 100) | round(2) }}" 
                                 required
@@ -77,6 +80,7 @@
                                 step="0.1" 
                                 min="0" 
                                 max="100" 
+                                id="inputTaxTransport"
                                 name="tax_transport" 
                                 value="{{ (payout_cfg.tax_transport * 100) | round(2) }}" 
                                 required
@@ -88,8 +92,8 @@
                 </div>
 
                 <div class="flex justify-end">
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition">
-                        Save Tax Rates
+                    <button type="button" onclick="openRatesModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition">
+                        Enregistrer les Taux de Taxes
                     </button>
                 </div>
             </form>
@@ -104,12 +108,13 @@
                 Define the Discord roles allowed to create payouts and manage player balances.
             </p>
 
-            <form method="POST" action="/guild/{{ current_guild.id }}/config/roles" class="space-y-4">
+            <form id="rolesForm" method="POST" action="/guild/{{ current_guild.id }}/config/roles" class="space-y-4">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Officer Role (Discord ID)</label>
                         {% if roles %}
-                        <select name="officer_role_id" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <select id="selectOfficerRole" name="officer_role_id" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <option value="">-- None configured --</option>
                             {% for r in roles %}
                             <option value="{{ r.id }}" {% if payout_cfg.officer_role_id == r.id %}selected{% endif %}>
@@ -120,6 +125,7 @@
                         {% else %}
                         <input 
                             type="text" 
+                            id="selectOfficerRole"
                             name="officer_role_id" 
                             value="{{ payout_cfg.officer_role_id or '' }}" 
                             placeholder="e.g. 123456789012345678"
@@ -131,7 +137,7 @@
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Leader Role (Discord ID)</label>
                         {% if roles %}
-                        <select name="leader_role_id" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <select id="selectLeaderRole" name="leader_role_id" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <option value="">-- None configured --</option>
                             {% for r in roles %}
                             <option value="{{ r.id }}" {% if payout_cfg.leader_role_id == r.id %}selected{% endif %}>
@@ -142,6 +148,7 @@
                         {% else %}
                         <input 
                             type="text" 
+                            id="selectLeaderRole"
                             name="leader_role_id" 
                             value="{{ payout_cfg.leader_role_id or '' }}" 
                             placeholder="e.g. 123456789012345678"
@@ -153,15 +160,15 @@
 
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Permission Level for /balance pay & add</label>
-                    <select name="pay_add_permission_level" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <select id="selectPermLevel" name="pay_add_permission_level" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <option value="officer" {% if payout_cfg.pay_add_permission_level == 'officer' %}selected{% endif %}>Officer (Both Officers and Leaders allowed)</option>
                         <option value="leader" {% if payout_cfg.pay_add_permission_level == 'leader' %}selected{% endif %}>Leader only</option>
                     </select>
                 </div>
 
                 <div class="flex justify-end">
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition">
-                        Save Roles
+                    <button type="button" onclick="openRolesModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition">
+                        Enregistrer les Rôles
                     </button>
                 </div>
             </form>
@@ -173,12 +180,13 @@
                 <span>🤖</span> General Bot Settings
             </h2>
 
-            <form method="POST" action="/guild/{{ current_guild.id }}/config/bot" class="space-y-4">
+            <form id="botForm" method="POST" action="/guild/{{ current_guild.id }}/config/bot" class="space-y-4">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Audit Log Channel (Channel ID)</label>
                         {% if channels %}
-                        <select name="log_channel_id" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <select id="selectLogChannel" name="log_channel_id" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <option value="">-- Disabled --</option>
                             {% for c in channels %}
                             <option value="{{ c.id }}" {% if bot_cfg.log_channel_id == c.id %}selected{% endif %}>
@@ -189,6 +197,7 @@
                         {% else %}
                         <input 
                             type="text" 
+                            id="selectLogChannel"
                             name="log_channel_id" 
                             value="{{ bot_cfg.log_channel_id or '' }}" 
                             placeholder="e.g. 123456789012345678"
@@ -200,7 +209,7 @@
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Payout DMs Opt-Out Role</label>
                         {% if roles %}
-                        <select name="notification_opt_out_role_id" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <select id="selectOptOutRole" name="notification_opt_out_role_id" class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                             <option value="">-- No opt-out role --</option>
                             {% for r in roles %}
                             <option value="{{ r.id }}" {% if bot_cfg.notification_opt_out_role_id == r.id %}selected{% endif %}>
@@ -211,6 +220,7 @@
                         {% else %}
                         <input 
                             type="text" 
+                            id="selectOptOutRole"
                             name="notification_opt_out_role_id" 
                             value="{{ bot_cfg.notification_opt_out_role_id or '' }}" 
                             placeholder="e.g. 123456789012345678"
@@ -221,13 +231,192 @@
                 </div>
 
                 <div class="flex justify-end">
-                    <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition">
-                        Save Bot Settings
+                    <button type="button" onclick="openBotModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition">
+                        Enregistrer la Configuration du Bot
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
+
+<!-- Modal 1: Confirmation Taxes -->
+<div id="confirmRatesModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-darkborder rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-darkborder pb-3">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <span>📊</span> Confirmation des Taux de Taxes
+            </h3>
+            <button onclick="closeRatesModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
+        </div>
+
+        <p class="text-xs text-slate-300">
+            Êtes-vous sûr de vouloir mettre à jour les taux de taxes appliqués aux futurs splits de loot ?
+        </p>
+
+        <div class="bg-slate-900/80 border border-darkborder rounded-xl p-4 space-y-2.5 text-xs">
+            <div class="flex justify-between items-center pb-2 border-b border-darkborder">
+                <span class="text-slate-400">Taxe Marché :</span>
+                <div>
+                    <span class="text-slate-500 line-through mr-1">{{ (payout_cfg.tax_market * 100) | round(2) }}%</span>
+                    <span id="recapMarketTax" class="font-mono font-bold text-amber-400 text-sm"></span>
+                </div>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-darkborder">
+                <span class="text-slate-400">Taxe Guilde :</span>
+                <div>
+                    <span class="text-slate-500 line-through mr-1">{{ (payout_cfg.tax_guild * 100) | round(2) }}%</span>
+                    <span id="recapGuildTax" class="font-mono font-bold text-amber-400 text-sm"></span>
+                </div>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-slate-400">Taxe Transport :</span>
+                <div>
+                    <span class="text-slate-500 line-through mr-1">{{ (payout_cfg.tax_transport * 100) | round(2) }}%</span>
+                    <span id="recapTransportTax" class="font-mono font-bold text-amber-400 text-sm"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+            <button type="button" onclick="closeRatesModal()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
+                Annuler
+            </button>
+            <button type="button" onclick="document.getElementById('ratesForm').submit()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/50 transition">
+                ✅ Confirmer et Enregistrer
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 2: Confirmation Rôles -->
+<div id="confirmRolesModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-darkborder rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-darkborder pb-3">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <span>🛡️</span> Confirmation des Permissions
+            </h3>
+            <button onclick="closeRolesModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
+        </div>
+
+        <p class="text-xs text-slate-300">
+            Êtes-vous sûr de vouloir modifier les rôles d'administration et de gestion des payouts ?
+        </p>
+
+        <div class="bg-slate-900/80 border border-darkborder rounded-xl p-4 space-y-2.5 text-xs">
+            <div class="flex justify-between items-center pb-2 border-b border-darkborder">
+                <span class="text-slate-400">Rôle Officier :</span>
+                <span id="recapOfficer" class="font-medium text-white"></span>
+            </div>
+            <div class="flex justify-between items-center pb-2 border-b border-darkborder">
+                <span class="text-slate-400">Rôle Leader :</span>
+                <span id="recapLeader" class="font-medium text-white"></span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-slate-400">Niveau de Permission :</span>
+                <span id="recapPerm" class="font-bold text-indigo-400"></span>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+            <button type="button" onclick="closeRolesModal()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
+                Annuler
+            </button>
+            <button type="button" onclick="document.getElementById('rolesForm').submit()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/50 transition">
+                ✅ Confirmer et Enregistrer
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal 3: Confirmation Bot -->
+<div id="confirmBotModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-darkborder rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-darkborder pb-3">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <span>🤖</span> Confirmation des Paramètres Bot
+            </h3>
+            <button onclick="closeBotModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
+        </div>
+
+        <p class="text-xs text-slate-300">
+            Êtes-vous sûr de vouloir mettre à jour les salons et rôles du bot ?
+        </p>
+
+        <div class="bg-slate-900/80 border border-darkborder rounded-xl p-4 space-y-2.5 text-xs">
+            <div class="flex justify-between items-center pb-2 border-b border-darkborder">
+                <span class="text-slate-400">Salon de Logs :</span>
+                <span id="recapLogChan" class="font-medium text-white"></span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-slate-400">Rôle Opt-out MP :</span>
+                <span id="recapOptOut" class="font-medium text-white"></span>
+            </div>
+        </div>
+
+        <div class="flex items-center justify-between pt-2">
+            <button type="button" onclick="closeBotModal()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
+                Annuler
+            </button>
+            <button type="button" onclick="document.getElementById('botForm').submit()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/50 transition">
+                ✅ Confirmer et Enregistrer
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function getSelectedText(elementId) {
+        const el = document.getElementById(elementId);
+        if (!el) return 'Non configuré';
+        if (el.tagName === 'SELECT') {
+            return el.options[el.selectedIndex]?.text || 'Non configuré';
+        }
+        return el.value ? ('ID: ' + el.value) : 'Non configuré';
+    }
+
+    // Rates Modal
+    function openRatesModal() {
+        const m = parseFloat(document.getElementById('inputTaxMarket').value);
+        const g = parseFloat(document.getElementById('inputTaxGuild').value);
+        const t = parseFloat(document.getElementById('inputTaxTransport').value);
+
+        if (isNaN(m) || isNaN(g) || isNaN(t) || m < 0 || m > 100 || g < 0 || g > 100 || t < 0 || t > 100) {
+            alert('Veuillez entrer des pourcentages de taxes valides (entre 0 et 100%).');
+            return;
+        }
+
+        document.getElementById('recapMarketTax').textContent = m.toFixed(1) + '%';
+        document.getElementById('recapGuildTax').textContent = g.toFixed(1) + '%';
+        document.getElementById('recapTransportTax').textContent = t.toFixed(1) + '%';
+        document.getElementById('confirmRatesModal').classList.remove('hidden');
+    }
+    function closeRatesModal() {
+        document.getElementById('confirmRatesModal').classList.add('hidden');
+    }
+
+    // Roles Modal
+    function openRolesModal() {
+        document.getElementById('recapOfficer').textContent = getSelectedText('selectOfficerRole');
+        document.getElementById('recapLeader').textContent = getSelectedText('selectLeaderRole');
+        const perm = document.getElementById('selectPermLevel').value;
+        document.getElementById('recapPerm').textContent = (perm === 'officer') ? 'Officiers & Leaders' : 'Leaders uniquement';
+        document.getElementById('confirmRolesModal').classList.remove('hidden');
+    }
+    function closeRolesModal() {
+        document.getElementById('confirmRolesModal').classList.add('hidden');
+    }
+
+    // Bot Modal
+    function openBotModal() {
+        document.getElementById('recapLogChan').textContent = getSelectedText('selectLogChannel');
+        document.getElementById('recapOptOut').textContent = getSelectedText('selectOptOutRole');
+        document.getElementById('confirmBotModal').classList.remove('hidden');
+    }
+    function closeBotModal() {
+        document.getElementById('confirmBotModal').classList.add('hidden');
+    }
+</script>
 {% endblock %}
+
 

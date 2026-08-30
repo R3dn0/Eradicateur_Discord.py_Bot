@@ -39,10 +39,55 @@ def create_app(bot) -> FastAPI:
     templates.env.filters["format_number"] = format_number
     templates.env.filters["format_percent"] = format_percent
 
+    # Auto-inject CSRF token and bot in template contexts
+    orig_template_response = templates.TemplateResponse
+
+    def template_response_with_csrf(
+        request: Request,
+        name: str,
+        context: dict | None = None,
+        status_code: int = 200,
+        **kwargs,
+    ):
+        ctx = context.copy() if context else {}
+        if "csrf_token" not in ctx:
+            ctx["csrf_token"] = getattr(request.state, "csrf_token", "")
+        if "bot" not in ctx:
+            ctx["bot"] = bot
+        if "current_user" not in ctx:
+            ctx["current_user"] = getattr(request.state, "user", None)
+        return orig_template_response(
+            request=request,
+            name=name,
+            context=ctx,
+            status_code=status_code,
+            **kwargs,
+        )
+
+    templates.TemplateResponse = template_response_with_csrf  # type: ignore[assignment]
+
     app.state.bot = bot
     app.state.templates = templates
 
-    # Custom exception handler for 307 redirect
+    # Security Headers Middleware
+    @app.middleware("http")
+    async def security_headers_middleware(request: Request, call_next):
+        response = await call_next(request)
+        response.headers["X-Frame-Options"] = "DENY"
+        response.headers["X-Content-Type-Options"] = "nosniff"
+        response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://cdn.tailwindcss.com https://unpkg.com; "
+            "style-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; "
+            "img-src 'self' data: https:; "
+            "font-src 'self' data: https:; "
+            "worker-src 'self' blob:; "
+            "connect-src 'self';"
+        )
+        return response
+
+    # Custom exception handler for redirects and errors
     @app.exception_handler(HTTPException)
     async def http_exception_handler(request: Request, exc: HTTPException):
         if exc.status_code == status.HTTP_307_TEMPORARY_REDIRECT:
@@ -73,4 +118,5 @@ def create_app(bot) -> FastAPI:
     app.include_router(logs_router)
 
     return app
+
 
