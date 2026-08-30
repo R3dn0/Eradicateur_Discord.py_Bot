@@ -1,11 +1,24 @@
-from fastapi import APIRouter, Depends, Form, Request, status
+import logging
+
+from fastapi import APIRouter, Depends, Form, HTTPException, Request, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from bot.repositories.activity_pool_repository import ActivityPoolRepository
 from bot.web.auth import require_auth
-from bot.web.routes.dashboard import get_available_guilds
+from bot.web.routes.dashboard import ensure_valid_guild, get_available_guilds
 
+logger = logging.getLogger("eradicateur_bot.web.activity_pool")
 router = APIRouter(dependencies=[Depends(require_auth)], tags=["Activity Pool"])
+
+
+@router.get("/activity-pool")
+@router.get("/pool")
+async def activity_pool_root_redirect(request: Request):
+    bot = request.app.state.bot
+    guilds = get_available_guilds(bot)
+    if guilds:
+        return RedirectResponse(url=f"/guild/{guilds[0]['id']}/activity-pool")
+    return RedirectResponse(url="/")
 
 
 @router.get("/guild/{guild_id}/activity-pool", response_class=HTMLResponse)
@@ -13,7 +26,7 @@ async def view_activity_pool(request: Request, guild_id: int):
     bot = request.app.state.bot
     templates = request.app.state.templates
     guilds = get_available_guilds(bot)
-    current_guild = next((g for g in guilds if g["id"] == guild_id), {"id": guild_id, "name": f"Guild #{guild_id}"})
+    current_guild = ensure_valid_guild(bot, guild_id)
 
     conn = await bot.db_manager.get_connection(guild_id)
     pool_repo = ActivityPoolRepository(conn)
@@ -36,10 +49,18 @@ async def view_activity_pool(request: Request, guild_id: int):
 @router.post("/guild/{guild_id}/activity-pool/add")
 async def add_role_to_pool(request: Request, guild_id: int, label: str = Form(...)):
     bot = request.app.state.bot
-    if label.strip():
-        conn = await bot.db_manager.get_connection(guild_id)
-        pool_repo = ActivityPoolRepository(conn)
-        await pool_repo.add_label(guild_id, label.strip())
+    ensure_valid_guild(bot, guild_id)
+
+    cleaned_label = label.strip()[:100]
+    if not cleaned_label:
+        raise HTTPException(status_code=400, detail="Role label cannot be empty")
+
+    conn = await bot.db_manager.get_connection(guild_id)
+    pool_repo = ActivityPoolRepository(conn)
+    await pool_repo.add_label(guild_id, cleaned_label)
+
+    client_ip = request.client.host if request.client else "unknown"
+    logger.info("Admin (IP %s) added role %r to activity pool in Guild %s", client_ip, cleaned_label, guild_id)
 
     return RedirectResponse(
         url=f"/guild/{guild_id}/activity-pool",
@@ -50,9 +71,17 @@ async def add_role_to_pool(request: Request, guild_id: int, label: str = Form(..
 @router.post("/guild/{guild_id}/activity-pool/remove/{position}")
 async def remove_role_from_pool(request: Request, guild_id: int, position: int):
     bot = request.app.state.bot
+    ensure_valid_guild(bot, guild_id)
+
+    if position <= 0:
+        raise HTTPException(status_code=400, detail="Invalid position")
+
     conn = await bot.db_manager.get_connection(guild_id)
     pool_repo = ActivityPoolRepository(conn)
     await pool_repo.remove_position(guild_id, position)
+
+    client_ip = request.client.host if request.client else "unknown"
+    logger.info("Admin (IP %s) removed position %s from activity pool in Guild %s", client_ip, position, guild_id)
 
     return RedirectResponse(
         url=f"/guild/{guild_id}/activity-pool",
@@ -68,6 +97,11 @@ async def move_role_position(
     direction: str = Form(...),  # "up" or "down"
 ):
     bot = request.app.state.bot
+    ensure_valid_guild(bot, guild_id)
+
+    if direction not in ("up", "down"):
+        raise HTTPException(status_code=400, detail="Invalid direction: must be 'up' or 'down'")
+
     conn = await bot.db_manager.get_connection(guild_id)
     pool_repo = ActivityPoolRepository(conn)
 
@@ -90,12 +124,18 @@ async def move_role_position(
 @router.post("/guild/{guild_id}/activity-pool/clear")
 async def clear_activity_pool(request: Request, guild_id: int):
     bot = request.app.state.bot
+    ensure_valid_guild(bot, guild_id)
+
     conn = await bot.db_manager.get_connection(guild_id)
     pool_repo = ActivityPoolRepository(conn)
     await pool_repo.clear(guild_id)
+
+    client_ip = request.client.host if request.client else "unknown"
+    logger.warning("Admin (IP %s) cleared entire activity pool in Guild %s", client_ip, guild_id)
 
     return RedirectResponse(
         url=f"/guild/{guild_id}/activity-pool",
         status_code=status.HTTP_303_SEE_OTHER,
     )
+
 

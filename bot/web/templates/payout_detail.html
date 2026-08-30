@@ -39,11 +39,9 @@
 
             <!-- Void Action Button -->
             {% if not payout.voided %}
-            <form method="POST" action="/guild/{{ current_guild.id }}/payouts/{{ payout.id }}/void" onsubmit="return confirm('⚠️ Are you sure you want to VOID this payout? This will automatically debit each participant of their received share!');">
-                <button type="submit" class="bg-red-950/80 hover:bg-red-900 text-red-200 border border-red-700 text-sm font-bold px-4 py-2.5 rounded-xl transition shadow flex items-center space-x-2">
-                    <span>🚫 Void Payout</span>
-                </button>
-            </form>
+            <button type="button" onclick="openVoidModal()" class="bg-red-950/80 hover:bg-red-900 text-red-200 border border-red-700 text-sm font-bold px-4 py-2.5 rounded-xl transition shadow flex items-center space-x-2">
+                <span>🚫 Void Payout</span>
+            </button>
             {% endif %}
         </div>
 
@@ -113,5 +111,67 @@
         </div>
     </div>
 </div>
+
+<!-- Modal Confirmation Annulation Payout -->
+{% if not payout.voided %}
+<div id="voidPayoutModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-red-800/80 rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-darkborder pb-3">
+            <h3 class="text-lg font-bold text-red-300 flex items-center gap-2">
+                <span>🚨</span> Confirmation d'annulation du Payout
+            </h3>
+            <button onclick="closeVoidModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
+        </div>
+
+        <div class="bg-red-950/50 border border-red-900 rounded-xl p-4 text-xs text-red-200 space-y-1">
+            <p class="font-bold text-sm text-red-300">⚠️ Action irréversible sur la base de données</p>
+            <p>L'annulation de ce split débitera immédiatement le solde de chaque participant de la somme qu'il a reçue lors de la création du payout.</p>
+        </div>
+
+        <div class="bg-slate-900/80 border border-darkborder rounded-xl p-4 space-y-3 text-xs">
+            <div class="flex justify-between items-center border-b border-darkborder pb-2">
+                <span class="text-slate-400 uppercase font-medium">Payout concerné</span>
+                <span class="font-mono font-bold text-white text-sm">#{{ payout.id }}</span>
+            </div>
+            <div class="flex justify-between items-center border-b border-darkborder pb-2">
+                <span class="text-slate-400 uppercase font-medium">Créé par</span>
+                <span class="text-slate-200">{{ creator_name }}</span>
+            </div>
+            <div class="flex justify-between items-center border-b border-darkborder pb-2">
+                <span class="text-slate-400 uppercase font-medium">Joueurs impactés</span>
+                <span class="font-bold text-amber-400 font-mono">{{ participants|length }} participants</span>
+            </div>
+            <div class="flex justify-between items-center border-b border-darkborder pb-2">
+                <span class="text-slate-400 uppercase font-medium">Débit par joueur</span>
+                <span class="font-bold text-red-400 font-mono text-sm">-{{ payout.amount_per_player | format_number }} Silvers</span>
+            </div>
+            <div class="flex justify-between items-center pt-1">
+                <span class="text-slate-400 uppercase font-medium">Total récupéré sur la guilde</span>
+                <span class="font-bold text-red-400 font-mono text-base">-{{ (payout.amount_per_player * payout.participant_count) | format_number }} Silvers</span>
+            </div>
+        </div>
+
+        <form method="POST" action="/guild/{{ current_guild.id }}/payouts/{{ payout.id }}/void" class="pt-2 flex items-center justify-between">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="button" onclick="closeVoidModal()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
+                Annuler
+            </button>
+            <button type="submit" class="bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-red-950/50 transition flex items-center space-x-2">
+                <span>🚫 Confirmer l'Annulation Définitive</span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openVoidModal() {
+        document.getElementById('voidPayoutModal').classList.remove('hidden');
+    }
+    function closeVoidModal() {
+        document.getElementById('voidPayoutModal').classList.add('hidden');
+    }
+</script>
+{% endif %}
 {% endblock %}
+
 

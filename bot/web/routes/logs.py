@@ -1,12 +1,22 @@
 from pathlib import Path
 
 from fastapi import APIRouter, Depends, Request
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 
 from bot.web.auth import require_auth
-from bot.web.routes.dashboard import get_available_guilds
+from bot.web.routes.dashboard import ensure_valid_guild, get_available_guilds
 
 router = APIRouter(dependencies=[Depends(require_auth)], tags=["Logs"])
+
+
+@router.get("/logs")
+@router.get("/log")
+async def logs_root_redirect(request: Request):
+    bot = request.app.state.bot
+    guilds = get_available_guilds(bot)
+    if guilds:
+        return RedirectResponse(url=f"/guild/{guilds[0]['id']}/logs")
+    return RedirectResponse(url="/")
 
 
 @router.get("/guild/{guild_id}/logs", response_class=HTMLResponse)
@@ -14,7 +24,7 @@ async def view_logs(request: Request, guild_id: int, log_type: str = "guild", le
     bot = request.app.state.bot
     templates = request.app.state.templates
     guilds = get_available_guilds(bot)
-    current_guild = next((g for g in guilds if g["id"] == guild_id), {"id": guild_id, "name": f"Guild #{guild_id}"})
+    current_guild = ensure_valid_guild(bot, guild_id)
 
     logs_dir = Path(bot.config.data_dir) / "logs"
 
@@ -51,4 +61,5 @@ async def view_logs(request: Request, guild_id: int, log_type: str = "guild", le
             "log_lines": log_lines,
         },
     )
+
 

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from bot.repositories.bot_config_repository import BotConfigRepository
@@ -57,6 +57,14 @@ def get_available_guilds(bot) -> list[dict]:
     return list(guilds_dict.values())
 
 
+def ensure_valid_guild(bot, guild_id: int) -> dict:
+    guilds = get_available_guilds(bot)
+    guild_info = next((g for g in guilds if g["id"] == guild_id), None)
+    if not guild_info:
+        raise HTTPException(status_code=404, detail=f"Guild {guild_id} not found")
+    return guild_info
+
+
 @router.get("/", response_class=HTMLResponse)
 async def dashboard_home(request: Request):
     bot = request.app.state.bot
@@ -83,16 +91,7 @@ async def guild_overview(request: Request, guild_id: int):
     bot = request.app.state.bot
     templates = request.app.state.templates
     guilds = get_available_guilds(bot)
-
-    guild_info = next((g for g in guilds if g["id"] == guild_id), None)
-    if not guild_info:
-        guild_info = {
-            "id": guild_id,
-            "name": f"Guild #{guild_id}",
-            "icon": None,
-            "member_count": None,
-            "online": False,
-        }
+    guild_info = ensure_valid_guild(bot, guild_id)
 
     # Fetch stats
     conn = await bot.db_manager.get_connection(guild_id)
@@ -123,4 +122,5 @@ async def guild_overview(request: Request, guild_id: int):
             "payout_cfg": payout_cfg,
         },
     )
+
 

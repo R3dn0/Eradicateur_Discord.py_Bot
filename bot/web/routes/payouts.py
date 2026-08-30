@@ -1,3 +1,5 @@
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 
@@ -5,9 +7,20 @@ from bot.repositories.payout_repository import PayoutRepository
 from bot.repositories.transaction_repository import TransactionRepository
 from bot.web.auth import require_auth
 from bot.web.routes.balances import _resolve_member_name
-from bot.web.routes.dashboard import get_available_guilds
+from bot.web.routes.dashboard import ensure_valid_guild, get_available_guilds
 
+logger = logging.getLogger("eradicateur_bot.web.payouts")
 router = APIRouter(dependencies=[Depends(require_auth)], tags=["Payouts"])
+
+
+@router.get("/payouts")
+@router.get("/payout")
+async def payouts_root_redirect(request: Request):
+    bot = request.app.state.bot
+    guilds = get_available_guilds(bot)
+    if guilds:
+        return RedirectResponse(url=f"/guild/{guilds[0]['id']}/payouts")
+    return RedirectResponse(url="/")
 
 
 @router.get("/guild/{guild_id}/payouts", response_class=HTMLResponse)
@@ -15,7 +28,7 @@ async def list_payouts(request: Request, guild_id: int):
     bot = request.app.state.bot
     templates = request.app.state.templates
     guilds = get_available_guilds(bot)
-    current_guild = next((g for g in guilds if g["id"] == guild_id), {"id": guild_id, "name": f"Guild #{guild_id}"})
+    current_guild = ensure_valid_guild(bot, guild_id)
 
     conn = await bot.db_manager.get_connection(guild_id)
     tx_repo = TransactionRepository(conn)
@@ -60,7 +73,10 @@ async def payout_detail(request: Request, guild_id: int, payout_id: int):
     bot = request.app.state.bot
     templates = request.app.state.templates
     guilds = get_available_guilds(bot)
-    current_guild = next((g for g in guilds if g["id"] == guild_id), {"id": guild_id, "name": f"Guild #{guild_id}"})
+    current_guild = ensure_valid_guild(bot, guild_id)
+
+    if payout_id <= 0:
+        raise HTTPException(status_code=400, detail="Invalid payout ID")
 
     conn = await bot.db_manager.get_connection(guild_id)
     tx_repo = TransactionRepository(conn)
@@ -99,9 +115,17 @@ async def payout_detail(request: Request, guild_id: int, payout_id: int):
 @router.post("/guild/{guild_id}/payouts/{payout_id}/void")
 async def void_payout_action(request: Request, guild_id: int, payout_id: int):
     bot = request.app.state.bot
+    ensure_valid_guild(bot, guild_id)
+
+    if payout_id <= 0:
+        raise HTTPException(status_code=400, detail="Invalid payout ID")
+
     conn = await bot.db_manager.get_connection(guild_id)
     tx_repo = TransactionRepository(conn)
     payout_repo = PayoutRepository(conn, tx_repo)
+
+    client_ip = request.client.host if request.client else "unknown"
+    logger.warning("Admin (IP %s) voided payout #%s in Guild %s", client_ip, payout_id, guild_id)
 
     try:
         # Voided by 0 (Dashboard Admin)
@@ -113,4 +137,5 @@ async def void_payout_action(request: Request, guild_id: int, payout_id: int):
         url=f"/guild/{guild_id}/payouts/{payout_id}",
         status_code=status.HTTP_303_SEE_OTHER,
     )
+
 
