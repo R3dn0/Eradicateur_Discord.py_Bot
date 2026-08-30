@@ -67,17 +67,25 @@ class TransactionRepository(BaseRepository):
         row = await cursor.fetchone()
         return int(row[0])
 
-    async def list_balances(self) -> list[tuple[int, int]]:
+    async def list_balances(self, include_zero: bool = False) -> list[tuple[int, int]]:
         await self._ensure_table()
-        cursor = await self._db.execute("""
-            SELECT discord_id, SUM(amount) AS balance
-            FROM transactions
-            GROUP BY discord_id
-            HAVING SUM(amount) != 0
-            ORDER BY balance DESC
-        """)
+        if include_zero:
+            cursor = await self._db.execute("""
+                SELECT discord_id, COALESCE(SUM(amount), 0) AS balance
+                FROM transactions
+                GROUP BY discord_id
+                ORDER BY balance DESC, discord_id ASC
+            """)
+        else:
+            cursor = await self._db.execute("""
+                SELECT discord_id, COALESCE(SUM(amount), 0) AS balance
+                FROM transactions
+                GROUP BY discord_id
+                HAVING SUM(amount) != 0
+                ORDER BY balance DESC, discord_id ASC
+            """)
         rows = await cursor.fetchall()
-        return [(row["discord_id"], int(row["balance"])) for row in rows]
+        return [(row["discord_id"], int(row["balance"] or 0)) for row in rows]
 
     async def get_total_owed(self) -> int:
         await self._ensure_table()

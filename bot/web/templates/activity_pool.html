@@ -15,11 +15,9 @@
             </p>
         </div>
         {% if pool_items %}
-        <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/clear" onsubmit="return confirm('⚠️ Are you sure you want to CLEAR the entire role pool?');">
-            <button type="submit" class="bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 text-xs font-semibold px-3 py-2 rounded-xl transition">
-                🗑️ Clear Pool
-            </button>
-        </form>
+        <button type="button" onclick="openClearModal()" class="bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 text-xs font-semibold px-3 py-2 rounded-xl transition">
+            🗑️ Clear Pool
+        </button>
         {% endif %}
     </div>
 
@@ -29,9 +27,11 @@
             <span>+</span> Add Role to Pool
         </h2>
         <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/add" class="flex gap-3">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <input 
                 type="text" 
                 name="label" 
+                maxlength="100"
                 required 
                 placeholder="e.g. 🛡️ Incubus Tank, 💚 Holy Healer, 💥 DPS Shadowcaller..." 
                 class="flex-1 bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
@@ -66,6 +66,7 @@
                 <div class="flex items-center space-x-2">
                     <!-- Move Up -->
                     <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/move" class="inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="hidden" name="position" value="{{ item.position }}">
                         <input type="hidden" name="direction" value="up">
                         <button type="submit" {% if loop.first %}disabled class="opacity-20 cursor-not-allowed"{% endif %} class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs border border-darkborder" title="Move Up">
@@ -75,6 +76,7 @@
 
                     <!-- Move Down -->
                     <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/move" class="inline">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
                         <input type="hidden" name="position" value="{{ item.position }}">
                         <input type="hidden" name="direction" value="down">
                         <button type="submit" {% if loop.last %}disabled class="opacity-20 cursor-not-allowed"{% endif %} class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs border border-darkborder" title="Move Down">
@@ -82,12 +84,15 @@
                         </button>
                     </form>
 
-                    <!-- Delete -->
-                    <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/remove/{{ item.position }}" onsubmit="return confirm('Remove this role?');" class="inline">
-                        <button type="submit" class="p-1.5 rounded-lg bg-red-950/60 hover:bg-red-900 text-red-400 text-xs border border-red-800" title="Delete">
-                            ✕
-                        </button>
-                    </form>
+                    <!-- Delete Button -->
+                    <button 
+                        type="button" 
+                        onclick="openRemoveModal('{{ item.position }}', '{{ item.label | escape }}')" 
+                        class="p-1.5 rounded-lg bg-red-950/60 hover:bg-red-900 text-red-400 text-xs border border-red-800 transition" 
+                        title="Delete"
+                    >
+                        ✕
+                    </button>
                 </div>
             </div>
             {% else %}
@@ -98,5 +103,96 @@
         </div>
     </div>
 </div>
+
+<!-- Modal 1: Clear Pool Confirmation -->
+{% if pool_items %}
+<div id="clearPoolModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-red-800/80 rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-darkborder pb-3">
+            <h3 class="text-lg font-bold text-red-300 flex items-center gap-2">
+                <span>⚠️</span> Réinitialiser l'Activity Pool
+            </h3>
+            <button onclick="closeClearModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
+        </div>
+
+        <p class="text-xs text-slate-300">
+            Êtes-vous certain de vouloir vider l'ensemble du pool de rôles ?
+        </p>
+
+        <div class="bg-red-950/40 border border-red-900/80 rounded-xl p-3.5 text-xs text-red-200">
+            Cette action supprimera définitivement les <span class="font-bold text-white font-mono">{{ pool_items|length }} rôles</span> pré-configurés pour la création d'événements.
+        </div>
+
+        <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/clear" class="flex items-center justify-between pt-2">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="button" onclick="closeClearModal()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
+                Annuler
+            </button>
+            <button type="submit" class="bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-red-950/50 transition">
+                🗑️ Confirmer le Vidage
+            </button>
+        </form>
+    </div>
+</div>
+{% endif %}
+
+<!-- Modal 2: Remove Role Confirmation -->
+<div id="removeRoleModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-darkborder rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-darkborder pb-3">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <span>🗑️</span> Supprimer ce rôle du Pool ?
+            </h3>
+            <button onclick="closeRemoveModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
+        </div>
+
+        <div class="bg-slate-900/80 border border-darkborder rounded-xl p-4 text-xs space-y-2">
+            <div class="flex justify-between items-center">
+                <span class="text-slate-400">Position :</span>
+                <span id="modalRolePos" class="font-mono font-bold text-slate-300"></span>
+            </div>
+            <div class="flex justify-between items-center">
+                <span class="text-slate-400">Rôle :</span>
+                <span id="modalRoleLabel" class="font-bold text-white text-sm"></span>
+            </div>
+        </div>
+
+        <form id="removeRoleForm" method="POST" action="" class="flex items-center justify-between pt-2">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            <button type="button" onclick="closeRemoveModal()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
+                Annuler
+            </button>
+            <button type="submit" class="bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-red-950/50 transition">
+                ✕ Supprimer Définitivement
+            </button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function openClearModal() {
+        const m = document.getElementById('clearPoolModal');
+        if (m) m.classList.remove('hidden');
+    }
+    function closeClearModal() {
+        const m = document.getElementById('clearPoolModal');
+        if (m) m.classList.add('hidden');
+    }
+
+    function openRemoveModal(position, label) {
+        document.getElementById('modalRolePos').textContent = '#' + position;
+        document.getElementById('modalRoleLabel').textContent = label;
+        document.getElementById('removeRoleForm').action = '/guild/{{ current_guild.id }}/activity-pool/remove/' + position;
+        document.getElementById('removeRoleModal').classList.remove('hidden');
+    }
+    function closeRemoveModal() {
+        document.getElementById('removeRoleModal').classList.add('hidden');
+        document.getElementById('modalRolePos').textContent = '';
+        document.getElementById('modalRoleLabel').textContent = '';
+        document.getElementById('removeRoleForm').action = '';
+    }
+</script>
 {% endblock %}
+
+
 

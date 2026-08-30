@@ -5,7 +5,7 @@
 {% block content %}
 <div class="space-y-6">
     <!-- Header banner -->
-    <div class="bg-darkcard border border-darkborder rounded-2xl p-6 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+    <div id="memberHeader" data-member-name="{{ member_name }}" class="bg-darkcard border border-darkborder rounded-2xl p-6 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
             <div class="flex items-center space-x-3">
                 <a href="/guild/{{ current_guild.id }}/balances" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center space-x-1">
@@ -29,14 +29,14 @@
     <!-- Quick action buttons -->
     <div class="flex items-center space-x-3">
         <button 
-            onclick="openQuickAction('credit')" 
-            class="bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 text-sm font-semibold px-4 py-2 rounded-xl transition"
+            data-operation="credit"
+            class="js-quick-action bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 text-sm font-semibold px-4 py-2 rounded-xl transition"
         >
             + Credit this player
         </button>
         <button 
-            onclick="openQuickAction('debit')" 
-            class="bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 text-sm font-semibold px-4 py-2 rounded-xl transition"
+            data-operation="debit"
+            class="js-quick-action bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 text-sm font-semibold px-4 py-2 rounded-xl transition"
         >
             - Debit this player
         </button>
@@ -98,64 +98,223 @@
     </div>
 </div>
 
-<!-- Modal -->
-<div id="txModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-    <div class="bg-darkcard border border-darkborder rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5">
-        <div class="flex items-center justify-between">
-            <h3 id="modalTitle" class="text-lg font-bold text-white">Balance Operation</h3>
+<!-- Modal with 2-Step Confirmation -->
+<div id="txModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-darkborder rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-darkborder pb-3">
+            <h3 id="modalTitle" class="text-lg font-bold text-white flex items-center gap-2">
+                <span>💰</span> Balance Operation
+            </h3>
             <button onclick="closeModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
         </div>
 
-        <form method="POST" action="/guild/{{ current_guild.id }}/balances/transaction" class="space-y-4">
+        <form id="historyTxForm" method="POST" action="/guild/{{ current_guild.id }}/balances/transaction" class="space-y-4">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <input type="hidden" name="discord_id" value="{{ discord_id }}">
             <input type="hidden" id="opInput" name="operation" value="credit">
 
-            <div>
-                <label for="modalAmount" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Amount (Silvers)</label>
-                <input 
-                    type="number" 
-                    id="modalAmount" 
-                    name="amount" 
-                    min="1" 
-                    required 
-                    placeholder="e.g. 500000"
-                    class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
+            <!-- STEP 1: Input -->
+            <div id="histStepInput" class="space-y-4">
+                <div class="bg-slate-900/60 p-3 rounded-xl border border-darkborder flex items-center justify-between text-xs">
+                    <span class="text-slate-400">Solde actuel du joueur :</span>
+                    <span class="font-mono font-bold text-sm text-slate-100">{{ current_balance | format_number }} Silvers</span>
+                </div>
+
+                <div>
+                    <label for="modalAmount" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Montant (Silvers)</label>
+                    <input 
+                        type="number" 
+                        id="modalAmount" 
+                        name="amount" 
+                        min="1" 
+                        max="100000000000"
+                        required 
+                        placeholder="e.g. 500000"
+                        class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                </div>
+
+                <div>
+                    <label for="modalReason" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Motif de la transaction</label>
+                    <input 
+                        type="text" 
+                        id="modalReason" 
+                        name="reason" 
+                        maxlength="255"
+                        required 
+                        placeholder="e.g. Ajustement / Remboursement / Prime"
+                        class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    >
+                </div>
+
+                <div class="flex items-center justify-end space-x-3 pt-2">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl text-sm text-slate-400 hover:text-white">
+                        Annuler
+                    </button>
+                    <button type="button" onclick="goToHistConfirmStep()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition flex items-center space-x-1">
+                        <span>Vérifier & Récapituler</span>
+                        <span>➔</span>
+                    </button>
+                </div>
             </div>
 
-            <div>
-                <label for="modalReason" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Reason</label>
-                <input 
-                    type="text" 
-                    id="modalReason" 
-                    name="reason" 
-                    required 
-                    placeholder="e.g. Adjustment / Bonus / Compensation"
-                    class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-            </div>
+            <!-- STEP 2: Confirmation Recap -->
+            <div id="histStepConfirm" class="hidden space-y-4">
+                <div class="bg-amber-950/40 border border-amber-800/80 rounded-xl p-4 text-xs text-amber-200">
+                    <p class="font-bold flex items-center gap-1.5 text-amber-300 text-sm mb-1">
+                        <span>⚠️</span> Êtes-vous sûr de vouloir appliquer cette transaction ?
+                    </p>
+                    <span>Vérifiez le récapitulatif du solde avant d'enregistrer l'opération dans la base de données.</span>
+                </div>
 
-            <div class="flex items-center justify-end space-x-3 pt-2">
-                <button type="button" onclick="closeModal()" class="px-4 py-2 rounded-xl text-sm text-slate-400 hover:text-white">
-                    Cancel
-                </button>
-                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition">
-                    Confirm
-                </button>
+                <div class="bg-slate-900/80 border border-darkborder rounded-xl p-4 space-y-3 font-sans text-sm">
+                    <div class="flex justify-between items-center border-b border-darkborder pb-2">
+                        <span class="text-slate-400 text-xs uppercase font-medium">Joueur</span>
+                        <div class="text-right">
+                            <span class="font-bold text-white block">{{ member_name }}</span>
+                            <span class="text-xs text-slate-400 font-mono">ID: {{ discord_id }}</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center border-b border-darkborder pb-2">
+                        <span class="text-slate-400 text-xs uppercase font-medium">Opération</span>
+                        <span id="histRecapOpBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold font-mono"></span>
+                    </div>
+
+                    <div class="flex justify-between items-center border-b border-darkborder pb-2">
+                        <span class="text-slate-400 text-xs uppercase font-medium">Montant</span>
+                        <span id="histRecapAmount" class="font-mono font-bold text-base"></span>
+                    </div>
+
+                    <div class="bg-slate-950/60 p-3 rounded-lg border border-darkborder space-y-1.5">
+                        <div class="flex justify-between text-xs">
+                            <span class="text-slate-400">Ancien solde :</span>
+                            <span class="font-mono font-bold text-slate-300">{{ current_balance | format_number }} Silvers</span>
+                        </div>
+                        <div class="flex justify-between text-xs border-t border-darkborder pt-1">
+                            <span class="text-slate-400">Nouveau solde estimé :</span>
+                            <span id="histRecapNewBalance" class="font-mono font-bold text-base"></span>
+                        </div>
+                    </div>
+
+                    <div id="histRecapWarningOverdraft" class="hidden bg-red-950/60 border border-red-800 text-red-300 px-3 py-2 rounded-lg text-xs">
+                        ⚠️ Attention : Cette opération placera le solde du joueur en négatif.
+                    </div>
+
+                    <div class="flex justify-between items-start pt-1 text-xs">
+                        <span class="text-slate-400 uppercase font-medium">Motif</span>
+                        <span id="histRecapReason" class="text-slate-200 font-medium text-right max-w-xs break-words"></span>
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-between pt-2">
+                    <button type="button" onclick="goToHistInputStep()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
+                        ← Modifier la saisie
+                    </button>
+                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/50 transition flex items-center space-x-2">
+                        <span>✅ Confirmer et Appliquer</span>
+                    </button>
+                </div>
             </div>
         </form>
     </div>
 </div>
 
 <script>
+    const currentMemberBalance = {{ current_balance }};
+
+    function formatNumber(num) {
+        if (num === null || isNaN(num)) return "0";
+        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
+    function resetHistForm() {
+        const form = document.getElementById('histTxForm');
+        if (form) form.reset();
+        document.getElementById('modalAmount').value = '';
+        document.getElementById('modalReason').value = '';
+        goToHistInputStep();
+    }
+
     function openQuickAction(op) {
+        resetHistForm();
         document.getElementById('opInput').value = op;
-        document.getElementById('modalTitle').innerText = (op === 'debit') ? 'Debit {{ member_name | escape }}' : 'Credit {{ member_name | escape }}';
+        const memberName = document.getElementById('memberHeader')?.getAttribute('data-member-name') || '';
+        document.getElementById('modalTitle').innerHTML = (op === 'debit') 
+            ? '<span>🔴</span> Débiter ' + memberName 
+            : '<span>🟢</span> Créditer ' + memberName;
+        goToHistInputStep();
         document.getElementById('txModal').classList.remove('hidden');
     }
+
     function closeModal() {
         document.getElementById('txModal').classList.add('hidden');
+        resetHistForm();
     }
+
+    function goToHistInputStep() {
+        document.getElementById('histStepInput').classList.remove('hidden');
+        document.getElementById('histStepConfirm').classList.add('hidden');
+    }
+
+    function goToHistConfirmStep() {
+        const amount = parseInt(document.getElementById('modalAmount').value, 10);
+        const reason = document.getElementById('modalReason').value.trim();
+        const op = document.getElementById('opInput').value;
+        const isCredit = (op === 'credit');
+
+        if (isNaN(amount) || amount <= 0) {
+            alert('Veuillez renseigner un montant strictement positif.');
+            return;
+        }
+        if (!reason) {
+            alert('Veuillez spécifier un motif pour la transaction.');
+            return;
+        }
+
+        const delta = isCredit ? amount : -amount;
+        const newBal = currentMemberBalance + delta;
+
+        const opBadge = document.getElementById('histRecapOpBadge');
+        const recapAmount = document.getElementById('histRecapAmount');
+        if (isCredit) {
+            opBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-emerald-950 text-emerald-300 border border-emerald-800';
+            opBadge.textContent = '+ CRÉDIT (AJOUT)';
+            recapAmount.className = 'font-mono font-bold text-base text-emerald-400';
+            recapAmount.textContent = '+ ' + formatNumber(amount) + ' Silvers';
+        } else {
+            opBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-red-950 text-red-300 border border-red-800';
+            opBadge.textContent = '- DÉBIT (RETRAIT)';
+            recapAmount.className = 'font-mono font-bold text-base text-red-400';
+            recapAmount.textContent = '- ' + formatNumber(amount) + ' Silvers';
+        }
+
+        const newBalEl = document.getElementById('histRecapNewBalance');
+        newBalEl.textContent = formatNumber(newBal) + ' Silvers';
+        newBalEl.className = 'font-mono font-bold text-base ' + (newBal < 0 ? 'text-red-400' : (newBal > 0 ? 'text-emerald-400' : 'text-slate-300'));
+
+        const warningEl = document.getElementById('histRecapWarningOverdraft');
+        if (newBal < 0) {
+            warningEl.classList.remove('hidden');
+        } else {
+            warningEl.classList.add('hidden');
+        }
+
+        document.getElementById('histRecapReason').textContent = reason;
+
+        document.getElementById('histStepInput').classList.add('hidden');
+        document.getElementById('histStepConfirm').classList.remove('hidden');
+    }
+
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.js-quick-action');
+        if (btn) {
+            const op = btn.getAttribute('data-operation') || 'credit';
+            openQuickAction(op);
+        }
+    });
 </script>
 {% endblock %}
+
+
 

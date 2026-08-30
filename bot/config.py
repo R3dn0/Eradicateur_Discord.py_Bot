@@ -1,5 +1,5 @@
+from dataclasses import dataclass, field
 import os
-from dataclasses import dataclass
 from dotenv import load_dotenv
 
 from bot.dev_logs import parse_log_level
@@ -18,6 +18,14 @@ class Config:
     dashboard_host: str = "0.0.0.0"
     dashboard_port: int = 38291
     dashboard_token: str | None = None
+    discord_client_id: str | None = None
+    discord_client_secret: str | None = None
+    discord_redirect_uri: str | None = None
+    dashboard_allowed_users: list[int] = field(default_factory=list)
+
+    @property
+    def session_secret(self) -> str:
+        return self.dashboard_token or self.discord_client_secret or self.discord_token
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -34,6 +42,15 @@ class Config:
         dashboard_port = int(os.getenv("DASHBOARD_PORT", "38291").strip())
         dashboard_token = os.getenv("DASHBOARD_TOKEN", "").strip() or None
 
+        discord_client_id = os.getenv("DISCORD_CLIENT_ID", "").strip() or None
+        discord_client_secret = os.getenv("DISCORD_CLIENT_SECRET", "").strip() or None
+        discord_redirect_uri = os.getenv("DISCORD_REDIRECT_URI", "").strip() or None
+
+        allowed_users_raw = os.getenv("DASHBOARD_ALLOWED_USERS", "")
+        dashboard_allowed_users = [
+            int(uid.strip()) for uid in allowed_users_raw.split(",") if uid.strip() and uid.strip().isdigit()
+        ]
+
         return cls(
             discord_token=token,
             guild_id=guild_ids,
@@ -43,4 +60,8 @@ class Config:
             dashboard_host=dashboard_host,
             dashboard_port=dashboard_port,
             dashboard_token=dashboard_token,
+            discord_client_id=discord_client_id,
+            discord_client_secret=discord_client_secret,
+            discord_redirect_uri=discord_redirect_uri,
+            dashboard_allowed_users=dashboard_allowed_users,
         )
