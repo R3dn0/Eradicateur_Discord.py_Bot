@@ -56,7 +56,7 @@ class TestSendBulkDm:
         member_normal.send.assert_awaited_once()
         args = member_normal.send.call_args
         sent_embed = args[1]["embed"]
-        assert sent_embed.footer.text == "by <@999> via Payout #42"
+        assert any(f.value == "by <@999> via Payout #42" for f in sent_embed.fields)
         member_optout.send.assert_not_called()
         member_forbidden.send.assert_awaited_once()
 

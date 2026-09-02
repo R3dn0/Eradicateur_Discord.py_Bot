@@ -78,3 +78,21 @@ async def test_update_pay_add_permission_level_persists(repo):
 async def test_update_pay_add_permission_level_rejects_invalid(repo):
     with pytest.raises(ValueError, match="Invalid permission level"):
         await repo.update_pay_add_permission_level(level="invalid", updated_by=1)
+
+
+@pytest.mark.asyncio
+async def test_update_payout_channel_persists(repo):
+    await repo.update_payout_channel(channel_id=987654321, updated_by=55)
+    config = await repo.get_config()
+    assert config.payout_channel_id == 987654321
+    assert config.updated_by == 55
+
+
+@pytest.mark.asyncio
+async def test_update_payout_channel_can_clear(repo):
+    await repo.update_payout_channel(channel_id=987654321, updated_by=55)
+    await repo.update_payout_channel(channel_id=None, updated_by=56)
+    config = await repo.get_config()
+    assert config.payout_channel_id is None
+    assert config.updated_by == 56
+

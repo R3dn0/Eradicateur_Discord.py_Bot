@@ -397,6 +397,7 @@ class ConfirmCancelView(discord.ui.View):
 
         payout_repo = PayoutRepository(db, TransactionRepository(db))
         bot_config_repo = BotConfigRepository(db)
+        payout_config_repo = PayoutConfigRepository(db)
         transaction_repo = TransactionRepository(db)
 
         n = len(self.participant_ids)
@@ -414,6 +415,15 @@ class ConfirmCancelView(discord.ui.View):
                 buyback_value=self.split.buyback_value,
                 participant_ids=self.participant_ids,
                 created_by=created_by,
+            )
+            logger.info(
+                "[Discord] User: %s (ID: %s) | Action: PAYOUT_CREATE | Payout #%s | Total Loot: %s | Participants: %s | Net/Player: %s",
+                interaction.user.display_name,
+                interaction.user.id,
+                payout_id,
+                self.bag_silvers + self.item_market_value,
+                n,
+                self.split.amount_per_player,
             )
         except Exception:
             logger.exception(
@@ -454,7 +464,7 @@ class ConfirmCancelView(discord.ui.View):
 
         context_template = await bot.translate("dm_context", interaction.locale)
         action = f"Payout #{payout_id}"
-        context = context_template.replace("{user}", interaction.user.display_name).replace(
+        context = context_template.replace("{user}", f"<@{interaction.user.id}>").replace(
             "{action}", action
         )
         result = await send_bulk_dm(
@@ -504,9 +514,16 @@ class ConfirmCancelView(discord.ui.View):
         )
         public_embed.add_field(name="\u200b", value=created_value, inline=False)
 
+        payout_cfg = await payout_config_repo.get_config()
+        target_channel = (
+            interaction.guild.get_channel(payout_cfg.payout_channel_id)
+            if payout_cfg.payout_channel_id and interaction.guild
+            else interaction.channel
+        ) or interaction.channel
+
         announce_failed = False
         try:
-            await interaction.channel.send(embed=public_embed)  # type: ignore
+            await target_channel.send(embed=public_embed)  # type: ignore
         except Exception:
             logger.exception(
                 'Payout %s created but public announcement failed — guild=%s "%s"',

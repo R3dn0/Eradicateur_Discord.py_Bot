@@ -1,3 +1,5 @@
+import logging
+
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -14,6 +16,8 @@ from bot.services.payout_config_service import PayoutConfigService
 from bot.utils.discord_dm import send_bulk_dm
 from bot.utils.discord_guards import require_guild_member
 from bot.utils.discord_time import to_discord_timestamp
+
+logger = logging.getLogger("eradicateur_bot.payout")
 
 
 class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", key="payout_name")):  # type: ignore[call-arg]
@@ -122,6 +126,14 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
 
         await payout_repo.void_payout(payout_id, voided_by=interaction.user.id)
 
+        logger.info(
+            "[Discord] User: %s (ID: %s) | Action: PAYOUT_VOID | Payout #%s | Amount Reversed: %s per player",
+            interaction.user.display_name,
+            interaction.user.id,
+            payout_id,
+            payout.amount_per_player,
+        )
+
         bot_config_repo = BotConfigRepository(db)
         bot_config = await bot_config_repo.get_config()
         no_dm_role_id = bot_config.notification_opt_out_role_id
@@ -222,6 +234,50 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
         await interaction.edit_original_response(content=success, embed=embed)
 
     @config.command(
+        name=app_commands.locale_str("channel", key="payout_config_channel_name"),
+        description=app_commands.locale_str(
+            "Set or clear the payout announcement channel",
+            key="payout_config_channel_description",
+        ),
+    )
+    @app_commands.default_permissions(administrator=True)
+    @app_commands.describe(
+        salon=app_commands.locale_str(
+            "Channel to post payout announcements. Omit to clear.",
+            key="payout_config_channel_param_description",
+        ),
+    )
+    @require_guild_member
+    async def config_channel(
+        self,
+        interaction: discord.Interaction,
+        salon: discord.TextChannel | None = None,
+    ) -> None:
+        assert self.bot.db_manager is not None
+        db = await self.bot.db_manager.get_connection(interaction.guild.id)
+        payout_config_repo = PayoutConfigRepository(db)
+
+        await payout_config_repo.update_payout_channel(
+            channel_id=salon.id if salon else None,
+            updated_by=interaction.user.id,
+        )
+
+        logger.info(
+            "[Discord] User: %s (ID: %s) | Action: CONFIG_PAYOUT_CHANNEL | Channel: %s (%s)",
+            interaction.user.display_name,
+            interaction.user.id,
+            salon.name if salon else "None",
+            salon.id if salon else "None",
+        )
+
+        if salon:
+            template = await self.bot.translate("payout_config_channel_set", interaction.locale)
+            msg = template.replace("{channel}", salon.mention)
+        else:
+            msg = await self.bot.translate("payout_config_channel_cleared", interaction.locale)
+        await interaction.response.send_message(msg, ephemeral=True)
+
+    @config.command(
         name=app_commands.locale_str("roles", key="payout_config_roles_name"),
         description=app_commands.locale_str(
             "Set the officer and leader roles for payout management",
@@ -250,6 +306,16 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
             leader_role_id=leader.id,
             officer_role_id=officer.id,
             updated_by=interaction.user.id,
+        )
+
+        logger.info(
+            "[Discord] User: %s (ID: %s) | Action: CONFIG_ROLES_UPDATE | Leader: %s (%s) | Officer: %s (%s)",
+            interaction.user.display_name,
+            interaction.user.id,
+            leader.name,
+            leader.id,
+            officer.name,
+            officer.id,
         )
 
         template = await self.bot.translate("payout_config_roles_updated", interaction.locale)
@@ -319,6 +385,15 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
             updated_by=interaction.user.id,
         )
 
+        logger.info(
+            "[Discord] User: %s (ID: %s) | Action: CONFIG_RATES_UPDATE | Market: %s%% | Guild: %s%% | Transport: %s%%",
+            interaction.user.display_name,
+            interaction.user.id,
+            market,
+            guild,
+            transport,
+        )
+
         def _fmt(v: float) -> str:
             return f"{v:.2%}".rstrip("0").rstrip(".")
 
@@ -380,6 +455,13 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
         await payout_config_repo.update_pay_add_permission_level(
             level=level,
             updated_by=interaction.user.id,
+        )
+
+        logger.info(
+            "[Discord] User: %s (ID: %s) | Action: CONFIG_PERMISSIONS_UPDATE | Level: %s",
+            interaction.user.display_name,
+            interaction.user.id,
+            level,
         )
 
         display = await self.bot.translate(
@@ -460,6 +542,17 @@ class PayoutCog(commands.GroupCog, group_name=app_commands.locale_str("payout", 
                 "payout_config_show_pay_add_permission", interaction.locale
             ),
             value=perm_display,
+            inline=False,
+        )
+        payout_channel = (
+            guild.get_channel(config.payout_channel_id)
+            if config.payout_channel_id and guild
+            else None
+        )
+        payout_chan_str = payout_channel.mention if payout_channel else not_configured
+        embed.add_field(
+            name=await self.bot.translate("payout_config_show_channel", interaction.locale),
+            value=payout_chan_str,
             inline=False,
         )
         if config.updated_by:

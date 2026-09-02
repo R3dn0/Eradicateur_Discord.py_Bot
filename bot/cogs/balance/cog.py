@@ -14,8 +14,8 @@ from bot.repositories.payout_config_repository import (
 from bot.repositories.transaction_repository import (
     TransactionRepository,
 )
+from bot.services.balance_notification_service import send_balance_transaction_dm
 from bot.services.payout_config_service import PayoutConfigService
-from bot.utils.discord_dm import send_bulk_dm
 from bot.utils.discord_guards import require_guild_member
 from bot.utils.discord_time import to_discord_timestamp
 from bot.utils.paginator import paginate_lines
@@ -283,6 +283,15 @@ class BalanceCog(
             await db.rollback()
             raise
 
+        logger.info(
+            "[Discord] User: %s (ID: %s) | Action: BALANCE_DEBIT | Target User ID: %s (%s) | Amount: -%s silvers | Reason: Manual withdrawal",
+            interaction.user.display_name,
+            interaction.user.id,
+            joueur.id,
+            joueur.display_name,
+            montant,
+        )
+
         cursor = await db.execute(
             "SELECT COALESCE(SUM(amount), 0) FROM transactions WHERE discord_id = ?",
             (joueur.id,),
@@ -290,32 +299,16 @@ class BalanceCog(
         row = await cursor.fetchone()
         new_balance = int(row[0])
 
-        bot_config_repo = BotConfigRepository(db)
-        bot_config = await bot_config_repo.get_config()
-        no_dm_role_id = bot_config.notification_opt_out_role_id
-
-        dm_title = await self.bot.translate("balance_dm_pay_title", interaction.locale)
-        dm_amount = await self.bot.translate("balance_dm_amount_debited", interaction.locale)
-        dm_new_balance = await self.bot.translate("balance_dm_new_balance", interaction.locale)
-
-        async def _build_pay_content(member: discord.Member) -> discord.Embed:
-            embed = discord.Embed(title=dm_title, color=discord.Color.red())
-            embed.add_field(name=dm_amount, value=f"{montant:,.0f}", inline=True)
-            embed.add_field(name=dm_new_balance, value=f"{new_balance:,.0f}", inline=True)
-            return embed
-
-        dm_context_template = await self.bot.translate("dm_context", interaction.locale)
-        action = await self.bot.translate("balance_pay_dm_action", interaction.locale)
-        context = dm_context_template.replace("{user}", interaction.user.display_name).replace(
-            "{action}", action
-        )
-
-        result = await send_bulk_dm(
+        result = await send_balance_transaction_dm(
+            bot=self.bot,
             guild=interaction.guild,
-            member_ids=[joueur.id],
-            build_content=_build_pay_content,
-            opt_out_role_id=no_dm_role_id,
-            context=context,
+            target_user_id=joueur.id,
+            amount=montant,
+            is_credit=False,
+            new_balance=new_balance,
+            reason=None,
+            actor_id=interaction.user.id,
+            locale=interaction.locale,
         )
 
         template = await self.bot.translate("balance_payer_paid", interaction.locale)
@@ -394,47 +387,28 @@ class BalanceCog(
             created_by=interaction.user.id,
         )
 
-        logger.debug(
-            'Credited %s silver to %s "%s" in guild %s "%s" by %s "%s"',
-            montant,
+        logger.info(
+            "[Discord] User: %s (ID: %s) | Action: BALANCE_CREDIT | Target User ID: %s (%s) | Amount: +%s silvers | Reason: %s",
+            interaction.user.display_name,
+            interaction.user.id,
             joueur.id,
             joueur.display_name,
-            interaction.guild.id,
-            interaction.guild.name,
-            interaction.user.id,
-            interaction.user.display_name,
+            montant,
+            raison,
         )
 
         new_balance = await transaction_repo.get_balance(joueur.id)
 
-        bot_config_repo = BotConfigRepository(db)
-        bot_config = await bot_config_repo.get_config()
-        no_dm_role_id = bot_config.notification_opt_out_role_id
-
-        dm_title = await self.bot.translate("balance_dm_add_title", interaction.locale)
-        dm_amount = await self.bot.translate("balance_dm_amount_credited", interaction.locale)
-        dm_new_balance = await self.bot.translate("balance_dm_new_balance", interaction.locale)
-        dm_reason = await self.bot.translate("balance_dm_reason", interaction.locale)
-
-        async def _build_add_content(member: discord.Member) -> discord.Embed:
-            embed = discord.Embed(title=dm_title, color=discord.Color.green())
-            embed.add_field(name=dm_amount, value=f"{montant:,.0f}", inline=True)
-            embed.add_field(name=dm_reason, value=raison, inline=False)
-            embed.add_field(name=dm_new_balance, value=f"{new_balance:,.0f}", inline=True)
-            return embed
-
-        dm_context_template = await self.bot.translate("dm_context", interaction.locale)
-        action = await self.bot.translate("balance_add_dm_action", interaction.locale)
-        context = dm_context_template.replace("{user}", interaction.user.display_name).replace(
-            "{action}", action
-        )
-
-        result = await send_bulk_dm(
+        result = await send_balance_transaction_dm(
+            bot=self.bot,
             guild=interaction.guild,
-            member_ids=[joueur.id],
-            build_content=_build_add_content,
-            opt_out_role_id=no_dm_role_id,
-            context=context,
+            target_user_id=joueur.id,
+            amount=montant,
+            is_credit=True,
+            new_balance=new_balance,
+            reason=raison,
+            actor_id=interaction.user.id,
+            locale=interaction.locale,
         )
 
         template = await self.bot.translate("balance_ajouter_credited", interaction.locale)
