@@ -151,3 +151,89 @@ class TransactionRepository(BaseRepository):
             )
             for row in rows
         ]
+
+    async def list_recent_transactions(self, limit: int = 10) -> list[Transaction]:
+        await self._ensure_table()
+        cursor = await self._db.execute(
+            """
+            SELECT id, discord_id, amount, reason, payout_id,
+                   created_by, created_at
+            FROM transactions
+            ORDER BY created_at DESC, id DESC
+            LIMIT ?
+        """,
+            (limit,),
+        )
+        rows = await cursor.fetchall()
+        return [
+            Transaction(
+                id=row["id"],
+                discord_id=row["discord_id"],
+                amount=row["amount"],
+                reason=row["reason"],
+                payout_id=row["payout_id"],
+                created_by=row["created_by"],
+                created_at=row["created_at"],
+            )
+            for row in rows
+        ]
+
+    async def list_all_transactions(
+        self,
+        limit: int | None = None,
+        offset: int = 0,
+        filter_type: str = "all",
+    ) -> list[Transaction]:
+        await self._ensure_table()
+        query = "SELECT id, discord_id, amount, reason, payout_id, created_by, created_at FROM transactions"
+        params: list = []
+        conditions: list[str] = []
+
+        if filter_type == "credits":
+            conditions.append("amount > 0")
+        elif filter_type == "debits":
+            conditions.append("amount < 0")
+        elif filter_type == "payouts":
+            conditions.append("payout_id IS NOT NULL")
+        elif filter_type == "manual":
+            conditions.append("payout_id IS NULL")
+
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+
+        query += " ORDER BY created_at DESC, id DESC"
+        if limit is not None:
+            query += " LIMIT ? OFFSET ?"
+            params.extend([limit, offset])
+
+        cursor = await self._db.execute(query, tuple(params))
+        rows = await cursor.fetchall()
+        return [
+            Transaction(
+                id=row["id"],
+                discord_id=row["discord_id"],
+                amount=row["amount"],
+                reason=row["reason"],
+                payout_id=row["payout_id"],
+                created_by=row["created_by"],
+                created_at=row["created_at"],
+            )
+            for row in rows
+        ]
+
+    async def get_transaction_stats(self) -> dict:
+        await self._ensure_table()
+        cursor = await self._db.execute("""
+            SELECT 
+                COUNT(*) as total_count,
+                COALESCE(SUM(CASE WHEN amount > 0 THEN amount ELSE 0 END), 0) as total_credits,
+                COALESCE(SUM(CASE WHEN amount < 0 THEN amount ELSE 0 END), 0) as total_debits
+            FROM transactions
+        """)
+        row = await cursor.fetchone()
+        return {
+            "total_count": int(row["total_count"] or 0),
+            "total_credits": int(row["total_credits"] or 0),
+            "total_debits": int(row["total_debits"] or 0),
+        }
+
