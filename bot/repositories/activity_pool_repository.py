@@ -85,6 +85,19 @@ class ActivityPoolRepository(BaseRepository):
         )
         await self._db.commit()
 
+    async def update_label(self, guild_id: int, position: int, label: str) -> bool:
+        await self._ensure_table()
+        cursor = await self._db.execute(
+            """
+            UPDATE activity_pool
+            SET label = ?
+            WHERE guild_id = ? AND position = ?
+            """,
+            (label, str(guild_id), position),
+        )
+        await self._db.commit()
+        return cursor.rowcount > 0
+
     async def set_order(self, guild_id: int, labels: list[str]) -> None:
         await self._ensure_table()
         await self._db.execute(
