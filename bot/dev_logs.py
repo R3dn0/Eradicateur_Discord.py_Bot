@@ -162,14 +162,15 @@ def setup_dev_logging(data_dir: str, level: int = logging.DEBUG) -> logging.Logg
     root = logging.getLogger("eradicateur_bot")
     root.setLevel(level)
 
-    existing = [h for h in root.handlers if isinstance(h, PerGuildFileHandler)]
-    if not existing:
-        handler = PerGuildFileHandler(os.path.join(data_dir, "logs"), level=level)
-        root.addHandler(handler)
+    for h in list(root.handlers):
+        if isinstance(h, (PerGuildFileHandler, ErrorFileHandler)):
+            root.removeHandler(h)
+            h.close()
 
-    existing_errors = [h for h in root.handlers if isinstance(h, ErrorFileHandler)]
-    if not existing_errors:
-        root.addHandler(ErrorFileHandler(data_dir))
+    handler = PerGuildFileHandler(data_dir, level=level)
+    root.addHandler(handler)
+
+    root.addHandler(ErrorFileHandler(data_dir))
 
     return root
 
