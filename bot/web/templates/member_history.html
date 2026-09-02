@@ -7,45 +7,98 @@
     <!-- Header banner -->
     <div id="memberHeader" data-member-name="{{ member_name }}" class="bg-darkcard border border-darkborder rounded-2xl p-6 shadow-xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
-            <div class="flex items-center space-x-3">
-                <a href="/guild/{{ current_guild.id }}/balances" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center space-x-1">
-                    <span>{{ t('back_to_balances') }}</span>
+            <div class="flex items-center space-x-3 mb-1.5">
+                <a href="/guild/{{ current_guild.id }}/balances" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center space-x-1 transition">
+                    <span>← {{ t('back_to_balances') }}</span>
                 </a>
             </div>
-            <h1 class="text-2xl font-black text-white mt-2 flex items-center gap-3">
-                <span>👤</span>
+            <h1 class="text-2xl font-black text-white flex items-center gap-3">
+                <span class="text-indigo-400">👤</span>
                 <span>{{ member_name }}</span>
             </h1>
-            <p class="text-xs text-slate-400 font-mono mt-0.5">{{ t('col_discord_id') }}: {{ discord_id }}</p>
+            <p class="text-xs text-slate-400 font-mono mt-1 flex items-center gap-2">
+                <span>{{ t('col_discord_id') }}: <span class="text-slate-300">{{ discord_id }}</span></span>
+            </p>
         </div>
-        <div class="text-right">
-            <span class="text-xs uppercase text-slate-400 font-medium tracking-wider">{{ t('current_balance_label') }}</span>
-            <div class="text-3xl font-black font-mono {% if current_balance > 0 %}text-emerald-400{% elif current_balance < 0 %}text-red-400{% else %}text-slate-300{% endif %}">
-                {{ current_balance | format_number }} <span class="text-sm font-bold text-slate-400">{{ t('silvers') }}</span>
-            </div>
+
+        <!-- Quick action buttons -->
+        {% if not user_perms or user_perms.can_manage_balances %}
+        <div class="flex items-center gap-3 self-end sm:self-center">
+            <button 
+                data-operation="credit"
+                class="js-quick-action bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-emerald-950/40 transition flex items-center gap-1.5 cursor-pointer"
+            >
+                <span>➕</span> {{ t('credit_this_player') }}
+            </button>
+            <button 
+                data-operation="debit"
+                class="js-quick-action bg-red-600 hover:bg-red-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-red-950/40 transition flex items-center gap-1.5 cursor-pointer"
+            >
+                <span>➖</span> {{ t('debit_this_player') }}
+            </button>
         </div>
+        {% endif %}
     </div>
 
-    <!-- Quick action buttons -->
-    {% if not user_perms or user_perms.can_manage_balances %}
-    <div class="flex items-center space-x-3">
-        <button 
-            data-operation="credit"
-            class="js-quick-action bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 text-sm font-semibold px-4 py-2 rounded-xl transition cursor-pointer"
-        >
-            {{ t('credit_this_player') }}
-        </button>
-        <button 
-            data-operation="debit"
-            class="js-quick-action bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 text-sm font-semibold px-4 py-2 rounded-xl transition cursor-pointer"
-        >
-            {{ t('debit_this_player') }}
-        </button>
+    <!-- 4-Card Stats Banner (Player Summary) -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Card 1: Current Balance -->
+        <div class="bg-darkcard border border-darkborder rounded-2xl p-4 shadow">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                <span>{{ t('current_balance_label') }}</span>
+                <span class="text-base">💰</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-1.5">
+                <span class="text-2xl font-black font-mono {% if current_balance > 0 %}text-emerald-400{% elif current_balance < 0 %}text-rose-400{% else %}text-slate-300{% endif %}">
+                    {{ current_balance | format_number }}
+                </span>
+                <span class="text-xs font-bold {% if current_balance > 0 %}text-emerald-400/80{% elif current_balance < 0 %}text-rose-400/80{% else %}text-slate-400{% endif %}">Silvers</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1 truncate">Solde net actuel</p>
+        </div>
+
+        <!-- Card 2: Total Operations -->
+        <div class="bg-darkcard border border-darkborder rounded-2xl p-4 shadow">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                <span>{{ t('tx_total_count') if t('tx_total_count') != 'tx_total_count' else 'Transactions' }}</span>
+                <span class="text-base">💳</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+                <span class="text-2xl font-black text-white">{{ stats.total_count }}</span>
+                <span class="text-xs text-slate-400">opérations</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">Historique du joueur</p>
+        </div>
+
+        <!-- Card 3: Total Credited -->
+        <div class="bg-darkcard border border-darkborder rounded-2xl p-4 shadow">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                <span>{{ t('tx_total_credits') if t('tx_total_credits') != 'tx_total_credits' else 'Total Gagné' }}</span>
+                <span class="text-base">🟢</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-1.5">
+                <span class="text-2xl font-black text-emerald-400 font-mono">+{{ stats.total_credits | format_number }}</span>
+                <span class="text-xs text-emerald-400/80 font-bold">Silvers</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">Payouts & crédits reçus</p>
+        </div>
+
+        <!-- Card 4: Total Debited -->
+        <div class="bg-darkcard border border-darkborder rounded-2xl p-4 shadow">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                <span>{{ t('tx_total_debits') if t('tx_total_debits') != 'tx_total_debits' else 'Total Retiré' }}</span>
+                <span class="text-base">🔴</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-1.5">
+                <span class="text-2xl font-black text-rose-400 font-mono">{{ stats.total_debits | format_number }}</span>
+                <span class="text-xs text-rose-400/80 font-bold">Silvers</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">Paiements & débits</p>
+        </div>
     </div>
-    {% endif %}
 
     <!-- Transactions Table -->
-    <div class="bg-darkcard border border-darkborder rounded-2xl shadow overflow-hidden">
+    <div class="bg-darkcard border border-darkborder rounded-2xl shadow-xl overflow-hidden">
         <div class="p-4 border-b border-darkborder flex items-center justify-between bg-slate-900/40">
             <h2 class="text-base font-bold text-white flex items-center gap-2">
                 <span>📜</span> {{ t('tx_history_title') }} ({{ transactions|length }})
@@ -53,46 +106,82 @@
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm text-slate-300">
-                <thead class="bg-slate-900/80 text-xs uppercase text-slate-400 font-semibold border-b border-darkborder">
+                <thead class="bg-slate-900/70 border-b border-darkborder text-xs uppercase text-slate-400 font-semibold tracking-wider">
                     <tr>
-                        <th class="px-6 py-4">{{ t('col_id') }}</th>
-                        <th class="px-6 py-4">{{ t('col_date') }}</th>
-                        <th class="px-6 py-4">{{ t('col_reason_origin') }}</th>
-                        <th class="px-6 py-4">{{ t('col_created_by') }}</th>
-                        <th class="px-6 py-4 text-right">{{ t('col_change') }}</th>
+                        <th class="px-5 py-3.5">{{ t('col_id') }}</th>
+                        <th class="px-5 py-3.5">{{ t('col_date') }}</th>
+                        <th class="px-5 py-3.5">Type / Réf</th>
+                        <th class="px-5 py-3.5 text-right">{{ t('col_change') }}</th>
+                        <th class="px-5 py-3.5">{{ t('col_reason_origin') }}</th>
+                        <th class="px-5 py-3.5">{{ t('col_created_by') }}</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-darkborder">
                     {% for tx in transactions %}
-                    <tr class="hover:bg-slate-800/50 transition">
-                        <td class="px-6 py-4 font-mono text-xs text-slate-400">#{{ tx.id }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap font-mono">
+                    <tr class="hover:bg-slate-800/40 transition">
+                        <!-- ID -->
+                        <td class="px-5 py-3 font-mono text-xs text-slate-500 font-bold">
+                            #{{ tx.id }}
+                        </td>
+
+                        <!-- Date & Time (2 lines) -->
+                        <td class="px-5 py-3 whitespace-nowrap font-mono">
                             <div class="text-xs font-semibold text-slate-300">{{ tx.created_at | format_date }}</div>
                             <div class="text-[11px] text-slate-500 font-medium">{{ tx.created_at | format_time }}</div>
                         </td>
-                        <td class="px-6 py-4">
+
+                        <!-- Type / Ref -->
+                        <td class="px-5 py-3 whitespace-nowrap">
                             {% if tx.payout_id %}
-                            <a href="/guild/{{ current_guild.id }}/payouts/{{ tx.payout_id }}" class="text-indigo-400 hover:text-indigo-300 font-medium">
-                                Payout #{{ tx.payout_id }}
+                            <a href="/guild/{{ current_guild.id }}/payouts/{{ tx.payout_id }}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-950/70 text-amber-300 border border-amber-700/60 hover:bg-amber-900 transition">
+                                <span>📜</span> Payout #{{ tx.payout_id }}
                             </a>
+                            {% elif tx.amount > 0 %}
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-950/70 text-emerald-300 border border-emerald-800/60">
+                                <span>🟢</span> Crédit
+                            </span>
                             {% else %}
-                            <span class="text-white">{{ tx.reason }}</span>
+                            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-950/70 text-rose-300 border border-rose-800/60">
+                                <span>🔴</span> Débit
+                            </span>
                             {% endif %}
                         </td>
-                        <td class="px-6 py-4 text-xs text-slate-400">
+
+                        <!-- Change / Amount -->
+                        <td class="px-5 py-3 text-right whitespace-nowrap">
+                            <span class="font-mono font-bold text-sm {% if tx.amount > 0 %}text-emerald-400{% elif tx.amount < 0 %}text-rose-400{% else %}text-slate-400{% endif %}">
+                                {% if tx.amount > 0 %}+{% endif %}{{ tx.amount | format_number }}
+                            </span>
+                            <span class="text-[11px] font-bold text-slate-500 ml-1">Silvers</span>
+                        </td>
+
+                        <!-- Reason / Origin -->
+                        <td class="px-5 py-3 max-w-xs truncate text-xs text-slate-300">
+                            {% if tx.reason %}
+                                {{ tx.reason }}
+                            {% elif tx.payout_id %}
+                                <span class="text-slate-500 italic">Distribution de butin Payout #{{ tx.payout_id }}</span>
+                            {% else %}
+                                <span class="text-slate-600">-</span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Author -->
+                        <td class="px-5 py-3 whitespace-nowrap text-xs">
                             {% if tx.created_by == 0 %}
-                            <span class="text-indigo-400 font-semibold">Dash Admin</span>
+                            <span class="inline-flex items-center gap-1 bg-indigo-950/60 text-indigo-300 border border-indigo-700/60 px-2 py-0.5 rounded text-[11px] font-semibold">
+                                <span>🤖</span> Dash Admin
+                            </span>
                             {% else %}
-                            {{ tx.creator_name }}
+                            <span class="text-slate-300 flex items-center gap-1">
+                                <span class="text-slate-500">👤</span> {{ tx.creator_name }}
+                            </span>
                             {% endif %}
-                        </td>
-                        <td class="px-6 py-4 text-right font-mono font-bold text-base {% if tx.amount > 0 %}text-emerald-400{% else %}text-red-400{% endif %}">
-                            {% if tx.amount > 0 %}+{% endif %}{{ tx.amount | format_number }}
                         </td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="5" class="px-6 py-8 text-center text-slate-500">
+                        <td colspan="6" class="px-5 py-10 text-center text-slate-500">
                             {{ t('no_tx_found') }}
                         </td>
                     </tr>
@@ -200,13 +289,9 @@
                         </div>
                     </div>
 
-                    <div id="histRecapWarningOverdraft" class="hidden bg-red-950/60 border border-red-800 text-red-300 px-3 py-2 rounded-lg text-xs">
-                        {{ t('warning_overdraft') }}
-                    </div>
-
-                    <div class="flex justify-between items-start pt-1 text-xs">
-                        <span class="text-slate-400 uppercase font-medium">{{ t('reason') }}</span>
-                        <span id="histRecapReason" class="text-slate-200 font-medium text-right max-w-xs break-words"></span>
+                    <div class="flex justify-between items-center text-xs">
+                        <span class="text-slate-400">{{ t('reason') }}</span>
+                        <span id="histRecapReason" class="font-medium text-slate-200"></span>
                     </div>
                 </div>
 
@@ -214,8 +299,8 @@
                     <button type="button" onclick="goToHistInputStep()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
                         {{ t('btn_edit_input') }}
                     </button>
-                    <button type="submit" onclick="isHistTxConfirmed = true;" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/50 transition flex items-center space-x-2">
-                        <span>{{ t('btn_confirm_apply') }}</span>
+                    <button type="button" onclick="document.getElementById('historyTxForm').submit()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/50 transition">
+                        {{ t('btn_confirm_apply') }}
                     </button>
                 </div>
             </div>
@@ -224,108 +309,71 @@
 </div>
 
 <script>
-    const currentMemberBalance = {{ current_balance }};
-    let isHistTxConfirmed = false;
+    let currentOp = 'credit';
+    const currentBal = {{ current_balance }};
+    const memberName = "{{ member_name | escape }}";
 
-    function handleHistFormSubmit(e) {
-        const isConfirmStepVisible = !document.getElementById('histStepConfirm').classList.contains('hidden');
-        if (!isConfirmStepVisible || !isHistTxConfirmed) {
-            e.preventDefault();
-            goToHistConfirmStep();
-            return false;
+    function setOperation(op) {
+        currentOp = op;
+        document.getElementById('opInput').value = op;
+        if (op === 'debit') {
+            document.getElementById('modalTitle').innerHTML = '<span>🔴</span> {{ t("debit_player") }} ' + memberName;
+            document.getElementById('modalReasonLabel').textContent = "{{ t('reason') }} ({{ t('reason_debit_placeholder') }})";
+            document.getElementById('modalReason').placeholder = "{{ t('reason_debit_placeholder') }}";
+        } else {
+            document.getElementById('modalTitle').innerHTML = '<span>🟢</span> {{ t("credit_player") }} ' + memberName;
+            document.getElementById('modalReasonLabel').textContent = "{{ t('reason') }} ({{ t('reason_credit_placeholder') }})";
+            document.getElementById('modalReason').placeholder = "{{ t('reason_credit_placeholder') }}";
         }
-        return true;
+        goToHistInputStep();
+        document.getElementById('txModal').classList.remove('hidden');
+        document.getElementById('modalAmount').focus();
     }
 
-    function formatNumber(num) {
-        if (num === null || isNaN(num)) return "0";
-        return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    }
-
-    function resetHistForm() {
-        isHistTxConfirmed = false;
-        const form = document.getElementById('histTxForm');
-        if (form) form.reset();
+    function closeModal() {
+        document.getElementById('txModal').classList.add('hidden');
         document.getElementById('modalAmount').value = '';
         document.getElementById('modalReason').value = '';
         goToHistInputStep();
     }
 
-    function openQuickAction(op) {
-        resetHistForm();
-        document.getElementById('opInput').value = op;
-        const memberName = document.getElementById('memberHeader')?.getAttribute('data-member-name') || '';
-        const label = document.getElementById('modalReasonLabel');
-        const input = document.getElementById('modalReason');
-        if (op === 'debit') {
-            document.getElementById('modalTitle').innerHTML = '<span>🔴</span> {{ t("debit_player") }} ' + memberName;
-            label.innerHTML = '{{ t("reason_debit_help") }}';
-            input.placeholder = '{{ t("reason_debit_placeholder") }}';
-        } else {
-            document.getElementById('modalTitle').innerHTML = '<span>🟢</span> {{ t("credit_player") }} ' + memberName;
-            label.innerHTML = '{{ t("reason_credit_help") }}';
-            input.placeholder = '{{ t("reason_credit_placeholder") }}';
-        }
-        goToHistInputStep();
-        document.getElementById('txModal').classList.remove('hidden');
-    }
-
-    function closeModal() {
-        document.getElementById('txModal').classList.add('hidden');
-        resetHistForm();
-    }
-
     function goToHistInputStep() {
-        isHistTxConfirmed = false;
         document.getElementById('histStepInput').classList.remove('hidden');
         document.getElementById('histStepConfirm').classList.add('hidden');
     }
 
     function goToHistConfirmStep() {
-        const amount = parseInt(document.getElementById('modalAmount').value, 10);
-        let reason = document.getElementById('modalReason').value.trim();
-        const op = document.getElementById('opInput').value;
-        const isCredit = (op === 'credit');
-
-        if (isNaN(amount) || amount <= 0) {
-            alert('{{ t("js_err_positive_amount") }}');
+        const amtInput = document.getElementById('modalAmount');
+        const amount = parseInt(amtInput.value, 10);
+        if (!amount || amount <= 0) {
+            amtInput.reportValidity();
             return;
         }
-        if (isCredit && !reason) {
-            alert('{{ t("js_err_reason_required") }}');
-            return;
-        }
-        if (!isCredit && !reason) {
-            reason = '{{ t("default_debit_reason") }}';
-        }
 
-        const delta = isCredit ? amount : -amount;
-        const newBal = currentMemberBalance + delta;
+        const reason = document.getElementById('modalReason').value.trim() || '{{ t("no_reason_provided") }}';
 
-        const opBadge = document.getElementById('histRecapOpBadge');
-        const recapAmount = document.getElementById('histRecapAmount');
-        if (isCredit) {
-            opBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-emerald-950 text-emerald-300 border border-emerald-800';
-            opBadge.textContent = '+ {{ t("credit_player") | upper }}';
-            recapAmount.className = 'font-mono font-bold text-base text-emerald-400';
-            recapAmount.textContent = '+ ' + formatNumber(amount) + ' {{ t("silvers") }}';
+        // Badge
+        const badge = document.getElementById('histRecapOpBadge');
+        const amtSpan = document.getElementById('histRecapAmount');
+        const newBalSpan = document.getElementById('histRecapNewBalance');
+
+        let newBal = currentBal;
+        if (currentOp === 'credit') {
+            badge.textContent = '{{ t("credit_op") }}';
+            badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-emerald-950/80 text-emerald-300 border border-emerald-800';
+            amtSpan.textContent = '+ ' + amount.toLocaleString('fr-FR') + ' {{ t("silvers") }}';
+            amtSpan.className = 'font-mono font-bold text-base text-emerald-400';
+            newBal += amount;
         } else {
-            opBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-red-950 text-red-300 border border-red-800';
-            opBadge.textContent = '- {{ t("debit_player") | upper }}';
-            recapAmount.className = 'font-mono font-bold text-base text-red-400';
-            recapAmount.textContent = '- ' + formatNumber(amount) + ' {{ t("silvers") }}';
+            badge.textContent = '{{ t("debit_op") }}';
+            badge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-red-950/80 text-red-300 border border-red-800';
+            amtSpan.textContent = '- ' + amount.toLocaleString('fr-FR') + ' {{ t("silvers") }}';
+            amtSpan.className = 'font-mono font-bold text-base text-red-400';
+            newBal -= amount;
         }
 
-        const newBalEl = document.getElementById('histRecapNewBalance');
-        newBalEl.textContent = formatNumber(newBal) + ' {{ t("silvers") }}';
-        newBalEl.className = 'font-mono font-bold text-base ' + (newBal < 0 ? 'text-red-400' : (newBal > 0 ? 'text-emerald-400' : 'text-slate-300'));
-
-        const warningEl = document.getElementById('histRecapWarningOverdraft');
-        if (newBal < 0) {
-            warningEl.classList.remove('hidden');
-        } else {
-            warningEl.classList.add('hidden');
-        }
+        newBalSpan.textContent = newBal.toLocaleString('fr-FR') + ' {{ t("silvers") }}';
+        newBalSpan.className = 'font-mono font-bold text-base ' + (newBal > 0 ? 'text-emerald-400' : (newBal < 0 ? 'text-red-400' : 'text-slate-300'));
 
         document.getElementById('histRecapReason').textContent = reason;
 
@@ -333,12 +381,22 @@
         document.getElementById('histStepConfirm').classList.remove('hidden');
     }
 
-    document.addEventListener('click', function(e) {
-        const btn = e.target.closest('.js-quick-action');
-        if (btn) {
-            const op = btn.getAttribute('data-operation') || 'credit';
-            openQuickAction(op);
+    function handleHistFormSubmit(e) {
+        if (document.getElementById('histStepConfirm').classList.contains('hidden')) {
+            e.preventDefault();
+            goToHistConfirmStep();
+            return false;
         }
+        return true;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        document.querySelectorAll('.js-quick-action').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const op = e.currentTarget.getAttribute('data-operation');
+                setOperation(op);
+            });
+        });
     });
 </script>
 {% endblock %}

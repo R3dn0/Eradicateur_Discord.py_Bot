@@ -222,6 +222,12 @@ async def member_history(request: Request, guild_id: int, discord_id: int):
             "created_at": tx.created_at,
         })
 
+    stats = {
+        "total_count": len(enriched_transactions),
+        "total_credits": sum(tx["amount"] for tx in enriched_transactions if tx["amount"] > 0),
+        "total_debits": sum(tx["amount"] for tx in enriched_transactions if tx["amount"] < 0),
+    }
+
     return templates.TemplateResponse(
         request=request,
         name="member_history.html",
@@ -233,6 +239,7 @@ async def member_history(request: Request, guild_id: int, discord_id: int):
             "member_name": member_name,
             "current_balance": current_balance,
             "transactions": enriched_transactions,
+            "stats": stats,
             "user_perms": user_perms,
         },
     )

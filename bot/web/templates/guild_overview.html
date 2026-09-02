@@ -160,9 +160,12 @@
                 </table>
             </div>
 
-            <div class="p-3 bg-slate-900/30 border-t border-darkborder flex justify-end">
-                <a href="/guild/{{ current_guild.id }}/balances" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
-                    <span>{{ t('view_all_balances') }}</span>
+            <div class="p-3 bg-slate-900/30 border-t border-darkborder flex items-center justify-between">
+                <a href="/guild/{{ current_guild.id }}/balances" class="text-xs text-slate-400 hover:text-slate-300 transition">
+                    {{ t('view_all_balances') }}
+                </a>
+                <a href="/guild/{{ current_guild.id }}/transactions" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1 transition">
+                    <span>{{ t('nav_transactions') }} ➔</span>
                 </a>
             </div>
         </div>
