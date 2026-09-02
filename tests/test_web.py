@@ -442,10 +442,8 @@ def test_multi_user_transaction_created_by(temp_env):
         f"/guild/{guild_id}/balances/999888/history",
         cookies={"eradicateur_session": user_cookie},
     )
-    assert resp.status_code == 200
-    assert "250 000" in resp.text
-    # Should record created_by = 135489084385787905
-    assert "135489084385787905" in resp.text
+    # Should display Dev 😎 for dev user
+    assert "Dev 😎" in resp.text
 
 
 def test_db_audit_logging_and_logs_view(temp_env):

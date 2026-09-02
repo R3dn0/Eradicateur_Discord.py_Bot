@@ -15,6 +15,9 @@ router = APIRouter(dependencies=[Depends(require_auth)], tags=["Balances"])
 
 
 async def _resolve_member_name(bot, guild_id: int, discord_id: int) -> str:
+    dev_users = getattr(getattr(bot, "config", None), "dashboard_dev_users", None) or [135489084385787905]
+    if discord_id in dev_users or discord_id == 0:
+        return "Dev 😎"
     if hasattr(bot, "get_guild"):
         guild = bot.get_guild(guild_id)
         if guild:
@@ -295,7 +298,9 @@ async def add_manual_transaction(
 
     current_user = getattr(request.state, "user", None) or {}
     actor_id = int(current_user.get("id", 0))
-    actor_name = current_user.get("display_name", "Dashboard Admin")
+    dev_users = getattr(getattr(bot, "config", None), "dashboard_dev_users", None) or [135489084385787905]
+    is_dev = actor_id in dev_users or actor_id == 0 or sim_role == "dev" or user_perms.get("is_dev")
+    actor_name = "Dev 😎" if is_dev else current_user.get("display_name", "Dashboard Admin")
 
     # Record transaction with created_by = logged-in Discord user ID
     await tx_repo.add_transaction(

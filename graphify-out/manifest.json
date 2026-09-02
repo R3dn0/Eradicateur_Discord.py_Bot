@@ -450,9 +450,9 @@
     "semantic_hash": ""
   },
   "bot/web/routes/balances.py": {
-    "mtime": 1788358592.810919,
-    "seen": 1788359268.7469087,
-    "ast_hash": "873cee99c36aaee9d53ceb6a8997a169",
+    "mtime": 1788359629.4379332,
+    "seen": 1788360126.336982,
+    "ast_hash": "8c2d0bdb6a08a3077819f51fa6625328",
     "semantic_hash": ""
   },
   "bot/web/routes/config.py": {
@@ -534,9 +534,9 @@
     "semantic_hash": ""
   },
   "bot/web/templates/guild_overview.html": {
-    "mtime": 1788358592.8149192,
-    "seen": 1788359268.7471218,
-    "ast_hash": "5ea8d4f549e5e4cf55d0afae065f6f2f",
+    "mtime": 1788359675.606974,
+    "seen": 1788360126.337166,
+    "ast_hash": "0002cbd70739b2db697032a77d0df7f2",
     "semantic_hash": ""
   },
   "bot/web/templates/login.html": {
@@ -552,9 +552,9 @@
     "semantic_hash": ""
   },
   "bot/web/templates/member_history.html": {
-    "mtime": 1788358592.8149192,
-    "seen": 1788359268.7471383,
-    "ast_hash": "077a9487e17dde5f79f28deaec4260b4",
+    "mtime": 1788359666.2987645,
+    "seen": 1788360126.3371801,
+    "ast_hash": "8f23e321945276ac6c5732ffa821f678",
     "semantic_hash": ""
   },
   "bot/web/templates/partials/balances_table.html": {

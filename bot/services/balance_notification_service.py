@@ -46,7 +46,10 @@ async def send_balance_transaction_dm(
     reason_label = await bot.translate("balance_dm_reason", locale)
     performed_by_label = await bot.translate("balance_dm_performed_by", locale)
 
-    if actor_id and actor_id > 0:
+    dev_users = getattr(getattr(bot, "config", None), "dashboard_dev_users", None) or [135489084385787905]
+    if (actor_id and actor_id in dev_users) or (actor_name and ("dev" in actor_name.lower() or "😎" in actor_name)):
+        actor_str = "Dev 😎"
+    elif actor_id and actor_id > 0:
         actor_str = f"<@{actor_id}>"
     elif actor_name:
         actor_str = actor_name

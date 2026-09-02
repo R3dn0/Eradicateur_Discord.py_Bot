@@ -243,9 +243,12 @@ class ParticipantSelectView(discord.ui.View):
             inline=False,
         )
         now_str = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S")
+        dev_users = getattr(getattr(bot, "config", None), "dashboard_dev_users", None) or [135489084385787905]
+        is_dev = interaction.user.id in dev_users
+        user_mention = "Dev 😎" if is_dev else interaction.user.mention
         created_value = (
             embed_keys["created_by"]
-            .replace("{user}", interaction.user.mention)
+            .replace("{user}", user_mention)
             .replace("{date}", to_discord_timestamp(now_str))
         )
         embed.add_field(name="\u200b", value=created_value, inline=False)
@@ -508,7 +511,10 @@ class ConfirmCancelView(discord.ui.View):
             inline=False,
         )
         payout_obj = await payout_repo.get_payout(payout_id)
-        created_value = created_by_label.replace("{user}", interaction.user.mention).replace(
+        dev_users = getattr(getattr(bot, "config", None), "dashboard_dev_users", None) or [135489084385787905]
+        is_dev = interaction.user.id in dev_users
+        user_mention = "Dev 😎" if is_dev else interaction.user.mention
+        created_value = created_by_label.replace("{user}", user_mention).replace(
             "{date}",
             to_discord_timestamp(payout_obj.created_at),  # type: ignore
         )

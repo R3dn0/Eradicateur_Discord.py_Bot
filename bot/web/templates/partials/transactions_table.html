@@ -135,9 +135,15 @@
 
                         <!-- Author -->
                         <td class="px-5 py-3 text-xs text-slate-400 whitespace-nowrap">
+                            {% if tx.created_by == 0 or 'Dev' in tx.creator_name or '😎' in tx.creator_name %}
+                            <span class="inline-flex items-center gap-1 bg-amber-950/70 text-amber-300 border border-amber-700/60 px-2 py-0.5 rounded text-[11px] font-bold">
+                                <span>😎</span> Dev 😎
+                            </span>
+                            {% else %}
                             <span class="font-medium text-slate-300">{{ tx.creator_name }}</span>
                             {% if tx.created_by and tx.created_by != 0 %}
                             <div class="text-[10px] font-mono text-slate-500">{{ tx.created_by }}</div>
+                            {% endif %}
                             {% endif %}
                         </td>
 

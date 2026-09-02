@@ -285,7 +285,10 @@ async def create_payout_action(
     if guild and hasattr(bot, "translate"):
         locale = get_web_locale(request)
         discord_locale = "fr" if locale == "fr" else "en-US"
-        creator_tag = f"<@{created_by}>" if created_by else actor_name
+        dev_users = getattr(getattr(bot, "config", None), "dashboard_dev_users", None) or [135489084385787905]
+        sim_role = request.cookies.get("dev_simulated_role", "dev")
+        is_dev = created_by in dev_users or created_by == 0 or sim_role == "dev" or user_perms.get("is_dev")
+        creator_tag = "Dev 😎" if is_dev else (f"<@{created_by}>" if created_by else actor_name)
 
         # 1. Send DMs to participants
         dm_title = await bot.translate("payout_dm_title", discord_locale)

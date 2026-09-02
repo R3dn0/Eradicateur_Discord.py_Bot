@@ -168,9 +168,9 @@
 
                         <!-- Author -->
                         <td class="px-5 py-3 whitespace-nowrap text-xs">
-                            {% if tx.created_by == 0 %}
-                            <span class="inline-flex items-center gap-1 bg-indigo-950/60 text-indigo-300 border border-indigo-700/60 px-2 py-0.5 rounded text-[11px] font-semibold">
-                                <span>🤖</span> Dash Admin
+                            {% if tx.created_by == 0 or 'Dev' in tx.creator_name or '😎' in tx.creator_name %}
+                            <span class="inline-flex items-center gap-1 bg-amber-950/70 text-amber-300 border border-amber-700/60 px-2 py-0.5 rounded text-[11px] font-bold">
+                                <span>😎</span> Dev 😎
                             </span>
                             {% else %}
                             <span class="text-slate-300 flex items-center gap-1">
