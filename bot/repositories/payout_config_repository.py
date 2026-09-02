@@ -14,6 +14,7 @@ class PayoutConfig:
     updated_at: str
     updated_by: int | None
     pay_add_permission_level: str = "officer"
+    payout_channel_id: int | None = None
 
 
 _DEFAULT_MARKET = 0.02
@@ -26,6 +27,7 @@ class PayoutConfigRepository(BaseRepository):
     _COLUMNS: dict[str, str] = {
         "updated_by": "INTEGER",
         "pay_add_permission_level": "TEXT NOT NULL DEFAULT 'officer'",
+        "payout_channel_id": "INTEGER",
     }
 
     def __init__(self, db: aiosqlite.Connection) -> None:
@@ -60,6 +62,7 @@ class PayoutConfigRepository(BaseRepository):
         cursor = await self._db.execute("SELECT * FROM payout_config WHERE id = 1")
         row = await cursor.fetchone()
         assert row is not None
+        payout_channel_id = row["payout_channel_id"] if "payout_channel_id" in row.keys() else None
         return PayoutConfig(
             tax_market=row["tax_market"],
             tax_guild=row["tax_guild"],
@@ -69,6 +72,7 @@ class PayoutConfigRepository(BaseRepository):
             updated_at=row["updated_at"],
             updated_by=row["updated_by"],
             pay_add_permission_level=row["pay_add_permission_level"],
+            payout_channel_id=payout_channel_id,
         )
 
     async def update_rates(
@@ -120,5 +124,19 @@ class PayoutConfigRepository(BaseRepository):
             WHERE id = 1
         """,
             (level, updated_by),
+        )
+        await self._db.commit()
+
+    async def update_payout_channel(self, channel_id: int | None, *, updated_by: int) -> None:
+        await self._ensure_table()
+        await self._db.execute(
+            """
+            UPDATE payout_config
+            SET payout_channel_id = ?,
+                updated_at = datetime('now'),
+                updated_by = ?
+            WHERE id = 1
+        """,
+            (channel_id, updated_by),
         )
         await self._db.commit()
