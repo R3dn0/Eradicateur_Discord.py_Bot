@@ -69,3 +69,12 @@ async def test_set_order_rewrites_positions(repo):
     await repo.set_order(2, ["X"])
     assert await repo.get_labels(1) == ["C", "A", "B"]
     assert await repo.get_labels(2) == ["X"]
+
+
+@pytest.mark.asyncio
+async def test_update_label(repo):
+    await repo.add_label(1, "Tank")
+    await repo.add_label(1, "Heal")
+    assert await repo.update_label(1, 2, "Main Healer") is True
+    assert await repo.get_labels(1) == ["Tank", "Main Healer"]
+    assert await repo.update_label(1, 99, "None") is False

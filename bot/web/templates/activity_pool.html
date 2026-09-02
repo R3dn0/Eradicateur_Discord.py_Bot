@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Activity Pool - {{ current_guild.name }}{% endblock %}
+{% block title %}{{ t('activity_pool_title') }} - {{ current_guild.name }}{% endblock %}
 
 {% block content %}
 <div class="space-y-6 max-w-4xl mx-auto">
@@ -8,88 +8,101 @@
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
             <h1 class="text-2xl font-black text-white flex items-center gap-2">
-                🛡️ Party Role Pool for Activities
+                <span>🛡️</span> {{ t('activity_pool_title') }}
             </h1>
             <p class="text-xs text-slate-400 mt-1">
-                Ordered list of preset roles for activity event creation (`/activite creer`)
+                {{ t('activity_pool_desc') }}
             </p>
         </div>
         {% if pool_items %}
-        <button type="button" onclick="openClearModal()" class="bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 text-xs font-semibold px-3 py-2 rounded-xl transition">
-            🗑️ Clear Pool
+        <button 
+            type="button" 
+            onclick="openClearModal()" 
+            class="bg-red-950/80 hover:bg-red-900 text-red-300 text-xs font-semibold px-4 py-2.5 rounded-xl border border-red-800 transition shadow cursor-pointer"
+        >
+            {{ t('clear_pool_btn') }}
         </button>
         {% endif %}
     </div>
 
     <!-- Add Role Form -->
-    <div class="bg-darkcard border border-darkborder rounded-2xl p-5 shadow">
-        <h2 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
-            <span>+</span> Add Role to Pool
+    <div class="bg-darkcard border border-darkborder rounded-2xl p-5 shadow-lg space-y-4">
+        <h2 class="text-sm font-bold text-white flex items-center gap-2">
+            <span>➕</span> {{ t('pool_add_title') }}
         </h2>
-        <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/add" class="flex gap-3">
+        <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/add" class="flex flex-col sm:flex-row items-stretch gap-3">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <input 
                 type="text" 
                 name="label" 
-                maxlength="100"
+                placeholder="{{ t('pool_add_placeholder') }}" 
                 required 
-                placeholder="e.g. 🛡️ Incubus Tank, 💚 Holy Healer, 💥 DPS Shadowcaller..." 
+                maxlength="100"
                 class="flex-1 bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
-            <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition shadow shrink-0">
-                Add Role
+            <button 
+                type="submit" 
+                class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl transition shadow flex items-center justify-center space-x-2 shrink-0 cursor-pointer"
+            >
+                {{ t('pool_add_submit') }}
             </button>
         </form>
     </div>
 
-    <!-- Roles List -->
+    <!-- Roles List with Drag & Drop -->
     <div class="bg-darkcard border border-darkborder rounded-2xl shadow overflow-hidden">
         <div class="p-4 border-b border-darkborder bg-slate-900/40 flex items-center justify-between">
             <h2 class="text-sm font-bold text-white">
-                Configured Roles ({{ pool_items|length }})
+                {{ t('pool_configured_title') }} ({{ pool_items|length }})
             </h2>
-            <span class="text-xs text-slate-500">Order shown in Discord signup dropdowns</span>
+            <div class="flex items-center gap-3">
+                <span id="dragSaveStatus" class="text-xs text-emerald-400 font-semibold opacity-0 transition-opacity duration-300 flex items-center gap-1">
+                    <span>✓</span> Ordre enregistré
+                </span>
+                <span class="text-xs text-slate-400 flex items-center gap-1.5 bg-slate-900/70 px-2.5 py-1 rounded-lg border border-darkborder">
+                    <span class="text-indigo-400 font-bold">⠿</span> Glisser-déposer une ligne pour réordonner
+                </span>
+            </div>
         </div>
 
-        <div class="divide-y divide-darkborder">
+        <div id="activityPoolList" class="divide-y divide-darkborder">
             {% for item in pool_items %}
-            <div class="p-4 flex items-center justify-between hover:bg-slate-800/40 transition">
-                <div class="flex items-center space-x-4">
-                    <span class="w-7 h-7 rounded-lg bg-slate-900 border border-darkborder flex items-center justify-center font-mono text-xs font-bold text-slate-400">
+            <div 
+                class="pool-item p-4 flex items-center justify-between hover:bg-slate-800/60 transition group bg-darkcard select-none cursor-grab active:cursor-grabbing border-y-2 border-transparent"
+                draggable="true"
+                data-label="{{ item.label | escape }}"
+            >
+                <!-- Drag Handle, Badge & Label -->
+                <div class="flex items-center space-x-3.5 flex-1 py-1 pointer-events-none">
+                    <span class="text-slate-500 group-hover:text-indigo-400 transition text-lg font-bold">
+                        ⠿
+                    </span>
+                    <span class="js-pos-badge w-7 h-7 rounded-lg bg-slate-900 border border-darkborder flex items-center justify-center font-mono text-xs font-bold text-slate-400 group-hover:border-indigo-500/50 group-hover:text-indigo-300 transition">
                         {{ item.position }}
                     </span>
-                    <span class="text-sm font-semibold text-white">
+                    <span class="js-role-label text-sm font-semibold text-white">
                         {{ item.label }}
                     </span>
                 </div>
 
-                <div class="flex items-center space-x-2">
-                    <!-- Move Up -->
-                    <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/move" class="inline">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                        <input type="hidden" name="position" value="{{ item.position }}">
-                        <input type="hidden" name="direction" value="up">
-                        <button type="submit" {% if loop.first %}disabled class="opacity-20 cursor-not-allowed"{% endif %} class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs border border-darkborder" title="Move Up">
-                            ▲
-                        </button>
-                    </form>
-
-                    <!-- Move Down -->
-                    <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/move" class="inline">
-                        <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
-                        <input type="hidden" name="position" value="{{ item.position }}">
-                        <input type="hidden" name="direction" value="down">
-                        <button type="submit" {% if loop.last %}disabled class="opacity-20 cursor-not-allowed"{% endif %} class="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs border border-darkborder" title="Move Down">
-                            ▼
-                        </button>
-                    </form>
+                <!-- Actions: Edit & Delete -->
+                <div class="flex items-center space-x-2 shrink-0">
+                    <!-- Edit Button -->
+                    <button 
+                        type="button" 
+                        onclick="openEditModal('{{ item.position }}', '{{ item.label | escape }}')" 
+                        class="js-edit-btn p-1.5 rounded-lg bg-indigo-950/60 hover:bg-indigo-900 text-indigo-300 text-xs border border-indigo-700/60 transition cursor-pointer" 
+                        title="Modifier ce rôle"
+                    >
+                        ✏️
+                    </button>
 
                     <!-- Delete Button -->
                     <button 
                         type="button" 
                         onclick="openRemoveModal('{{ item.position }}', '{{ item.label | escape }}')" 
-                        class="p-1.5 rounded-lg bg-red-950/60 hover:bg-red-900 text-red-400 text-xs border border-red-800 transition" 
-                        title="Delete"
+                        class="js-remove-btn p-1.5 rounded-lg bg-red-950/60 hover:bg-red-900 text-red-400 text-xs border border-red-800 transition cursor-pointer" 
+                        title="{{ t('btn_delete') }}"
                     >
                         ✕
                     </button>
@@ -97,7 +110,7 @@
             </div>
             {% else %}
             <div class="p-8 text-center text-slate-500 text-sm">
-                No roles configured in the pool yet. Use the form above to add some.
+                {{ t('no_roles_pool') }}
             </div>
             {% endfor %}
         </div>
@@ -110,26 +123,26 @@
     <div class="bg-darkcard border border-red-800/80 rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5">
         <div class="flex items-center justify-between border-b border-darkborder pb-3">
             <h3 class="text-lg font-bold text-red-300 flex items-center gap-2">
-                <span>⚠️</span> Réinitialiser l'Activity Pool
+                <span>⚠️</span> {{ t('clear_pool_modal_title') }}
             </h3>
             <button onclick="closeClearModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
         </div>
 
         <p class="text-xs text-slate-300">
-            Êtes-vous certain de vouloir vider l'ensemble du pool de rôles ?
+            {{ t('clear_pool_modal_prompt') }}
         </p>
 
         <div class="bg-red-950/40 border border-red-900/80 rounded-xl p-3.5 text-xs text-red-200">
-            Cette action supprimera définitivement les <span class="font-bold text-white font-mono">{{ pool_items|length }} rôles</span> pré-configurés pour la création d'événements.
+            {{ t('clear_pool_modal_warn') }} ({{ pool_items|length }} {{ t('roles_settings') }}).
         </div>
 
         <form method="POST" action="/guild/{{ current_guild.id }}/activity-pool/clear" class="flex items-center justify-between pt-2">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <button type="button" onclick="closeClearModal()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
-                Annuler
+                {{ t('btn_cancel') }}
             </button>
             <button type="submit" class="bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-red-950/50 transition">
-                🗑️ Confirmer le Vidage
+                {{ t('clear_pool_confirm_btn') }}
             </button>
         </form>
     </div>
@@ -141,18 +154,18 @@
     <div class="bg-darkcard border border-darkborder rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5">
         <div class="flex items-center justify-between border-b border-darkborder pb-3">
             <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                <span>🗑️</span> Supprimer ce rôle du Pool ?
+                <span>🗑️</span> {{ t('remove_role_modal_title') }}
             </h3>
             <button onclick="closeRemoveModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
         </div>
 
         <div class="bg-slate-900/80 border border-darkborder rounded-xl p-4 text-xs space-y-2">
             <div class="flex justify-between items-center">
-                <span class="text-slate-400">Position :</span>
+                <span class="text-slate-400">{{ t('position_label') }}</span>
                 <span id="modalRolePos" class="font-mono font-bold text-slate-300"></span>
             </div>
             <div class="flex justify-between items-center">
-                <span class="text-slate-400">Rôle :</span>
+                <span class="text-slate-400">{{ t('role_label') }}</span>
                 <span id="modalRoleLabel" class="font-bold text-white text-sm"></span>
             </div>
         </div>
@@ -160,11 +173,50 @@
         <form id="removeRoleForm" method="POST" action="" class="flex items-center justify-between pt-2">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <button type="button" onclick="closeRemoveModal()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
-                Annuler
+                {{ t('btn_cancel') }}
             </button>
             <button type="submit" class="bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-red-950/50 transition">
-                ✕ Supprimer Définitivement
+                {{ t('remove_role_confirm_btn') }}
             </button>
+        </form>
+    </div>
+</div>
+
+<!-- Modal 3: Edit Role Label -->
+<div id="editRoleModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+    <div class="bg-darkcard border border-darkborder rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-5">
+        <div class="flex items-center justify-between border-b border-darkborder pb-3">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <span>✏️</span> Modifier le rôle
+            </h3>
+            <button onclick="closeEditModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
+        </div>
+
+        <form id="editRoleForm" method="POST" action="" class="space-y-4">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+            
+            <div class="space-y-1.5">
+                <label class="block text-xs font-semibold text-slate-400">
+                    Nom du rôle (<span id="editRolePosLabel" class="text-indigo-400 font-mono"></span>)
+                </label>
+                <input 
+                    type="text" 
+                    id="editRoleInput"
+                    name="label" 
+                    maxlength="100"
+                    required 
+                    class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+            </div>
+
+            <div class="flex items-center justify-between pt-2">
+                <button type="button" onclick="closeEditModal()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
+                    {{ t('btn_cancel') }}
+                </button>
+                <button type="submit" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-indigo-950/50 transition">
+                    {{ t('btn_save') }}
+                </button>
+            </div>
         </form>
     </div>
 </div>
@@ -191,8 +243,113 @@
         document.getElementById('modalRoleLabel').textContent = '';
         document.getElementById('removeRoleForm').action = '';
     }
+
+    function openEditModal(position, label) {
+        document.getElementById('editRolePosLabel').textContent = '#' + position;
+        document.getElementById('editRoleInput').value = label;
+        document.getElementById('editRoleForm').action = '/guild/{{ current_guild.id }}/activity-pool/edit/' + position;
+        document.getElementById('editRoleModal').classList.remove('hidden');
+        document.getElementById('editRoleInput').focus();
+    }
+    function closeEditModal() {
+        document.getElementById('editRoleModal').classList.add('hidden');
+        document.getElementById('editRolePosLabel').textContent = '';
+        document.getElementById('editRoleInput').value = '';
+        document.getElementById('editRoleForm').action = '';
+    }
+
+    // Function to re-index elements and send save request
+    async function saveActivityPoolOrder() {
+        const listEl = document.getElementById('activityPoolList');
+        if (!listEl) return;
+        const items = listEl.querySelectorAll('.pool-item');
+        const labels = [];
+        
+        items.forEach((item, index) => {
+            const pos = index + 1;
+            const badge = item.querySelector('.js-pos-badge');
+            if (badge) badge.textContent = pos;
+            
+            const label = item.getAttribute('data-label');
+            if (label) {
+                labels.push(label);
+                const safeLabel = label.replace(/'/g, "\\'");
+                const editBtn = item.querySelector('.js-edit-btn');
+                if (editBtn) editBtn.setAttribute('onclick', `openEditModal('${pos}', '${safeLabel}')`);
+                const removeBtn = item.querySelector('.js-remove-btn');
+                if (removeBtn) removeBtn.setAttribute('onclick', `openRemoveModal('${pos}', '${safeLabel}')`);
+            }
+        });
+
+        if (labels.length === 0) return;
+
+        try {
+            const res = await fetch('/guild/{{ current_guild.id }}/activity-pool/reorder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-Token': '{{ csrf_token }}'
+                },
+                body: JSON.stringify({ labels: labels })
+            });
+
+            if (res.ok) {
+                const statusEl = document.getElementById('dragSaveStatus');
+                if (statusEl) {
+                    statusEl.classList.remove('opacity-0');
+                    setTimeout(() => statusEl.classList.add('opacity-0'), 2500);
+                }
+            } else {
+                console.error("Server returned error on reorder:", res.status);
+            }
+        } catch (err) {
+            console.error("Failed to reorder activity pool:", err);
+        }
+    }
+
+    // Native HTML5 Drag & Drop Engine
+    function initNativeDragAndDrop() {
+        const listEl = document.getElementById('activityPoolList');
+        if (!listEl) return;
+
+        let draggedItem = null;
+
+        listEl.addEventListener('dragstart', function(e) {
+            const target = e.target.closest('.pool-item');
+            if (!target) return;
+            draggedItem = target;
+            e.dataTransfer.effectAllowed = 'move';
+            e.dataTransfer.setData('text/plain', target.getAttribute('data-label') || '');
+            setTimeout(() => {
+                target.classList.add('opacity-40', 'bg-indigo-950/40', 'border-dashed', 'border-indigo-500');
+            }, 0);
+        });
+
+        listEl.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            const target = e.target.closest('.pool-item');
+            if (!target || target === draggedItem) return;
+
+            const rect = target.getBoundingClientRect();
+            const next = (e.clientY - rect.top) / (rect.bottom - rect.top) > 0.5;
+            listEl.insertBefore(draggedItem, next && target.nextSibling ? target.nextSibling : target);
+        });
+
+        listEl.addEventListener('dragend', function(e) {
+            if (draggedItem) {
+                draggedItem.classList.remove('opacity-40', 'bg-indigo-950/40', 'border-dashed', 'border-indigo-500');
+                draggedItem = null;
+                saveActivityPoolOrder();
+            }
+        });
+    }
+
+    // Initialize on load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initNativeDragAndDrop);
+    } else {
+        initNativeDragAndDrop();
+    }
 </script>
 {% endblock %}
-
-
-
