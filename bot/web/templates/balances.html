@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Player Balances - {{ current_guild.name }}{% endblock %}
+{% block title %}{{ t('balances_title') }} - {{ current_guild.name }}{% endblock %}
 
 {% block content %}
 <div class="space-y-6">
@@ -8,20 +8,22 @@
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
             <h1 class="text-2xl font-black text-white flex items-center gap-2">
-                💰 Player Balances & Wallets
+                💰 {{ t('balances_title') }}
             </h1>
             <p class="text-xs text-slate-400 mt-1">
-                Total Guild Debt: <span class="font-bold text-amber-400 font-mono">{{ total_owed | format_number }} Silvers</span>
+                {{ t('total_debt') }}: <span class="font-bold text-amber-400 font-mono">{{ total_owed | format_number }} {{ t('silvers') }}</span>
             </p>
         </div>
+        {% if not user_perms or user_perms.can_manage_balances %}
         <button 
             data-discord-id=""
             data-member-name=""
             data-operation="credit"
-            class="js-tx-btn bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition shadow flex items-center space-x-2"
+            class="js-tx-btn bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition shadow flex items-center space-x-2 cursor-pointer"
         >
-            <span>+ New Manual Transaction</span>
+            <span>{{ t('new_manual_tx_btn') }}</span>
         </button>
+        {% endif %}
     </div>
 
     <!-- Search & Filters Toolbar -->
@@ -37,7 +39,7 @@
                     id="searchInput"
                     name="q" 
                     value="{{ query }}"
-                    placeholder="Search by username, nickname, or Discord ID (including 0 balances)..." 
+                    placeholder="{{ t('search_player_placeholder') }}" 
                     hx-get="/guild/{{ current_guild.id }}/balances"
                     hx-include="[name='filter_type']"
                     hx-trigger="keyup changed delay:300ms"
@@ -56,21 +58,28 @@
                     onclick="setBalanceFilter('all')"
                     class="filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if (filter_type or 'all') == 'all' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
                 >
-                    Tous ({{ stats.all if stats else (balances|length) }})
+                    {{ t('filter_all') }} ({{ stats.all if stats else (balances|length) }})
                 </button>
                 <button 
                     type="button"
                     onclick="setBalanceFilter('nonzero')"
                     class="filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if filter_type == 'nonzero' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
                 >
-                    Soldes actifs ({{ stats.nonzero if stats else (balances|length) }})
+                    {{ t('filter_nonzero') }} ({{ stats.nonzero if stats else (balances|length) }})
                 </button>
                 <button 
                     type="button"
                     onclick="setBalanceFilter('zero')"
                     class="filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if filter_type == 'zero' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
                 >
-                    Soldes à 0 ({{ stats.zero if stats else 0 }})
+                    {{ t('filter_zero') }} ({{ stats.zero if stats else 0 }})
+                </button>
+                <button 
+                    type="button"
+                    onclick="setBalanceFilter('left')"
+                    class="filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if filter_type == 'left' %}bg-amber-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
+                >
+                    {{ t('filter_left') }} ({{ stats.left if stats else 0 }})
                 </button>
             </div>
         </div>
@@ -87,78 +96,101 @@
     <div class="bg-darkcard border border-darkborder rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-5">
         <div class="flex items-center justify-between border-b border-darkborder pb-3">
             <h3 id="modalTitle" class="text-lg font-bold text-white flex items-center gap-2">
-                <span>💰</span> Balance Operation
+                <span>💰</span> {{ t('manual_transaction') }}
             </h3>
             <button onclick="closeTransactionModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
         </div>
 
-        <form id="txForm" method="POST" action="/guild/{{ current_guild.id }}/balances/transaction" class="space-y-4">
+        <form id="txForm" method="POST" action="/guild/{{ current_guild.id }}/balances/transaction" onsubmit="return handleTxFormSubmit(event)" class="space-y-4">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
 
             <!-- STEP 1: Input form -->
             <div id="txStepInput" class="space-y-4">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">Operation Type</label>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">{{ t('operation_type') }}</label>
                     <div class="grid grid-cols-2 gap-3">
                         <label class="flex items-center space-x-2 bg-slate-900 border border-darkborder p-3 rounded-xl cursor-pointer hover:border-emerald-500/50 transition">
-                            <input type="radio" name="operation" value="credit" id="opCredit" checked class="text-indigo-600 focus:ring-indigo-500">
-                            <span class="text-sm font-bold text-emerald-400">+ Crédit (Ajout)</span>
+                            <input type="radio" name="operation" value="credit" id="opCredit" checked onchange="updateOperationUI()" class="text-indigo-600 focus:ring-indigo-500">
+                            <span class="text-sm font-bold text-emerald-400">{{ t('credit_add') }}</span>
                         </label>
                         <label class="flex items-center space-x-2 bg-slate-900 border border-darkborder p-3 rounded-xl cursor-pointer hover:border-red-500/50 transition">
-                            <input type="radio" name="operation" value="debit" id="opDebit" class="text-indigo-600 focus:ring-indigo-500">
-                            <span class="text-sm font-bold text-red-400">- Débit (Retrait)</span>
+                            <input type="radio" name="operation" value="debit" id="opDebit" onchange="updateOperationUI()" class="text-indigo-600 focus:ring-indigo-500">
+                            <span class="text-sm font-bold text-red-400">{{ t('debit_sub') }}</span>
                         </label>
                     </div>
                 </div>
 
                 <div>
-                    <label for="modalDiscordId" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Player Discord ID</label>
-                    <input 
-                        type="number" 
-                        id="modalDiscordId" 
-                        name="discord_id" 
-                        required 
-                        placeholder="e.g. 123456789012345678"
-                        oninput="onDiscordIdInput()"
-                        class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    >
-                    <p id="modalPlayerName" class="text-xs text-indigo-400 mt-1 font-medium"></p>
+                    <label class="block text-xs font-semibold text-slate-300 uppercase mb-1">{{ t('discord_id_label') }}</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        <!-- 1. Dropdown select directly from all cataloged members -->
+                        <div>
+                            <select 
+                                id="modalMemberDropdown" 
+                                onchange="onModalDropdownSelect(this)"
+                                class="w-full bg-slate-900 border border-darkborder rounded-xl px-3 py-2.5 text-xs text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            >
+                                <option value="">-- {{ t('payout_select_member_placeholder') }} --</option>
+                                {% for b in (all_members or balances) %}
+                                <option value="{{ b.discord_id }}">{{ b.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <!-- 2. Text input / search by ID -->
+                        <div>
+                            <input 
+                                type="text" 
+                                id="modalDiscordId" 
+                                name="discord_id" 
+                                required 
+                                list="modalMembersList"
+                                placeholder="{{ t('discord_id_placeholder') }}"
+                                oninput="onDiscordIdInput()"
+                                class="w-full bg-slate-900 border border-darkborder rounded-xl px-3 py-2.5 text-xs text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                            >
+                            <datalist id="modalMembersList">
+                                {% for b in (all_members or balances) %}
+                                <option value="{{ b.discord_id }}">{{ b.name }}</option>
+                                {% endfor %}
+                            </datalist>
+                        </div>
+                    </div>
+                    <p id="modalPlayerName" class="text-xs text-indigo-400 mt-1.5 font-medium min-h-[1rem]"></p>
                 </div>
 
                 <div>
-                    <label for="modalAmount" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Amount (Silvers)</label>
+                    <label for="modalAmount" class="block text-xs font-semibold text-slate-300 uppercase mb-1">{{ t('amount') }}</label>
                     <input 
                         type="number" 
                         id="modalAmount" 
                         name="amount" 
                         min="1" 
-                        max="100000000000"
+                        max="100000000000" 
                         required 
-                        placeholder="e.g. 500000"
+                        placeholder="{{ t('amount_placeholder') }}"
                         class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 font-mono focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
                 </div>
 
                 <div>
-                    <label for="modalReason" class="block text-xs font-semibold text-slate-300 uppercase mb-1">Transaction Reason</label>
+                    <label id="modalReasonLabel" for="modalReason" class="block text-xs font-semibold text-slate-300 uppercase mb-1">{{ t('reason') }}</label>
                     <input 
                         type="text" 
                         id="modalReason" 
                         name="reason" 
                         maxlength="255"
-                        required 
-                        placeholder="e.g. Ajustement loot / Remboursement / Prime"
+                        placeholder="{{ t('reason_credit_placeholder') }}"
                         class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
                 </div>
 
                 <div class="flex items-center justify-end space-x-3 pt-2">
                     <button type="button" onclick="closeTransactionModal()" class="px-4 py-2 rounded-xl text-sm text-slate-400 hover:text-white">
-                        Annuler
+                        {{ t('btn_cancel') }}
                     </button>
                     <button type="button" onclick="goToConfirmationStep()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition flex items-center space-x-1">
-                        <span>Vérifier & Récapituler</span>
-                        <span>➔</span>
+                        <span>{{ t('btn_verify_recap') }}</span>
                     </button>
                 </div>
             </div>
@@ -167,14 +199,14 @@
             <div id="txStepConfirm" class="hidden space-y-4">
                 <div class="bg-amber-950/40 border border-amber-800/80 rounded-xl p-4 text-xs text-amber-200">
                     <p class="font-bold flex items-center gap-1.5 text-amber-300 text-sm mb-1">
-                        <span>⚠️</span> Confirmation requise avant écriture en base
+                        <span>⚠️</span> {{ t('tx_confirm_title') }}
                     </p>
-                    <span>Veuillez vérifier attentivement le récapitulatif des modifications ci-dessous.</span>
+                    <span>{{ t('tx_confirm_warning') }}</span>
                 </div>
 
                 <div class="bg-slate-900/80 border border-darkborder rounded-xl p-4 space-y-3 font-sans text-sm">
                     <div class="flex justify-between items-center border-b border-darkborder pb-2">
-                        <span class="text-slate-400 text-xs uppercase font-medium">Joueur</span>
+                        <span class="text-slate-400 text-xs uppercase font-medium">{{ t('col_member') }}</span>
                         <div class="text-right">
                             <span id="recapPlayerName" class="font-bold text-white block"></span>
                             <span id="recapDiscordId" class="text-xs text-slate-400 font-mono"></span>
@@ -182,42 +214,42 @@
                     </div>
 
                     <div class="flex justify-between items-center border-b border-darkborder pb-2">
-                        <span class="text-slate-400 text-xs uppercase font-medium">Type d'opération</span>
+                        <span class="text-slate-400 text-xs uppercase font-medium">{{ t('operation_type') }}</span>
                         <span id="recapOpBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold font-mono"></span>
                     </div>
 
                     <div class="flex justify-between items-center border-b border-darkborder pb-2">
-                        <span class="text-slate-400 text-xs uppercase font-medium">Montant</span>
+                        <span class="text-slate-400 text-xs uppercase font-medium">{{ t('amount') }}</span>
                         <span id="recapAmount" class="font-mono font-bold text-base"></span>
                     </div>
 
                     <div class="bg-slate-950/60 p-3 rounded-lg border border-darkborder space-y-1.5">
                         <div class="flex justify-between text-xs">
-                            <span class="text-slate-400">Ancien solde :</span>
+                            <span class="text-slate-400">{{ t('old_balance_est') }}</span>
                             <span id="recapOldBalance" class="font-mono font-bold text-slate-300"></span>
                         </div>
                         <div class="flex justify-between text-xs border-t border-darkborder pt-1">
-                            <span class="text-slate-400">Nouveau solde estimé :</span>
+                            <span class="text-slate-400">{{ t('new_balance_est') }}</span>
                             <span id="recapNewBalance" class="font-mono font-bold text-base"></span>
                         </div>
                     </div>
 
                     <div id="recapWarningOverdraft" class="hidden bg-red-950/60 border border-red-800 text-red-300 px-3 py-2 rounded-lg text-xs">
-                        ⚠️ Attention : Cette opération placera le solde du joueur en négatif.
+                        {{ t('warning_overdraft') }}
                     </div>
 
                     <div class="flex justify-between items-start pt-1 text-xs">
-                        <span class="text-slate-400 uppercase font-medium">Motif</span>
+                        <span class="text-slate-400 uppercase font-medium">{{ t('reason') }}</span>
                         <span id="recapReason" class="text-slate-200 font-medium text-right max-w-xs break-words"></span>
                     </div>
                 </div>
 
                 <div class="flex items-center justify-between pt-2">
                     <button type="button" onclick="goToInputStep()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
-                        ← Modifier la saisie
+                        {{ t('btn_edit_input') }}
                     </button>
-                    <button type="submit" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/50 transition flex items-center space-x-2">
-                        <span>✅ Confirmer et Appliquer</span>
+                    <button type="submit" onclick="isTxConfirmed = true;" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/50 transition flex items-center space-x-2">
+                        <span>{{ t('btn_confirm_apply') }}</span>
                     </button>
                 </div>
             </div>
@@ -227,24 +259,82 @@
 
 <script>
     const knownBalances = {
-        {% for b in balances %}
+        {% for b in (all_members or balances) %}
         "{{ b.discord_id }}": { name: {{ b.name | tojson }}, balance: {{ b.balance }} },
         {% endfor %}
     };
 
     let currentSelectedBalance = null;
+    let isTxConfirmed = false;
+
+    function handleTxFormSubmit(e) {
+        const isConfirmStepVisible = !document.getElementById('txStepConfirm').classList.contains('hidden');
+        if (!isConfirmStepVisible || !isTxConfirmed) {
+            e.preventDefault();
+            goToConfirmationStep();
+            return false;
+        }
+        return true;
+    }
 
     function formatNumber(num) {
         if (num === null || isNaN(num)) return "0";
         return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
     }
 
+    function onModalDropdownSelect(selectEl) {
+        const id = selectEl.value;
+        const input = document.getElementById('modalDiscordId');
+        if (input) {
+            input.value = id;
+            onDiscordIdInput();
+        }
+    }
+
     function onDiscordIdInput() {
-        const id = document.getElementById('modalDiscordId').value.trim();
-        const info = knownBalances[id];
-        if (info) {
-            document.getElementById('modalPlayerName').textContent = 'Membre : ' + info.name + ' (' + formatNumber(info.balance) + ' silvers)';
-            currentSelectedBalance = info.balance;
+        const raw = document.getElementById('modalDiscordId').value.trim();
+        const select = document.getElementById('modalMemberDropdown');
+        const datalist = document.getElementById('modalMembersList');
+
+        let foundId = null;
+        let foundInfo = null;
+
+        if (raw && knownBalances[raw]) {
+            foundId = raw;
+            foundInfo = knownBalances[raw];
+        } else if (raw) {
+            for (const [id, info] of Object.entries(knownBalances)) {
+                if (typeof isFuzzyMemberMatch === 'function' && isFuzzyMemberMatch(raw, info.name, id)) {
+                    foundId = id;
+                    foundInfo = info;
+                    break;
+                }
+            }
+        }
+
+        // Dynamically filter datalist suggestions for fuzzy search
+        if (datalist) {
+            let html = '';
+            if (raw) {
+                for (const [id, info] of Object.entries(knownBalances)) {
+                    if (typeof isFuzzyMemberMatch === 'function' && isFuzzyMemberMatch(raw, info.name, id)) {
+                        html += `<option value="${info.name}">${id}</option>`;
+                    }
+                }
+            } else {
+                for (const [id, info] of Object.entries(knownBalances)) {
+                    html += `<option value="${info.name}">${id}</option>`;
+                }
+            }
+            if (html) datalist.innerHTML = html;
+        }
+
+        if (select) {
+            select.value = foundId || "";
+        }
+        if (foundInfo) {
+            document.getElementById('modalPlayerName').textContent = '{{ t("col_member") }} : ' + foundInfo.name + ' (' + formatNumber(foundInfo.balance) + ' {{ t("silvers") }})';
+            currentSelectedBalance = foundInfo.balance;
         } else {
             document.getElementById('modalPlayerName').textContent = '';
             currentSelectedBalance = null;
@@ -252,8 +342,11 @@
     }
 
     function resetTransactionForm() {
+        isTxConfirmed = false;
         const form = document.getElementById('txForm');
         if (form) form.reset();
+        const select = document.getElementById('modalMemberDropdown');
+        if (select) select.value = '';
         document.getElementById('modalDiscordId').value = '';
         document.getElementById('modalAmount').value = '';
         document.getElementById('modalReason').value = '';
@@ -262,23 +355,41 @@
         goToInputStep();
     }
 
+    function updateOperationUI() {
+        const isDebit = document.getElementById('opDebit').checked;
+        const label = document.getElementById('modalReasonLabel');
+        const input = document.getElementById('modalReason');
+        if (isDebit) {
+            document.getElementById('modalTitle').innerHTML = '<span>🔴</span> {{ t("debit_player") }}';
+            label.innerHTML = '{{ t("reason_debit_help") }}';
+            input.placeholder = '{{ t("reason_debit_placeholder") }}';
+        } else {
+            document.getElementById('modalTitle').innerHTML = '<span>🟢</span> {{ t("credit_player") }}';
+            label.innerHTML = '{{ t("reason_credit_help") }}';
+            input.placeholder = '{{ t("reason_credit_placeholder") }}';
+        }
+    }
+
     function openTransactionModal(discordId, name, balance, operation) {
         resetTransactionForm();
         document.getElementById('modalDiscordId').value = discordId || '';
+        const select = document.getElementById('modalMemberDropdown');
+        if (select) {
+            select.value = discordId || '';
+        }
         if (balance !== undefined && balance !== null && balance !== '') {
             currentSelectedBalance = parseInt(balance, 10);
-            document.getElementById('modalPlayerName').textContent = name ? 'Membre : ' + name + ' (' + formatNumber(currentSelectedBalance) + ' silvers)' : '';
+            document.getElementById('modalPlayerName').textContent = name ? '{{ t("col_member") }} : ' + name + ' (' + formatNumber(currentSelectedBalance) + ' {{ t("silvers") }})' : '';
         } else {
             onDiscordIdInput();
         }
 
         if (operation === 'debit') {
             document.getElementById('opDebit').checked = true;
-            document.getElementById('modalTitle').innerHTML = '<span>🔴</span> Débiter un joueur';
         } else {
             document.getElementById('opCredit').checked = true;
-            document.getElementById('modalTitle').innerHTML = '<span>🟢</span> Créditer un joueur';
         }
+        updateOperationUI();
 
         goToInputStep();
         document.getElementById('txModal').classList.remove('hidden');
@@ -290,31 +401,46 @@
     }
 
     function goToInputStep() {
+        isTxConfirmed = false;
         document.getElementById('txStepInput').classList.remove('hidden');
         document.getElementById('txStepConfirm').classList.add('hidden');
     }
 
     function goToConfirmationStep() {
-        const discordId = document.getElementById('modalDiscordId').value.trim();
+        let discordId = document.getElementById('modalDiscordId').value.trim();
         const amount = parseInt(document.getElementById('modalAmount').value, 10);
-        const reason = document.getElementById('modalReason').value.trim();
+        let reason = document.getElementById('modalReason').value.trim();
         const isCredit = document.getElementById('opCredit').checked;
 
+        // Try fuzzy resolve if not directly an existing ID
+        if (discordId && (!knownBalances[discordId] || isNaN(parseInt(discordId, 10)))) {
+            for (const [id, info] of Object.entries(knownBalances)) {
+                if (typeof isFuzzyMemberMatch === 'function' && isFuzzyMemberMatch(discordId, info.name, id)) {
+                    discordId = id;
+                    document.getElementById('modalDiscordId').value = id;
+                    break;
+                }
+            }
+        }
+
         if (!discordId || isNaN(parseInt(discordId, 10)) || parseInt(discordId, 10) <= 0) {
-            alert('Veuillez renseigner un ID Discord valide.');
+            alert('{{ t("js_err_invalid_discord_id") }}');
             return;
         }
         if (isNaN(amount) || amount <= 0) {
-            alert('Veuillez renseigner un montant strictement positif.');
+            alert('{{ t("js_err_positive_amount") }}');
             return;
         }
-        if (!reason) {
-            alert('Veuillez spécifier un motif pour la transaction.');
+        if (isCredit && !reason) {
+            alert('{{ t("js_err_reason_required") }}');
             return;
+        }
+        if (!isCredit && !reason) {
+            reason = '{{ t("default_debit_reason") }}';
         }
 
         const info = knownBalances[discordId];
-        const playerName = info ? info.name : ('Joueur #' + discordId);
+        const playerName = info ? info.name : ('{{ t("col_member") }} #' + discordId);
         const oldBal = (currentSelectedBalance !== null && !isNaN(currentSelectedBalance)) 
             ? currentSelectedBalance 
             : (info ? info.balance : 0);
@@ -329,19 +455,19 @@
         const recapAmount = document.getElementById('recapAmount');
         if (isCredit) {
             opBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-emerald-950 text-emerald-300 border border-emerald-800';
-            opBadge.textContent = '+ CRÉDIT';
+            opBadge.textContent = '+ {{ t("credit_player") | upper }}';
             recapAmount.className = 'font-mono font-bold text-base text-emerald-400';
-            recapAmount.textContent = '+ ' + formatNumber(amount) + ' Silvers';
+            recapAmount.textContent = '+ ' + formatNumber(amount) + ' {{ t("silvers") }}';
         } else {
             opBadge.className = 'px-2.5 py-0.5 rounded-full text-xs font-bold font-mono bg-red-950 text-red-300 border border-red-800';
-            opBadge.textContent = '- DÉBIT';
+            opBadge.textContent = '- {{ t("debit_player") | upper }}';
             recapAmount.className = 'font-mono font-bold text-base text-red-400';
-            recapAmount.textContent = '- ' + formatNumber(amount) + ' Silvers';
+            recapAmount.textContent = '- ' + formatNumber(amount) + ' {{ t("silvers") }}';
         }
 
-        document.getElementById('recapOldBalance').textContent = formatNumber(oldBal) + ' Silvers';
+        document.getElementById('recapOldBalance').textContent = formatNumber(oldBal) + ' {{ t("silvers") }}';
         const newBalEl = document.getElementById('recapNewBalance');
-        newBalEl.textContent = formatNumber(newBal) + ' Silvers';
+        newBalEl.textContent = formatNumber(newBal) + ' {{ t("silvers") }}';
         newBalEl.className = 'font-mono font-bold text-base ' + (newBal < 0 ? 'text-red-400' : (newBal > 0 ? 'text-emerald-400' : 'text-slate-300'));
 
         const warningEl = document.getElementById('recapWarningOverdraft');
@@ -386,6 +512,3 @@
     });
 </script>
 {% endblock %}
-
-
-

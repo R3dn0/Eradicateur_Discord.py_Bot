@@ -2,53 +2,62 @@
     <table class="w-full text-left text-sm text-slate-300">
         <thead class="bg-slate-900/80 text-xs uppercase text-slate-400 font-semibold border-b border-darkborder">
             <tr>
-                <th class="px-6 py-4">Member</th>
-                <th class="px-6 py-4">Discord ID</th>
-                <th class="px-6 py-4 text-right">Current Balance</th>
-                <th class="px-6 py-4 text-center">Actions</th>
+                <th class="px-6 py-4">{{ t('col_member') }}</th>
+                <th class="px-6 py-4">{{ t('col_discord_id') }}</th>
+                <th class="px-6 py-4 text-right">{{ t('col_balance') }}</th>
+                <th class="px-6 py-4 text-center">{{ t('col_actions') }}</th>
             </tr>
         </thead>
         <tbody class="divide-y divide-darkborder">
             {% for b in balances %}
             <tr class="hover:bg-slate-800/50 transition">
                 <td class="px-6 py-4 font-medium text-white flex items-center space-x-3">
-                    <span class="w-8 h-8 rounded-full bg-slate-800 border border-darkborder flex items-center justify-center text-xs font-bold text-indigo-400">
+                    <span class="w-8 h-8 rounded-full bg-slate-800 border border-darkborder flex items-center justify-center text-xs font-bold text-indigo-400 shrink-0">
                         {{ (b.name[0] if (b.name and b.name|length > 0) else '?') | upper }}
                     </span>
-                    <span class="truncate max-w-xs">{{ b.name or 'User ' ~ b.discord_id }}</span>
+                    <div class="flex items-center gap-2 truncate max-w-xs">
+                        <span class="truncate">{{ b.name or 'User ' ~ b.discord_id }}</span>
+                        {% if not b.in_guild %}
+                        <span class="px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-amber-950/80 text-amber-300 border border-amber-700/60 shrink-0" title="{{ t('badge_left_guild_desc') }}">
+                            {{ t('filter_left') }}
+                        </span>
+                        {% endif %}
+                    </div>
                 </td>
                 <td class="px-6 py-4 font-mono text-xs text-slate-400">{{ b.discord_id }}</td>
                 <td class="px-6 py-4 text-right">
                     <span class="font-mono font-bold {% if b.balance > 0 %}text-emerald-400{% elif b.balance < 0 %}text-red-400{% else %}text-slate-400{% endif %} text-base">
                         {{ b.balance | format_number }}
                     </span>
-                    <span class="text-xs text-slate-500 ml-1">silvers</span>
+                    <span class="text-xs text-slate-500 ml-1">{{ t('silvers') }}</span>
                 </td>
                 <td class="px-6 py-4 text-center">
                     <div class="flex items-center justify-center space-x-2">
-                        <a href="/guild/{{ current_guild.id }}/balances/{{ b.discord_id }}/history" class="text-xs bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-darkborder px-3 py-1.5 rounded-lg transition">
-                            📜 History
+                        <a href="/guild/{{ current_guild.id }}/balances/{{ b.discord_id }}/history" class="text-xs bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-indigo-600 dark:text-indigo-300 border border-slate-300 dark:border-darkborder px-3 py-1.5 rounded-lg transition font-medium">
+                            📜 {{ t('btn_history') }}
                         </a>
+                        {% if not user_perms or user_perms.can_manage_balances %}
                         <button 
                             data-discord-id="{{ b.discord_id }}"
                             data-member-name="{{ b.name }}"
                             data-balance="{{ b.balance }}"
                             data-operation="credit"
-                            class="js-tx-btn text-xs bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 px-2.5 py-1.5 rounded-lg transition"
-                            title="Credit player balance"
+                            class="js-tx-btn text-xs bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 px-2.5 py-1.5 rounded-lg transition cursor-pointer"
+                            title="{{ t('credit_player') }}"
                         >
-                            + Credit
+                            {{ t('btn_credit_player') }}
                         </button>
                         <button 
                             data-discord-id="{{ b.discord_id }}"
                             data-member-name="{{ b.name }}"
                             data-balance="{{ b.balance }}"
                             data-operation="debit"
-                            class="js-tx-btn text-xs bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 px-2.5 py-1.5 rounded-lg transition"
-                            title="Debit player balance"
+                            class="js-tx-btn text-xs bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 px-2.5 py-1.5 rounded-lg transition cursor-pointer"
+                            title="{{ t('debit_player') }}"
                         >
-                            - Debit
+                            {{ t('btn_debit_player') }}
                         </button>
+                        {% endif %}
                     </div>
                 </td>
             </tr>
@@ -56,13 +65,15 @@
             <tr>
                 <td colspan="4" class="px-6 py-8 text-center text-slate-500">
                     {% if query %}
-                    Aucun membre trouvé correspondant à la recherche "{{ query }}".
+                    {{ t('no_members_found') }} ("{{ query }}")
                     {% elif filter_type == 'zero' %}
-                    Aucun joueur avec un solde à 0 silvers trouvé.
+                    {{ t('no_zero_members') }}
                     {% elif filter_type == 'nonzero' %}
-                    Aucun solde actif (> 0) enregistré.
+                    {{ t('no_nonzero_members') }}
+                    {% elif filter_type == 'left' %}
+                    {{ t('no_left_members') }}
                     {% else %}
-                    Aucun joueur ou solde enregistré dans la base de données.
+                    {{ t('no_members_db') }}
                     {% endif %}
                 </td>
             </tr>
@@ -70,4 +81,3 @@
         </tbody>
     </table>
 </div>
-

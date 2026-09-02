@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Payout #{{ payout.id }} Details - {{ current_guild.name }}{% endblock %}
+{% block title %}{{ t('payout_num') }}{{ payout.id }} {{ t('btn_details') }} - {{ current_guild.name }}{% endblock %}
 
 {% block content %}
 <div class="space-y-6 max-w-4xl mx-auto">
     <!-- Breadcrumb -->
     <div>
         <a href="/guild/{{ current_guild.id }}/payouts" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center space-x-1">
-            <span>← Back to Payouts List</span>
+            <span>{{ t('back_to_payouts') }}</span>
         </a>
     </div>
 
@@ -16,31 +16,31 @@
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-darkborder pb-6">
             <div>
                 <div class="flex items-center space-x-3">
-                    <h1 class="text-2xl font-black text-white">Payout #{{ payout.id }}</h1>
+                    <h1 class="text-2xl font-black text-white">{{ t('payout_num') }}{{ payout.id }}</h1>
                     {% if payout.voided %}
                     <span class="bg-red-950/80 text-red-300 border border-red-800 text-xs px-3 py-1 rounded-full font-bold">
-                        🚫 Voided
+                        {{ t('voided_payout_badge') }}
                     </span>
                     {% else %}
                     <span class="bg-emerald-950/80 text-emerald-300 border border-emerald-800 text-xs px-3 py-1 rounded-full font-bold">
-                        ✅ Valid Payout
+                        {{ t('valid_payout_badge') }}
                     </span>
                     {% endif %}
                 </div>
                 <p class="text-xs text-slate-400 mt-1">
-                    Created on {{ payout.created_at }} by <span class="text-slate-200 font-medium">{{ creator_name }}</span> (ID: {{ payout.created_by }})
+                    {{ t('created_on_by', date=payout.created_at, creator=creator_name, id=payout.created_by) }}
                 </p>
                 {% if payout.voided and payout.voided_at %}
                 <p class="text-xs text-red-400 mt-1">
-                    Voided on {{ payout.voided_at }} (by ID {{ payout.voided_by or 'Admin' }})
+                    {{ t('voided_on_by', date=payout.voided_at, id=(payout.voided_by or 'Admin')) }}
                 </p>
                 {% endif %}
             </div>
 
             <!-- Void Action Button -->
-            {% if not payout.voided %}
-            <button type="button" onclick="openVoidModal()" class="bg-red-950/80 hover:bg-red-900 text-red-200 border border-red-700 text-sm font-bold px-4 py-2.5 rounded-xl transition shadow flex items-center space-x-2">
-                <span>🚫 Void Payout</span>
+            {% if not payout.voided and (not user_perms or user_perms.can_manage_payouts) %}
+            <button type="button" onclick="openVoidModal()" class="bg-red-950/80 hover:bg-red-900 text-red-200 border border-red-700 text-sm font-bold px-4 py-2.5 rounded-xl transition shadow flex items-center space-x-2 cursor-pointer">
+                <span>{{ t('void_payout_btn') }}</span>
             </button>
             {% endif %}
         </div>
@@ -48,46 +48,46 @@
         <!-- Breakdown Grid -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
             <div class="bg-slate-900/60 p-4 rounded-xl border border-darkborder">
-                <span class="text-xs text-slate-400 font-medium uppercase">Bag Silvers</span>
+                <span class="text-xs text-slate-400 font-medium uppercase">{{ t('card_bag_silvers') }}</span>
                 <p class="text-lg font-black text-amber-400 font-mono mt-1">{{ payout.bag_silvers | format_number }}</p>
             </div>
             <div class="bg-slate-900/60 p-4 rounded-xl border border-darkborder">
-                <span class="text-xs text-slate-400 font-medium uppercase">Item Value</span>
+                <span class="text-xs text-slate-400 font-medium uppercase">{{ t('card_item_value') }}</span>
                 <p class="text-lg font-black text-slate-200 font-mono mt-1">{{ payout.item_market_value | format_number }}</p>
             </div>
             <div class="bg-slate-900/60 p-4 rounded-xl border border-darkborder">
-                <span class="text-xs text-slate-400 font-medium uppercase">Activity Cost</span>
+                <span class="text-xs text-slate-400 font-medium uppercase">{{ t('card_activity_cost') }}</span>
                 <p class="text-lg font-black text-red-400 font-mono mt-1">-{{ payout.activity_cost | format_number }}</p>
             </div>
             <div class="bg-slate-900/60 p-4 rounded-xl border border-darkborder">
-                <span class="text-xs text-slate-400 font-medium uppercase">Net Per Player</span>
+                <span class="text-xs text-slate-400 font-medium uppercase">{{ t('card_net_per_player') }}</span>
                 <p class="text-lg font-black text-emerald-400 font-mono mt-1">{{ payout.amount_per_player | format_number }}</p>
             </div>
         </div>
 
         <!-- Taxes applied -->
         <div class="bg-slate-900/40 p-4 rounded-xl border border-darkborder">
-            <h3 class="text-xs font-bold text-slate-300 uppercase mb-2">Taxes Applied on this Split</h3>
+            <h3 class="text-xs font-bold text-slate-300 uppercase mb-2">{{ t('taxes_applied_title') }}</h3>
             <div class="grid grid-cols-3 gap-4 text-xs">
-                <div><span class="text-slate-400">Market Tax:</span> <span class="font-bold text-slate-200">{{ payout.tax_market | format_percent }}</span></div>
-                <div><span class="text-slate-400">Guild Tax:</span> <span class="font-bold text-slate-200">{{ payout.tax_guild | format_percent }}</span></div>
-                <div><span class="text-slate-400">Transport Tax:</span> <span class="font-bold text-slate-200">{{ payout.tax_transport | format_percent }}</span></div>
+                <div><span class="text-slate-400">{{ t('tax_market_label') }}</span> <span class="font-bold text-slate-200">{{ payout.tax_market | format_percent }}</span></div>
+                <div><span class="text-slate-400">{{ t('tax_guild_label') }}</span> <span class="font-bold text-slate-200">{{ payout.tax_guild | format_percent }}</span></div>
+                <div><span class="text-slate-400">{{ t('tax_transport_label') }}</span> <span class="font-bold text-slate-200">{{ payout.tax_transport | format_percent }}</span></div>
             </div>
         </div>
 
         <!-- Participants Table -->
         <div>
             <h3 class="text-sm font-bold text-white mb-3 flex items-center gap-2">
-                <span>👥</span> Participants & Distributed Credits ({{ participants|length }})
+                <span>👥</span> {{ t('participants_credits_title') }} ({{ participants|length }})
             </h3>
             <div class="bg-slate-900/60 rounded-xl border border-darkborder overflow-hidden">
                 <table class="w-full text-left text-sm text-slate-300">
                     <thead class="bg-slate-900 text-xs uppercase text-slate-400 font-semibold border-b border-darkborder">
                         <tr>
-                            <th class="px-5 py-3">Player</th>
-                            <th class="px-5 py-3 font-mono text-xs">Discord ID</th>
-                            <th class="px-5 py-3 text-right">Amount Credited</th>
-                            <th class="px-5 py-3 text-center">Profile</th>
+                            <th class="px-5 py-3">{{ t('col_member') }}</th>
+                            <th class="px-5 py-3 font-mono text-xs">{{ t('col_discord_id') }}</th>
+                            <th class="px-5 py-3 text-right">{{ t('col_amount_credited') }}</th>
+                            <th class="px-5 py-3 text-center">{{ t('col_profile') }}</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-darkborder">
@@ -100,7 +100,7 @@
                             </td>
                             <td class="px-5 py-3 text-center">
                                 <a href="/guild/{{ current_guild.id }}/balances/{{ pt.discord_id }}/history" class="text-xs text-indigo-400 hover:text-indigo-300">
-                                    View balance ➔
+                                    {{ t('view_balance_link') }}
                                 </a>
                             </td>
                         </tr>
@@ -118,46 +118,46 @@
     <div class="bg-darkcard border border-red-800/80 rounded-2xl shadow-2xl max-w-lg w-full p-6 space-y-5">
         <div class="flex items-center justify-between border-b border-darkborder pb-3">
             <h3 class="text-lg font-bold text-red-300 flex items-center gap-2">
-                <span>🚨</span> Confirmation d'annulation du Payout
+                <span>🚨</span> {{ t('void_confirm_title') }}
             </h3>
             <button onclick="closeVoidModal()" class="text-slate-400 hover:text-white text-xl">&times;</button>
         </div>
 
         <div class="bg-red-950/50 border border-red-900 rounded-xl p-4 text-xs text-red-200 space-y-1">
-            <p class="font-bold text-sm text-red-300">⚠️ Action irréversible sur la base de données</p>
-            <p>L'annulation de ce split débitera immédiatement le solde de chaque participant de la somme qu'il a reçue lors de la création du payout.</p>
+            <p class="font-bold text-sm text-red-300">{{ t('void_confirm_warning_title') }}</p>
+            <p>{{ t('void_confirm_warning_text') }}</p>
         </div>
 
         <div class="bg-slate-900/80 border border-darkborder rounded-xl p-4 space-y-3 text-xs">
             <div class="flex justify-between items-center border-b border-darkborder pb-2">
-                <span class="text-slate-400 uppercase font-medium">Payout concerné</span>
+                <span class="text-slate-400 uppercase font-medium">{{ t('void_payout_concerned') }}</span>
                 <span class="font-mono font-bold text-white text-sm">#{{ payout.id }}</span>
             </div>
             <div class="flex justify-between items-center border-b border-darkborder pb-2">
-                <span class="text-slate-400 uppercase font-medium">Créé par</span>
+                <span class="text-slate-400 uppercase font-medium">{{ t('col_created_by') }}</span>
                 <span class="text-slate-200">{{ creator_name }}</span>
             </div>
             <div class="flex justify-between items-center border-b border-darkborder pb-2">
-                <span class="text-slate-400 uppercase font-medium">Joueurs impactés</span>
-                <span class="font-bold text-amber-400 font-mono">{{ participants|length }} participants</span>
+                <span class="text-slate-400 uppercase font-medium">{{ t('void_impacted_players') }}</span>
+                <span class="font-bold text-amber-400 font-mono">{{ participants|length }} {{ t('players') }}</span>
             </div>
             <div class="flex justify-between items-center border-b border-darkborder pb-2">
-                <span class="text-slate-400 uppercase font-medium">Débit par joueur</span>
-                <span class="font-bold text-red-400 font-mono text-sm">-{{ payout.amount_per_player | format_number }} Silvers</span>
+                <span class="text-slate-400 uppercase font-medium">{{ t('void_debit_per_player') }}</span>
+                <span class="font-bold text-red-400 font-mono text-sm">-{{ payout.amount_per_player | format_number }} {{ t('silvers') }}</span>
             </div>
             <div class="flex justify-between items-center pt-1">
-                <span class="text-slate-400 uppercase font-medium">Total récupéré sur la guilde</span>
-                <span class="font-bold text-red-400 font-mono text-base">-{{ (payout.amount_per_player * payout.participant_count) | format_number }} Silvers</span>
+                <span class="text-slate-400 uppercase font-medium">{{ t('void_total_recovered') }}</span>
+                <span class="font-bold text-red-400 font-mono text-base">-{{ (payout.amount_per_player * payout.participant_count) | format_number }} {{ t('silvers') }}</span>
             </div>
         </div>
 
         <form method="POST" action="/guild/{{ current_guild.id }}/payouts/{{ payout.id }}/void" class="pt-2 flex items-center justify-between">
             <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
             <button type="button" onclick="closeVoidModal()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
-                Annuler
+                {{ t('btn_cancel') }}
             </button>
             <button type="submit" class="bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-red-950/50 transition flex items-center space-x-2">
-                <span>🚫 Confirmer l'Annulation Définitive</span>
+                <span>{{ t('void_confirm_btn') }}</span>
             </button>
         </form>
     </div>
@@ -173,5 +173,3 @@
 </script>
 {% endif %}
 {% endblock %}
-
-

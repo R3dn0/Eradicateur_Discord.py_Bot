@@ -4,7 +4,10 @@ from fastapi import APIRouter, Depends, Form, HTTPException, Request, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from bot.repositories.transaction_repository import TransactionRepository
-from bot.web.auth import require_auth
+from bot.services.balance_notification_service import send_balance_transaction_dm
+from bot.utils.fuzzy_search import fuzzy_match_member
+from bot.web.audit import log_db_action
+from bot.web.auth import get_user_guild_permissions, require_auth
 from bot.web.routes.dashboard import ensure_valid_guild, get_available_guilds
 
 logger = logging.getLogger("eradicateur_bot.web.balances")
@@ -25,6 +28,70 @@ async def _resolve_member_name(bot, guild_id: int, discord_id: int) -> str:
             except Exception:
                 pass
     return f"User {discord_id}"
+
+
+async def get_cataloged_guild_members(bot, guild_id: int, conn) -> list[dict]:
+    """
+    Catalogues all members of the Discord guild (excluding bots),
+    merging their profile with current database balances.
+    - Active server members are tagged with in_guild=True.
+    - Departed members (not in discord guild) with a non-zero balance are tagged with in_guild=False.
+    - Departed members with 0 balance are excluded completely.
+    """
+    tx_repo = TransactionRepository(conn)
+    raw_balances = await tx_repo.list_balances(include_zero=True)
+    db_balances = {row[0]: row[1] for row in raw_balances}
+
+    catalog: dict[int, dict] = {}
+
+    guild = bot.get_guild(guild_id) if hasattr(bot, "get_guild") else None
+    if guild:
+        members = list(guild.members)
+        if len(members) <= 1 and hasattr(guild, "fetch_members"):
+            try:
+                members = [m async for m in guild.fetch_members(limit=None)]
+            except Exception:
+                members = list(guild.members)
+
+        for m in members:
+            if getattr(m, "bot", False):
+                continue
+            bal = db_balances.get(m.id, 0)
+            display_name = m.display_name
+            username = getattr(m, "name", str(m.id))
+            full_name = f"{display_name} (@{username})" if username and username != display_name else display_name
+            catalog[m.id] = {
+                "discord_id": str(m.id),
+                "name": full_name,
+                "display_name": display_name,
+                "balance": bal,
+                "in_guild": True,
+            }
+
+        # Add departed members who still have a non-zero balance in DB
+        for discord_id, bal in db_balances.items():
+            if discord_id not in catalog and bal != 0:
+                name = await _resolve_member_name(bot, guild_id, discord_id)
+                catalog[discord_id] = {
+                    "discord_id": str(discord_id),
+                    "name": name,
+                    "display_name": name,
+                    "balance": bal,
+                    "in_guild": False,
+                }
+    else:
+        # Fallback when guild object is unavailable (e.g. tests / bot offline)
+        for discord_id, bal in db_balances.items():
+            name = await _resolve_member_name(bot, guild_id, discord_id)
+            catalog[discord_id] = {
+                "discord_id": str(discord_id),
+                "name": name,
+                "display_name": name,
+                "balance": bal,
+                "in_guild": True,
+            }
+
+    return sorted(catalog.values(), key=lambda x: x["name"].lower())
 
 
 @router.get("/balances")
@@ -51,65 +118,40 @@ async def list_balances(
 
     conn = await bot.db_manager.get_connection(guild_id)
     tx_repo = TransactionRepository(conn)
-
-    # Fetch all balances from database including zero balances
-    raw_balances = await tx_repo.list_balances(include_zero=True)
     total_owed = await tx_repo.get_total_owed()
 
-    # Track seen discord IDs
-    seen_ids = set()
-    all_enriched = []
+    all_enriched = await get_cataloged_guild_members(bot, guild_id, conn)
     q_lower = q.lower().strip()
 
-    # 1. Process all database balances
-    for discord_id, balance in raw_balances:
-        seen_ids.add(discord_id)
-        name = await _resolve_member_name(bot, guild_id, discord_id)
-        all_enriched.append({
-            "discord_id": discord_id,
-            "name": name or f"User {discord_id}",
-            "balance": balance,
-        })
-
-    # 2. If searching, also search Discord guild members not in transactions (balance 0)
-    if q_lower and hasattr(bot, "get_guild"):
-        try:
-            guild = bot.get_guild(guild_id)
-            if guild and hasattr(guild, "members") and guild.members:
-                for m in guild.members:
-                    if m.id not in seen_ids:
-                        display_name = f"{getattr(m, 'display_name', str(m.id))} (@{getattr(m, 'name', str(m.id))})"
-                        if q_lower in display_name.lower() or q_lower in str(m.id):
-                            seen_ids.add(m.id)
-                            all_enriched.append({
-                                "discord_id": m.id,
-                                "name": display_name,
-                                "balance": 0,
-                            })
-        except Exception:
-            logger.exception("Error searching Discord guild members for guild %s", guild_id)
-
-    # Stats for filter tabs (Tous, Actifs, Soldes à 0)
+    # Stats for filter tabs (Tous, Actifs, Soldes à 0, Partis avec solde)
     stats = {
         "all": len(all_enriched),
         "nonzero": sum(1 for b in all_enriched if b["balance"] != 0),
-        "zero": sum(1 for b in all_enriched if b["balance"] == 0),
+        "zero": sum(1 for b in all_enriched if b["balance"] == 0 and b.get("in_guild", True)),
+        "left": sum(1 for b in all_enriched if not b.get("in_guild", True) and b["balance"] != 0),
     }
 
-    # Filter by query string
+    # Filter by query string and filter_type
     filtered_balances = []
     for b in all_enriched:
-        if q_lower:
-            if q_lower not in b["name"].lower() and q_lower not in str(b["discord_id"]):
+        if q:
+            if not fuzzy_match_member(q, b["name"], b["discord_id"]):
                 continue
 
         # Apply balance type filter
         if filter_type == "nonzero" and b["balance"] == 0:
             continue
-        elif filter_type == "zero" and b["balance"] != 0:
+        elif filter_type == "zero" and (b["balance"] != 0 or not b.get("in_guild", True)):
+            continue
+        elif filter_type == "left" and (b.get("in_guild", True) or b["balance"] == 0):
             continue
 
         filtered_balances.append(b)
+
+    user = getattr(request.state, "user", None) or {}
+    user_id = int(user.get("id", 0))
+    sim_role = request.cookies.get("dev_simulated_role", "dev")
+    user_perms = await get_user_guild_permissions(bot, guild_id, user_id, simulated_role=sim_role)
 
     # Return partial for HTMX search / filter
     if request.headers.get("HX-Request") and not request.headers.get("HX-Boosted"):
@@ -123,6 +165,7 @@ async def list_balances(
                 "query": q,
                 "filter_type": filter_type,
                 "stats": stats,
+                "user_perms": user_perms,
             },
         )
 
@@ -134,10 +177,12 @@ async def list_balances(
             "guilds": guilds,
             "current_guild": current_guild,
             "balances": filtered_balances,
+            "all_members": all_enriched,
             "total_owed": total_owed,
             "query": q,
             "filter_type": filter_type,
             "stats": stats,
+            "user_perms": user_perms,
             "message": None,
             "error": None,
         },
@@ -150,6 +195,11 @@ async def member_history(request: Request, guild_id: int, discord_id: int):
     templates = request.app.state.templates
     guilds = get_available_guilds(bot)
     current_guild = ensure_valid_guild(bot, guild_id)
+
+    user = getattr(request.state, "user", None) or {}
+    user_id = int(user.get("id", 0))
+    sim_role = request.cookies.get("dev_simulated_role", "dev")
+    user_perms = await get_user_guild_permissions(bot, guild_id, user_id, simulated_role=sim_role)
 
     conn = await bot.db_manager.get_connection(guild_id)
     tx_repo = TransactionRepository(conn)
@@ -183,6 +233,7 @@ async def member_history(request: Request, guild_id: int, discord_id: int):
             "member_name": member_name,
             "current_balance": current_balance,
             "transactions": enriched_transactions,
+            "user_perms": user_perms,
         },
     )
 
@@ -194,10 +245,22 @@ async def add_manual_transaction(
     discord_id: int = Form(...),
     operation: str = Form(...),  # "credit" or "debit"
     amount: int = Form(...),
-    reason: str = Form(...),
+    reason: str = Form(""),
+    return_to: str | None = Form(None),
 ):
     bot = request.app.state.bot
     ensure_valid_guild(bot, guild_id)
+
+    user = getattr(request.state, "user", None) or {}
+    user_id = int(user.get("id", 0))
+    sim_role = request.cookies.get("dev_simulated_role", "dev")
+    user_perms = await get_user_guild_permissions(bot, guild_id, user_id, simulated_role=sim_role)
+
+    if not user_perms["can_manage_balances"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Insufficient permissions to execute manual transactions on balances.",
+        )
 
     if operation not in ("credit", "debit"):
         raise HTTPException(status_code=400, detail="Invalid operation type. Must be 'credit' or 'debit'.")
@@ -208,10 +271,15 @@ async def add_manual_transaction(
     if discord_id <= 0:
         raise HTTPException(status_code=400, detail="Invalid Discord User ID")
 
-    sanitized_reason = reason.strip()[:255]
-    if not sanitized_reason:
-        sanitized_reason = "Manual adjustment"
-    cleaned_reason = f"[Web Dashboard] {sanitized_reason}"
+    stripped_reason = reason.strip()[:255]
+    if operation == "debit":
+        sanitized_reason = stripped_reason if stripped_reason else "Manual withdrawal"
+    else:
+        if not stripped_reason:
+            raise HTTPException(status_code=400, detail="Reason is required for credit transactions")
+        sanitized_reason = stripped_reason
+
+    cleaned_reason = f"[Dash] {sanitized_reason}"
 
     final_amount = amount if operation == "credit" else -amount
 
@@ -222,19 +290,6 @@ async def add_manual_transaction(
     actor_id = int(current_user.get("id", 0))
     actor_name = current_user.get("display_name", "Dashboard Admin")
 
-    client_ip = request.client.host if request.client else "unknown"
-    logger.info(
-        "User %s (ID: %s, IP: %s) performed manual %s of %s silvers for user %s (Guild %s, Reason: %s)",
-        actor_name,
-        actor_id,
-        client_ip,
-        operation,
-        amount,
-        discord_id,
-        guild_id,
-        sanitized_reason,
-    )
-
     # Record transaction with created_by = logged-in Discord user ID
     await tx_repo.add_transaction(
         discord_id=discord_id,
@@ -243,8 +298,42 @@ async def add_manual_transaction(
         created_by=actor_id,
     )
 
+    new_balance = await tx_repo.get_balance(discord_id)
+
+    # Attempt to send Discord DM notification to the user
+    if hasattr(bot, "get_guild"):
+        guild = bot.get_guild(guild_id)
+        if guild:
+            try:
+                await send_balance_transaction_dm(
+                    bot=bot,
+                    guild=guild,
+                    target_user_id=discord_id,
+                    amount=amount,
+                    is_credit=(operation == "credit"),
+                    new_balance=new_balance,
+                    reason=sanitized_reason if operation == "credit" else None,
+                    actor_id=actor_id,
+                    actor_name=actor_name,
+                )
+            except Exception:
+                logger.exception(
+                    "Failed to send balance transaction DM for user %s in guild %s",
+                    discord_id,
+                    guild_id,
+                )
+
+    log_db_action(
+        request,
+        guild_id,
+        f"BALANCE_{operation.upper()}",
+        f"Target User ID: {discord_id} | Amount: {final_amount:+d} silvers | Reason: {sanitized_reason}",
+    )
+
+    redirect_url = return_to if (return_to and return_to.startswith(f"/guild/{guild_id}")) else f"/guild/{guild_id}/balances/{discord_id}/history"
+
     return RedirectResponse(
-        url=f"/guild/{guild_id}/balances/{discord_id}/history",
+        url=redirect_url,
         status_code=status.HTTP_303_SEE_OTHER,
     )
 

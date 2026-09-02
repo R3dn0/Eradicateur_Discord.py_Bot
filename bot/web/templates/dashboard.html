@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block title %}Select Server - Eradicateur Dashboard{% endblock %}
+{% block title %}{{ t('servers_title') }} - {{ t('app_title') }}{% endblock %}
 
 {% block content %}
 <div class="max-w-4xl mx-auto py-8">
     <div class="text-center mb-8">
-        <h1 class="text-3xl font-extrabold text-white">Connected Discord Servers</h1>
-        <p class="text-slate-400 mt-2">Select a server to manage its database and settings</p>
+        <h1 class="text-3xl font-extrabold text-white">{{ t('servers_title') }}</h1>
+        <p class="text-slate-400 mt-2">{{ t('servers_subtitle') }}</p>
     </div>
 
     {% if guilds %}
@@ -26,12 +26,12 @@
                         {{ g.name }}
                     </h2>
                     {% if g.online %}
-                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm" title="Bot is online in this server"></span>
+                    <span class="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500 shadow-sm" title="Online"></span>
                     {% endif %}
                 </div>
-                <p class="text-xs text-slate-400 font-mono mt-0.5">ID: {{ g.id }}</p>
+                <p class="text-xs text-slate-400 font-mono mt-0.5">{{ t('guild_id_label') }}: {{ g.id }}</p>
                 {% if g.member_count %}
-                <p class="text-xs text-slate-500 mt-1">👥 {{ g.member_count }} members</p>
+                <p class="text-xs text-slate-500 mt-1">👥 {{ g.member_count }} {{ t('members') }}</p>
                 {% endif %}
             </div>
             <div class="text-indigo-400 group-hover:translate-x-1 transition text-xl font-bold">
@@ -42,9 +42,8 @@
     </div>
     {% else %}
     <div class="bg-darkcard border border-darkborder p-8 rounded-2xl text-center">
-        <p class="text-slate-400">No servers found in configuration or data directory.</p>
+        <p class="text-slate-400">{{ t('no_servers_found') }}</p>
     </div>
     {% endif %}
 </div>
 {% endblock %}
-

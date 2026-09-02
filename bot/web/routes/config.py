@@ -6,7 +6,8 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 
 from bot.repositories.bot_config_repository import BotConfigRepository
 from bot.repositories.payout_config_repository import PayoutConfigRepository
-from bot.web.auth import require_auth
+from bot.web.audit import log_db_action
+from bot.web.auth import get_user_guild_permissions, require_auth
 from bot.web.routes.dashboard import ensure_valid_guild, get_available_guilds
 
 logger = logging.getLogger("eradicateur_bot.web.config")
@@ -42,6 +43,17 @@ async def view_config(request: Request, guild_id: int):
     guilds = get_available_guilds(bot)
     current_guild = ensure_valid_guild(bot, guild_id)
 
+    user = getattr(request.state, "user", None) or {}
+    user_id = int(user.get("id", 0))
+    sim_role = request.cookies.get("dev_simulated_role", "dev")
+    user_perms = await get_user_guild_permissions(bot, guild_id, user_id, simulated_role=sim_role)
+
+    if not user_perms["can_manage_config"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Leader role required to access guild configuration.",
+        )
+
     conn = await bot.db_manager.get_connection(guild_id)
     bot_cfg_repo = BotConfigRepository(conn)
     payout_cfg_repo = PayoutConfigRepository(conn)
@@ -69,6 +81,7 @@ async def view_config(request: Request, guild_id: int):
             "payout_cfg": payout_cfg,
             "roles": roles,
             "channels": channels,
+            "user_perms": user_perms,
             "success_msg": request.query_params.get("saved"),
         },
     )
@@ -85,6 +98,16 @@ async def update_rates(
     bot = request.app.state.bot
     ensure_valid_guild(bot, guild_id)
 
+    user = getattr(request.state, "user", None) or {}
+    user_id = int(user.get("id", 0))
+    sim_role = request.cookies.get("dev_simulated_role", "dev")
+    user_perms = await get_user_guild_permissions(bot, guild_id, user_id, simulated_role=sim_role)
+    if not user_perms["can_manage_config"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Leader role required to update tax rates.",
+        )
+
     # Validate range and reject NaN / Inf
     for name, val in [("tax_market", tax_market), ("tax_guild", tax_guild), ("tax_transport", tax_transport)]:
         if math.isnan(val) or math.isinf(val) or val < 0.0 or val > 100.0:
@@ -98,17 +121,14 @@ async def update_rates(
     conn = await bot.db_manager.get_connection(guild_id)
     payout_cfg_repo = PayoutConfigRepository(conn)
 
-    client_ip = request.client.host if request.client else "unknown"
-    logger.info(
-        "Admin (IP %s) updated tax rates for Guild %s: Market=%.4f, Guild=%.4f, Transport=%.4f",
-        client_ip,
-        guild_id,
-        m,
-        g,
-        t,
-    )
+    await payout_cfg_repo.update_rates(market=m, guild=g, transport=t, updated_by=user_id)
 
-    await payout_cfg_repo.update_rates(market=m, guild=g, transport=t, updated_by=0)
+    log_db_action(
+        request,
+        guild_id,
+        "TAX_RATES_UPDATE",
+        f"Market: {m*100:.2f}%, Guild: {g*100:.2f}%, Transport: {t*100:.2f}%",
+    )
 
     return RedirectResponse(
         url=f"/guild/{guild_id}/config?saved=rates",
@@ -123,31 +143,41 @@ async def update_roles(
     officer_role_id: str = Form(""),
     leader_role_id: str = Form(""),
     pay_add_permission_level: str = Form("officer"),
+    payout_channel_id: str = Form(""),
 ):
     bot = request.app.state.bot
     ensure_valid_guild(bot, guild_id)
+
+    user = getattr(request.state, "user", None) or {}
+    user_id = int(user.get("id", 0))
+    sim_role = request.cookies.get("dev_simulated_role", "dev")
+    user_perms = await get_user_guild_permissions(bot, guild_id, user_id, simulated_role=sim_role)
+    if not user_perms["is_admin"] and not user_perms["is_leader"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Leader or Administrator role required to update roles.",
+        )
 
     if pay_add_permission_level not in ("officer", "leader"):
         raise HTTPException(status_code=400, detail="Invalid permission level: must be 'officer' or 'leader'")
 
     off_id = _parse_optional_id(officer_role_id, "officer_role_id")
     ldr_id = _parse_optional_id(leader_role_id, "leader_role_id")
+    payout_ch_id = _parse_optional_id(payout_channel_id, "payout_channel_id")
 
     conn = await bot.db_manager.get_connection(guild_id)
     payout_cfg_repo = PayoutConfigRepository(conn)
 
-    client_ip = request.client.host if request.client else "unknown"
-    logger.info(
-        "Admin (IP %s) updated roles for Guild %s: Officer=%s, Leader=%s, Level=%s",
-        client_ip,
-        guild_id,
-        off_id,
-        ldr_id,
-        pay_add_permission_level,
-    )
+    await payout_cfg_repo.update_roles(officer_role_id=off_id, leader_role_id=ldr_id, updated_by=user_id)
+    await payout_cfg_repo.update_pay_add_permission_level(level=pay_add_permission_level, updated_by=user_id)
+    await payout_cfg_repo.update_payout_channel(channel_id=payout_ch_id, updated_by=user_id)
 
-    await payout_cfg_repo.update_roles(officer_role_id=off_id, leader_role_id=ldr_id, updated_by=0)
-    await payout_cfg_repo.update_pay_add_permission_level(level=pay_add_permission_level, updated_by=0)
+    log_db_action(
+        request,
+        guild_id,
+        "ROLES_CONFIG_UPDATE",
+        f"Officer Role: {off_id or 'None'}, Leader Role: {ldr_id or 'None'}, Pay/Add Level: {pay_add_permission_level}, Payout Channel: {payout_ch_id or 'None'}",
+    )
 
     return RedirectResponse(
         url=f"/guild/{guild_id}/config?saved=roles",
@@ -165,23 +195,31 @@ async def update_bot_config(
     bot = request.app.state.bot
     ensure_valid_guild(bot, guild_id)
 
+    user = getattr(request.state, "user", None) or {}
+    user_id = int(user.get("id", 0))
+    sim_role = request.cookies.get("dev_simulated_role", "dev")
+    user_perms = await get_user_guild_permissions(bot, guild_id, user_id, simulated_role=sim_role)
+    if not user_perms["can_manage_config"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Leader role required to update bot configuration.",
+        )
+
     opt_role_id = _parse_optional_id(notification_opt_out_role_id, "notification_opt_out_role_id")
     log_ch_id = _parse_optional_id(log_channel_id, "log_channel_id")
 
     conn = await bot.db_manager.get_connection(guild_id)
     bot_cfg_repo = BotConfigRepository(conn)
 
-    client_ip = request.client.host if request.client else "unknown"
-    logger.info(
-        "Admin (IP %s) updated bot config for Guild %s: OptOutRole=%s, LogChannel=%s",
-        client_ip,
-        guild_id,
-        opt_role_id,
-        log_ch_id,
-    )
+    await bot_cfg_repo.update_opt_out_role(role_id=opt_role_id, updated_by=user_id)
+    await bot_cfg_repo.update_log_channel(channel_id=log_ch_id, updated_by=user_id)
 
-    await bot_cfg_repo.update_opt_out_role(role_id=opt_role_id, updated_by=0)
-    await bot_cfg_repo.update_log_channel(channel_id=log_ch_id, updated_by=0)
+    log_db_action(
+        request,
+        guild_id,
+        "BOT_CONFIG_UPDATE",
+        f"Opt-Out Role: {opt_role_id or 'None'}, Log Channel: {log_ch_id or 'None'}",
+    )
 
     return RedirectResponse(
         url=f"/guild/{guild_id}/config?saved=bot",
