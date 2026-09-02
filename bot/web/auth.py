@@ -198,13 +198,159 @@ def clear_auth_cookie(response: Response) -> None:
 def is_user_authorized(bot, user_id: int, user_roles: list[int] | None = None) -> bool:
     """
     Check if a Discord user is authorized to access the dashboard.
-    Enforces whitelist: DASHBOARD_ALLOWED_USERS.
-    Roles structure is ready for future multi-tier access control.
+    Enforces whitelist: DASHBOARD_ALLOWED_USERS, dev accounts, or server admins.
     """
+    if not bot:
+        return True
+    if user_id == 0 or is_dev_user(bot, user_id):
+        return True
     allowed_users = getattr(bot.config, "dashboard_allowed_users", [])
-    if allowed_users:
-        return user_id in allowed_users
+    if allowed_users and user_id in allowed_users:
+        return True
+    if hasattr(bot, "guilds"):
+        for guild in bot.guilds:
+            if getattr(guild, "owner_id", None) == user_id:
+                return True
+            member = guild.get_member(user_id)
+            if member and getattr(member, "guild_permissions", None) and member.guild_permissions.administrator:
+                return True
     return False
+
+
+async def get_user_guild_permissions(
+    bot,
+    guild_id: int,
+    user_id: int,
+    simulated_role: str | None = None,
+) -> dict:
+    """
+    Computes permissions for a user within a specific guild:
+    - is_dev: True if user in dashboard_dev_users or API admin (id=0)
+    - If user is dev, supports simulation of 'dev', 'leader', or 'officer' roles.
+    - is_admin: True if is_dev or Discord server admin / owner
+    - is_leader: True if is_admin or has leader_role_id
+    - is_officer: True if is_leader or has officer_role_id
+    - can_manage_balances: is_leader if pay_add_permission_level == "leader" else is_officer
+    - can_manage_payouts: is_officer
+    - can_manage_config: is_leader
+    - can_manage_activity_pool: is_leader
+    """
+    default_full_perms = {
+        "is_dev": True,
+        "is_simulated": False,
+        "simulated_role": "dev",
+        "is_admin": True,
+        "is_leader": True,
+        "is_officer": True,
+        "can_manage_balances": True,
+        "can_manage_payouts": True,
+        "can_manage_config": True,
+        "can_manage_activity_pool": True,
+    }
+
+    if not bot:
+        return default_full_perms
+
+    user_is_dev = (user_id == 0 or is_dev_user(bot, user_id))
+
+    # 1. Dev Role Simulation
+    if user_is_dev:
+        if simulated_role == "leader":
+            return {
+                "is_dev": False,
+                "is_simulated": True,
+                "simulated_role": "leader",
+                "is_admin": True,
+                "is_leader": True,
+                "is_officer": True,
+                "can_manage_balances": True,
+                "can_manage_payouts": True,
+                "can_manage_config": True,
+                "can_manage_activity_pool": True,
+            }
+        elif simulated_role == "officer":
+            pay_add_level = "officer"
+            if hasattr(bot, "db_manager") and bot.db_manager:
+                try:
+                    from bot.repositories.payout_config_repository import PayoutConfigRepository
+                    conn = await bot.db_manager.get_connection(guild_id)
+                    payout_cfg_repo = PayoutConfigRepository(conn)
+                    cfg = await payout_cfg_repo.get_config()
+                    pay_add_level = cfg.pay_add_permission_level
+                except Exception:
+                    pay_add_level = "officer"
+
+            can_manage_balances = (pay_add_level == "officer")
+
+            return {
+                "is_dev": False,
+                "is_simulated": True,
+                "simulated_role": "officer",
+                "is_admin": False,
+                "is_leader": False,
+                "is_officer": True,
+                "can_manage_balances": can_manage_balances,
+                "can_manage_payouts": True,
+                "can_manage_config": False,
+                "can_manage_activity_pool": False,
+            }
+        else:
+            return default_full_perms
+
+    guild = bot.get_guild(guild_id) if hasattr(bot, "get_guild") else None
+    member = guild.get_member(user_id) if guild else None
+
+    # If member not in memory cache, try fetching
+    if guild and not member and hasattr(guild, "fetch_member"):
+        try:
+            member = await guild.fetch_member(user_id)
+        except Exception:
+            member = None
+
+    # Check Discord Administrator or Guild Owner
+    is_server_admin = False
+    if guild and getattr(guild, "owner_id", None) == user_id:
+        is_server_admin = True
+    elif member and getattr(member, "guild_permissions", None) and member.guild_permissions.administrator:
+        is_server_admin = True
+
+    is_leader = is_server_admin
+    is_officer = is_server_admin
+    pay_add_level = "officer"
+
+    if hasattr(bot, "db_manager") and bot.db_manager:
+        try:
+            from bot.repositories.payout_config_repository import PayoutConfigRepository
+
+            conn = await bot.db_manager.get_connection(guild_id)
+            payout_cfg_repo = PayoutConfigRepository(conn)
+            cfg = await payout_cfg_repo.get_config()
+            pay_add_level = cfg.pay_add_permission_level
+
+            if member:
+                if cfg.leader_role_id and member.get_role(cfg.leader_role_id):
+                    is_leader = True
+                    is_officer = True
+                if cfg.officer_role_id and member.get_role(cfg.officer_role_id):
+                    is_officer = True
+        except Exception as e:
+            logger.warning("Error fetching payout config for permissions in guild %s: %s", guild_id, e)
+
+    can_manage_balances = is_leader if pay_add_level == "leader" else is_officer
+    can_manage_payouts = is_officer
+    can_manage_config = is_leader
+    can_manage_activity_pool = is_leader
+
+    return {
+        "is_dev": False,
+        "is_admin": is_server_admin,
+        "is_leader": is_leader,
+        "is_officer": is_officer,
+        "can_manage_balances": can_manage_balances,
+        "can_manage_payouts": can_manage_payouts,
+        "can_manage_config": can_manage_config,
+        "can_manage_activity_pool": can_manage_activity_pool,
+    }
 
 
 def get_discord_oauth_url(bot, state: str) -> str | None:
@@ -300,8 +446,7 @@ async def require_auth(
 
             if not submitted_csrf or not verify_csrf_token(submitted_csrf, secret):
                 logger.warning(
-                    "CSRF token validation failed for IP %s on %s %s",
-                    _get_client_ip(request),
+                    "CSRF token validation failed on %s %s",
                     request.method,
                     request.url.path,
                 )
@@ -325,5 +470,35 @@ async def require_auth(
         status_code=status.HTTP_307_TEMPORARY_REDIRECT,
         headers={"Location": "/login"},
     )
+
+
+def is_dev_user(bot, user_id: int) -> bool:
+    """Check if the user ID is in the whitelist of developer accounts."""
+    if not bot:
+        return False
+    if user_id == 0:
+        return True
+    dev_users = getattr(bot.config, "dashboard_dev_users", None) or [135489084385787905]
+    return user_id in dev_users
+
+
+async def require_dev_auth(
+    request: Request,
+    eradicateur_session: Annotated[str | None, Cookie()] = None,
+) -> bool:
+    """Require user to be logged in AND belong to dashboard_dev_users."""
+    await require_auth(request, eradicateur_session)
+    user = getattr(request.state, "user", None) or {}
+    user_id = int(user.get("id", 0))
+    bot = getattr(request.app.state, "bot", None)
+
+    if not is_dev_user(bot, user_id):
+        logger.warning("Unauthorized DEV section access attempt by Discord ID %s", user_id)
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Access restricted to Developer Discord accounts.",
+        )
+    return True
+
 
 

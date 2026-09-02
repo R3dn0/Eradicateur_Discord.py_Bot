@@ -1,13 +1,23 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="{{ locale or 'fr' }}" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Eradicateur Bot - Admin{% endblock %}</title>
+    <title>{% block title %}{{ t('app_title') }} - {{ t('admin_dashboard') }}{% endblock %}</title>
+    <!-- Theme initialisation (prevents flash of white/dark) -->
+    <script>
+        if (localStorage.getItem('theme') === 'light') {
+            document.documentElement.classList.remove('dark');
+        } else {
+            document.documentElement.classList.add('dark');
+        }
+    </script>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- HTMX CDN -->
     <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+    <!-- SortableJS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.2/Sortable.min.js"></script>
     <script>
         tailwind.config = {
             darkMode: 'class',
@@ -24,57 +34,237 @@
                             900: '#312e81',
                             950: '#1e1b4b',
                         },
-                        darkbg: '#0f172a',
-                        darkcard: '#1e293b',
-                        darkborder: '#334155',
+                        darkbg: 'var(--color-bg)',
+                        darkcard: 'var(--color-card)',
+                        darkborder: 'var(--color-border)',
                     }
                 }
             }
         }
     </script>
     <style>
+        :root {
+            --color-bg: #f8fafc;
+            --color-card: #ffffff;
+            --color-border: #e2e8f0;
+            --color-input-bg: #ffffff;
+            --color-input-border: #cbd5e1;
+            --color-text-main: #0f172a;
+            --color-text-muted: #64748b;
+        }
+        .dark {
+            --color-bg: #0f172a;
+            --color-card: #1e293b;
+            --color-border: #334155;
+            --color-input-bg: #0f172a;
+            --color-input-border: #334155;
+            --color-text-main: #f1f5f9;
+            --color-text-muted: #94a3b8;
+        }
         .hidden { display: none !important; }
-        body { background-color: #0f172a; color: #f1f5f9; }
-        select option { background-color: #0f172a; color: #f8fafc; }
+        body { background-color: var(--color-bg); color: var(--color-text-main); transition: background-color 0.15s ease, color 0.15s ease; }
+        select option { background-color: var(--color-card); color: var(--color-text-main); }
+        
+        /* Light mode precise contrast adjustments */
+        html:not(.dark) { color-scheme: light; }
+        html:not(.dark) .bg-indigo-600,
+        html:not(.dark) .bg-indigo-500,
+        html:not(.dark) .bg-emerald-600,
+        html:not(.dark) .bg-emerald-500,
+        html:not(.dark) .bg-red-600,
+        html:not(.dark) .bg-red-500,
+        html:not(.dark) .bg-[#5865F2] {
+            color: #ffffff !important;
+        }
+        html:not(.dark) h1, 
+        html:not(.dark) h2, 
+        html:not(.dark) h3 {
+            color: #0f172a !important;
+        }
+        html:not(.dark) .text-white {
+            color: #0f172a !important;
+        }
+        html:not(.dark) button.text-white,
+        html:not(.dark) a.bg-indigo-600,
+        html:not(.dark) a.bg-emerald-600,
+        html:not(.dark) button.bg-indigo-600,
+        html:not(.dark) button.bg-emerald-600,
+        html:not(.dark) button.bg-red-600 {
+            color: #ffffff !important;
+        }
+        html:not(.dark) .bg-slate-900\/80,
+        html:not(.dark) .bg-slate-900\/60,
+        html:not(.dark) .bg-slate-900\/50,
+        html:not(.dark) .bg-slate-900\/40,
+        html:not(.dark) .bg-slate-900\/30,
+        html:not(.dark) .bg-slate-900 {
+            background-color: #f1f5f9 !important;
+            border-color: #e2e8f0 !important;
+            color: #1e293b;
+        }
+        html:not(.dark) .bg-slate-800,
+        html:not(.dark) a.bg-slate-800,
+        html:not(.dark) button.bg-slate-800 {
+            background-color: #e2e8f0 !important;
+            border-color: #cbd5e1 !important;
+            color: #1e293b !important;
+        }
+        html:not(.dark) a.bg-slate-800:hover,
+        html:not(.dark) button.bg-slate-800:hover {
+            background-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        html:not(.dark) a.bg-slate-800.text-indigo-300,
+        html:not(.dark) button.bg-slate-800.text-indigo-300,
+        html:not(.dark) .text-indigo-300 {
+            color: #4338ca !important;
+        }
+        html:not(.dark) .text-indigo-400 {
+            color: #4f46e5 !important;
+        }
+        html:not(.dark) input.bg-slate-900,
+        html:not(.dark) select.bg-slate-900,
+        html:not(.dark) input.bg-slate-900\/60,
+        html:not(.dark) select.bg-slate-900\/60 {
+            background-color: #ffffff !important;
+            border-color: #cbd5e1 !important;
+            color: #0f172a !important;
+        }
+        html:not(.dark) .bg-slate-950\/60,
+        html:not(.dark) .bg-slate-950 {
+            background-color: #f8fafc !important;
+            border-color: #e2e8f0 !important;
+            color: #1e293b;
+        }
+        html:not(.dark) #log-console-box {
+            background-color: #020617 !important;
+            color: #e2e8f0 !important;
+            border-color: #1e293b !important;
+        }
+        html:not(.dark) #log-console-box .text-white {
+            color: #f8fafc !important;
+        }
+        /* Badges in light mode */
+        html:not(.dark) .bg-indigo-950,
+        html:not(.dark) .bg-indigo-950\/80,
+        html:not(.dark) .bg-indigo-950\/70,
+        html:not(.dark) .bg-indigo-950\/60,
+        html:not(.dark) .bg-indigo-950\/40 {
+            background-color: #e0e7ff !important;
+            color: #3730a3 !important;
+            border-color: #c7d2fe !important;
+        }
+        html:not(.dark) .bg-emerald-950,
+        html:not(.dark) .bg-emerald-950\/80,
+        html:not(.dark) .bg-emerald-950\/60,
+        html:not(.dark) .bg-emerald-950\/50,
+        html:not(.dark) .bg-emerald-950\/40 {
+            background-color: #d1fae5 !important;
+            color: #065f46 !important;
+            border-color: #a7f3d0 !important;
+        }
+        html:not(.dark) .bg-red-950,
+        html:not(.dark) .bg-red-950\/80,
+        html:not(.dark) .bg-red-950\/60,
+        html:not(.dark) .bg-red-950\/50,
+        html:not(.dark) .bg-red-950\/40 {
+            background-color: #fee2e2 !important;
+            color: #991b1b !important;
+            border-color: #fecaca !important;
+        }
+        html:not(.dark) .bg-amber-950,
+        html:not(.dark) .bg-amber-950\/80,
+        html:not(.dark) .bg-amber-950\/60,
+        html:not(.dark) .bg-amber-950\/40 {
+            background-color: #fef3c7 !important;
+            color: #92400e !important;
+            border-color: #fde68a !important;
+        }
+        html:not(.dark) .text-slate-400 { color: #64748b !important; }
+        html:not(.dark) .text-slate-300 { color: #334155 !important; }
+        html:not(.dark) .text-slate-200 { color: #1e293b !important; }
+        html:not(.dark) .text-slate-100 { color: #0f172a !important; }
+        html:not(.dark) tr:hover {
+            background-color: #f8fafc !important;
+        }
+
         /* Custom scrollbar */
         ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        ::-webkit-scrollbar-track { background: var(--color-bg); }
+        ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #64748b; }
     </style>
 </head>
-<body class="bg-darkbg text-slate-100 min-h-screen flex flex-col font-sans antialiased" hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'>
+<body class="min-h-screen flex flex-col font-sans antialiased" hx-headers='{"X-CSRF-Token": "{{ csrf_token }}"}'>
 
     <!-- Navbar -->
     <header class="bg-darkcard border-b border-darkborder sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-4">
-                <a href="/" class="flex items-center space-x-2 text-indigo-400 font-bold text-lg hover:text-indigo-300 transition">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            <!-- Left: Branding -->
+            <div class="flex items-center space-x-3 sm:space-x-4 shrink-0">
+                <a href="/" class="flex items-center space-x-2 text-indigo-500 hover:text-indigo-400 font-black text-lg transition">
                     <span class="text-2xl">⚔️</span>
-                    <span>ERADICATEUR BOT</span>
+                    <span class="tracking-tight">{{ t('app_title') }}</span>
                 </a>
-                <span class="bg-indigo-950 text-indigo-300 text-xs px-2.5 py-1 rounded-full font-medium border border-indigo-800">
-                    Admin Dashboard
+                <span class="bg-indigo-950/70 text-indigo-300 text-xs px-2.5 py-1 rounded-full font-medium border border-indigo-800/80 hidden sm:inline">
+                    {{ t('admin_dashboard') }}
                 </span>
             </div>
 
-            <!-- User Profile & Quick Nav -->
-            <div class="flex items-center space-x-3">
+            <!-- Center: Role Simulator for DEV Discord users -->
+            {% if is_dev %}
+            <div class="flex items-center space-x-2 bg-amber-950/60 border border-amber-600/70 rounded-xl px-3 py-1.5 shadow-md shadow-amber-950/40">
+                <span class="text-[11px] font-extrabold text-amber-400 uppercase tracking-wider hidden md:inline-flex items-center gap-1.5">
+                    <span>👑</span> Dev Role :
+                </span>
+                <select 
+                    id="devRoleSelector" 
+                    onchange="setDevSimulatedRole(this.value)" 
+                    class="bg-slate-900 border border-amber-500/50 text-amber-200 text-xs font-bold rounded-lg px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer shadow-inner"
+                    title="Simulateur de rôle pour les développeurs"
+                >
+                    <option value="dev" {% if simulated_role == 'dev' or not simulated_role %}selected{% endif %}>⚡ Dev (Pleins pouvoirs)</option>
+                    <option value="leader" {% if simulated_role == 'leader' %}selected{% endif %}>👑 Leader</option>
+                    <option value="officer" {% if simulated_role == 'officer' %}selected{% endif %}>🛡️ Officier</option>
+                </select>
+            </div>
+            {% endif %}
+
+            <!-- Right Controls: Lang, Theme, User Profile & Quick Nav -->
+            <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
                 {% if guilds and guilds|length > 1 %}
-                <div class="relative">
-                    <select onchange="if(this.value) window.location.href='/guild/' + this.value" class="bg-slate-800 border border-darkborder text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
-                        <option value="">Select server...</option>
+                <div class="relative hidden sm:block">
+                    <select onchange="if(this.value) window.location.href='/guild/' + this.value" class="bg-slate-100 dark:bg-slate-800 border border-darkborder text-slate-800 dark:text-slate-200 text-xs rounded-lg px-2.5 py-1.5 focus:ring-2 focus:ring-indigo-500">
+                        <option value="">{{ t('select_server') }}</option>
                         {% for g in guilds %}
                         <option value="{{ g.id }}" {% if current_guild and current_guild.id == g.id %}selected{% endif %}>
-                            {{ g.name }} ({{ g.id }})
+                            {{ g.name }}
                         </option>
                         {% endfor %}
                     </select>
                 </div>
                 {% endif %}
 
+                <!-- Language Selector -->
+                {% if locale == 'en' %}
+                <a href="/set-language/fr" class="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-2.5 py-1.5 rounded-lg border border-darkborder transition flex items-center space-x-1.5 font-semibold" title="{{ t('lang_switch_to') }}">
+                    <span>🇬🇧</span>
+                    <span>EN</span>
+                </a>
+                {% else %}
+                <a href="/set-language/en" class="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 px-2.5 py-1.5 rounded-lg border border-darkborder transition flex items-center space-x-1.5 font-semibold" title="{{ t('lang_switch_to') }}">
+                    <span>🇫🇷</span>
+                    <span>FR</span>
+                </a>
+                {% endif %}
+
+                <!-- Theme Toggle -->
+                <button onclick="toggleTheme()" class="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-darkborder transition flex items-center space-x-1 font-semibold" title="{{ t('theme_toggle') }}">
+                    <span id="theme-icon">🌙</span>
+                </button>
+
                 {% if current_user %}
-                <div class="flex items-center space-x-2 bg-slate-900/90 border border-darkborder px-2.5 py-1 rounded-xl">
+                <div class="flex items-center space-x-2 bg-slate-100 dark:bg-slate-900/90 border border-darkborder px-2.5 py-1 rounded-xl">
                     {% if current_user.avatar %}
                     <img src="{{ current_user.avatar }}" alt="Avatar" class="w-6 h-6 rounded-full border border-darkborder">
                     {% else %}
@@ -82,11 +272,11 @@
                         {{ current_user.display_name[0] | upper }}
                     </div>
                     {% endif %}
-                    <span class="text-xs font-semibold text-slate-200 hidden sm:inline">{{ current_user.display_name }}</span>
+                    <span class="text-xs font-semibold text-slate-800 dark:text-slate-200 hidden md:inline">{{ current_user.display_name }}</span>
                 </div>
-                <a href="/logout" class="text-xs bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800/80 px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1" title="Déconnexion">
+                <a href="/logout" class="text-xs bg-red-100 dark:bg-red-950/60 hover:bg-red-200 dark:hover:bg-red-900 text-red-700 dark:text-red-300 border border-red-300 dark:border-red-800/80 px-2.5 py-1.5 rounded-lg transition flex items-center space-x-1" title="{{ t('logout') }}">
                     <span>🚪</span>
-                    <span class="hidden sm:inline">Logout</span>
+                    <span class="hidden sm:inline">{{ t('logout') }}</span>
                 </a>
                 {% endif %}
             </div>
@@ -98,23 +288,30 @@
         {% if current_guild %}
         <!-- Guild Sub-Navigation Menu -->
         <div class="mb-6 bg-darkcard rounded-xl p-2 border border-darkborder flex flex-wrap items-center gap-2">
-            <a href="/guild/{{ current_guild.id }}" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if request.url.path == '/guild/' ~ current_guild.id %}bg-indigo-600 text-white shadow{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
-                📊 Overview
+            <a href="/guild/{{ current_guild.id }}" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if request.url.path == '/guild/' ~ current_guild.id %}bg-indigo-600 text-white shadow{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white{% endif %}">
+                {{ t('nav_overview') }}
             </a>
-            <a href="/guild/{{ current_guild.id }}/balances" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/balances' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
-                💰 Balances & Players
+            <a href="/guild/{{ current_guild.id }}/balances" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/balances' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white{% endif %}">
+                {{ t('nav_balances') }}
             </a>
-            <a href="/guild/{{ current_guild.id }}/payouts" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/payouts' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
-                📜 Payouts
+            <a href="/guild/{{ current_guild.id }}/transactions" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/transactions' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white{% endif %}">
+                {{ t('nav_transactions') }}
             </a>
-            <a href="/guild/{{ current_guild.id }}/activity-pool" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/activity-pool' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
-                🛡️ Activity Pool
+            <a href="/guild/{{ current_guild.id }}/payouts" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/payouts' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white{% endif %}">
+                {{ t('nav_payouts') }}
             </a>
-            <a href="/guild/{{ current_guild.id }}/config" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/config' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
-                ⚙️ Configuration
+            {% if not user_perms or user_perms.can_manage_activity_pool %}
+            <a href="/guild/{{ current_guild.id }}/activity-pool" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/activity-pool' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white{% endif %}">
+                {{ t('nav_activity_pool') }}
             </a>
-            <a href="/guild/{{ current_guild.id }}/logs" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/logs' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-300 hover:bg-slate-800 hover:text-white{% endif %}">
-                📑 Logs
+            {% endif %}
+            {% if not user_perms or user_perms.can_manage_config %}
+            <a href="/guild/{{ current_guild.id }}/config" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/config' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white{% endif %}">
+                {{ t('nav_config') }}
+            </a>
+            {% endif %}
+            <a href="/guild/{{ current_guild.id }}/logs" class="px-4 py-2 rounded-lg text-sm font-medium transition {% if '/logs' in request.url.path %}bg-indigo-600 text-white shadow{% else %}text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white{% endif %}">
+                {{ t('nav_logs') }}
             </a>
         </div>
         {% endif %}
@@ -127,8 +324,90 @@
 
     <!-- Footer -->
     <footer class="bg-darkcard border-t border-darkborder py-4 text-center text-xs text-slate-500">
-        Eradicateur Bot &bull; Albion Online Guild Manager &bull; SQLite WAL Mode
+        {{ t('footer_text') }}
     </footer>
+
+    <script>
+        function updateThemeIcon() {
+            const icon = document.getElementById('theme-icon');
+            if (icon) {
+                icon.textContent = document.documentElement.classList.contains('dark') ? '🌙' : '☀️';
+            }
+        }
+        function toggleTheme() {
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('theme', 'dark');
+            }
+            updateThemeIcon();
+        }
+        function setDevSimulatedRole(role) {
+            const currentUrl = window.location.pathname + window.location.search;
+            window.location.href = '/set-dev-role/' + encodeURIComponent(role) + '?redirect=' + encodeURIComponent(currentUrl);
+        }
+        document.addEventListener('DOMContentLoaded', updateThemeIcon);
+
+        // Universal Fuzzy Matching for Members / Players
+        function normalizeFuzzyStr(str) {
+            if (!str) return '';
+            const leetMap = { '0': 'o', '1': 'i', '3': 'e', '4': 'a', '5': 's', '7': 't', '8': 'b', '@': 'a', '$': 's' };
+            const s = str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            return s.split('').map(c => leetMap[c] || c).join('');
+        }
+
+        function damerauLevenshtein(s1, s2) {
+            const len1 = s1.length, len2 = s2.length;
+            if (len1 === 0) return len2;
+            if (len2 === 0) return len1;
+            const d = Array.from({ length: len1 + 1 }, () => new Array(len2 + 1).fill(0));
+            for (let i = 0; i <= len1; i++) d[i][0] = i;
+            for (let j = 0; j <= len2; j++) d[0][j] = j;
+            for (let i = 1; i <= len1; i++) {
+                for (let j = 1; j <= len2; j++) {
+                    const cost = s1[i - 1] === s2[j - 1] ? 0 : 1;
+                    d[i][j] = Math.min(
+                        d[i - 1][j] + 1,
+                        d[i][j - 1] + 1,
+                        d[i - 1][j - 1] + cost
+                    );
+                    if (i > 1 && j > 1 && s1[i - 1] === s2[j - 2] && s1[i - 2] === s2[j - 1]) {
+                        d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+                    }
+                }
+            }
+            return d[len1][len2];
+        }
+
+        function isFuzzyMemberMatch(query, targetName, targetId) {
+            if (!query) return true;
+            const qTrim = query.trim();
+            if (targetId && String(targetId).includes(qTrim)) return true;
+            const nq = normalizeFuzzyStr(qTrim);
+            const nt = normalizeFuzzyStr(targetName);
+            if (!nq) return true;
+            if (nt.includes(nq)) return true;
+            const qLen = nq.length;
+            const maxErrors = qLen <= 3 ? 0 : (qLen <= 6 ? 1 : (qLen <= 9 ? 2 : 3));
+            if (maxErrors === 0) return false;
+
+            const tokens = nt.replace(/[\(\)@]/g, ' ').split(/\s+/).filter(Boolean);
+            for (let t of tokens) {
+                if (damerauLevenshtein(nq, t) <= maxErrors) return true;
+                if (t.length >= qLen && damerauLevenshtein(nq, t.substring(0, qLen)) <= maxErrors) return true;
+            }
+
+            for (let wLen = Math.max(1, qLen - maxErrors); wLen <= Math.min(nt.length, qLen + maxErrors); wLen++) {
+                for (let i = 0; i <= nt.length - wLen; i++) {
+                    const w = nt.substring(i, i + wLen);
+                    if (damerauLevenshtein(nq, w) <= maxErrors) return true;
+                }
+            }
+            return false;
+        }
+    </script>
 </body>
 </html>
 
