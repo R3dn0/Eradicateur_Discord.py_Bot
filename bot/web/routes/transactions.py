@@ -45,11 +45,13 @@ async def list_transactions(
     # Fetch transactions matching database filter
     raw_txs = await tx_repo.list_all_transactions(limit=None, filter_type=filter_type)
 
+    from bot.web.routes.balances import _resolve_creator_name, _resolve_member_name
+
     # Enrich transactions
     enriched_txs = []
     for tx in raw_txs:
         player_name = await _resolve_member_name(bot, guild_id, tx.discord_id)
-        creator_name = await _resolve_member_name(bot, guild_id, tx.created_by) if tx.created_by else "Dash Admin"
+        creator_name = await _resolve_creator_name(bot, guild_id, tx.created_by)
 
         # Apply fuzzy search filter if specified
         if q and not fuzzy_match_member(q, player_name, tx.discord_id):

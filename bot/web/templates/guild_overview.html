@@ -26,41 +26,41 @@
         <div class="flex items-center space-x-3">
             {% if not user_perms or user_perms.can_manage_balances %}
             <a href="/guild/{{ current_guild.id }}/balances" class="bg-white hover:bg-slate-100 text-indigo-700 text-sm font-bold px-4 py-2 rounded-xl transition shadow-md">
-                {{ t('btn_manage_balances') }}
+                + {{ t('btn_manage_balances') }}
             </a>
             {% endif %}
             {% if not user_perms or user_perms.can_manage_config %}
             <a href="/guild/{{ current_guild.id }}/config" class="bg-indigo-950/60 hover:bg-indigo-950/80 text-white border border-indigo-400/40 text-sm font-semibold px-4 py-2 rounded-xl transition backdrop-blur-sm">
-                {{ t('btn_configure') }}
+                ⚙️ {{ t('btn_configure') }}
             </a>
             {% endif %}
         </div>
     </div>
 
     <!-- Stat Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        <!-- Total Owed -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Treasury (Total Debt) -->
         <div class="bg-darkcard border border-darkborder rounded-2xl p-5 shadow">
             <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase tracking-wider">
                 <span>{{ t('card_treasury') }}</span>
                 <span class="text-xl">💰</span>
             </div>
-            <div class="mt-3">
-                <span class="text-2xl font-black text-amber-400">{{ total_owed | format_number }}</span>
-                <span class="text-xs text-amber-400/80 font-bold ml-1">{{ t('silvers') }}</span>
+            <div class="mt-3 flex items-baseline">
+                <span class="text-2xl font-black text-amber-400 font-mono">{{ total_owed | format_number }}</span>
+                <span class="text-xs text-slate-400 ml-1 font-mono">{{ t('silvers') }}</span>
             </div>
             <p class="text-xs text-slate-500 mt-1">{{ t('card_treasury_sub') }}</p>
         </div>
 
-        <!-- Active Players -->
+        <!-- Registered Players with balance -->
         <div class="bg-darkcard border border-darkborder rounded-2xl p-5 shadow">
             <div class="flex items-center justify-between text-slate-400 text-xs font-medium uppercase tracking-wider">
                 <span>{{ t('card_registered_players') }}</span>
                 <span class="text-xl">👥</span>
             </div>
             <div class="mt-3">
-                <span class="text-2xl font-black text-indigo-300">{{ active_players_count }}</span>
-                <span class="text-xs text-slate-400 ml-1">{{ t('members') }}</span>
+                <span class="text-2xl font-black text-white">{{ active_players_count }}</span>
+                <span class="text-xs text-slate-400 ml-1">{{ t('players') }}</span>
             </div>
             <p class="text-xs text-slate-500 mt-1">{{ t('card_registered_players_sub') }}</p>
         </div>
@@ -73,7 +73,7 @@
             </div>
             <div class="mt-3">
                 <span class="text-2xl font-black text-emerald-400">{{ active_payouts_count }}</span>
-                <span class="text-xs text-slate-400 ml-1">{{ t('nav_payouts') }}</span>
+                <span class="text-xs text-slate-400 ml-1">payouts</span>
             </div>
             <p class="text-xs text-slate-500 mt-1">{{ t('card_pending_payouts_sub') }}</p>
         </div>
@@ -132,13 +132,9 @@
                                 </div>
                             </td>
                             <td class="px-4 py-3">
-                                {% if tx.payout_id %}
-                                <a href="/guild/{{ current_guild.id }}/payouts/{{ tx.payout_id }}" class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-950/80 text-indigo-300 border border-indigo-800 hover:bg-indigo-900 transition font-mono">
-                                    <span>Split #{{ tx.payout_id }}</span>
-                                </a>
-                                {% else %}
-                                <span class="text-slate-300 block truncate max-w-[200px]" title="{{ tx.reason }}">{{ tx.reason }}</span>
-                                {% endif %}
+                                <div class="max-w-[220px]" title="{{ tx.reason }}">
+                                    {{ tx.reason | format_reason(current_guild.id, tx.payout_id) }}
+                                </div>
                                 <span class="text-[10px] text-slate-500">{{ t('col_created_by') }} {{ tx.creator_name }}</span>
                             </td>
                             <td class="px-4 py-3 text-right font-mono font-bold whitespace-nowrap">
@@ -162,7 +158,7 @@
 
             <div class="p-3 bg-slate-900/30 border-t border-darkborder flex items-center justify-between">
                 <a href="/guild/{{ current_guild.id }}/balances" class="text-xs text-slate-400 hover:text-slate-300 transition">
-                    {{ t('view_all_balances') }}
+                    {{ t('view_all_balances') }} ➔
                 </a>
                 <a href="/guild/{{ current_guild.id }}/transactions" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1 transition">
                     <span>{{ t('nav_transactions') }} ➔</span>
@@ -181,7 +177,7 @@
                 </div>
                 {% if not user_perms or user_perms.can_manage_payouts %}
                 <button type="button" onclick="openPayoutCreateModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs px-3.5 py-2 rounded-xl shadow transition flex items-center gap-1.5 shrink-0 cursor-pointer">
-                    <span>{{ t('create_payout_btn') }}</span>
+                    <span>+ {{ t('create_payout_btn') }}</span>
                 </button>
                 {% endif %}
             </div>
@@ -199,43 +195,37 @@
                     <tbody class="divide-y divide-darkborder">
                         {% for p in recent_payouts %}
                         <tr class="hover:bg-slate-800/40 transition">
-                            <td class="px-4 py-3 cursor-pointer" onclick="window.location.href='/guild/{{ current_guild.id }}/payouts/{{ p.id }}'">
-                                <a href="/guild/{{ current_guild.id }}/payouts/{{ p.id }}" class="font-mono font-bold text-indigo-400 hover:text-indigo-300 block">
-                                    Payout #{{ p.id }}
+                            <td class="px-4 py-3 whitespace-nowrap">
+                                {% if p.voided %}
+                                <a href="/guild/{{ current_guild.id }}/payouts/{{ p.id }}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-950/70 text-rose-300 border border-rose-700/60 hover:bg-rose-900 transition font-mono" title="Payout #{{ p.id }} ({{ t('status_voided') }})">
+                                    <span>🚫</span>
+                                    <span class="line-through decoration-rose-500/80">Payout #{{ p.id }}</span>
                                 </a>
-                                <div class="text-[10px] font-mono text-slate-500 leading-tight">
+                                {% else %}
+                                <a href="/guild/{{ current_guild.id }}/payouts/{{ p.id }}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-950/70 text-amber-300 border border-amber-700/60 hover:bg-amber-900 transition font-mono">
+                                    <span>📜</span>
+                                    <span>Payout #{{ p.id }}</span>
+                                </a>
+                                {% endif %}
+                                <div class="text-[10px] text-slate-500 font-mono mt-1 leading-tight">
                                     <span>{{ p.created_at | format_date }}</span>
                                     <span class="text-slate-600 ml-1">{{ p.created_at | format_time }}</span>
                                 </div>
                             </td>
-                            <td class="px-4 py-3">
-                                <div class="grid grid-cols-2 gap-1.5 max-w-[360px]">
-                                    {% for pt in p.participants %}
-                                    <a href="/guild/{{ current_guild.id }}/balances/{{ pt.discord_id }}/history" class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-lg bg-indigo-950/80 hover:bg-indigo-900 text-indigo-200 hover:text-white border border-indigo-700/60 text-[11px] font-medium transition truncate shadow-xs" title="{{ pt.name }} (+{{ pt.amount | format_number }} silvers)">
-                                        <span class="text-indigo-400 shrink-0">👤</span> <span class="truncate">{{ pt.name }}</span>
-                                    </a>
-                                    {% else %}
-                                    <span class="col-span-2 font-medium text-slate-400 text-[11px]">{{ p.participant_count }} {{ t('players') }}</span>
-                                    {% endfor %}
-                                </div>
-                                <div class="flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[10px] text-slate-500 mt-1.5 font-medium">
-                                    <span>💰 <span class="text-slate-400">{{ t('card_bag_silvers') }}:</span> <strong class="text-amber-400/90 font-mono">{{ p.bag_silvers | format_number }}</strong></span>
-                                    {% if p.item_market_value %}
-                                    <span>📦 <span class="text-slate-400">{{ t('card_item_value') }}:</span> <strong class="text-slate-300 font-mono">{{ p.item_market_value | format_number }}</strong></span>
-                                    {% endif %}
-                                </div>
+                            <td class="px-4 py-3 cursor-pointer font-bold text-slate-300" onclick="window.location.href='/guild/{{ current_guild.id }}/payouts/{{ p.id }}'">
+                                👥 {{ p.participant_count }}
                             </td>
-                            <td class="px-4 py-3 text-right font-mono font-bold whitespace-nowrap text-emerald-400 cursor-pointer hover:text-emerald-300 transition" onclick="window.location.href='/guild/{{ current_guild.id }}/payouts/{{ p.id }}'">
-                                +{{ p.amount_per_player | format_number }}
+                            <td class="px-4 py-3 text-right cursor-pointer font-mono font-bold text-emerald-400" onclick="window.location.href='/guild/{{ current_guild.id }}/payouts/{{ p.id }}'">
+                                {{ p.amount_per_player | format_number }} <span class="text-[10px] text-slate-500 font-normal">{{ t('silvers') }}</span>
                             </td>
                             <td class="px-4 py-3 text-center cursor-pointer" onclick="window.location.href='/guild/{{ current_guild.id }}/payouts/{{ p.id }}'">
                                 {% if p.voided %}
                                 <span class="bg-red-950/80 hover:bg-red-900 text-red-300 border border-red-800 text-[10px] px-2 py-0.5 rounded-full font-bold transition">
-                                    {{ t('status_voided') }}
+                                    🚫 {{ t('status_voided') }}
                                 </span>
                                 {% else %}
                                 <span class="bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 text-[10px] px-2 py-0.5 rounded-full font-bold transition">
-                                    {{ t('status_active') }}
+                                    ✅ {{ t('status_active') }}
                                 </span>
                                 {% endif %}
                             </td>
@@ -253,7 +243,7 @@
 
             <div class="p-3 bg-slate-900/30 border-t border-darkborder flex justify-end">
                 <a href="/guild/{{ current_guild.id }}/payouts" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
-                    <span>{{ t('view_all_payouts') }}</span>
+                    <span>{{ t('view_all_payouts') }} ➔</span>
                 </a>
             </div>
         </div>
@@ -385,7 +375,7 @@
                                     onclick="addSelectedParticipant()" 
                                     class="px-3 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl shadow transition cursor-pointer shrink-0"
                                 >
-                                    {{ t('payout_add_player_btn') }}
+                                    + {{ t('payout_add_player_btn') }}
                                 </button>
                             </div>
                             <p id="payoutSearchMatchHint" class="text-[11px] text-indigo-400 font-medium min-h-[0.85rem] px-1"></p>
@@ -403,6 +393,7 @@
                     <p class="font-bold text-indigo-300 flex items-center gap-1.5">
                         <span>⚡</span> {{ t('payout_simulation_title') }}
                     </p>
+                    <!-- Live Simulation Results Panel -->
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-[11px] font-mono">
                         <div>
                             <span class="text-slate-400 block">{{ t('payout_modal_bag_label') }} :</span>
@@ -421,25 +412,26 @@
                             <span id="simGuildCut" class="font-bold text-amber-400">0</span>
                         </div>
                         <div>
-                            <span class="text-slate-400 block">{{ t('payout_sim_item_net') }} :</span>
-                            <span id="simItemNet" class="font-bold text-slate-200">0</span>
+                            <span class="text-slate-400 block">{{ t('payout_sim_buyback') }} :</span>
+                            <span id="simBuyback" class="font-bold text-slate-300">0</span>
                         </div>
                         <div>
                             <span class="text-slate-400 block">{{ t('payout_sim_total_pool') }} :</span>
                             <span id="simTotalPool" class="font-bold text-indigo-300">0</span>
                         </div>
-                        <div></div>
-                        <div>
-                            <span class="text-slate-400 block">{{ t('payout_sim_buyback') }} :</span>
-                            <span id="simBuyback" class="font-bold text-slate-300">0</span>
-                        </div>
-                        <div>
-                            <span class="text-slate-400 block">{{ t('payout_participants_label') }} :</span>
-                            <span id="simPlayerCount" class="font-bold text-white">0</span>
-                        </div>
-                        <div class="col-span-2 sm:col-span-3 pt-1.5 border-t border-indigo-900/60 flex justify-between items-center">
-                            <span class="text-slate-300 font-semibold">{{ t('payout_sim_per_player') }} :</span>
-                            <span id="simPerPlayer" class="font-bold text-emerald-400 text-sm">0 silvers</span>
+                        <div class="col-span-2 sm:col-span-3 pt-2 border-t border-indigo-900/60 space-y-1.5">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-300 font-semibold">{{ t('payout_sim_per_player') }} :</span>
+                                <span id="simPerPlayer" class="font-bold text-emerald-400 text-sm">0 silvers</span>
+                            </div>
+                            <div class="flex flex-col gap-1 pt-1 text-[11px]">
+                                <div class="flex justify-between items-center text-slate-400">
+                                    <span>{{ t('payout_participants_label') }} (<span id="simPlayerCount" class="font-bold text-white">0</span>) :</span>
+                                </div>
+                                <div id="simParticipantsList" class="flex flex-wrap gap-1 items-center font-sans text-xs text-slate-300">
+                                    <span class="text-slate-500 italic text-[11px]">{{ t('payout_no_participants_selected') }}</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -450,7 +442,7 @@
                         {{ t('btn_cancel') }}
                     </button>
                     <button type="button" onclick="goToPayoutConfirmStep()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg transition cursor-pointer">
-                        {{ t('payout_btn_next') }}
+                        <span>{{ t('payout_btn_next') }} ➔</span>
                     </button>
                 </div>
             </div>
@@ -481,32 +473,25 @@
                             <span id="recapPayoutGuildCut" class="font-bold text-amber-400">0</span>
                         </div>
                         <div>
-                            <span class="text-slate-400 block">{{ t('payout_sim_item_net') }} :</span>
-                            <span id="recapPayoutItemNet" class="font-bold text-slate-200">0</span>
+                            <span class="text-slate-400 block">{{ t('payout_sim_buyback') }} :</span>
+                            <span id="recapPayoutBuyback" class="font-bold text-slate-300">0</span>
                         </div>
                         <div>
                             <span class="text-slate-400 block">{{ t('payout_sim_total_pool') }} :</span>
                             <span id="recapPayoutTotalPool" class="font-bold text-indigo-300">0</span>
                         </div>
-                        <div></div>
-                        <div>
-                            <span class="text-slate-400 block">{{ t('payout_sim_buyback') }} :</span>
-                            <span id="recapPayoutBuyback" class="font-bold text-slate-300">0</span>
-                        </div>
-                        <div>
-                            <span class="text-slate-400 block">{{ t('payout_participants_label') }} :</span>
-                            <span id="recapPayoutPlayerCount" class="font-bold text-white">0</span>
-                        </div>
-                        <div class="col-span-2 sm:col-span-3 pt-2 border-t border-indigo-900/60 flex justify-between items-center">
-                            <span class="text-slate-300 font-semibold">{{ t('payout_sim_per_player') }} :</span>
-                            <span id="recapPayoutPerPlayer" class="font-mono font-black text-emerald-400 text-sm">0 silvers</span>
-                        </div>
-                    </div>
-
-                    <!-- Specified participants badges container -->
-                    <div class="pt-2 border-t border-indigo-900/60 space-y-1.5">
-                        <span class="text-slate-400 font-semibold text-[11px] block">{{ t('payout_participants_label') }} :</span>
-                        <div id="recapPayoutParticipantsBadges" class="max-h-28 overflow-y-auto bg-slate-950/60 border border-darkborder rounded-xl p-2.5 flex flex-wrap gap-1.5 items-start">
+                        <div class="col-span-2 sm:col-span-3 pt-2 border-t border-indigo-900/60 space-y-1.5">
+                            <div class="flex justify-between items-center">
+                                <span class="text-slate-300 font-semibold">{{ t('payout_sim_per_player') }} :</span>
+                                <span id="recapPayoutPerPlayer" class="font-mono font-black text-emerald-400 text-base">0 silvers</span>
+                            </div>
+                            <div class="flex flex-col gap-1 pt-1 text-[11px]">
+                                <div class="flex justify-between items-center text-slate-400">
+                                    <span>{{ t('payout_participants_label') }} (<span id="recapPayoutPlayerCount" class="font-bold text-white">0</span>) :</span>
+                                </div>
+                                <div id="recapPayoutParticipantsBadges" class="max-h-28 overflow-y-auto bg-slate-950/60 border border-darkborder rounded-xl p-2.5 flex flex-wrap gap-1.5 items-start font-sans">
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -514,10 +499,10 @@
                 <!-- Footer Buttons Step 2 -->
                 <div class="flex items-center justify-between pt-2">
                     <button type="button" onclick="goToPayoutInputStep()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition cursor-pointer">
-                        {{ t('btn_edit_input') }}
+                        <span>← {{ t('btn_edit_input') }}</span>
                     </button>
                     <button type="submit" id="payoutSubmitBtn" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/50 transition cursor-pointer">
-                        {{ t('payout_btn_confirm_create') }}
+                        <span>✅ {{ t('payout_btn_confirm_create') }}</span>
                     </button>
                 </div>
             </div>
@@ -546,13 +531,13 @@
                     <label class="cursor-pointer">
                         <input type="radio" name="operation" id="opCredit" value="credit" checked class="peer sr-only" onchange="updateOperationUI()">
                         <div class="p-3 text-center rounded-xl border border-darkborder bg-slate-900/60 peer-checked:bg-emerald-950/60 peer-checked:border-emerald-700 peer-checked:text-emerald-300 text-slate-400 text-xs font-bold transition">
-                            {{ t('credit_add') }}
+                            🟢 {{ t('credit_add') }}
                         </div>
                     </label>
                     <label class="cursor-pointer">
                         <input type="radio" name="operation" id="opDebit" value="debit" class="peer sr-only" onchange="updateOperationUI()">
                         <div class="p-3 text-center rounded-xl border border-darkborder bg-slate-900/60 peer-checked:bg-red-950/60 peer-checked:border-red-700 peer-checked:text-red-300 text-slate-400 text-xs font-bold transition">
-                            {{ t('debit_sub') }}
+                            🔴 {{ t('debit_sub') }}
                         </div>
                     </label>
                 </div>
@@ -613,7 +598,7 @@
                         {{ t('btn_cancel') }}
                     </button>
                     <button type="button" onclick="goToConfirmationStep()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition flex items-center space-x-1">
-                        <span>{{ t('btn_verify_recap') }}</span>
+                        <span>{{ t('btn_verify_recap') }} ➔</span>
                     </button>
                 </div>
             </div>
@@ -669,10 +654,10 @@
 
                 <div class="flex items-center justify-between pt-2">
                     <button type="button" onclick="goToInputStep()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
-                        {{ t('btn_edit_input') }}
+                        <span>← {{ t('btn_edit_input') }}</span>
                     </button>
                     <button type="submit" onclick="isTxConfirmed = true;" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/50 transition flex items-center space-x-2">
-                        <span>{{ t('btn_confirm_apply') }}</span>
+                        <span>✅ {{ t('btn_confirm_apply') }}</span>
                     </button>
                 </div>
             </div>
@@ -737,10 +722,12 @@
             document.getElementById('modalTitle').innerHTML = '<span>🔴</span> {{ t("debit_player") }}';
             label.innerHTML = '{{ t("reason_debit_help") }}';
             input.placeholder = '{{ t("reason_debit_placeholder") }}';
+            input.required = false;
         } else {
             document.getElementById('modalTitle').innerHTML = '<span>🟢</span> {{ t("credit_player") }}';
-            label.innerHTML = '{{ t("reason_credit_help") }}';
+            label.innerHTML = '{{ t("reason_credit_help") }} <span class="text-rose-400 font-bold">*</span>';
             input.placeholder = '{{ t("reason_credit_placeholder") }}';
+            input.required = true;
         }
     }
 
@@ -907,7 +894,7 @@
         if (hintEl) hintEl.textContent = '';
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = '{{ t("payout_btn_confirm_create") }}';
+            submitBtn.textContent = '✅ {{ t("payout_btn_confirm_create") }}';
         }
 
         payoutParticipants.clear();
@@ -1003,6 +990,19 @@
         const countText = document.getElementById('payoutParticipantCountText');
         if (countText) countText.textContent = payoutParticipants.size;
 
+        const simList = document.getElementById('simParticipantsList');
+        if (simList) {
+            if (payoutParticipants.size === 0) {
+                simList.innerHTML = '<span class="text-slate-500 italic text-[11px]">{{ t("payout_no_participants_selected") }}</span>';
+            } else {
+                let simHtml = '';
+                payoutParticipants.forEach((name, id) => {
+                    simHtml += `<span class="inline-flex items-center gap-1 bg-slate-900 border border-slate-700/60 rounded px-1.5 py-0.5 text-[11px] text-slate-200">👤 ${name}</span>`;
+                });
+                simList.innerHTML = simHtml;
+            }
+        }
+
         if (!container) return;
 
         if (payoutParticipants.size === 0) {
@@ -1031,12 +1031,15 @@
         const cost = Math.max(0, parseInt(costEl ? costEl.value : 0, 10) || 0);
         const n = payoutParticipants.size;
 
-        const guildCut = bag * payoutRates.guild;
-        const silverPool = Math.max(0, bag - guildCut);
+        const guildSilverCut = bag * payoutRates.guild;
+        const silverPool = Math.max(0, bag - guildSilverCut);
         const totalTaxes = payoutRates.market + payoutRates.guild + payoutRates.transport;
-        const itemNet = Math.max(0, (item - cost) * (1 - totalTaxes));
+        const taxableItems = Math.max(0, item - cost);
+        const itemNet = taxableItems * (1 - totalTaxes);
         const totalPool = silverPool + itemNet;
         const buyback = Math.max(0, item * (1 - payoutRates.market - payoutRates.transport));
+        const guildItemCut = taxableItems * payoutRates.guild;
+        const guildPart = guildSilverCut + guildItemCut;
 
         let perPlayer = 0;
         if (n > 0) {
@@ -1049,7 +1052,6 @@
         const elItemValue = document.getElementById('simItemValue');
         const elActivityCost = document.getElementById('simActivityCost');
         const elGuildCut = document.getElementById('simGuildCut');
-        const elItemNet = document.getElementById('simItemNet');
         const elTotalPool = document.getElementById('simTotalPool');
         const elBuyback = document.getElementById('simBuyback');
         const elPlayerCount = document.getElementById('simPlayerCount');
@@ -1058,22 +1060,17 @@
         if (elBagSilvers) elBagSilvers.textContent = bag.toLocaleString() + ' silvers';
         if (elItemValue) elItemValue.textContent = item.toLocaleString() + ' silvers';
         if (elActivityCost) elActivityCost.textContent = cost.toLocaleString() + ' silvers';
-        if (elGuildCut) elGuildCut.textContent = Math.round(guildCut).toLocaleString() + ' silvers';
-        if (elItemNet) elItemNet.textContent = Math.round(itemNet).toLocaleString() + ' silvers';
+        if (elGuildCut) elGuildCut.textContent = '+' + Math.round(guildPart).toLocaleString() + ' silvers';
         if (elTotalPool) elTotalPool.textContent = Math.round(totalPool).toLocaleString() + ' silvers';
         if (elBuyback) elBuyback.textContent = Math.round(buyback).toLocaleString() + ' silvers';
         if (elPlayerCount) elPlayerCount.textContent = n;
         if (elPerPlayer) elPerPlayer.textContent = Math.round(perPlayer).toLocaleString() + ' {{ t("silvers") }}';
 
-        return { bag, item, cost, n, guildCut, itemNet, totalPool, buyback, perPlayer };
+        return { bag, item, cost, n, guildCut: guildPart, itemNet, totalPool, buyback, perPlayer };
     }
 
     function goToPayoutConfirmStep() {
         const sim = updatePayoutSimulation();
-        if (sim.bag <= 0 && sim.item <= 0) {
-            alert('{{ t("js_err_payout_positive_values") }}');
-            return;
-        }
         if (sim.n <= 0) {
             alert('{{ t("js_err_payout_no_participants") }}');
             return;
@@ -1082,10 +1079,9 @@
         document.getElementById('recapPayoutBags').textContent = sim.bag.toLocaleString() + ' silvers';
         document.getElementById('recapPayoutItems').textContent = sim.item.toLocaleString() + ' silvers';
         document.getElementById('recapPayoutCost').textContent = sim.cost.toLocaleString() + ' silvers';
-        document.getElementById('recapPayoutGuildCut').textContent = Math.round(sim.guildCut).toLocaleString() + ' silvers';
-        document.getElementById('recapPayoutItemNet').textContent = Math.round(sim.itemNet).toLocaleString() + ' silvers';
-        document.getElementById('recapPayoutTotalPool').textContent = Math.round(sim.totalPool).toLocaleString() + ' silvers';
+        document.getElementById('recapPayoutGuildCut').textContent = '+' + Math.round(sim.guildCut).toLocaleString() + ' silvers';
         document.getElementById('recapPayoutBuyback').textContent = Math.round(sim.buyback).toLocaleString() + ' silvers';
+        document.getElementById('recapPayoutTotalPool').textContent = Math.round(sim.totalPool).toLocaleString() + ' silvers';
         document.getElementById('recapPayoutPlayerCount').textContent = sim.n;
         document.getElementById('recapPayoutPerPlayer').textContent = '+' + Math.round(sim.perPlayer).toLocaleString() + ' {{ t("silvers") }}';
 

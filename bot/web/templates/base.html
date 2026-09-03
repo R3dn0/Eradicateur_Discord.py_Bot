@@ -92,7 +92,10 @@
         html:not(.dark) button.bg-red-600 {
             color: #ffffff !important;
         }
+        html:not(.dark) thead,
+        html:not(.dark) .bg-slate-900\/90,
         html:not(.dark) .bg-slate-900\/80,
+        html:not(.dark) .bg-slate-900\/70,
         html:not(.dark) .bg-slate-900\/60,
         html:not(.dark) .bg-slate-900\/50,
         html:not(.dark) .bg-slate-900\/40,
@@ -100,7 +103,10 @@
         html:not(.dark) .bg-slate-900 {
             background-color: #f1f5f9 !important;
             border-color: #e2e8f0 !important;
-            color: #1e293b;
+            color: #475569;
+        }
+        html:not(.dark) thead th {
+            color: #64748b !important;
         }
         html:not(.dark) .bg-slate-800,
         html:not(.dark) a.bg-slate-800,
@@ -183,9 +189,12 @@
         html:not(.dark) .text-slate-400 { color: #64748b !important; }
         html:not(.dark) .text-slate-300 { color: #334155 !important; }
         html:not(.dark) .text-slate-200 { color: #1e293b !important; }
-        html:not(.dark) .text-slate-100 { color: #0f172a !important; }
-        html:not(.dark) tr:hover {
+        html:not(.dark) tbody tr:hover {
             background-color: #f8fafc !important;
+        }
+        html:not(.dark) thead tr,
+        html:not(.dark) thead tr:hover {
+            background-color: #f1f5f9 !important;
         }
 
         /* Custom scrollbar */
