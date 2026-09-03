@@ -6,6 +6,7 @@ from fastapi import APIRouter, Form, Request, Response, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from bot.web.auth import (
+    SESSION_COOKIE_NAME,
     check_login_rate_limit,
     clear_auth_cookie,
     create_csrf_token,
@@ -16,6 +17,7 @@ from bot.web.auth import (
     is_user_authorized,
     record_login_failure,
     record_login_success,
+    revoke_session_token,
     set_user_auth_cookie,
     verify_csrf_token,
 )
@@ -141,7 +143,7 @@ async def discord_callback(request: Request, code: str = "", state: str = ""):
     )
 
     # Check Whitelist authorization
-    if not is_user_authorized(bot, user_id):
+    if not await is_user_authorized(bot, user_id):
         logger.warning(
             "Unauthorized Discord login attempt: %s (ID: %s)",
             display_name,
@@ -246,6 +248,9 @@ async def login_submit(
 
 @router.get("/logout")
 async def logout(request: Request):
+    cookie = request.cookies.get(SESSION_COOKIE_NAME)
+    if cookie:
+        revoke_session_token(cookie)
     response = RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
     clear_auth_cookie(response)
     return response

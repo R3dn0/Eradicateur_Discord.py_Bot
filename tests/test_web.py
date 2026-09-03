@@ -13,6 +13,8 @@ from bot.web.auth import (
     _sign_data,
     create_csrf_token,
     create_session_token,
+    create_user_session_token,
+    decode_user_session_token,
     verify_csrf_token,
     verify_session_token,
 )
@@ -369,7 +371,7 @@ def test_departed_guild_members_filtering(temp_env):
     assert "/balances/2002/history" not in resp.text
 
 
-def test_discord_user_session_and_whitelist(temp_env):
+async def test_user_session_token_and_auth(temp_env):
     mock_bot, app, client = temp_env
     secret = "secret-dashboard-token"
 
@@ -379,9 +381,9 @@ def test_discord_user_session_and_whitelist(temp_env):
     from bot.web.auth import create_user_session_token, decode_user_session_token, is_user_authorized
 
     # 1. Test whitelist check
-    assert is_user_authorized(mock_bot, 135489084385787905) is True
-    assert is_user_authorized(mock_bot, 656540896040452107) is True
-    assert is_user_authorized(mock_bot, 999999999999999999) is False
+    assert await is_user_authorized(mock_bot, 135489084385787905) is True
+    assert await is_user_authorized(mock_bot, 656540896040452107) is True
+    assert await is_user_authorized(mock_bot, 999999999999999999) is False
 
     # 2. Test user session creation and decoding
     user_data = {
@@ -437,13 +439,35 @@ def test_multi_user_transaction_created_by(temp_env):
     )
     assert resp.status_code == 303
 
-    # Check member history
+    # Check member history (in default dev mode)
     resp = client.get(
         f"/guild/{guild_id}/balances/999888/history",
-        cookies={"eradicateur_session": user_cookie},
+        cookies={"eradicateur_session": user_cookie, "dev_simulated_role": "dev"},
     )
-    # Should display Dev 😎 for dev user
-    assert "Dev 😎" in resp.text
+    assert "DEV 😎" in resp.text
+
+    # Perform transaction in leader simulated role
+    resp = client.post(
+        f"/guild/{guild_id}/balances/transaction",
+        data={
+            "csrf_token": csrf,
+            "discord_id": 999888,
+            "operation": "credit",
+            "amount": 100000,
+            "reason": "Leader bonus",
+        },
+        cookies={"eradicateur_session": user_cookie, "dev_simulated_role": "leader"},
+        follow_redirects=False,
+    )
+    assert resp.status_code == 303
+
+    # Check member history in leader mode: author should show real username/display_name and not Dev
+    resp = client.get(
+        f"/guild/{guild_id}/balances/999888/history",
+        cookies={"eradicateur_session": user_cookie, "dev_simulated_role": "leader"},
+    )
+    assert "Leader bonus" in resp.text
+    assert "Redn0" in resp.text
 
 
 def test_db_audit_logging_and_logs_view(temp_env):
@@ -662,6 +686,21 @@ def test_create_payout_web_and_channel_config(temp_env):
     assert "Payout #1" in resp.text
     assert "1001" in resp.text
     assert "1002" in resp.text
+
+    # 3. Create Payout with 0 silvers and 0 item value
+    resp_zero = client.post(
+        f"/guild/{guild_id}/payouts/create",
+        data={
+            "bag_silvers": 0,
+            "item_market_value": 0,
+            "activity_cost": 0,
+            "participant_ids": "1001, 1002",
+        },
+        headers=auth_headers,
+        follow_redirects=False,
+    )
+    assert resp_zero.status_code == 303
+    assert "/payouts/2" in resp_zero.headers["location"]
 
 
 def test_dashboard_role_permissions(temp_env):
@@ -1022,6 +1061,173 @@ def test_activity_pool_drag_and_drop_reorder(temp_env):
     assert "DPS Frost" in resp_view.text
     assert "activityPoolList" in resp_view.text
     assert "Sortable" in resp_view.text
+
+
+def test_dev_creator_signing_behavior(temp_env):
+    from bot.web.auth import create_csrf_token, create_user_session_token
+
+    mock_bot, app, client = temp_env
+    guild_id = 123456
+    dev_user_id = 135489084385787905
+    secret = "secret-dashboard-token"
+
+    dev_token = create_user_session_token(
+        {
+            "id": dev_user_id,
+            "username": "superdev",
+            "display_name": "SuperDev",
+            "avatar": None,
+            "roles": [101],
+        },
+        secret,
+    )
+    csrf = create_csrf_token(secret)
+
+    # 1. Dev user in DEV mode creates a transaction -> created_by should be 0, displayed as "😎 DEV 😎"
+    client.cookies = {"eradicateur_session": dev_token, "dev_simulated_role": "dev"}
+    resp_tx_dev = client.post(
+        f"/guild/{guild_id}/balances/transaction",
+        data={
+            "csrf_token": csrf,
+            "discord_id": 999111,
+            "operation": "credit",
+            "amount": 250000,
+            "reason": "Dev Bonus",
+        },
+        follow_redirects=True,
+    )
+    assert resp_tx_dev.status_code == 200
+
+    resp_hist = client.get(f"/guild/{guild_id}/balances/999111/history")
+    assert resp_hist.status_code == 200
+    assert "DEV 😎" in resp_hist.text
+
+    # 2. Dev user switches to "officer" mode and creates a transaction -> created_by should be dev_user_id
+    client.cookies = {"eradicateur_session": dev_token, "dev_simulated_role": "officer"}
+    resp_tx_off = client.post(
+        f"/guild/{guild_id}/balances/transaction",
+        data={
+            "csrf_token": csrf,
+            "discord_id": 999111,
+            "operation": "credit",
+            "amount": 100000,
+            "reason": "Officer Bonus",
+        },
+        follow_redirects=True,
+    )
+    assert resp_tx_off.status_code == 200
+
+    resp_hist2 = client.get(f"/guild/{guild_id}/balances/999111/history")
+    assert resp_hist2.status_code == 200
+    assert "SuperDev" in resp_hist2.text
+
+
+def test_void_payout_triggers_debit_dm_and_format_reason(temp_env):
+    mock_bot, app, client = temp_env
+    auth_headers = {"Authorization": "Bearer secret-dashboard-token"}
+    guild_id = 123456
+
+    # 1. Create a payout
+    resp_create = client.post(
+        f"/guild/{guild_id}/payouts/create",
+        data={
+            "bag_silvers": 500_000,
+            "item_market_value": 1_000_000,
+            "activity_cost": 100_000,
+            "participant_ids": "1001, 1002",
+        },
+        headers=auth_headers,
+        follow_redirects=False,
+    )
+    assert resp_create.status_code == 303
+
+    # 2. View member history: should format distribution reason with Payout badge link
+    resp_hist = client.get(f"/guild/{guild_id}/balances/1001/history", headers=auth_headers)
+    assert resp_hist.status_code == 200
+    assert "Payout #1" in resp_hist.text
+    assert f"/guild/{guild_id}/payouts/1" in resp_hist.text
+
+    # 3. Void the payout
+    resp_void = client.post(
+        f"/guild/{guild_id}/payouts/1/void",
+        headers=auth_headers,
+        follow_redirects=False,
+    )
+    assert resp_void.status_code == 303
+
+    # 4. View member history again: should show voided Payout badge link with line-through
+    resp_hist_after = client.get(f"/guild/{guild_id}/balances/1001/history", headers=auth_headers)
+    assert resp_hist_after.status_code == 200
+    assert "line-through" in resp_hist_after.text
+    assert "Payout #1" in resp_hist_after.text
+
+
+def test_session_revocation_on_logout(temp_env):
+    mock_bot, app, client = temp_env
+    secret = "secret-dashboard-token"
+    user_data = {"id": 12345, "username": "Tester", "display_name": "Tester", "roles": ["admin"]}
+    token = create_user_session_token(user_data, secret)
+
+    # Token should be valid initially
+    assert decode_user_session_token(token, secret) is not None
+
+    # Call /logout with cookie
+    resp = client.get("/logout", cookies={"eradicateur_session": token}, follow_redirects=False)
+    assert resp.status_code == 302
+    assert resp.headers["location"] == "/login"
+
+    # Token must now be rejected as revoked
+    assert decode_user_session_token(token, secret) is None
+
+
+def test_csv_exports(temp_env):
+    mock_bot, app, client = temp_env
+    auth_headers = {"Authorization": "Bearer secret-dashboard-token"}
+    guild_id = 123456
+
+    # 1. Create a transaction so balance and history have data
+    client.post(
+        f"/guild/{guild_id}/balances/transaction",
+        data={
+            "discord_id": 555666,
+            "operation": "credit",
+            "amount": 250000,
+            "reason": "Initial loot share",
+        },
+        headers=auth_headers,
+    )
+
+    # 2. Export Balances CSV
+    resp_bal_csv = client.get(f"/guild/{guild_id}/balances/export.csv", headers=auth_headers)
+    assert resp_bal_csv.status_code == 200
+    assert "text/csv" in resp_bal_csv.headers["content-type"]
+    assert "555666" in resp_bal_csv.text
+    assert "250000" in resp_bal_csv.text
+
+    # 3. Export Member History CSV
+    resp_hist_csv = client.get(f"/guild/{guild_id}/balances/555666/history/export.csv", headers=auth_headers)
+    assert resp_hist_csv.status_code == 200
+    assert "text/csv" in resp_hist_csv.headers["content-type"]
+    assert "Initial loot share" in resp_hist_csv.text
+
+    # 4. Create payout and export Payouts CSV
+    client.post(
+        f"/guild/{guild_id}/payouts/create",
+        data={
+            "bag_silvers": 100_000,
+            "item_market_value": 200_000,
+            "activity_cost": 20_000,
+            "participant_ids": "555666",
+        },
+        headers=auth_headers,
+    )
+    resp_payout_csv = client.get(f"/guild/{guild_id}/payouts/export.csv", headers=auth_headers)
+    assert resp_payout_csv.status_code == 200
+    assert "text/csv" in resp_payout_csv.headers["content-type"]
+    assert "100000" in resp_payout_csv.text
+
+
+
 
 
 
