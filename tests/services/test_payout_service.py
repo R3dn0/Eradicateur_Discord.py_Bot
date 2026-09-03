@@ -16,6 +16,7 @@ class TestComputeSplit:
 
         assert result.silver_per_player == 134_000
         assert result.buyback_value == 29_070_000
+        assert result.guild_gain == 2_857_600
 
         total_per_player = result.silver_per_player + result.item_per_player
         assert total_per_player == result.amount_per_player
