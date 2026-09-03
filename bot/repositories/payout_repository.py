@@ -148,6 +148,34 @@ class PayoutRepository(BaseRepository):
             voided_at=row["voided_at"],
         )
 
+    async def list_payouts(self, limit: int = 50) -> list[Payout]:
+        await self._ensure_tables()
+        cursor = await self._db.execute(
+            "SELECT * FROM payouts ORDER BY id DESC LIMIT ?",
+            (limit,),
+        )
+        rows = await cursor.fetchall()
+        return [
+            Payout(
+                id=row["id"],
+                bag_silvers=row["bag_silvers"],
+                item_market_value=row["item_market_value"],
+                activity_cost=row["activity_cost"],
+                tax_market=row["tax_market"],
+                tax_guild=row["tax_guild"],
+                tax_transport=row["tax_transport"],
+                participant_count=row["participant_count"],
+                amount_per_player=row["amount_per_player"],
+                buyback_value=row["buyback_value"],
+                created_by=row["created_by"],
+                created_at=row["created_at"],
+                voided=bool(row["voided"]),
+                voided_by=row["voided_by"],
+                voided_at=row["voided_at"],
+            )
+            for row in rows
+        ]
+
     async def void_payout(self, payout_id: int, voided_by: int) -> None:
         await self._ensure_tables()
         try:

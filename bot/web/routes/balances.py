@@ -1,7 +1,10 @@
+import csv
+import io
 import logging
+import time
 
 from fastapi import APIRouter, Depends, Form, HTTPException, Request, status
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, Response
 
 from bot.repositories.transaction_repository import TransactionRepository
 from bot.services.balance_notification_service import send_balance_transaction_dm
@@ -15,9 +18,8 @@ router = APIRouter(dependencies=[Depends(require_auth)], tags=["Balances"])
 
 
 async def _resolve_member_name(bot, guild_id: int, discord_id: int) -> str:
-    dev_users = getattr(getattr(bot, "config", None), "dashboard_dev_users", None) or [135489084385787905]
-    if discord_id in dev_users or discord_id == 0:
-        return "Dev 😎"
+    if discord_id == 0:
+        return "Web Dashboard Admin"
     if hasattr(bot, "get_guild"):
         guild = bot.get_guild(guild_id)
         if guild:
@@ -31,6 +33,12 @@ async def _resolve_member_name(bot, guild_id: int, discord_id: int) -> str:
             except Exception:
                 pass
     return f"User {discord_id}"
+
+
+async def _resolve_creator_name(bot, guild_id: int, created_by: int) -> str:
+    if created_by == 0:
+        return "😎 DEV 😎"
+    return await _resolve_member_name(bot, guild_id, created_by)
 
 
 async def get_cataloged_guild_members(bot, guild_id: int, conn) -> list[dict]:
@@ -213,7 +221,7 @@ async def member_history(request: Request, guild_id: int, discord_id: int):
 
     enriched_transactions = []
     for tx in transactions:
-        creator_name = await _resolve_member_name(bot, guild_id, tx.created_by)
+        creator_name = await _resolve_creator_name(bot, guild_id, tx.created_by)
         enriched_transactions.append({
             "id": tx.id,
             "discord_id": tx.discord_id,
@@ -298,16 +306,16 @@ async def add_manual_transaction(
 
     current_user = getattr(request.state, "user", None) or {}
     actor_id = int(current_user.get("id", 0))
-    dev_users = getattr(getattr(bot, "config", None), "dashboard_dev_users", None) or [135489084385787905]
-    is_dev = actor_id in dev_users or actor_id == 0 or sim_role == "dev" or user_perms.get("is_dev")
-    actor_name = "Dev 😎" if is_dev else current_user.get("display_name", "Dashboard Admin")
+    is_dev_mode = (sim_role == "dev") or (actor_id == 0 and sim_role not in ("leader", "officer"))
+    recorded_created_by = 0 if is_dev_mode else actor_id
+    actor_name = "😎 DEV 😎" if is_dev_mode else current_user.get("display_name", "Dashboard Admin")
 
-    # Record transaction with created_by = logged-in Discord user ID
+    # Record transaction with created_by = 0 for DEV mode, or user ID for Leader/Officer
     await tx_repo.add_transaction(
         discord_id=discord_id,
         amount=final_amount,
         reason=cleaned_reason,
-        created_by=actor_id,
+        created_by=recorded_created_by,
     )
 
     new_balance = await tx_repo.get_balance(discord_id)
@@ -325,7 +333,7 @@ async def add_manual_transaction(
                     is_credit=(operation == "credit"),
                     new_balance=new_balance,
                     reason=sanitized_reason if operation == "credit" else None,
-                    actor_id=actor_id,
+                    actor_id=None if is_dev_mode else (actor_id if actor_id > 0 else None),
                     actor_name=actor_name,
                 )
             except Exception:
@@ -347,6 +355,76 @@ async def add_manual_transaction(
     return RedirectResponse(
         url=redirect_url,
         status_code=status.HTTP_303_SEE_OTHER,
+    )
+
+
+@router.get("/guild/{guild_id}/balances/export.csv")
+async def export_balances_csv(request: Request, guild_id: int):
+    bot = request.app.state.bot
+    ensure_valid_guild(bot, guild_id)
+
+    conn = await bot.db_manager.get_connection(guild_id)
+    tx_repo = TransactionRepository(conn)
+    rows = await tx_repo.list_balances(include_zero=False)
+
+    output = io.StringIO()
+    writer = csv.writer(output, delimiter=";", quoting=csv.QUOTE_MINIMAL)
+    writer.writerow(["Discord ID", "Pseudo", "Solde (Silvers)"])
+
+    for discord_id, balance in rows:
+        name = await _resolve_member_name(bot, guild_id, discord_id)
+        writer.writerow([discord_id, name, balance])
+
+    csv_content = output.getvalue()
+    filename = f"balances_{guild_id}_{int(time.time())}.csv"
+    return Response(
+        content=csv_content,
+        media_type="text/csv; charset=utf-8",
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+            "Cache-Control": "no-cache",
+        },
+    )
+
+
+@router.get("/guild/{guild_id}/balances/{discord_id}/history/export.csv")
+async def export_member_history_csv(request: Request, guild_id: int, discord_id: int):
+    bot = request.app.state.bot
+    ensure_valid_guild(bot, guild_id)
+
+    conn = await bot.db_manager.get_connection(guild_id)
+    tx_repo = TransactionRepository(conn)
+    txs = await tx_repo.list_transactions(discord_id)
+
+    player_name = await _resolve_member_name(bot, guild_id, discord_id)
+
+    output = io.StringIO()
+    writer = csv.writer(output, delimiter=";", quoting=csv.QUOTE_MINIMAL)
+    writer.writerow(["ID Transaction", "Date & Heure", "Joueur ID", "Joueur Nom", "Type / Ref", "Montant (Silvers)", "Motif / Raison", "Auteur"])
+
+    for tx in txs:
+        tx_type = f"Payout #{tx.payout_id}" if tx.payout_id else ("Credit" if tx.amount > 0 else "Debit")
+        author = "😎 DEV 😎" if tx.created_by == 0 else await _resolve_creator_name(bot, guild_id, tx.created_by)
+        writer.writerow([
+            tx.id,
+            tx.created_at,
+            discord_id,
+            player_name,
+            tx_type,
+            tx.amount,
+            tx.reason or "",
+            author,
+        ])
+
+    csv_content = output.getvalue()
+    filename = f"history_{discord_id}_{int(time.time())}.csv"
+    return Response(
+        content=csv_content,
+        media_type="text/csv; charset=utf-8",
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+            "Cache-Control": "no-cache",
+        },
     )
 
 

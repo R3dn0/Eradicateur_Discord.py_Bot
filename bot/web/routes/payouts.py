@@ -1,13 +1,17 @@
+import csv
+import io
 import logging
+import time
 
 import discord
 from fastapi import APIRouter, Depends, Form, HTTPException, Request, status
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, Response
 
 from bot.repositories.bot_config_repository import BotConfigRepository
 from bot.repositories.payout_config_repository import PayoutConfigRepository
 from bot.repositories.payout_repository import PayoutRepository
 from bot.repositories.transaction_repository import TransactionRepository
+from bot.services.balance_notification_service import send_balance_transaction_dm
 from bot.services.payout_config_service import PayoutConfigService
 from bot.services.payout_service import compute_split
 from bot.utils.discord_dm import send_bulk_dm
@@ -55,9 +59,11 @@ async def list_payouts(request: Request, guild_id: int):
     cursor = await conn.execute("SELECT * FROM payouts ORDER BY id DESC")
     rows = await cursor.fetchall()
 
+    from bot.web.routes.balances import _resolve_creator_name, get_cataloged_guild_members
+
     payouts = []
     for row in rows:
-        creator_name = await _resolve_member_name(bot, guild_id, row["created_by"]) if row["created_by"] else "Admin"
+        creator_name = await _resolve_creator_name(bot, guild_id, row["created_by"])
         payouts.append({
             "id": row["id"],
             "bag_silvers": row["bag_silvers"],
@@ -74,7 +80,6 @@ async def list_payouts(request: Request, guild_id: int):
             "voided_at": row["voided_at"],
         })
 
-    from bot.web.routes.balances import get_cataloged_guild_members
     enriched_balances = await get_cataloged_guild_members(bot, guild_id, conn)
 
     return templates.TemplateResponse(
@@ -88,6 +93,72 @@ async def list_payouts(request: Request, guild_id: int):
             "payout_cfg": payout_cfg,
             "balances": enriched_balances,
             "user_perms": user_perms,
+        },
+    )
+
+
+@router.get("/guild/{guild_id}/payouts/export.csv")
+async def export_payouts_csv(request: Request, guild_id: int):
+    bot = request.app.state.bot
+    ensure_valid_guild(bot, guild_id)
+
+    conn = await bot.db_manager.get_connection(guild_id)
+    tx_repo = TransactionRepository(conn)
+    payout_repo = PayoutRepository(conn, tx_repo)
+    payout_cfg_repo = PayoutConfigRepository(conn)
+
+    payouts = await payout_repo.list_payouts(limit=5000)
+    payout_cfg_service = PayoutConfigService(payout_cfg_repo)
+    rates = await payout_cfg_service.get_rates()
+
+    output = io.StringIO()
+    writer = csv.writer(output, delimiter=";", quoting=csv.QUOTE_MINIMAL)
+    writer.writerow([
+        "ID Payout",
+        "Date",
+        "Auteur",
+        "Participants",
+        "Sacs d'argent (Silvers)",
+        "Valeur Items Marché",
+        "Coût Activité",
+        "Part Guilde",
+        "Buyback Value",
+        "Net par Joueur",
+        "Statut",
+    ])
+
+    for p in payouts:
+        creator = "😎 DEV 😎" if p.created_by == 0 else await _resolve_member_name(bot, guild_id, p.created_by)
+        split = compute_split(
+            bag_silvers=p.bag_silvers,
+            item_market_value=p.item_market_value,
+            activity_cost=p.activity_cost,
+            rates=rates,
+            participant_count=max(1, p.participant_count),
+        )
+        status_str = "Annulé" if p.voided else "Actif"
+        writer.writerow([
+            p.id,
+            p.created_at,
+            creator,
+            p.participant_count,
+            p.bag_silvers,
+            p.item_market_value,
+            p.activity_cost,
+            split.guild_gain,
+            split.buyback_value,
+            p.amount_per_player,
+            status_str,
+        ])
+
+    csv_content = output.getvalue()
+    filename = f"payouts_{guild_id}_{int(time.time())}.csv"
+    return Response(
+        content=csv_content,
+        media_type="text/csv; charset=utf-8",
+        headers={
+            "Content-Disposition": f'attachment; filename="{filename}"',
+            "Cache-Control": "no-cache",
         },
     )
 
@@ -116,7 +187,9 @@ async def payout_detail(request: Request, guild_id: int, payout_id: int):
         raise HTTPException(status_code=404, detail="Payout not found")
 
     transactions = await tx_repo.list_transactions_for_payout(payout_id)
-    creator_name = await _resolve_member_name(bot, guild_id, payout.created_by) if payout.created_by else "Admin"
+    transactions = await tx_repo.list_transactions_for_payout(payout_id)
+    from bot.web.routes.balances import _resolve_creator_name
+    creator_name = await _resolve_creator_name(bot, guild_id, payout.created_by)
 
     participants = []
     for tx in transactions:
@@ -165,8 +238,21 @@ async def void_payout_action(request: Request, guild_id: int, payout_id: int):
     tx_repo = TransactionRepository(conn)
     payout_repo = PayoutRepository(conn, tx_repo)
 
+    payout = await payout_repo.get_payout(payout_id)
+    if not payout:
+        raise HTTPException(status_code=404, detail="Payout not found")
+    if payout.voided:
+        raise HTTPException(status_code=400, detail="Payout already voided")
+
+    payout_txns = await tx_repo.list_transactions_for_payout(payout_id)
+    participant_ids = [t.discord_id for t in payout_txns if t.amount > 0]
+
+    is_dev_mode = (sim_role == "dev") or (user_id == 0 and sim_role not in ("leader", "officer"))
+    recorded_voided_by = 0 if is_dev_mode else user_id
+    actor_name = "😎 DEV 😎" if is_dev_mode else (user.get("display_name") or "Dashboard Admin")
+
     try:
-        await payout_repo.void_payout(payout_id=payout_id, voided_by=user_id)
+        await payout_repo.void_payout(payout_id=payout_id, voided_by=recorded_voided_by)
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -176,6 +262,26 @@ async def void_payout_action(request: Request, guild_id: int, payout_id: int):
         "PAYOUT_VOID",
         f"Voided Payout #{payout_id}",
     )
+
+    # Trigger debit DMs to impacted participants
+    guild = bot.get_guild(guild_id)
+    if guild:
+        for pid in participant_ids:
+            try:
+                new_bal = await tx_repo.get_balance(pid)
+                await send_balance_transaction_dm(
+                    bot=bot,
+                    guild=guild,
+                    target_user_id=pid,
+                    amount=payout.amount_per_player,
+                    is_credit=False,
+                    new_balance=new_bal,
+                    reason=f"Annulation Payout #{payout_id}",
+                    actor_id=recorded_voided_by,
+                    actor_name=actor_name,
+                )
+            except Exception as e:
+                logger.warning("Failed to send void debit DM to %s for payout #%s: %s", pid, payout_id, e)
 
     return RedirectResponse(
         url=f"/guild/{guild_id}/payouts/{payout_id}",
@@ -208,9 +314,6 @@ async def create_payout_action(
 
     if bag_silvers < 0 or item_market_value < 0 or activity_cost < 0:
         raise HTTPException(status_code=400, detail="Amounts must be non-negative")
-
-    if bag_silvers <= 0 and item_market_value <= 0:
-        raise HTTPException(status_code=400, detail="At least bag silvers or item value must be strictly positive")
 
     # Parse and deduplicate participant IDs
     raw_ids = [p.strip() for p in participant_ids.replace(",", " ").split() if p.strip()]
@@ -252,9 +355,13 @@ async def create_payout_action(
     raw_uid = current_user.get("id")
     actor_name = current_user.get("display_name") or "Dashboard Admin"
     try:
-        created_by = int(raw_uid) if raw_uid else 0
+        user_uid = int(raw_uid) if raw_uid else 0
     except (ValueError, TypeError):
-        created_by = 0
+        user_uid = 0
+
+    is_dev_mode = (sim_role == "dev") or (user_uid == 0 and sim_role not in ("leader", "officer"))
+    recorded_created_by = 0 if is_dev_mode else user_uid
+    creator_tag = "😎 DEV 😎" if is_dev_mode else (f"<@{user_uid}>" if user_uid else actor_name)
 
     try:
         payout_id = await payout_repo.create_payout(
@@ -267,7 +374,7 @@ async def create_payout_action(
             amount_per_player=split.amount_per_player,
             buyback_value=split.buyback_value,
             participant_ids=clean_ids,
-            created_by=created_by,
+            created_by=recorded_created_by,
         )
     except Exception as e:
         logger.exception("Failed to create payout via web: %s", e)
@@ -285,10 +392,6 @@ async def create_payout_action(
     if guild and hasattr(bot, "translate"):
         locale = get_web_locale(request)
         discord_locale = "fr" if locale == "fr" else "en-US"
-        dev_users = getattr(getattr(bot, "config", None), "dashboard_dev_users", None) or [135489084385787905]
-        sim_role = request.cookies.get("dev_simulated_role", "dev")
-        is_dev = created_by in dev_users or created_by == 0 or sim_role == "dev" or user_perms.get("is_dev")
-        creator_tag = "Dev 😎" if is_dev else (f"<@{created_by}>" if created_by else actor_name)
 
         # 1. Send DMs to participants
         dm_title = await bot.translate("payout_dm_title", discord_locale)
@@ -378,5 +481,8 @@ async def create_payout_action(
         url=f"/guild/{guild_id}/payouts/{payout_id}",
         status_code=status.HTTP_303_SEE_OTHER,
     )
+
+
+
 
 
