@@ -155,6 +155,33 @@ def create_app(bot) -> FastAPI:
 
     templates.TemplateResponse = template_response_with_csrf  # type: ignore[assignment]
 
+    # Auto-inject CSRF token and bot in template contexts
+    orig_template_response = templates.TemplateResponse
+
+    def template_response_with_csrf(
+        request: Request,
+        name: str,
+        context: dict | None = None,
+        status_code: int = 200,
+        **kwargs,
+    ):
+        ctx = context.copy() if context else {}
+        if "csrf_token" not in ctx:
+            ctx["csrf_token"] = getattr(request.state, "csrf_token", "")
+        if "bot" not in ctx:
+            ctx["bot"] = bot
+        if "current_user" not in ctx:
+            ctx["current_user"] = getattr(request.state, "user", None)
+        return orig_template_response(
+            request=request,
+            name=name,
+            context=ctx,
+            status_code=status_code,
+            **kwargs,
+        )
+
+    templates.TemplateResponse = template_response_with_csrf  # type: ignore[assignment]
+
     app.state.bot = bot
     app.state.templates = templates
 
