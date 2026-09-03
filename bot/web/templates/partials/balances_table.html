@@ -45,7 +45,7 @@
                             class="js-tx-btn text-xs bg-emerald-950/60 hover:bg-emerald-900 text-emerald-300 border border-emerald-800 px-2.5 py-1.5 rounded-lg transition cursor-pointer"
                             title="{{ t('credit_player') }}"
                         >
-                            {{ t('btn_credit_player') }}
+                            + {{ t('btn_credit_player') }}
                         </button>
                         <button 
                             data-discord-id="{{ b.discord_id }}"
@@ -55,7 +55,7 @@
                             class="js-tx-btn text-xs bg-red-950/60 hover:bg-red-900 text-red-300 border border-red-800 px-2.5 py-1.5 rounded-lg transition cursor-pointer"
                             title="{{ t('debit_player') }}"
                         >
-                            {{ t('btn_debit_player') }}
+                            - {{ t('btn_debit_player') }}
                         </button>
                         {% endif %}
                     </div>

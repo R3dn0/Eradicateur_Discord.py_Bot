@@ -115,7 +115,7 @@ async def set_dev_role(request: Request, role: str, redirect: str = "/"):
 
 @router.get("/guild/{guild_id}", response_class=HTMLResponse)
 async def guild_overview(request: Request, guild_id: int):
-    from bot.web.routes.balances import _resolve_member_name
+    from bot.web.routes.balances import _resolve_creator_name, _resolve_member_name
 
     bot = request.app.state.bot
     templates = request.app.state.templates
@@ -142,7 +142,7 @@ async def guild_overview(request: Request, guild_id: int):
     recent_transactions = []
     for tx in recent_txs_raw:
         player_name = await _resolve_member_name(bot, guild_id, tx.discord_id)
-        creator_name = await _resolve_member_name(bot, guild_id, tx.created_by) if tx.created_by else "Dash Admin"
+        creator_name = await _resolve_creator_name(bot, guild_id, tx.created_by)
         recent_transactions.append({
             "id": tx.id,
             "discord_id": tx.discord_id,
@@ -160,7 +160,7 @@ async def guild_overview(request: Request, guild_id: int):
     payout_rows = await cursor.fetchall()
     recent_payouts = []
     for p in payout_rows:
-        creator_name = await _resolve_member_name(bot, guild_id, p["created_by"]) if p["created_by"] else "Dash Admin"
+        creator_name = await _resolve_creator_name(bot, guild_id, p["created_by"])
         txs = await tx_repo.list_transactions_for_payout(p["id"])
         participants = []
         for tx in txs:

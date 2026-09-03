@@ -22,8 +22,16 @@
         </div>
 
         <!-- Quick action buttons -->
-        {% if not user_perms or user_perms.can_manage_balances %}
-        <div class="flex items-center gap-3 self-end sm:self-center">
+        <div class="flex items-center gap-2.5 self-end sm:self-center flex-wrap">
+            <a 
+                href="/guild/{{ current_guild.id }}/balances/{{ discord_id }}/history/export.csv" 
+                class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-xs px-3.5 py-2.5 rounded-xl border border-darkborder transition shadow flex items-center gap-1.5"
+                title="{{ t('btn_export_csv') }}"
+            >
+                <span>📥</span>
+                <span>{{ t('btn_export_csv') }}</span>
+            </a>
+            {% if not user_perms or user_perms.can_manage_balances %}
             <button 
                 data-operation="credit"
                 class="js-quick-action bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-xs px-4 py-2.5 rounded-xl shadow-lg shadow-emerald-950/40 transition flex items-center gap-1.5 cursor-pointer"
@@ -36,8 +44,8 @@
             >
                 <span>➖</span> {{ t('debit_this_player') }}
             </button>
+            {% endif %}
         </div>
-        {% endif %}
     </div>
 
     <!-- 4-Card Stats Banner (Player Summary) -->
@@ -106,7 +114,7 @@
         </div>
         <div class="overflow-x-auto">
             <table class="w-full text-left text-sm text-slate-300">
-                <thead class="bg-slate-900/70 border-b border-darkborder text-xs uppercase text-slate-400 font-semibold tracking-wider">
+                <thead class="bg-slate-900/80 text-xs uppercase text-slate-400 font-semibold border-b border-darkborder">
                     <tr>
                         <th class="px-5 py-3.5">{{ t('col_id') }}</th>
                         <th class="px-5 py-3.5">{{ t('col_date') }}</th>
@@ -156,21 +164,15 @@
                         </td>
 
                         <!-- Reason / Origin -->
-                        <td class="px-5 py-3 max-w-xs truncate text-xs text-slate-300">
-                            {% if tx.reason %}
-                                {{ tx.reason }}
-                            {% elif tx.payout_id %}
-                                <span class="text-slate-500 italic">Distribution de butin Payout #{{ tx.payout_id }}</span>
-                            {% else %}
-                                <span class="text-slate-600">-</span>
-                            {% endif %}
+                        <td class="px-5 py-3 text-xs text-slate-300">
+                            {{ tx.reason | format_reason(current_guild.id, tx.payout_id) }}
                         </td>
 
                         <!-- Author -->
                         <td class="px-5 py-3 whitespace-nowrap text-xs">
-                            {% if tx.created_by == 0 or 'Dev' in tx.creator_name or '😎' in tx.creator_name %}
+                            {% if tx.created_by == 0 %}
                             <span class="inline-flex items-center gap-1 bg-amber-950/70 text-amber-300 border border-amber-700/60 px-2 py-0.5 rounded text-[11px] font-bold">
-                                <span>😎</span> Dev 😎
+                                <span>😎</span> DEV 😎
                             </span>
                             {% else %}
                             <span class="text-slate-300 flex items-center gap-1">
@@ -236,6 +238,7 @@
                         name="reason" 
                         maxlength="255"
                         placeholder="{{ t('reason_credit_placeholder') }}"
+                        oninput="this.setCustomValidity('')"
                         class="w-full bg-slate-900 border border-darkborder rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     >
                 </div>
@@ -245,7 +248,7 @@
                         {{ t('btn_cancel') }}
                     </button>
                     <button type="button" onclick="goToHistConfirmStep()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition flex items-center space-x-1">
-                        <span>{{ t('btn_verify_recap') }}</span>
+                        <span>{{ t('btn_verify_recap') }} ➔</span>
                     </button>
                 </div>
             </div>
@@ -297,10 +300,10 @@
 
                 <div class="flex items-center justify-between pt-2">
                     <button type="button" onclick="goToHistInputStep()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
-                        {{ t('btn_edit_input') }}
+                        <span>← {{ t('btn_edit_input') }}</span>
                     </button>
                     <button type="button" onclick="document.getElementById('historyTxForm').submit()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/50 transition">
-                        {{ t('btn_confirm_apply') }}
+                        <span>✅ {{ t('btn_confirm_apply') }}</span>
                     </button>
                 </div>
             </div>
@@ -316,14 +319,19 @@
     function setOperation(op) {
         currentOp = op;
         document.getElementById('opInput').value = op;
+        const reasonInput = document.getElementById('modalReason');
+        const reasonLabel = document.getElementById('modalReasonLabel');
         if (op === 'debit') {
             document.getElementById('modalTitle').innerHTML = '<span>🔴</span> {{ t("debit_player") }} ' + memberName;
-            document.getElementById('modalReasonLabel').textContent = "{{ t('reason') }} ({{ t('reason_debit_placeholder') }})";
-            document.getElementById('modalReason').placeholder = "{{ t('reason_debit_placeholder') }}";
+            reasonLabel.innerHTML = '{{ t("reason") }} <span class="text-slate-500 font-normal">({{ t("reason_debit_placeholder") }})</span>';
+            reasonInput.placeholder = "{{ t('reason_debit_placeholder') }}";
+            reasonInput.required = false;
+            reasonInput.setCustomValidity('');
         } else {
             document.getElementById('modalTitle').innerHTML = '<span>🟢</span> {{ t("credit_player") }} ' + memberName;
-            document.getElementById('modalReasonLabel').textContent = "{{ t('reason') }} ({{ t('reason_credit_placeholder') }})";
-            document.getElementById('modalReason').placeholder = "{{ t('reason_credit_placeholder') }}";
+            reasonLabel.innerHTML = '{{ t("reason") }} <span class="text-rose-400 font-bold">*</span> <span class="text-slate-500 font-normal">({{ t("reason_credit_placeholder") }})</span>';
+            reasonInput.placeholder = "{{ t('reason_credit_placeholder') }}";
+            reasonInput.required = true;
         }
         goToHistInputStep();
         document.getElementById('txModal').classList.remove('hidden');
@@ -334,6 +342,7 @@
         document.getElementById('txModal').classList.add('hidden');
         document.getElementById('modalAmount').value = '';
         document.getElementById('modalReason').value = '';
+        document.getElementById('modalReason').setCustomValidity('');
         goToHistInputStep();
     }
 
@@ -350,7 +359,17 @@
             return;
         }
 
-        const reason = document.getElementById('modalReason').value.trim() || '{{ t("no_reason_provided") }}';
+        const reasonInput = document.getElementById('modalReason');
+        const reason = reasonInput.value.trim();
+        if (currentOp === 'credit' && !reason) {
+            reasonInput.setCustomValidity('{{ t("js_err_reason_required") }}');
+            reasonInput.reportValidity();
+            return;
+        } else {
+            reasonInput.setCustomValidity('');
+        }
+
+        const displayReason = reason || '{{ t("default_debit_reason") }}';
 
         // Badge
         const badge = document.getElementById('histRecapOpBadge');
@@ -375,7 +394,7 @@
         newBalSpan.textContent = newBal.toLocaleString('fr-FR') + ' {{ t("silvers") }}';
         newBalSpan.className = 'font-mono font-bold text-base ' + (newBal > 0 ? 'text-emerald-400' : (newBal < 0 ? 'text-red-400' : 'text-slate-300'));
 
-        document.getElementById('histRecapReason').textContent = reason;
+        document.getElementById('histRecapReason').textContent = displayReason;
 
         document.getElementById('histStepInput').classList.add('hidden');
         document.getElementById('histStepConfirm').classList.remove('hidden');
