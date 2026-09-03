@@ -137,41 +137,14 @@ def create_app(bot) -> FastAPI:
         if "current_user" not in ctx:
             ctx["current_user"] = getattr(request.state, "user", None)
         if "is_dev" not in ctx:
-            user = getattr(request.state, "user", None) or {}
-            user_id = int(user.get("id", 0))
-            ctx["is_dev"] = is_dev_user(bot, user_id)
+            user = getattr(request.state, "user", None)
+            user_id = int(user.get("id", 0)) if user else 0
+            ctx["is_dev"] = is_dev_user(bot, user_id) if user_id else False
         if "simulated_role" not in ctx:
             ctx["simulated_role"] = request.cookies.get("dev_simulated_role", "dev")
         current_locale = get_web_locale(request)
         ctx["locale"] = current_locale
         ctx["t"] = lambda k, **kw: translate_web(k, locale=current_locale, **kw)
-        return orig_template_response(
-            request=request,
-            name=name,
-            context=ctx,
-            status_code=status_code,
-            **kwargs,
-        )
-
-    templates.TemplateResponse = template_response_with_csrf  # type: ignore[assignment]
-
-    # Auto-inject CSRF token and bot in template contexts
-    orig_template_response = templates.TemplateResponse
-
-    def template_response_with_csrf(
-        request: Request,
-        name: str,
-        context: dict | None = None,
-        status_code: int = 200,
-        **kwargs,
-    ):
-        ctx = context.copy() if context else {}
-        if "csrf_token" not in ctx:
-            ctx["csrf_token"] = getattr(request.state, "csrf_token", "")
-        if "bot" not in ctx:
-            ctx["bot"] = bot
-        if "current_user" not in ctx:
-            ctx["current_user"] = getattr(request.state, "user", None)
         return orig_template_response(
             request=request,
             name=name,

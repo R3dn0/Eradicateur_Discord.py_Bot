@@ -220,26 +220,7 @@
                 </span>
             </div>
 
-            <!-- Center: Role Simulator for DEV Discord users -->
-            {% if is_dev %}
-            <div class="flex items-center space-x-2 bg-amber-950/60 border border-amber-600/70 rounded-xl px-3 py-1.5 shadow-md shadow-amber-950/40">
-                <span class="text-[11px] font-extrabold text-amber-400 uppercase tracking-wider hidden md:inline-flex items-center gap-1.5">
-                    <span>👑</span> Dev Role :
-                </span>
-                <select 
-                    id="devRoleSelector" 
-                    onchange="setDevSimulatedRole(this.value)" 
-                    class="bg-slate-900 border border-amber-500/50 text-amber-200 text-xs font-bold rounded-lg px-2.5 py-1 focus:outline-none focus:ring-2 focus:ring-amber-500 cursor-pointer shadow-inner"
-                    title="Simulateur de rôle pour les développeurs"
-                >
-                    <option value="dev" {% if simulated_role == 'dev' or not simulated_role %}selected{% endif %}>⚡ Dev (Pleins pouvoirs)</option>
-                    <option value="leader" {% if simulated_role == 'leader' %}selected{% endif %}>👑 Leader</option>
-                    <option value="officer" {% if simulated_role == 'officer' %}selected{% endif %}>🛡️ Officier</option>
-                </select>
-            </div>
-            {% endif %}
-
-            <!-- Right Controls: Lang, Theme, User Profile & Quick Nav -->
+            <!-- Right Controls: Dev Role, Lang, Theme, User Profile & Quick Nav -->
             <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
                 {% if guilds and guilds|length > 1 %}
                 <div class="relative hidden sm:block">
@@ -252,6 +233,23 @@
                         {% endfor %}
                     </select>
                 </div>
+                {% endif %}
+
+                {% if current_user and is_dev %}
+                <!-- Dev Simulated Role Switcher -->
+                {% if simulated_role == 'leader' %}
+                <button onclick="setDevSimulatedRole('officer')" class="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-darkborder transition flex items-center space-x-1 font-semibold" title="Rôle simulé : Leader — Cliquer pour passer à Officier (🥈)">
+                    <span class="text-sm">🥇</span>
+                </button>
+                {% elif simulated_role == 'officer' %}
+                <button onclick="setDevSimulatedRole('dev')" class="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-darkborder transition flex items-center space-x-1 font-semibold" title="Rôle simulé : Officier — Cliquer pour passer à Dev (😎)">
+                    <span class="text-sm">🥈</span>
+                </button>
+                {% else %}
+                <button onclick="setDevSimulatedRole('leader')" class="text-xs bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-200 p-1.5 sm:px-2.5 sm:py-1.5 rounded-lg border border-darkborder transition flex items-center space-x-1 font-semibold" title="Rôle simulé : Dev — Cliquer pour passer à Leader (🥇)">
+                    <span class="text-sm">😎</span>
+                </button>
+                {% endif %}
                 {% endif %}
 
                 <!-- Language Selector -->

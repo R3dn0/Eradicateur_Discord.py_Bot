@@ -137,8 +137,8 @@ async def guild_overview(request: Request, guild_id: int):
     row = await cursor.fetchone()
     active_payouts_count = row[0] if row else 0
 
-    # Recent Transactions (10)
-    recent_txs_raw = await tx_repo.list_recent_transactions(limit=10)
+    # Recent Transactions (25)
+    recent_txs_raw = await tx_repo.list_recent_transactions(limit=25)
     recent_transactions = []
     for tx in recent_txs_raw:
         player_name = await _resolve_member_name(bot, guild_id, tx.discord_id)
@@ -155,8 +155,8 @@ async def guild_overview(request: Request, guild_id: int):
             "created_at": tx.created_at,
         })
 
-    # Recent Payouts (10)
-    cursor = await conn.execute("SELECT * FROM payouts ORDER BY created_at DESC, id DESC LIMIT 10")
+    # Recent Payouts (25)
+    cursor = await conn.execute("SELECT * FROM payouts ORDER BY created_at DESC, id DESC LIMIT 25")
     payout_rows = await cursor.fetchall()
     recent_payouts = []
     for p in payout_rows:
