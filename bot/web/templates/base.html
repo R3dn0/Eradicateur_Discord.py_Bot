@@ -221,7 +221,7 @@
             </div>
 
             <!-- Center: Role Simulator for DEV Discord users -->
-            {% if is_dev %}
+            {% if current_user and is_dev %}
             <div class="flex items-center space-x-2 bg-amber-950/60 border border-amber-600/70 rounded-xl px-3 py-1.5 shadow-md shadow-amber-950/40">
                 <span class="text-[11px] font-extrabold text-amber-400 uppercase tracking-wider hidden md:inline-flex items-center gap-1.5">
                     <span>👑</span> Dev Role :

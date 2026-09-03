@@ -137,9 +137,9 @@ def create_app(bot) -> FastAPI:
         if "current_user" not in ctx:
             ctx["current_user"] = getattr(request.state, "user", None)
         if "is_dev" not in ctx:
-            user = getattr(request.state, "user", None) or {}
-            user_id = int(user.get("id", 0))
-            ctx["is_dev"] = is_dev_user(bot, user_id)
+            user = getattr(request.state, "user", None)
+            user_id = int(user.get("id", 0)) if user else 0
+            ctx["is_dev"] = is_dev_user(bot, user_id) if user_id else False
         if "simulated_role" not in ctx:
             ctx["simulated_role"] = request.cookies.get("dev_simulated_role", "dev")
         current_locale = get_web_locale(request)
