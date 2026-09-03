@@ -1,0 +1,204 @@
+<div id="transactions-table-container" class="space-y-4">
+    <!-- Stats Banner -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <!-- Card 1: Dette de la guilde -->
+        <div class="bg-darkcard border border-darkborder rounded-2xl p-4 shadow">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                <span>{{ t('card_treasury') }}</span>
+                <span class="text-base">💰</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-1.5">
+                <span class="text-2xl font-black text-amber-400 font-mono">{{ total_owed | format_number }}</span>
+                <span class="text-xs text-amber-400/80 font-bold">Silvers</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1 truncate">{{ t('card_treasury_sub') }}</p>
+        </div>
+
+        <!-- Card 2: Transactions Totales -->
+        <div class="bg-darkcard border border-darkborder rounded-2xl p-4 shadow">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                <span>{{ t('tx_total_count') if t('tx_total_count') != 'tx_total_count' else 'Transactions Totales' }}</span>
+                <span class="text-base">💳</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-2">
+                <span class="text-2xl font-black text-white">{{ stats.total_count }}</span>
+                <span class="text-xs text-slate-400">opérations</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">Journal complet</p>
+        </div>
+
+        <!-- Card 3: Total Crédité -->
+        <div class="bg-darkcard border border-darkborder rounded-2xl p-4 shadow">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                <span>{{ t('tx_total_credits') if t('tx_total_credits') != 'tx_total_credits' else 'Total Crédité' }}</span>
+                <span class="text-base">🟢</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-1.5">
+                <span class="text-2xl font-black text-emerald-400 font-mono">+{{ stats.total_credits | format_number }}</span>
+                <span class="text-xs text-emerald-400/80 font-bold">Silvers</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">Entrées sur soldes</p>
+        </div>
+
+        <!-- Card 4: Total Débité -->
+        <div class="bg-darkcard border border-darkborder rounded-2xl p-4 shadow">
+            <div class="flex items-center justify-between text-slate-400 text-xs font-semibold uppercase tracking-wider">
+                <span>{{ t('tx_total_debits') if t('tx_total_debits') != 'tx_total_debits' else 'Total Débité' }}</span>
+                <span class="text-base">🔴</span>
+            </div>
+            <div class="mt-2 flex items-baseline gap-1.5">
+                <span class="text-2xl font-black text-rose-400 font-mono">{{ stats.total_debits | format_number }}</span>
+                <span class="text-xs text-rose-400/80 font-bold">Silvers</span>
+            </div>
+            <p class="text-[11px] text-slate-500 mt-1">Sorties de guilde</p>
+        </div>
+    </div>
+
+    <!-- Table Container -->
+    <div class="bg-darkcard border border-darkborder rounded-2xl shadow-xl overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left text-sm text-slate-300">
+                <thead class="bg-slate-900/80 text-xs uppercase text-slate-400 font-semibold border-b border-darkborder">
+                    <tr>
+                        <th class="px-5 py-3.5">ID</th>
+                        <th class="px-5 py-3.5">Date & Heure</th>
+                        <th class="px-5 py-3.5">Joueur</th>
+                        <th class="px-5 py-3.5">Type / Réf</th>
+                        <th class="px-5 py-3.5 text-right">Montant</th>
+                        <th class="px-5 py-3.5">Motif / Raison</th>
+                        <th class="px-5 py-3.5">Auteur</th>
+                        <th class="px-5 py-3.5 text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-darkborder">
+                    {% for tx in transactions %}
+                    <tr class="hover:bg-slate-800/40 transition">
+                        <!-- ID -->
+                        <td class="px-5 py-3 font-mono text-xs text-slate-500 font-bold">
+                            #{{ tx.id }}
+                        </td>
+
+                        <!-- Date & Time (2 lines) -->
+                        <td class="px-5 py-3 whitespace-nowrap font-mono">
+                            <div class="text-xs font-semibold text-slate-300">{{ tx.created_at | format_date }}</div>
+                            <div class="text-[11px] text-slate-500 font-medium">{{ tx.created_at | format_time }}</div>
+                        </td>
+
+                        <!-- Player -->
+                        <td class="px-5 py-3">
+                            <div class="flex items-center gap-2">
+                                <a href="/guild/{{ current_guild.id }}/balances/{{ tx.discord_id }}/history" class="font-bold text-white hover:text-indigo-400 transition">
+                                    {{ tx.player_name }}
+                                </a>
+                            </div>
+                            <div class="text-[11px] font-mono text-slate-500">ID: {{ tx.discord_id }}</div>
+                        </td>
+
+                        <!-- Type / Ref -->
+                        <td class="px-5 py-3 whitespace-nowrap">
+                            {% if tx.payout_id %}
+                            <a href="/guild/{{ current_guild.id }}/payouts/{{ tx.payout_id }}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-950/70 text-amber-300 border border-amber-700/60 hover:bg-amber-900 transition">
+                                <span>📜</span>
+                                <span>Payout #{{ tx.payout_id }}</span>
+                            </a>
+                            {% elif tx.amount > 0 %}
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-emerald-950/70 text-emerald-300 border border-emerald-700/60">
+                                <span>🟢</span>
+                                <span>Crédit Manuel</span>
+                            </span>
+                            {% else %}
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-rose-950/70 text-rose-300 border border-rose-700/60">
+                                <span>🔴</span>
+                                <span>Débit Manuel</span>
+                            </span>
+                            {% endif %}
+                        </td>
+
+                        <!-- Amount -->
+                        <td class="px-5 py-3 text-right whitespace-nowrap">
+                            {% if tx.amount > 0 %}
+                            <span class="font-bold font-mono text-emerald-400 text-sm">
+                                +{{ tx.amount | format_number }}
+                            </span>
+                            {% else %}
+                            <span class="font-bold font-mono text-rose-400 text-sm">
+                                {{ tx.amount | format_number }}
+                            </span>
+                            {% endif %}
+                            <span class="text-[11px] text-slate-500 ml-0.5">Silvers</span>
+                        </td>
+
+                        <!-- Reason -->
+                        <td class="px-5 py-3 text-xs text-slate-300 max-w-xs" title="{{ tx.reason }}">
+                            {{ tx.reason | format_reason(current_guild.id, tx.payout_id) }}
+                        </td>
+
+                        <!-- Author -->
+                        <td class="px-5 py-3 text-xs text-slate-400 whitespace-nowrap">
+                            {% if tx.created_by == 0 %}
+                            <span class="inline-flex items-center gap-1 bg-amber-950/70 text-amber-300 border border-amber-700/60 px-2 py-0.5 rounded text-[11px] font-bold">
+                                <span>😎</span> DEV 😎
+                            </span>
+                            {% else %}
+                            <span class="font-medium text-slate-300">{{ tx.creator_name }}</span>
+                            {% if tx.created_by and tx.created_by != 0 %}
+                            <div class="text-[10px] font-mono text-slate-500">{{ tx.created_by }}</div>
+                            {% endif %}
+                            {% endif %}
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="px-5 py-3 text-center whitespace-nowrap">
+                            <a href="/guild/{{ current_guild.id }}/balances/{{ tx.discord_id }}/history" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1.5 rounded-lg border border-darkborder transition font-medium">
+                                Voir Historique ➔
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="px-5 py-12 text-center text-slate-500">
+                            <div class="text-3xl mb-2">💳</div>
+                            <p class="text-sm font-semibold">Aucune transaction trouvée.</p>
+                            <p class="text-xs text-slate-600 mt-1">Modifiez vos filtres ou effectuez une transaction manuelle.</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Bar -->
+        {% if total_pages > 1 %}
+        <div class="p-4 border-t border-darkborder bg-slate-900/40 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+            <div>
+                Affichage de <span class="font-bold text-white">{{ ((current_page - 1) * page_size) + 1 }}</span> à <span class="font-bold text-white">{{ [current_page * page_size, total_items] | min }}</span> sur <span class="font-bold text-white">{{ total_items }}</span> transactions
+            </div>
+            <div class="flex items-center space-x-2">
+                {% if current_page > 1 %}
+                <button 
+                    type="button"
+                    onclick="loadTransactionsPage({{ current_page - 1 }})"
+                    class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-darkborder transition font-medium"
+                >
+                    ← Précédent
+                </button>
+                {% endif %}
+
+                <span class="px-2 py-1 font-semibold text-slate-300">
+                    Page {{ current_page }} / {{ total_pages }}
+                </span>
+
+                {% if current_page < total_pages %}
+                <button 
+                    type="button"
+                    onclick="loadTransactionsPage({{ current_page + 1 }})"
+                    class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg border border-darkborder transition font-medium"
+                >
+                    Suivant →
+                </button>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>

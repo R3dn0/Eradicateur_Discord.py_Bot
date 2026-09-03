@@ -1,3 +1,5 @@
+import logging
+
 import discord
 from discord import app_commands
 from discord.ext import commands
@@ -6,6 +8,8 @@ from bot.main import EradicateurBot
 from bot.repositories.bot_config_repository import BotConfigRepository
 from bot.utils.discord_guards import require_guild_member
 from bot.utils.discord_time import to_discord_timestamp
+
+logger = logging.getLogger("eradicateur_bot.config")
 
 
 class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", key="config_name")):  # type: ignore[call-arg]
@@ -57,6 +61,14 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
             updated_by=interaction.user.id,
         )
 
+        logger.info(
+            "[Discord] User: %s (ID: %s) | Action: CONFIG_NONOTIFICATION_ROLE | Role: %s (%s)",
+            interaction.user.display_name,
+            interaction.user.id,
+            role.name if role else "None",
+            role.id if role else "None",
+        )
+
         if role:
             template = await self.bot.translate(
                 "config_nonotification_role_set", interaction.locale
@@ -106,7 +118,7 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
             value = (
                 (
                     await self.bot.translate(
-                        "config_nonotification_show_updated_by", interaction.locale
+                    "config_nonotification_show_updated_by", interaction.locale
                     )
                 )
                 .replace("{user}", f"<@{config.updated_by}>")
@@ -153,6 +165,14 @@ class ConfigCog(commands.GroupCog, group_name=app_commands.locale_str("config", 
         await bot_config_repo.update_log_channel(
             channel_id=salon.id if salon else None,
             updated_by=interaction.user.id,
+        )
+
+        logger.info(
+            "[Discord] User: %s (ID: %s) | Action: CONFIG_LOG_CHANNEL | Channel: %s (%s)",
+            interaction.user.display_name,
+            interaction.user.id,
+            salon.name if salon else "None",
+            salon.id if salon else "None",
         )
 
         if salon:

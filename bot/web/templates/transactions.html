@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}Historique des Transactions - {{ current_guild.name }}{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div>
+            <h1 class="text-2xl font-black text-white flex items-center gap-2">
+                💳 Historique des Transactions
+            </h1>
+            <p class="text-xs text-slate-400 mt-1">
+                Journal complet des opérations, crédits, débits et distributions de butin
+            </p>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="/guild/{{ current_guild.id }}/balances" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl border border-darkborder transition shadow">
+                💰 Voir les Soldes
+            </a>
+            <a href="/guild/{{ current_guild.id }}/payouts" class="bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold px-4 py-2.5 rounded-xl border border-darkborder transition shadow">
+                📜 Voir les Payouts
+            </a>
+        </div>
+    </div>
+
+    <!-- Search & Filters Toolbar -->
+    <div class="bg-darkcard border border-darkborder rounded-2xl p-4 shadow space-y-3">
+        <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
+            <!-- Search bar with live HTMX and fuzzy match -->
+            <div class="relative flex-1">
+                <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-500">
+                    🔍
+                </span>
+                <input 
+                    type="text" 
+                    id="txSearchInput"
+                    name="q" 
+                    value="{{ query }}"
+                    placeholder="Rechercher par joueur, pseudo ou Discord ID..." 
+                    hx-get="/guild/{{ current_guild.id }}/transactions"
+                    hx-include="#txFilterTypeInput, #txPageInput"
+                    hx-trigger="keyup changed delay:300ms"
+                    hx-target="#transactions-table-container"
+                    class="w-full bg-slate-900 border border-darkborder rounded-xl pl-10 pr-4 py-2.5 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                >
+            </div>
+
+            <!-- Hidden Inputs for HTMX -->
+            <input type="hidden" id="txFilterTypeInput" name="filter" value="{{ filter_type or 'all' }}">
+            <input type="hidden" id="txPageInput" name="page" value="{{ current_page or 1 }}">
+
+            <!-- Filter Pills -->
+            <div class="flex flex-wrap items-center gap-1.5 bg-slate-900/80 p-1.5 rounded-xl border border-darkborder">
+                <button 
+                    type="button"
+                    onclick="setTxFilter('all')"
+                    class="tx-filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if (filter_type or 'all') == 'all' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
+                >
+                    Toutes ({{ stats.total_count }})
+                </button>
+                <button 
+                    type="button"
+                    onclick="setTxFilter('credits')"
+                    class="tx-filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if filter_type == 'credits' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
+                >
+                    🟢 Crédits
+                </button>
+                <button 
+                    type="button"
+                    onclick="setTxFilter('debits')"
+                    class="tx-filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if filter_type == 'debits' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
+                >
+                    🔴 Débits
+                </button>
+                <button 
+                    type="button"
+                    onclick="setTxFilter('payouts')"
+                    class="tx-filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if filter_type == 'payouts' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
+                >
+                    📜 Payouts
+                </button>
+                <button 
+                    type="button"
+                    onclick="setTxFilter('manual')"
+                    class="tx-filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if filter_type == 'manual' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
+                >
+                    ⚡ Manuelles
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dynamic Container -->
+    {% include "partials/transactions_table.html" %}
+</div>
+
+<script>
+    function setTxFilter(type) {
+        document.getElementById('txFilterTypeInput').value = type;
+        document.getElementById('txPageInput').value = 1;
+        
+        // Update active class on pills
+        const pills = document.querySelectorAll('.tx-filter-pill');
+        pills.forEach(p => {
+            p.classList.remove('bg-indigo-600', 'text-white', 'shadow');
+            p.classList.add('text-slate-400', 'hover:text-white', 'hover:bg-slate-800');
+        });
+        
+        if (event && event.target) {
+            event.target.classList.add('bg-indigo-600', 'text-white', 'shadow');
+            event.target.classList.remove('text-slate-400', 'hover:text-white', 'hover:bg-slate-800');
+        }
+
+        htmx.ajax('GET', '/guild/{{ current_guild.id }}/transactions', {
+            target: '#transactions-table-container',
+            values: {
+                q: document.getElementById('txSearchInput').value,
+                filter: type,
+                page: 1
+            }
+        });
+    }
+
+    function loadTransactionsPage(page) {
+        document.getElementById('txPageInput').value = page;
+        htmx.ajax('GET', '/guild/{{ current_guild.id }}/transactions', {
+            target: '#transactions-table-container',
+            values: {
+                q: document.getElementById('txSearchInput').value,
+                filter: document.getElementById('txFilterTypeInput').value,
+                page: page
+            }
+        });
+    }
+</script>
+{% endblock %}

@@ -22,6 +22,7 @@ class Config:
     discord_client_secret: str | None = None
     discord_redirect_uri: str | None = None
     dashboard_allowed_users: list[int] = field(default_factory=list)
+    dashboard_dev_users: list[int] = field(default_factory=list)
 
     @property
     def session_secret(self) -> str:
@@ -51,6 +52,13 @@ class Config:
             int(uid.strip()) for uid in allowed_users_raw.split(",") if uid.strip() and uid.strip().isdigit()
         ]
 
+        dev_users_raw = os.getenv("DEV_DISCORD_USERS", os.getenv("DEV_USER_IDS", "135489084385787905"))
+        dashboard_dev_users = [
+            int(uid.strip()) for uid in dev_users_raw.split(",") if uid.strip() and uid.strip().isdigit()
+        ]
+        if not dashboard_dev_users:
+            dashboard_dev_users = [135489084385787905]
+
         return cls(
             discord_token=token,
             guild_id=guild_ids,
@@ -64,4 +72,5 @@ class Config:
             discord_client_secret=discord_client_secret,
             discord_redirect_uri=discord_redirect_uri,
             dashboard_allowed_users=dashboard_allowed_users,
+            dashboard_dev_users=dashboard_dev_users,
         )

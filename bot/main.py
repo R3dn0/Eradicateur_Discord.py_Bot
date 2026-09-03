@@ -126,6 +126,11 @@ class EradicateurBot(commands.Bot):
         assert self.user is not None
         logger.info("Logged in as %s (id: %s)", self.user, self.user.id)
 
+    async def on_interaction(self, interaction: discord.Interaction) -> None:
+        guild_id = interaction.guild.id if interaction.guild else None
+        with guild_log_context(guild_id):
+            await super().on_interaction(interaction)
+
     async def on_app_command_completion(
         self,
         interaction: discord.Interaction,
@@ -134,16 +139,31 @@ class EradicateurBot(commands.Bot):
         if interaction.guild is None or self.db_manager is None:
             return
 
-        user = interaction.user
-        guild = interaction.guild
-        user_ref = f'{user.id} "{user.display_name}"' if user is not None else "<unknown>"
-        logger.debug(
-            "Command '%s' executed by %s in guild %s \"%s\"",
-            f"/{command.qualified_name}",
-            user_ref,
-            guild.id,
-            guild.name,
-        )
+        with guild_log_context(interaction.guild.id):
+            user = interaction.user
+            guild = interaction.guild
+            user_ref = f'{user.display_name} (ID: {user.id})' if user is not None else "<unknown>"
+
+            params_parts = []
+            try:
+                ns = interaction.namespace
+            except Exception:
+                ns = None
+            if ns is not None:
+                for name, value in vars(ns).items():
+                    if isinstance(value, (discord.Member, discord.User, discord.Role)):
+                        formatted = f"@{value.display_name}"
+                    else:
+                        formatted = str(value)
+                    params_parts.append(f"{name}: {formatted}")
+            params_str = f" | Params: {', '.join(params_parts)}" if params_parts else ""
+
+            logger.debug(
+                "User: %s | Command: /%s%s",
+                user_ref,
+                command.qualified_name,
+                params_str,
+            )
 
         try:
             db = await self.db_manager.get_connection(interaction.guild.id)

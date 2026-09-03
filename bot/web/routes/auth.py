@@ -6,6 +6,7 @@ from fastapi import APIRouter, Form, Request, Response, status
 from fastapi.responses import HTMLResponse, RedirectResponse
 
 from bot.web.auth import (
+    SESSION_COOKIE_NAME,
     check_login_rate_limit,
     clear_auth_cookie,
     create_csrf_token,
@@ -16,9 +17,11 @@ from bot.web.auth import (
     is_user_authorized,
     record_login_failure,
     record_login_success,
+    revoke_session_token,
     set_user_auth_cookie,
     verify_csrf_token,
 )
+from bot.web.i18n import get_web_locale, translate_web
 
 logger = logging.getLogger("eradicateur_bot.web.auth")
 router = APIRouter(tags=["Auth"])
@@ -81,14 +84,15 @@ async def discord_callback(request: Request, code: str = "", state: str = ""):
     secret = getattr(bot.config, "session_secret", None)
     stored_state = request.cookies.get("discord_oauth_state")
 
+    locale = get_web_locale(request)
     if not state or not stored_state or state != stored_state:
-        logger.warning("Discord OAuth2 state mismatch from IP %s", request.client.host if request.client else "unknown")
+        logger.warning("Discord OAuth2 state mismatch")
         return templates.TemplateResponse(
             request=request,
             name="login.html",
             context={
                 "bot": bot,
-                "error": "Échec de validation de sécurité OAuth2 (State mismatch). Veuillez réessayer.",
+                "error": str(translate_web("auth_err_state_mismatch", locale=locale)),
                 "discord_oauth_enabled": True,
                 "password_login_enabled": bool(getattr(bot.config, "dashboard_token", None)),
             },
@@ -106,7 +110,7 @@ async def discord_callback(request: Request, code: str = "", state: str = ""):
             name="login.html",
             context={
                 "bot": bot,
-                "error": "Impossible de valider la connexion auprès de Discord. Vérifiez la configuration.",
+                "error": str(translate_web("auth_err_discord_exchange", locale=locale)),
                 "discord_oauth_enabled": True,
                 "password_login_enabled": bool(getattr(bot.config, "dashboard_token", None)),
             },
@@ -121,7 +125,7 @@ async def discord_callback(request: Request, code: str = "", state: str = ""):
             name="login.html",
             context={
                 "bot": bot,
-                "error": "Impossible de récupérer les informations de votre profil Discord.",
+                "error": str(translate_web("auth_err_discord_profile", locale=locale)),
                 "discord_oauth_enabled": True,
                 "password_login_enabled": bool(getattr(bot.config, "dashboard_token", None)),
             },
@@ -139,19 +143,18 @@ async def discord_callback(request: Request, code: str = "", state: str = ""):
     )
 
     # Check Whitelist authorization
-    if not is_user_authorized(bot, user_id):
+    if not await is_user_authorized(bot, user_id):
         logger.warning(
-            "Unauthorized Discord login attempt: %s (ID: %s) from IP %s",
+            "Unauthorized Discord login attempt: %s (ID: %s)",
             display_name,
             user_id,
-            request.client.host if request.client else "unknown",
         )
         return templates.TemplateResponse(
             request=request,
             name="login.html",
             context={
                 "bot": bot,
-                "error": f"Accès non autorisé : Le compte Discord « {display_name} » (ID: {user_id}) n'est pas dans la liste des administrateurs autorisés.",
+                "error": str(translate_web("auth_err_unauthorized", locale=locale, display_name=display_name, user_id=user_id)),
                 "discord_oauth_enabled": True,
                 "password_login_enabled": bool(getattr(bot.config, "dashboard_token", None)),
             },
@@ -187,8 +190,9 @@ async def login_submit(
     expected_token = getattr(bot.config, "dashboard_token", None) if bot else None
 
     # Rate limiting check (max 5 attempts per minute per IP)
+    locale = get_web_locale(request)
     if not check_login_rate_limit(request, max_attempts=5, window_seconds=60):
-        logger.warning("Rate limit exceeded for login attempt from IP %s", request.client.host if request.client else "unknown")
+        logger.warning("Rate limit exceeded for login attempt")
         if secret:
             request.state.csrf_token = create_csrf_token(secret)
         return templates.TemplateResponse(
@@ -196,7 +200,7 @@ async def login_submit(
             name="login.html",
             context={
                 "bot": bot,
-                "error": "Trop de tentatives de connexion échouées. Veuillez patienter 60 secondes.",
+                "error": str(translate_web("auth_err_rate_limit", locale=locale)),
                 "discord_oauth_enabled": bool(getattr(bot.config, "discord_client_id", None)),
                 "password_login_enabled": bool(expected_token),
             },
@@ -206,7 +210,7 @@ async def login_submit(
     # Validate CSRF token for login if token is configured
     if secret and csrf_token:
         if not verify_csrf_token(csrf_token, secret):
-            logger.warning("Invalid CSRF token during login from IP %s", request.client.host if request.client else "unknown")
+            logger.warning("Invalid CSRF token during login")
 
     # Constant-time comparison to prevent timing attacks
     if not expected_token or not hmac.compare_digest(token.strip(), expected_token.strip()):
@@ -218,7 +222,7 @@ async def login_submit(
             name="login.html",
             context={
                 "bot": bot,
-                "error": "Mot de passe / Token invalide. Veuillez réessayer.",
+                "error": str(translate_web("auth_err_invalid_token", locale=locale)),
                 "discord_oauth_enabled": bool(getattr(bot.config, "discord_client_id", None)),
                 "password_login_enabled": bool(expected_token),
             },
@@ -226,7 +230,7 @@ async def login_submit(
         )
 
     record_login_success(request)
-    logger.info("Successful password login to dashboard from IP %s", request.client.host if request.client else "unknown")
+    logger.info("Successful password login to dashboard")
 
     user_payload = {
         "id": 0,
@@ -244,8 +248,29 @@ async def login_submit(
 
 @router.get("/logout")
 async def logout(request: Request):
+    cookie = request.cookies.get(SESSION_COOKIE_NAME)
+    if cookie:
+        revoke_session_token(cookie)
     response = RedirectResponse(url="/login", status_code=status.HTTP_302_FOUND)
     clear_auth_cookie(response)
+    return response
+
+
+@router.get("/set-language/{lang}")
+async def set_language(request: Request, lang: str):
+    referer = request.headers.get("Referer", "/")
+    # Prevent open redirect
+    if not referer.startswith("/") and not referer.startswith(str(request.base_url)):
+        referer = "/"
+    response = RedirectResponse(url=referer, status_code=status.HTTP_302_FOUND)
+    if lang in ["fr", "en"]:
+        response.set_cookie(
+            key="dashboard_lang",
+            value=lang,
+            max_age=365 * 24 * 3600,
+            httponly=False,
+            samesite="lax",
+        )
     return response
 
 

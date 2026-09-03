@@ -51,7 +51,7 @@ async def send_bulk_dm(
             continue
 
         if context:
-            embed.set_footer(text=context)
+            embed.add_field(name="\u200b", value=context, inline=False)
 
         try:
             await member.send(embed=embed)
