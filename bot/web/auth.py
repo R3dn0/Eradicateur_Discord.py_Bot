@@ -18,6 +18,35 @@ CSRF_MAX_AGE = 86400  # 24 hours
 
 # In-memory sliding-window rate limiter for login
 _login_attempts: dict[str, list[float]] = {}
+# In-memory revocation cache for logged-out session tokens
+_revoked_tokens: dict[str, float] = {}
+
+
+def revoke_session_token(token: str | None) -> None:
+    """Revoke a session token upon logout."""
+    if not token:
+        return
+    token_hash = hashlib.sha256(token.encode()).hexdigest()
+    now = time.time()
+    _revoked_tokens[token_hash] = now + SESSION_MAX_AGE
+    if len(_revoked_tokens) > 500:
+        for k, expiry in list(_revoked_tokens.items()):
+            if now > expiry:
+                _revoked_tokens.pop(k, None)
+
+
+def is_session_token_revoked(token: str | None) -> bool:
+    """Check if a session token was explicitly revoked."""
+    if not token:
+        return False
+    token_hash = hashlib.sha256(token.encode()).hexdigest()
+    expiry = _revoked_tokens.get(token_hash)
+    if expiry is None:
+        return False
+    if time.time() > expiry:
+        _revoked_tokens.pop(token_hash, None)
+        return False
+    return True
 
 
 def _get_client_ip(request: Request) -> str:
@@ -87,6 +116,8 @@ def create_user_session_token(user_data: dict, secret: str) -> str:
 
 def decode_user_session_token(session_cookie: str | None, secret: str | None) -> dict | None:
     if not secret or not session_cookie:
+        return None
+    if is_session_token_revoked(session_cookie):
         return None
     data = _verify_data(session_cookie, secret)
     if not data:
@@ -195,10 +226,10 @@ def clear_auth_cookie(response: Response) -> None:
     )
 
 
-def is_user_authorized(bot, user_id: int, user_roles: list[int] | None = None) -> bool:
+async def is_user_authorized(bot, user_id: int, user_roles: list[int] | None = None) -> bool:
     """
     Check if a Discord user is authorized to access the dashboard.
-    Enforces whitelist: DASHBOARD_ALLOWED_USERS, dev accounts, or server admins.
+    Enforces whitelist: DASHBOARD_ALLOWED_USERS, dev accounts, server owner, server admins, leaders, or officers.
     """
     if not bot:
         return True
@@ -212,8 +243,26 @@ def is_user_authorized(bot, user_id: int, user_roles: list[int] | None = None) -
             if getattr(guild, "owner_id", None) == user_id:
                 return True
             member = guild.get_member(user_id)
+            if not member and hasattr(guild, "fetch_member"):
+                try:
+                    member = await guild.fetch_member(user_id)
+                except Exception:
+                    member = None
             if member and getattr(member, "guild_permissions", None) and member.guild_permissions.administrator:
                 return True
+            if member and hasattr(bot, "db_manager") and bot.db_manager:
+                try:
+                    from bot.repositories.payout_config_repository import PayoutConfigRepository
+
+                    conn = await bot.db_manager.get_connection(guild.id)
+                    payout_cfg_repo = PayoutConfigRepository(conn)
+                    cfg = await payout_cfg_repo.get_config()
+                    if cfg.leader_role_id and member.get_role(cfg.leader_role_id):
+                        return True
+                    if cfg.officer_role_id and member.get_role(cfg.officer_role_id):
+                        return True
+                except Exception:
+                    pass
     return False
 
 
