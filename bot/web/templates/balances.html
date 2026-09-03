@@ -14,16 +14,27 @@
                 {{ t('total_debt') }}: <span class="font-bold text-amber-400 font-mono">{{ total_owed | format_number }} {{ t('silvers') }}</span>
             </p>
         </div>
-        {% if not user_perms or user_perms.can_manage_balances %}
-        <button 
-            data-discord-id=""
-            data-member-name=""
-            data-operation="credit"
-            class="js-tx-btn bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition shadow flex items-center space-x-2 cursor-pointer"
-        >
-            <span>{{ t('new_manual_tx_btn') }}</span>
-        </button>
-        {% endif %}
+        <div class="flex items-center gap-3">
+            <a 
+                href="/guild/{{ current_guild.id }}/balances/export.csv" 
+                class="bg-slate-800 hover:bg-slate-700 text-slate-200 font-semibold text-sm px-3.5 py-2.5 rounded-xl border border-darkborder transition shadow flex items-center space-x-2"
+                title="{{ t('btn_export_csv') }}"
+            >
+                <span>📥</span>
+                <span>{{ t('btn_export_csv') }}</span>
+            </a>
+            {% if not user_perms or user_perms.can_manage_balances %}
+            <button 
+                type="button"
+                data-discord-id=""
+                data-member-name=""
+                data-operation="credit"
+                class="js-tx-btn bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-4 py-2.5 rounded-xl transition shadow flex items-center space-x-2 cursor-pointer"
+            >
+                <span>+ {{ t('new_manual_tx_btn') }}</span>
+            </button>
+            {% endif %}
+        </div>
     </div>
 
     <!-- Search & Filters Toolbar -->
@@ -79,7 +90,7 @@
                     onclick="setBalanceFilter('left')"
                     class="filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if filter_type == 'left' %}bg-amber-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
                 >
-                    {{ t('filter_left') }} ({{ stats.left if stats else 0 }})
+                    🚪 {{ t('filter_left') }} ({{ stats.left if stats else 0 }})
                 </button>
             </div>
         </div>
@@ -111,11 +122,11 @@
                     <div class="grid grid-cols-2 gap-3">
                         <label class="flex items-center space-x-2 bg-slate-900 border border-darkborder p-3 rounded-xl cursor-pointer hover:border-emerald-500/50 transition">
                             <input type="radio" name="operation" value="credit" id="opCredit" checked onchange="updateOperationUI()" class="text-indigo-600 focus:ring-indigo-500">
-                            <span class="text-sm font-bold text-emerald-400">{{ t('credit_add') }}</span>
+                            <span class="text-sm font-bold text-emerald-400">🟢 {{ t('credit_add') }}</span>
                         </label>
                         <label class="flex items-center space-x-2 bg-slate-900 border border-darkborder p-3 rounded-xl cursor-pointer hover:border-red-500/50 transition">
                             <input type="radio" name="operation" value="debit" id="opDebit" onchange="updateOperationUI()" class="text-indigo-600 focus:ring-indigo-500">
-                            <span class="text-sm font-bold text-red-400">{{ t('debit_sub') }}</span>
+                            <span class="text-sm font-bold text-red-400">🔴 {{ t('debit_sub') }}</span>
                         </label>
                     </div>
                 </div>
@@ -190,7 +201,7 @@
                         {{ t('btn_cancel') }}
                     </button>
                     <button type="button" onclick="goToConfirmationStep()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-sm px-5 py-2.5 rounded-xl shadow transition flex items-center space-x-1">
-                        <span>{{ t('btn_verify_recap') }}</span>
+                        <span>{{ t('btn_verify_recap') }} ➔</span>
                     </button>
                 </div>
             </div>
@@ -246,10 +257,10 @@
 
                 <div class="flex items-center justify-between pt-2">
                     <button type="button" onclick="goToInputStep()" class="px-4 py-2.5 rounded-xl text-sm text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 transition">
-                        {{ t('btn_edit_input') }}
+                        <span>← {{ t('btn_edit_input') }}</span>
                     </button>
                     <button type="submit" onclick="isTxConfirmed = true;" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-emerald-950/50 transition flex items-center space-x-2">
-                        <span>{{ t('btn_confirm_apply') }}</span>
+                        <span>✅ {{ t('btn_confirm_apply') }}</span>
                     </button>
                 </div>
             </div>
@@ -363,10 +374,12 @@
             document.getElementById('modalTitle').innerHTML = '<span>🔴</span> {{ t("debit_player") }}';
             label.innerHTML = '{{ t("reason_debit_help") }}';
             input.placeholder = '{{ t("reason_debit_placeholder") }}';
+            input.required = false;
         } else {
             document.getElementById('modalTitle').innerHTML = '<span>🟢</span> {{ t("credit_player") }}';
-            label.innerHTML = '{{ t("reason_credit_help") }}';
+            label.innerHTML = '{{ t("reason_credit_help") }} <span class="text-rose-400 font-bold">*</span>';
             input.placeholder = '{{ t("reason_credit_placeholder") }}';
+            input.required = true;
         }
     }
 
