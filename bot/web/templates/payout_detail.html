@@ -7,7 +7,7 @@
     <!-- Breadcrumb -->
     <div>
         <a href="/guild/{{ current_guild.id }}/payouts" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center space-x-1">
-            <span>{{ t('back_to_payouts') }}</span>
+            <span>← {{ t('back_to_payouts') }}</span>
         </a>
     </div>
 
@@ -16,14 +16,17 @@
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-darkborder pb-6">
             <div>
                 <div class="flex items-center space-x-3">
-                    <h1 class="text-2xl font-black text-white">{{ t('payout_num') }}{{ payout.id }}</h1>
+                    <span class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl text-lg font-black bg-amber-950/70 text-amber-300 border border-amber-700/60 font-mono shadow">
+                        <span>📜</span>
+                        <span>Payout #{{ payout.id }}</span>
+                    </span>
                     {% if payout.voided %}
                     <span class="bg-red-950/80 text-red-300 border border-red-800 text-xs px-3 py-1 rounded-full font-bold">
-                        {{ t('voided_payout_badge') }}
+                        🚫 {{ t('voided_payout_badge') }}
                     </span>
                     {% else %}
                     <span class="bg-emerald-950/80 text-emerald-300 border border-emerald-800 text-xs px-3 py-1 rounded-full font-bold">
-                        {{ t('valid_payout_badge') }}
+                        ✅ {{ t('valid_payout_badge') }}
                     </span>
                     {% endif %}
                 </div>
@@ -40,34 +43,44 @@
             <!-- Void Action Button -->
             {% if not payout.voided and (not user_perms or user_perms.can_manage_payouts) %}
             <button type="button" onclick="openVoidModal()" class="bg-red-950/80 hover:bg-red-900 text-red-200 border border-red-700 text-sm font-bold px-4 py-2.5 rounded-xl transition shadow flex items-center space-x-2 cursor-pointer">
-                <span>{{ t('void_payout_btn') }}</span>
+                <span>🚫 {{ t('void_payout_btn') }}</span>
             </button>
             {% endif %}
         </div>
 
         <!-- Breakdown Grid -->
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-            <div class="bg-slate-900/60 p-4 rounded-xl border border-darkborder">
+        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div class="bg-slate-900/60 p-3.5 rounded-xl border border-darkborder">
                 <span class="text-xs text-slate-400 font-medium uppercase">{{ t('card_bag_silvers') }}</span>
-                <p class="text-lg font-black text-amber-400 font-mono mt-1">{{ payout.bag_silvers | format_number }}</p>
+                <p class="text-base sm:text-lg font-black text-amber-400 font-mono mt-1">{{ payout.bag_silvers | format_number }}</p>
             </div>
-            <div class="bg-slate-900/60 p-4 rounded-xl border border-darkborder">
+            <div class="bg-slate-900/60 p-3.5 rounded-xl border border-darkborder">
                 <span class="text-xs text-slate-400 font-medium uppercase">{{ t('card_item_value') }}</span>
-                <p class="text-lg font-black text-slate-200 font-mono mt-1">{{ payout.item_market_value | format_number }}</p>
+                <p class="text-base sm:text-lg font-black text-slate-200 font-mono mt-1">{{ payout.item_market_value | format_number }}</p>
             </div>
-            <div class="bg-slate-900/60 p-4 rounded-xl border border-darkborder">
+            <div class="bg-slate-900/60 p-3.5 rounded-xl border border-darkborder">
                 <span class="text-xs text-slate-400 font-medium uppercase">{{ t('card_activity_cost') }}</span>
-                <p class="text-lg font-black text-red-400 font-mono mt-1">-{{ payout.activity_cost | format_number }}</p>
+                <p class="text-base sm:text-lg font-black text-red-400 font-mono mt-1">-{{ payout.activity_cost | format_number }}</p>
             </div>
-            <div class="bg-slate-900/60 p-4 rounded-xl border border-darkborder">
+            <div class="bg-slate-900/60 p-3.5 rounded-xl border border-darkborder">
+                <span class="text-xs text-slate-400 font-medium uppercase">{{ t('payout_sim_buyback') }}</span>
+                <p class="text-base sm:text-lg font-black text-slate-300 font-mono mt-1">{{ payout.buyback_value | format_number }}</p>
+            </div>
+            <div class="bg-slate-900/60 p-3.5 rounded-xl border border-darkborder">
                 <span class="text-xs text-slate-400 font-medium uppercase">{{ t('card_net_per_player') }}</span>
-                <p class="text-lg font-black text-emerald-400 font-mono mt-1">{{ payout.amount_per_player | format_number }}</p>
+                <p class="text-base sm:text-lg font-black text-emerald-400 font-mono mt-1">{{ payout.amount_per_player | format_number }}</p>
             </div>
         </div>
 
         <!-- Taxes applied -->
         <div class="bg-slate-900/40 p-4 rounded-xl border border-darkborder">
-            <h3 class="text-xs font-bold text-slate-300 uppercase mb-2">{{ t('taxes_applied_title') }}</h3>
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-3 pb-2 border-b border-darkborder">
+                <h3 class="text-xs font-bold text-slate-300 uppercase">{{ t('taxes_applied_title') }}</h3>
+                <div class="text-xs flex items-center gap-1.5">
+                    <span class="text-slate-400 font-medium">{{ t('guild_gain_label') }} :</span>
+                    <span class="font-bold font-mono text-amber-400 text-sm">+{{ ((payout.bag_silvers + [payout.item_market_value - payout.activity_cost, 0] | max) * payout.tax_guild) | format_number }} {{ t('silvers') }}</span>
+                </div>
+            </div>
             <div class="grid grid-cols-3 gap-4 text-xs">
                 <div><span class="text-slate-400">{{ t('tax_market_label') }}</span> <span class="font-bold text-slate-200">{{ payout.tax_market | format_percent }}</span></div>
                 <div><span class="text-slate-400">{{ t('tax_guild_label') }}</span> <span class="font-bold text-slate-200">{{ payout.tax_guild | format_percent }}</span></div>
@@ -100,7 +113,7 @@
                             </td>
                             <td class="px-5 py-3 text-center">
                                 <a href="/guild/{{ current_guild.id }}/balances/{{ pt.discord_id }}/history" class="text-xs text-indigo-400 hover:text-indigo-300">
-                                    {{ t('view_balance_link') }}
+                                    {{ t('view_balance_link') }} ➔
                                 </a>
                             </td>
                         </tr>
@@ -124,14 +137,17 @@
         </div>
 
         <div class="bg-red-950/50 border border-red-900 rounded-xl p-4 text-xs text-red-200 space-y-1">
-            <p class="font-bold text-sm text-red-300">{{ t('void_confirm_warning_title') }}</p>
+            <p class="font-bold text-sm text-red-300"><span>⚠️</span> {{ t('void_confirm_warning_title') }}</p>
             <p>{{ t('void_confirm_warning_text') }}</p>
         </div>
 
         <div class="bg-slate-900/80 border border-darkborder rounded-xl p-4 space-y-3 text-xs">
             <div class="flex justify-between items-center border-b border-darkborder pb-2">
                 <span class="text-slate-400 uppercase font-medium">{{ t('void_payout_concerned') }}</span>
-                <span class="font-mono font-bold text-white text-sm">#{{ payout.id }}</span>
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-lg text-xs font-bold bg-amber-950/70 text-amber-300 border border-amber-700/60 font-mono">
+                    <span>📜</span>
+                    <span>Payout #{{ payout.id }}</span>
+                </span>
             </div>
             <div class="flex justify-between items-center border-b border-darkborder pb-2">
                 <span class="text-slate-400 uppercase font-medium">{{ t('col_created_by') }}</span>
@@ -157,7 +173,7 @@
                 {{ t('btn_cancel') }}
             </button>
             <button type="submit" class="bg-red-600 hover:bg-red-500 text-white font-bold text-sm px-5 py-2.5 rounded-xl shadow-lg shadow-red-950/50 transition flex items-center space-x-2">
-                <span>{{ t('void_confirm_btn') }}</span>
+                <span>🚫 {{ t('void_confirm_btn') }}</span>
             </button>
         </form>
     </div>
