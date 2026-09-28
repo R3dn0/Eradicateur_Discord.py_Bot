@@ -523,10 +523,8 @@ async def require_auth(
 
 def is_dev_user(bot, user_id: int) -> bool:
     """Check if the user ID is in the whitelist of developer accounts."""
-    if not bot:
+    if not bot or not user_id:
         return False
-    if user_id == 0:
-        return True
     dev_users = getattr(bot.config, "dashboard_dev_users", None) or [135489084385787905]
     return user_id in dev_users
 

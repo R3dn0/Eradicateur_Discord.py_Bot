@@ -1227,6 +1227,42 @@ def test_csv_exports(temp_env):
     assert "100000" in resp_payout_csv.text
 
 
+def test_transactions_view_and_pagination(temp_env):
+    mock_bot, app, client = temp_env
+    auth_headers = {"Authorization": "Bearer secret-dashboard-token"}
+    guild_id = 123456
+
+    # 1. Create a few transactions
+    for i in range(5):
+        client.post(
+            f"/guild/{guild_id}/balances/transaction",
+            data={
+                "discord_id": 888100 + i,
+                "operation": "credit",
+                "amount": 10000 * (i + 1),
+                "reason": f"Transaction test {i}",
+            },
+            headers=auth_headers,
+        )
+
+    # 2. View transactions page
+    resp = client.get(f"/guild/{guild_id}/transactions", headers=auth_headers)
+    assert resp.status_code == 200
+    assert "Transaction test 0" in resp.text
+    assert "Transaction test 4" in resp.text
+
+    # 3. Test filter=credits
+    resp_credits = client.get(f"/guild/{guild_id}/transactions?filter=credits", headers=auth_headers)
+    assert resp_credits.status_code == 200
+    assert "Transaction test 0" in resp_credits.text
+
+    # 4. Test search query
+    resp_search = client.get(f"/guild/{guild_id}/transactions?q=888102", headers=auth_headers)
+    assert resp_search.status_code == 200
+    assert "888102" in resp_search.text
+
+
+
 
 
 
