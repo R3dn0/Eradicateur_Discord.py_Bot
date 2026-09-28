@@ -57,45 +57,45 @@
     <!-- Table Container -->
     <div class="bg-darkcard border border-darkborder rounded-2xl shadow-xl overflow-hidden">
         <div class="overflow-x-auto">
-            <table class="w-full text-left text-sm text-slate-300">
+            <table class="w-full table-fixed min-w-[1024px] text-left text-sm text-slate-300">
                 <thead class="bg-slate-900/80 text-xs uppercase text-slate-400 font-semibold border-b border-darkborder">
                     <tr>
-                        <th class="px-5 py-3.5">ID</th>
-                        <th class="px-5 py-3.5">Date & Heure</th>
-                        <th class="px-5 py-3.5">Joueur</th>
-                        <th class="px-5 py-3.5">Type / Réf</th>
-                        <th class="px-5 py-3.5 text-right">Montant</th>
-                        <th class="px-5 py-3.5">Motif / Raison</th>
-                        <th class="px-5 py-3.5">Auteur</th>
-                        <th class="px-5 py-3.5 text-center">Action</th>
+                        <th class="w-[5%] px-3 py-3.5">ID</th>
+                        <th class="w-[11%] px-3 py-3.5">Date & Heure</th>
+                        <th class="w-[18%] px-4 py-3.5">Joueur</th>
+                        <th class="w-[13%] px-4 py-3.5">Type / Réf</th>
+                        <th class="w-[13%] px-4 py-3.5 text-right">Montant</th>
+                        <th class="w-[17%] px-4 py-3.5">Motif / Raison</th>
+                        <th class="w-[11%] px-4 py-3.5">Auteur</th>
+                        <th class="w-[12%] px-4 py-3.5 text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-darkborder">
                     {% for tx in transactions %}
                     <tr class="hover:bg-slate-800/40 transition">
                         <!-- ID -->
-                        <td class="px-5 py-3 font-mono text-xs text-slate-500 font-bold">
+                        <td class="px-3 py-3 font-mono text-xs text-slate-500 font-bold truncate">
                             #{{ tx.id }}
                         </td>
 
                         <!-- Date & Time (2 lines) -->
-                        <td class="px-5 py-3 whitespace-nowrap font-mono">
+                        <td class="px-3 py-3 whitespace-nowrap font-mono">
                             <div class="text-xs font-semibold text-slate-300">{{ tx.created_at | format_date }}</div>
                             <div class="text-[11px] text-slate-500 font-medium">{{ tx.created_at | format_time }}</div>
                         </td>
 
                         <!-- Player -->
-                        <td class="px-5 py-3">
-                            <div class="flex items-center gap-2">
-                                <a href="/guild/{{ current_guild.id }}/balances/{{ tx.discord_id }}/history" class="font-bold text-white hover:text-indigo-400 transition">
+                        <td class="px-4 py-3 min-w-0">
+                            <div class="flex items-center gap-2 truncate">
+                                <a href="/guild/{{ current_guild.id }}/balances/{{ tx.discord_id }}/history" class="font-bold text-white hover:text-indigo-400 transition truncate">
                                     {{ tx.player_name }}
                                 </a>
                             </div>
-                            <div class="text-[11px] font-mono text-slate-500">ID: {{ tx.discord_id }}</div>
+                            <div class="text-[11px] font-mono text-slate-500 truncate">ID: {{ tx.discord_id }}</div>
                         </td>
 
                         <!-- Type / Ref -->
-                        <td class="px-5 py-3 whitespace-nowrap">
+                        <td class="px-4 py-3 whitespace-nowrap">
                             {% if tx.payout_id %}
                             <a href="/guild/{{ current_guild.id }}/payouts/{{ tx.payout_id }}" class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-bold bg-amber-950/70 text-amber-300 border border-amber-700/60 hover:bg-amber-900 transition">
                                 <span>📜</span>
@@ -115,7 +115,7 @@
                         </td>
 
                         <!-- Amount -->
-                        <td class="px-5 py-3 text-right whitespace-nowrap">
+                        <td class="px-4 py-3 text-right whitespace-nowrap">
                             {% if tx.amount > 0 %}
                             <span class="font-bold font-mono text-emerald-400 text-sm">
                                 +{{ tx.amount | format_number }}
@@ -129,28 +129,28 @@
                         </td>
 
                         <!-- Reason -->
-                        <td class="px-5 py-3 text-xs text-slate-300 max-w-xs" title="{{ tx.reason }}">
+                        <td class="px-4 py-3 text-xs text-slate-300 truncate" title="{{ tx.reason }}">
                             {{ tx.reason | format_reason(current_guild.id, tx.payout_id) }}
                         </td>
 
                         <!-- Author -->
-                        <td class="px-5 py-3 text-xs text-slate-400 whitespace-nowrap">
+                        <td class="px-4 py-3 text-xs text-slate-400 whitespace-nowrap min-w-0 truncate">
                             {% if tx.created_by == 0 %}
                             <span class="inline-flex items-center gap-1 bg-amber-950/70 text-amber-300 border border-amber-700/60 px-2 py-0.5 rounded text-[11px] font-bold">
                                 <span>😎</span> DEV 😎
                             </span>
                             {% else %}
-                            <span class="font-medium text-slate-300">{{ tx.creator_name }}</span>
+                            <div class="font-medium text-slate-300 truncate">{{ tx.creator_name }}</div>
                             {% if tx.created_by and tx.created_by != 0 %}
-                            <div class="text-[10px] font-mono text-slate-500">{{ tx.created_by }}</div>
+                            <div class="text-[10px] font-mono text-slate-500 truncate">{{ tx.created_by }}</div>
                             {% endif %}
                             {% endif %}
                         </td>
 
                         <!-- Actions -->
-                        <td class="px-5 py-3 text-center whitespace-nowrap">
-                            <a href="/guild/{{ current_guild.id }}/balances/{{ tx.discord_id }}/history" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1.5 rounded-lg border border-darkborder transition font-medium">
-                                Voir Historique ➔
+                        <td class="px-4 py-3 text-center whitespace-nowrap">
+                            <a href="/guild/{{ current_guild.id }}/balances/{{ tx.discord_id }}/history" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2 py-1.5 rounded-lg border border-darkborder transition font-medium inline-block">
+                                Historique ➔
                             </a>
                         </td>
                     </tr>
