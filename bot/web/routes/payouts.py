@@ -187,7 +187,6 @@ async def payout_detail(request: Request, guild_id: int, payout_id: int):
         raise HTTPException(status_code=404, detail="Payout not found")
 
     transactions = await tx_repo.list_transactions_for_payout(payout_id)
-    transactions = await tx_repo.list_transactions_for_payout(payout_id)
     from bot.web.routes.balances import _resolve_creator_name
     creator_name = await _resolve_creator_name(bot, guild_id, payout.created_by)
 

@@ -107,3 +107,23 @@ async def test_list_transactions_for_payout(repo):
     assert len(txs) == 2
     assert txs[0].id == txn_id_1
     assert txs[1].id == txn_id_2
+
+
+@pytest.mark.asyncio
+async def test_count_transactions_and_filters(repo):
+    await repo.add_transaction(discord_id=100, amount=50, reason="credit 1", created_by=1)
+    await repo.add_transaction(discord_id=100, amount=-20, reason="debit 1", created_by=1)
+    await repo.add_transaction(discord_id=200, amount=100, reason="payout tx", created_by=1, payout_id=10)
+
+    assert await repo.count_transactions("all") == 3
+    assert await repo.count_transactions("credits") == 2
+    assert await repo.count_transactions("debits") == 1
+    assert await repo.count_transactions("payouts") == 1
+    assert await repo.count_transactions("manual") == 2
+
+    # Test pagination with list_all_transactions
+    page_1 = await repo.list_all_transactions(limit=2, offset=0)
+    page_2 = await repo.list_all_transactions(limit=2, offset=2)
+    assert len(page_1) == 2
+    assert len(page_2) == 1
+

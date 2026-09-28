@@ -5,7 +5,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 
 from bot.repositories.transaction_repository import TransactionRepository
 from bot.web.auth import get_user_guild_permissions, require_auth
-from bot.web.routes.balances import _resolve_member_name
+from bot.web.routes.balances import _resolve_members_bulk
 from bot.web.routes.dashboard import ensure_valid_guild, get_available_guilds
 from bot.utils.fuzzy_search import fuzzy_match_member
 
@@ -42,42 +42,80 @@ async def list_transactions(
     stats = await tx_repo.get_transaction_stats()
     total_owed = await tx_repo.get_total_owed()
 
-    # Fetch transactions matching database filter
-    raw_txs = await tx_repo.list_all_transactions(limit=None, filter_type=filter_type)
-
-    from bot.web.routes.balances import _resolve_creator_name, _resolve_member_name
-
-    # Enrich transactions
-    enriched_txs = []
-    for tx in raw_txs:
-        player_name = await _resolve_member_name(bot, guild_id, tx.discord_id)
-        creator_name = await _resolve_creator_name(bot, guild_id, tx.created_by)
-
-        # Apply fuzzy search filter if specified
-        if q and not fuzzy_match_member(q, player_name, tx.discord_id):
-            continue
-
-        tx_kind = "payout" if tx.payout_id else ("credit" if tx.amount > 0 else "debit")
-
-        enriched_txs.append({
-            "id": tx.id,
-            "discord_id": tx.discord_id,
-            "player_name": player_name,
-            "amount": tx.amount,
-            "reason": tx.reason,
-            "payout_id": tx.payout_id,
-            "created_by": tx.created_by,
-            "creator_name": creator_name,
-            "created_at": tx.created_at,
-            "kind": tx_kind,
-        })
-
     page_size = 40
-    total_items = len(enriched_txs)
-    total_pages = max(1, math.ceil(total_items / page_size))
-    current_page = min(page, total_pages)
-    start_idx = (current_page - 1) * page_size
-    paginated_txs = enriched_txs[start_idx : start_idx + page_size]
+    search_query = q.strip()
+
+    if not search_query:
+        # Fast path: database-level pagination
+        total_items = await tx_repo.count_transactions(filter_type=filter_type)
+        total_pages = max(1, math.ceil(total_items / page_size))
+        current_page = min(page, total_pages)
+        start_idx = (current_page - 1) * page_size
+
+        raw_txs = await tx_repo.list_all_transactions(
+            limit=page_size,
+            offset=start_idx,
+            filter_type=filter_type,
+        )
+
+        player_ids = {tx.discord_id for tx in raw_txs}
+        creator_ids = {tx.created_by for tx in raw_txs}
+
+        resolved_players = await _resolve_members_bulk(bot, guild_id, player_ids, is_creator=False)
+        resolved_creators = await _resolve_members_bulk(bot, guild_id, creator_ids, is_creator=True)
+
+        paginated_txs = []
+        for tx in raw_txs:
+            player_name = resolved_players.get(tx.discord_id, f"User {tx.discord_id}")
+            creator_name = resolved_creators.get(tx.created_by, f"User {tx.created_by}")
+            tx_kind = "payout" if tx.payout_id else ("credit" if tx.amount > 0 else "debit")
+            paginated_txs.append({
+                "id": tx.id,
+                "discord_id": tx.discord_id,
+                "player_name": player_name,
+                "amount": tx.amount,
+                "reason": tx.reason,
+                "payout_id": tx.payout_id,
+                "created_by": tx.created_by,
+                "creator_name": creator_name,
+                "created_at": tx.created_at,
+                "kind": tx_kind,
+            })
+    else:
+        # Search path: fetch filtered transactions, bulk resolve unique users, then fuzzy filter
+        raw_txs = await tx_repo.list_all_transactions(limit=None, filter_type=filter_type)
+
+        player_ids = {tx.discord_id for tx in raw_txs}
+        creator_ids = {tx.created_by for tx in raw_txs}
+
+        resolved_players = await _resolve_members_bulk(bot, guild_id, player_ids, is_creator=False)
+        resolved_creators = await _resolve_members_bulk(bot, guild_id, creator_ids, is_creator=True)
+
+        enriched_txs = []
+        for tx in raw_txs:
+            player_name = resolved_players.get(tx.discord_id, f"User {tx.discord_id}")
+            if not fuzzy_match_member(search_query, player_name, tx.discord_id):
+                continue
+            creator_name = resolved_creators.get(tx.created_by, f"User {tx.created_by}")
+            tx_kind = "payout" if tx.payout_id else ("credit" if tx.amount > 0 else "debit")
+            enriched_txs.append({
+                "id": tx.id,
+                "discord_id": tx.discord_id,
+                "player_name": player_name,
+                "amount": tx.amount,
+                "reason": tx.reason,
+                "payout_id": tx.payout_id,
+                "created_by": tx.created_by,
+                "creator_name": creator_name,
+                "created_at": tx.created_at,
+                "kind": tx_kind,
+            })
+
+        total_items = len(enriched_txs)
+        total_pages = max(1, math.ceil(total_items / page_size))
+        current_page = min(page, total_pages)
+        start_idx = (current_page - 1) * page_size
+        paginated_txs = enriched_txs[start_idx : start_idx + page_size]
 
     user = getattr(request.state, "user", None) or {}
     user_id = int(user.get("id", 0))
