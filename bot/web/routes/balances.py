@@ -1,3 +1,4 @@
+import asyncio
 import csv
 import io
 import logging
@@ -16,29 +17,105 @@ from bot.web.routes.dashboard import ensure_valid_guild, get_available_guilds
 logger = logging.getLogger("eradicateur_bot.web.balances")
 router = APIRouter(dependencies=[Depends(require_auth)], tags=["Balances"])
 
+_MEMBER_NAME_CACHE: dict[tuple[int, int], tuple[float, str]] = {}
+_CACHE_TTL_SECONDS = 300.0  # Cache for 5 minutes
+
 
 async def _resolve_member_name(bot, guild_id: int, discord_id: int) -> str:
     if discord_id == 0:
         return "Web Dashboard Admin"
+
+    now = time.time()
+    cache_key = (guild_id, discord_id)
+    if cache_key in _MEMBER_NAME_CACHE:
+        cached_time, cached_name = _MEMBER_NAME_CACHE[cache_key]
+        if now - cached_time < _CACHE_TTL_SECONDS:
+            return cached_name
+
+    name = f"User {discord_id}"
     if hasattr(bot, "get_guild"):
         guild = bot.get_guild(guild_id)
         if guild:
             member = guild.get_member(discord_id)
             if member:
-                return f"{member.display_name} (@{member.name})"
+                name = f"{member.display_name} (@{member.name})"
+                _MEMBER_NAME_CACHE[cache_key] = (now, name)
+                return name
             try:
                 user = await bot.fetch_user(discord_id)
                 if user:
-                    return f"{user.display_name} (@{user.name})"
+                    name = f"{user.display_name} (@{user.name})"
             except Exception:
                 pass
-    return f"User {discord_id}"
+
+    _MEMBER_NAME_CACHE[cache_key] = (now, name)
+    return name
 
 
 async def _resolve_creator_name(bot, guild_id: int, created_by: int) -> str:
     if created_by == 0:
         return "😎 DEV 😎"
     return await _resolve_member_name(bot, guild_id, created_by)
+
+
+async def _resolve_members_bulk(
+    bot,
+    guild_id: int,
+    discord_ids: set[int] | list[int],
+    *,
+    is_creator: bool = False,
+) -> dict[int, str]:
+    now = time.time()
+    resolved: dict[int, str] = {}
+    missing_ids: set[int] = set()
+
+    guild = bot.get_guild(guild_id) if hasattr(bot, "get_guild") else None
+
+    for uid in discord_ids:
+        if uid == 0:
+            resolved[uid] = "😎 DEV 😎" if is_creator else "Web Dashboard Admin"
+            continue
+
+        cache_key = (guild_id, uid)
+        if cache_key in _MEMBER_NAME_CACHE:
+            cached_time, cached_name = _MEMBER_NAME_CACHE[cache_key]
+            if now - cached_time < _CACHE_TTL_SECONDS:
+                resolved[uid] = cached_name
+                continue
+
+        if guild:
+            member = guild.get_member(uid)
+            if member:
+                name = f"{member.display_name} (@{member.name})"
+                _MEMBER_NAME_CACHE[cache_key] = (now, name)
+                resolved[uid] = name
+                continue
+
+        missing_ids.add(uid)
+
+    if missing_ids and hasattr(bot, "fetch_user"):
+        async def _fetch(uid: int):
+            try:
+                user = await bot.fetch_user(uid)
+                if user:
+                    name = f"{user.display_name} (@{user.name})"
+                    _MEMBER_NAME_CACHE[(guild_id, uid)] = (now, name)
+                    return uid, name
+            except Exception:
+                pass
+            fallback = f"User {uid}"
+            _MEMBER_NAME_CACHE[(guild_id, uid)] = (now, fallback)
+            return uid, fallback
+
+        fetched = await asyncio.gather(*[_fetch(uid) for uid in missing_ids])
+        for uid, name in fetched:
+            resolved[uid] = name
+
+    for uid in discord_ids:
+        if uid not in resolved:
+            resolved[uid] = f"User {uid}"
+
+    return resolved
 
 
 async def get_cataloged_guild_members(bot, guild_id: int, conn) -> list[dict]:
@@ -120,7 +197,7 @@ async def list_balances(
     request: Request,
     guild_id: int,
     q: str = "",
-    filter_type: str = "all",
+    filter_type: str = "nonzero",
 ):
     bot = request.app.state.bot
     templates = request.app.state.templates

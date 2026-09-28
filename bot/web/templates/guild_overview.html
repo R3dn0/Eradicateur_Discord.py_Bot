@@ -93,10 +93,10 @@
     </div>
 
     <!-- 2-Column Section: Transactions (2/5) & Payouts (3/5) -->
-    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6">
+    <div class="grid grid-cols-1 lg:grid-cols-5 gap-6 items-stretch">
         <!-- Left Column: Recent Transactions (2/5) -->
-        <div class="lg:col-span-2 bg-darkcard border border-darkborder rounded-2xl shadow-xl overflow-hidden flex flex-col">
-            <div class="p-4 sm:p-5 border-b border-darkborder bg-slate-900/50 flex items-center justify-between gap-3">
+        <div class="lg:col-span-2 bg-darkcard border border-darkborder rounded-2xl shadow-xl overflow-hidden flex flex-col h-[1000px] max-h-[1000px]">
+            <div class="p-4 sm:p-5 border-b border-darkborder bg-slate-900/50 flex items-center justify-between gap-3 shrink-0">
                 <div>
                     <h2 class="text-base font-bold text-white flex items-center gap-2">
                         <span>💳</span> {{ t('recent_transactions') }}
@@ -110,9 +110,9 @@
                 {% endif %}
             </div>
 
-            <div class="flex-1 overflow-x-auto">
+            <div class="flex-1 min-h-0 overflow-x-auto overflow-y-auto">
                 <table class="w-full text-left text-xs text-slate-300">
-                    <thead class="bg-slate-900/80 text-[11px] uppercase text-slate-400 font-semibold border-b border-darkborder">
+                    <thead class="bg-slate-900/95 text-[11px] uppercase text-slate-400 font-semibold border-b border-darkborder sticky top-0 z-10 backdrop-blur">
                         <tr>
                             <th class="px-4 py-2.5">{{ t('col_member') }}</th>
                             <th class="px-4 py-2.5">{{ t('col_reason_origin') }}</th>
@@ -147,7 +147,7 @@
                         </tr>
                         {% else %}
                         <tr>
-                            <td colspan="3" class="px-4 py-8 text-center text-slate-500">
+                            <td colspan="3" class="px-4 py-12 text-center text-slate-500">
                                 {{ t('no_recent_tx') }}
                             </td>
                         </tr>
@@ -156,7 +156,7 @@
                 </table>
             </div>
 
-            <div class="p-3 bg-slate-900/30 border-t border-darkborder flex items-center justify-between">
+            <div class="p-3 bg-slate-900/30 border-t border-darkborder flex items-center justify-between mt-auto shrink-0">
                 <a href="/guild/{{ current_guild.id }}/balances" class="text-xs text-slate-400 hover:text-slate-300 transition">
                     {{ t('view_all_balances') }} ➔
                 </a>
@@ -167,8 +167,8 @@
         </div>
 
         <!-- Right Column: Recent Payouts (3/5) -->
-        <div class="lg:col-span-3 bg-darkcard border border-darkborder rounded-2xl shadow-xl overflow-hidden flex flex-col">
-            <div class="p-4 sm:p-5 border-b border-darkborder bg-slate-900/50 flex items-center justify-between gap-3">
+        <div class="lg:col-span-3 bg-darkcard border border-darkborder rounded-2xl shadow-xl overflow-hidden flex flex-col h-[1000px] max-h-[1000px]">
+            <div class="p-4 sm:p-5 border-b border-darkborder bg-slate-900/50 flex items-center justify-between gap-3 shrink-0">
                 <div>
                     <h2 class="text-base font-bold text-white flex items-center gap-2">
                         <span>📜</span> {{ t('recent_payouts') }}
@@ -182,9 +182,9 @@
                 {% endif %}
             </div>
 
-            <div class="flex-1 overflow-x-auto">
+            <div class="flex-1 min-h-0 overflow-x-auto overflow-y-auto">
                 <table class="w-full text-left text-xs text-slate-300">
-                    <thead class="bg-slate-900/80 text-[11px] uppercase text-slate-400 font-semibold border-b border-darkborder">
+                    <thead class="bg-slate-900/95 text-[11px] uppercase text-slate-400 font-semibold border-b border-darkborder sticky top-0 z-10 backdrop-blur">
                         <tr>
                             <th class="px-4 py-2.5">{{ t('col_payout_id') }} / {{ t('col_payout_date') }}</th>
                             <th class="px-4 py-2.5">{{ t('col_payout_players') }}</th>
@@ -232,7 +232,7 @@
                         </tr>
                         {% else %}
                         <tr>
-                            <td colspan="4" class="px-4 py-8 text-center text-slate-500">
+                            <td colspan="4" class="px-4 py-12 text-center text-slate-500">
                                 {{ t('no_recent_payouts') }}
                             </td>
                         </tr>
@@ -241,7 +241,7 @@
                 </table>
             </div>
 
-            <div class="p-3 bg-slate-900/30 border-t border-darkborder flex justify-end">
+            <div class="p-3 bg-slate-900/30 border-t border-darkborder flex justify-end mt-auto shrink-0">
                 <a href="/guild/{{ current_guild.id }}/payouts" class="text-xs text-indigo-400 hover:text-indigo-300 font-semibold flex items-center gap-1">
                     <span>{{ t('view_all_payouts') }} ➔</span>
                 </a>

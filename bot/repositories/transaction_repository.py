@@ -35,6 +35,9 @@ class TransactionRepository(BaseRepository):
                     DEFAULT (datetime('now'))
             )
         """)
+        await self._db.execute("CREATE INDEX IF NOT EXISTS idx_transactions_discord_id ON transactions (discord_id)")
+        await self._db.execute("CREATE INDEX IF NOT EXISTS idx_transactions_payout_id ON transactions (payout_id)")
+        await self._db.execute("CREATE INDEX IF NOT EXISTS idx_transactions_created_at ON transactions (created_at DESC, id DESC)")
         await self._run_migrations()
         await self._db.commit()
 
@@ -220,6 +223,27 @@ class TransactionRepository(BaseRepository):
             )
             for row in rows
         ]
+
+    async def count_transactions(self, filter_type: str = "all") -> int:
+        await self._ensure_table()
+        query = "SELECT COUNT(*) FROM transactions"
+        conditions: list[str] = []
+
+        if filter_type == "credits":
+            conditions.append("amount > 0")
+        elif filter_type == "debits":
+            conditions.append("amount < 0")
+        elif filter_type == "payouts":
+            conditions.append("payout_id IS NOT NULL")
+        elif filter_type == "manual":
+            conditions.append("payout_id IS NULL")
+
+        if conditions:
+            query += " WHERE " + " AND ".join(conditions)
+
+        cursor = await self._db.execute(query)
+        row = await cursor.fetchone()
+        return int(row[0]) if row else 0
 
     async def get_transaction_stats(self) -> dict:
         await self._ensure_table()
