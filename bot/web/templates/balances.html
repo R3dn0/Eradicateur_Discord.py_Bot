@@ -60,21 +60,21 @@
             </div>
 
             <!-- Hidden filter_type input for HTMX search inclusion -->
-            <input type="hidden" id="filterTypeInput" name="filter_type" value="{{ filter_type or 'all' }}">
+            <input type="hidden" id="filterTypeInput" name="filter_type" value="{{ filter_type or 'nonzero' }}">
 
             <!-- Filter Pills -->
             <div class="flex flex-wrap items-center gap-1.5 bg-slate-900/80 p-1.5 rounded-xl border border-darkborder">
                 <button 
                     type="button"
                     onclick="setBalanceFilter('all')"
-                    class="filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if (filter_type or 'all') == 'all' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
+                    class="filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if filter_type == 'all' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
                 >
                     {{ t('filter_all') }} ({{ stats.all if stats else (balances|length) }})
                 </button>
                 <button 
                     type="button"
                     onclick="setBalanceFilter('nonzero')"
-                    class="filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if filter_type == 'nonzero' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
+                    class="filter-pill px-3.5 py-1.5 rounded-lg text-xs font-semibold transition {% if (filter_type or 'nonzero') == 'nonzero' %}bg-indigo-600 text-white shadow{% else %}text-slate-400 hover:text-white hover:bg-slate-800{% endif %}"
                 >
                     {{ t('filter_nonzero') }} ({{ stats.nonzero if stats else (balances|length) }})
                 </button>
